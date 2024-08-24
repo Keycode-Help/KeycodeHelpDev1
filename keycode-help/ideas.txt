@@ -1,0 +1,69 @@
+APP Ideas
+
+
+Categories
+- Vin to keycode Generator
+- Pincode calculator (For programming keys)
+- Tech Support
+- Forum
+- Remote Support
+- Learning Center
+- News and Updates
+- Contact Us
+- About Us
+- FAQ
+- Blog
+- Sitemap
+- Privacy Policy
+- Terms of Service
+- Refund Policy
+- Shipping Policy
+- Warranty Policy
+- Return Policy
+- Disclaimer
+- Legal
+
+
+Problems (What are problems i face during the day)
+- I can't find the keycode
+- I can't use the lishi
+- I can't find the right key 
+- I can't program the key
+- I am a beginner
+- I need to repossess the car
+- I need to rekey the car
+- I need to replace the car key
+- I need to duplicate the car key
+- I need to unlock the car by the door
+- I need to unlock the car by the trunk
+- I need to unlock the car by the glove box
+- I need to unlock the car by the ignition
+- I need to unlock the car by the gas cap
+- I need to unlock the car by the steering wheel
+- I need tech support when stuck 
+- I need late access to resources
+- I need to know the latest news and updates in automotive locksmithing
+
+Targets:
+automotive locksmiths, car dealerships, car rental companies, car insurance companies, 
+car repair shops, car owners, car enthusiasts, car clubs, car forums, 
+car blogs, car websites, car manufacturers, car parts suppliers, car key suppliers,
+car key programmers, car key manufacturers, car key distributors, car key wholesalers, 
+car key retailers, car key cutters, car key programmers, car key duplicators, car key cloners, 
+car key testers, car key readers, car key programmers, car key fitters, 
+car key repairers, car key unlockers, car key removers
+
+User stories: (How users will use the app)
+- As an automotive locksmith, I want to generate a keycode from a vin so that I can cut a key
+- As a car dealership, I want to calculate a pincode so that I can program a key
+- As a car rental company, I want to get tech support so that I can unlock a car
+- As a car insurance company, I want to get remote support so that I can unlock a car or program a key
+- As a car repair shop, I want to get tech support so that I can repair a car
+- As a car owner, I want to get support for lost keys
+- As a car enthusiast, I want to learn how to program keys
+- As a car club, I want to get tech support so that I can unlock a car
+- I learned how to program keys 
+- I learned how to professionally cut keys
+
+
+
