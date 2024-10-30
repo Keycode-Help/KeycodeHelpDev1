@@ -1,6 +1,5 @@
 name: CI Pipeline
 
-# Run the workflow on pushes to main or on pull requests.
 on:
   push:
     branches: [main]
@@ -12,37 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
       - name: Check out code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
 
-      # Step 3: Cache Node modules for faster installs
       - name: Cache Node modules
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('Frontend/keycodehelp/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Step 4: Install dependencies
       - name: Install dependencies
         run: npm install
+        working-directory: Frontend/keycodehelp
 
-      # Step 5: Run linting
       - name: Run ESLint
         run: npm run lint
+        working-directory: Frontend/keycodehelp
 
-      # Step 6: Run tests
       - name: Run tests
         run: npm test
+        working-directory: Frontend/keycodehelp
 
-      # Step 7: Build the Next.js project
       - name: Build the project
         run: npm run build
+        working-directory: Frontend/keycodehelp
