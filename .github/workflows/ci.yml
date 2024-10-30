@@ -13,6 +13,15 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          # Check out only the contents of `Frontend/keycodehelp` into the root
+          repository: Keycode-Help/KeycodeHelpDev1
+          path: Frontend/keycodehelp
+
+      - name: Move to correct directory
+        run: |
+          mv Frontend/keycodehelp/* .
+          mv Frontend/keycodehelp/.* . || true  # Handle hidden files
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -23,26 +32,18 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('Frontend/keycodehelp/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: |
-          cd Frontend/keycodehelp
-          npm install
+        run: npm install
 
       - name: Run ESLint
-        run: |
-          cd Frontend/keycodehelp
-          npm run lint
+        run: npm run lint
 
       - name: Run tests
-        run: |
-          cd Frontend/keycodehelp
-          npm test
+        run: npm test
 
       - name: Build the project
-        run: |
-          cd Frontend/keycodehelp
-          npm run build
+        run: npm run build
