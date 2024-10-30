@@ -13,14 +13,11 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-        with:
-          path: Frontend/keycodehelp
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-          working-directory: Frontend/keycodehelp
 
       - name: Cache Node modules
         uses: actions/cache@v3
@@ -31,17 +28,21 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm install
-        working-directory: Frontend/keycodehelp
+        run: |
+          cd Frontend/keycodehelp
+          npm install
 
       - name: Run ESLint
-        run: npm run lint
-        working-directory: Frontend/keycodehelp
+        run: |
+          cd Frontend/keycodehelp
+          npm run lint
 
       - name: Run tests
-        run: npm test
-        working-directory: Frontend/keycodehelp
+        run: |
+          cd Frontend/keycodehelp
+          npm test
 
       - name: Build the project
-        run: npm run build
-        working-directory: Frontend/keycodehelp
+        run: |
+          cd Frontend/keycodehelp
+          npm run build
