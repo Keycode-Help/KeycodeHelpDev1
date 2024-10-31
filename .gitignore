@@ -23,5 +23,7 @@
 hs_err_pid*
 replay_pid*
 
-node_modules
-.next
+node_modules/
+.next/
+.env.local
+
