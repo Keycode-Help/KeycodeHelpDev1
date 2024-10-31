@@ -14,24 +14,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Print working directory (Debugging)
-        run: pwd
-
-      - name: List all files in root directory (Debugging)
-        run: ls -R
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-
-      - name: Cache Node modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('Frontend/keycodehelp/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: |
