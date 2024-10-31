@@ -11,19 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: Check out code
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-strict: false
+          node-version: "20"
 
-      - name: Print working directory
-        run: pwd
+      - name: Install dependencies
+        working-directory: Frontend/keycodehelp
+        run: npm install
 
-      - name: List all files and directories
-        run: ls -R
+      - name: Run ESLint
+        working-directory: Frontend/keycodehelp
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: Frontend/keycodehelp
+        run: npm test
+
+      - name: Build the project
+        working-directory: Frontend/keycodehelp
+        run: npm run build
