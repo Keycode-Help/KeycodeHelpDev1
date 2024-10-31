@@ -14,6 +14,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Print Git status
+        run: |
+          git status
+          git remote -v
+
       - name: Print working directory
         run: pwd
 
