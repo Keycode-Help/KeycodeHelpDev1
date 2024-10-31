@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Debug Path Structure
 
 on:
   push:
@@ -7,30 +7,23 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  debug-path:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
+      - name: Print working directory
+        run: pwd
 
-      - name: Install dependencies
-        working-directory: Frontend/keycodehelp
-        run: npm install
+      - name: List all files and directories in the root
+        run: ls -R
 
-      - name: Run ESLint
-        working-directory: Frontend/keycodehelp
-        run: npm run lint
-
-      - name: Run tests
-        working-directory: Frontend/keycodehelp
-        run: npm test
-
-      - name: Build the project
-        working-directory: Frontend/keycodehelp
-        run: npm run build
+      - name: Check for package.json in Frontend/keycodehelp
+        run: |
+          if [ -f "Frontend/keycodehelp/package.json" ]; then
+            echo "package.json found in Frontend/keycodehelp"
+          else
+            echo "package.json NOT found in Frontend/keycodehelp"
+          fi
