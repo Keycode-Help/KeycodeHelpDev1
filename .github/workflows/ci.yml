@@ -1,4 +1,4 @@
-name: Debugging Workflow
+name: CI Pipeline
 
 on:
   push:
@@ -11,13 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Check out code
         uses: actions/checkout@v4
-
-      - name: Print Git status
-        run: |
-          git status
-          git remote -v
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-strict: false
 
       - name: Print working directory
         run: pwd
