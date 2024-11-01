@@ -1,0 +1,20 @@
+# Keycode Help Project Workflow
+
+## Branch Structure Overview
+
+The **Keycode Help** project follows a structured branching strategy to maintain code quality, testing, and deployment across environments. Here’s an overview of the three main branches:
+
+- **`dev` branch**: Used for active development and integration of new features. All feature branches should be merged into `dev` after initial testing.
+- **`main` branch**: Serves as the staging environment. This branch is considered stable and contains features ready for final testing before going live.
+- **`production` branch**: Represents the live codebase. Only thoroughly tested and approved changes from the `main` branch should be merged here.
+
+---
+
+## Workflow Outline
+
+### 1. Setting Up Your Local Development Environment
+
+1. **Clone the Repository**:
+   ```bash
+   git clone <repo_url>
+   cd keycode-help
