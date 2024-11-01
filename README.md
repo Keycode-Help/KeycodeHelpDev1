@@ -12,7 +12,7 @@ A platform for locksmiths and automotive professionals to access VIN-to-Keycode 
 
 ---
 
-This `README.md` gives a professional, user-friendly, and engaging description of your **Keycode Help** project, setting the stage for future collaborators or users. Let me know if you’d like any changes or further customizations!
+This `README.md` gives a professional, user-friendly, and engaging description of your **Keycode Help** project, setting the stage for future collaborators or users. 
 
 
 
