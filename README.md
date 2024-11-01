@@ -87,4 +87,7 @@ Follow these steps to set up **Keycode Help** locally for development and contri
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/YourUsername/keycode-help.git
+git clone [https://github.com/YourUsername/keycode-help.git]
+
+
+Check out the other .Md files in this main branch for more project details and instructions
