@@ -1,180 +1,224 @@
-# Tech Stack with Detailed Instructions
+# 🔑 Keycode Help: Tech Stack Documentation
 
-## Backend (Serverless)
-With the serverless approach, Firebase handles backend requirements, minimizing traditional server management needs. Below are the key backend technologies and configurations.
-
-### 1. Firebase Functions – Serverless Backend
-**Why**: Firebase Functions provide a serverless environment for handling API requests, business logic, and secure interactions with Firebase services.
-
-**Instructions**:
-- Set up Firebase Functions:
-    ```bash
-    npm install -g firebase-tools
-    firebase init functions
-    ```
-- Use Firebase Functions to handle API requests for services such as:
-  - VIN to Keycode lookups
-  - User authentication checks
-  - Logging user actions and requests
-- Use Firebase Console to set up environment configurations and ensure proper permissions are set for accessing Firestore and other Firebase services.
-
-### 2. Firebase Firestore – Real-Time Database
-**Why**: Firestore is a flexible, scalable NoSQL database that supports real-time data synchronization.
-
-**Instructions**:
-- Configure Firestore in Firebase Console and set up collections for:
-  - `VINLookups`: Stores VIN, keycode, and user details for each request.
-  - `KeyTypeDetails`: Stores keycode, key type, transponder chip details, frequency, and programming steps.
-  - `Users`: Manages user roles and permissions (e.g., locksmith, admin).
-- Define Firestore rules to enforce security, ensuring only authenticated users access data based on their role.
-
-### 3. Firebase Authentication – Secure User Management
-**Why**: Firebase Authentication simplifies managing user login, registration, and Multi-Factor Authentication (MFA).
-
-**Instructions**:
-- Enable Email/Password Authentication in Firebase Console.
-- Set up MFA for additional security.
-- Use Firebase's role-based access to restrict endpoints, ensuring locksmiths and admins have the appropriate access levels.
-
-### 4. Stripe Integration – Payment Processing
-**Why**: Stripe handles payment processing, subscription management, and invoicing with robust security.
-
-**Instructions**:
-- Set up a Stripe account and configure webhooks for events like `invoice.payment_succeeded` and `invoice.payment_failed`.
-- Use Firebase's Stripe extension to streamline integration, allowing secure, serverless subscription management directly in Firebase Functions.
+Welcome to the **Keycode Help** project! This document provides an overview of the technologies and tools used to build the MVP and clear instructions to ensure smooth collaboration. The stack is designed to keep the project lightweight, scalable, and focused on delivering core features efficiently.
 
 ---
 
-## Frontend
+## Backend: RESTful APIs with Node.js and MySQL
 
-### 1. Next.js (React) – Frontend Framework
-**Why**: Next.js enables server-side rendering (SSR), static site generation (SSG), and excellent performance for a real-time, responsive application.
+### 1. **Node.js with Express.js**  
+**Why**: Express.js provides a lightweight framework to build RESTful APIs for user authentication, VIN-to-keycode lookups, and dashboard data retrieval.  
 
-**Instructions**:
-- Set up a new Next.js project:
+#### Setup Instructions:
+1. Initialize the backend:
     ```bash
-    npx create-next-app@latest keycode-help-frontend
-    cd keycode-help-frontend
+    mkdir backend
+    cd backend
+    npm init -y
+    npm install express mysql2 bcrypt jsonwebtoken dotenv
+    npm install --save-dev nodemon
     ```
-- Configure API routes for client-side communication with Firebase Functions (e.g., `/api/vinLookup`, `/api/keyType`).
-- Use `getServerSideProps` or `getStaticProps` for optimal data loading strategies in Next.js pages.
 
-### 2. TypeScript – Type Safety
-**Why**: TypeScript introduces static typing, enhancing maintainability and code quality, particularly in a large codebase with complex data types.
-
-**Instructions**:
-- Set up TypeScript in your Next.js project:
-    ```bash
-    touch tsconfig.json
-    npm install --save-dev typescript @types/react @types/node
+2. Organize the backend structure:
     ```
-- Define interfaces for API responses, keycode data, and user roles to ensure consistency across components.
-
-### 3. Tailwind CSS – Styling Framework
-**Why**: Tailwind CSS speeds up development with utility-first classes, making it easy to create responsive and modern UIs without custom CSS.
-
-**Instructions**:
-- Install and configure Tailwind in your Next.js project:
-    ```bash
-    npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
-    npx tailwindcss init
+    backend/
+    ├── app.js
+    ├── config/
+    │   └── db.js
+    ├── controllers/
+    │   ├── authController.js
+    │   ├── vinController.js
+    └── routes/
+        ├── auth.js
+        ├── vin.js
     ```
-- Use utility classes to style forms, buttons, dashboards, and mobile-friendly components quickly.
 
----
-
-## Real-Time Data & Notifications
-
-### 1. Firestore Real-Time Updates
-**Why**: Firestore’s real-time sync provides instant data updates, ideal for displaying dynamic information (e.g., VIN lookup results, keycode status).
-
-**Instructions**:
-- Use Firestore’s real-time listeners in the frontend to subscribe to updates:
+3. Set up the main server (`app.js`):
     ```javascript
-    import { firestore } from '../firebaseConfig';
-    firestore.collection('VINLookups').onSnapshot((snapshot) => {
-      // Handle real-time updates
+    const express = require('express');
+    const app = express();
+    const dotenv = require('dotenv');
+    const bodyParser = require('body-parser');
+    dotenv.config();
+
+    app.use(bodyParser.json());
+
+    app.use('/api/auth', require('./routes/auth'));
+    app.use('/api/vin', require('./routes/vin'));
+
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    ```
+
+---
+
+### 2. **MySQL Database**  
+**Why**: MySQL offers reliable, structured storage for user accounts, VIN lookups, and keycode mappings.
+
+#### Setup Instructions:
+1. Install MySQL locally or use a cloud-hosted service.
+2. Create the following tables:
+    ```sql
+    CREATE TABLE Users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        role ENUM('locksmith', 'admin') DEFAULT 'locksmith',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE VINLookups (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        vin VARCHAR(17) NOT NULL,
+        keycode VARCHAR(50),
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES Users(id)
+    );
+    ```
+
+3. Configure the database connection (`config/db.js`):
+    ```javascript
+    const mysql = require('mysql2');
+    const connection = mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+    });
+
+    connection.connect((err) => {
+        if (err) {
+            console.error('Error connecting to MySQL:', err.message);
+        } else {
+            console.log('Connected to MySQL');
+        }
+    });
+
+    module.exports = connection;
+    ```
+
+---
+
+## Frontend: Simple and Lightweight with HTML, Tailwind CSS, and Vanilla JavaScript  
+
+### 1. **HTML and Vanilla JavaScript**  
+**Why**: Lightweight and efficient, these tools allow rapid development of core functionality without unnecessary complexity.
+
+#### Setup Instructions:
+1. Organize the frontend structure:
+    ```
+    frontend/
+    ├── index.html        # Landing page
+    ├── login.html        # Login page
+    ├── dashboard.html    # User dashboard
+    ├── css/
+    │   └── styles.css    # Tailwind CSS
+    ├── js/
+    │   ├── auth.js       # Handles authentication logic
+    │   └── vin.js        # VIN lookup functionality
+    ```
+
+2. Example of a VIN lookup form (`dashboard.html`):
+    ```html
+    <form id="vin-form">
+        <label for="vin">Enter VIN:</label>
+        <input type="text" id="vin" maxlength="17" required />
+        <button type="submit">Lookup Keycode</button>
+    </form>
+    <div id="result"></div>
+    <script src="./js/vin.js"></script>
+    ```
+
+3. VIN lookup logic (`js/vin.js`):
+    ```javascript
+    const vinForm = document.getElementById('vin-form');
+    const resultDiv = document.getElementById('result');
+
+    vinForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const vin = document.getElementById('vin').value;
+
+        const response = await fetch('/api/vin/lookup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ vin }),
+        });
+
+        const data = await response.json();
+        resultDiv.textContent = data.keycode || 'Keycode not found.';
     });
     ```
 
-### 2. Firebase Cloud Messaging (Optional) – Notifications
-**Why**: Cloud Messaging allows real-time push notifications, useful for sending alerts about subscription renewals or low credits.
+---
 
-**Instructions**:
-- Enable Cloud Messaging in Firebase Console.
-- Set up notification permissions on the client-side, and use Firebase Functions to trigger notifications based on user activity or specific events.
+### 2. **Tailwind CSS**  
+**Why**: Tailwind CSS provides utility-first styling to quickly build modern, responsive UIs.
+
+#### Setup Instructions:
+1. Install Tailwind CSS:
+    ```bash
+    npm install -D tailwindcss postcss autoprefixer
+    npx tailwindcss init
+    ```
+
+2. Configure `tailwind.config.js`:
+    ```javascript
+    module.exports = {
+        content: ['./**/*.html'],
+        theme: {
+            extend: {},
+        },
+        plugins: [],
+    };
+    ```
+
+3. Add Tailwind to `css/styles.css`:
+    ```css
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+    ```
+
+4. Use Tailwind utility classes to style forms, buttons, and layout elements.
 
 ---
 
-## Automation Tools (Optional)
+## Deployment
 
-### 1. Puppeteer (Web Scraping) – Automate VIN-to-Keycode Process
-**Why**: Puppeteer can be used to automate VIN-to-keycode retrieval if a dedicated API is unavailable.
+### Backend: Railway or Render  
+**Why**: Both platforms provide scalable, low-cost hosting for Node.js applications.
 
-**Instructions**:
-- Set up Puppeteer in a Firebase Function:
-    ```bash
-    npm install puppeteer
-    ```
-- Write a script to interact with the VIN retrieval service, retrieve keycodes, and store them in Firestore.
-
-### 2. Nodemailer – Automated Email Notifications
-**Why**: Notify users automatically after completing a VIN-to-keycode request or when updates are available.
-
-**Instructions**:
-- Install Nodemailer in Firebase Functions:
-    ```bash
-    npm install nodemailer
-    ```
-- Configure an SMTP service and create email templates to send keycode retrieval or subscription updates directly to users.
+#### Setup Instructions:
+1. Connect the `backend` folder to Railway or Render.
+2. Add environment variables (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `JWT_SECRET`).
+3. Deploy the backend directly from your repository.
 
 ---
 
-## CI/CD & DevOps
+### Frontend: Vercel or Netlify  
+**Why**: These platforms are ideal for static frontend hosting, offering quick deployments and CI/CD integration.
 
-### 1. Vercel – CI/CD and Hosting
-**Why**: Vercel provides serverless deployment, automatic scaling, and continuous deployment for Next.js projects, making it ideal for this setup.
-
-**Instructions**:
-- Connect your GitHub repository to Vercel for automated deployments.
-- Configure environment variables in Vercel for Firebase and Stripe keys.
-- Push changes to the main branch to trigger automatic deployments on Vercel.
-
-### 2. GitHub Actions – CI/CD for Testing
-**Why**: GitHub Actions automate testing, building, and deploying whenever new code is pushed, ensuring reliability.
-
-**Instructions**:
-- Create a GitHub Actions workflow file at `.github/workflows/ci.yml`:
-    ```yaml
-    name: CI Pipeline
-    on:
-      push:
-        branches:
-          - main
-    jobs:
-      build:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v2
-          - name: Set up Node.js
-            uses: actions/setup-node@v2
-            with:
-              node-version: '14'
-          - name: Install dependencies
-            run: npm install
-          - name: Run tests
-            run: npm run test
-    ```
+#### Setup Instructions:
+1. Connect the `frontend` folder to Vercel or Netlify.
+2. Deploy the static files (`index.html`, `login.html`, `dashboard.html`) to the platform.
+3. Configure any necessary redirects for API requests.
 
 ---
 
 ## Summary of Tech Stack
 
-- **Backend (Serverless)**: Firebase Functions, Firebase Firestore, Firebase Authentication, Stripe  
-- **Frontend**: Next.js, React, TypeScript, Tailwind CSS  
-- **Real-Time Updates**: Firestore listeners, Firebase Cloud Messaging (optional)  
-- **Automation (Optional)**: Puppeteer for VIN retrieval automation, Nodemailer for email notifications  
-- **CI/CD**: Vercel for deployment, GitHub Actions for testing  
+| **Layer**       | **Technology**               | **Why**                                                                 |
+|------------------|------------------------------|-------------------------------------------------------------------------|
+| **Backend**      | Node.js, Express.js          | Lightweight, fast, and scalable for RESTful APIs.                      |
+| **Database**     | MySQL                        | Structured data storage for users, VIN lookups, and keycodes.           |
+| **Frontend**     | HTML, Tailwind CSS, JS       | Simple and efficient for MVP development.                              |
+| **Authentication** | JWT, bcrypt.js             | Secure token-based authentication and password hashing.                |
+| **Payments**     | Stripe                       | Simplifies payment and subscription management.                        |
+| **Hosting**      | Vercel (frontend), Railway (backend) | Scalable and cost-effective hosting solutions.                         |
 
-By following this streamlined tech stack, you’ll build a scalable, cost-effective, and high-performing **Keycode Help** platform that provides locksmiths and automotive professionals with a seamless experience. Let me know if you’d like further guidance on any specific setup steps!
+---
+
+This documentation ensures that all collaborators have the context and tools needed to contribute effectively. Let’s keep the codebase organized and aligned with these standards. If you encounter issues or have suggestions, feel free to raise them during standups or via GitHub Issues.
