@@ -50,7 +50,7 @@ To get started with Keycode Help, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/YourUsername/keycode-help.git
+   git clone https://github.com/Keycode-Help/KeycodeHelpDev1.git
    cd keycode-help
 
 
