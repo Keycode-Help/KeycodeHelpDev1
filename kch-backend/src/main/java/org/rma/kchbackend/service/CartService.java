@@ -1,0 +1,128 @@
+package org.rma.kchbackend.service;
+
+import org.rma.kchbackend.model.*;
+import org.rma.kchbackend.repository.CartItemRepository;
+import org.rma.kchbackend.repository.CartRepository;
+import org.rma.kchbackend.repository.VehicleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.rma.kchbackend.repository.TransactionRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class CartService {
+
+    private final CartRepository cartRepository;
+    private final VehicleRepository vehicleRepository;
+    private final CartItemRepository cartItemRepository;
+    private final TransactionRepository transactionRepository;
+
+    @Autowired
+    public CartService(CartRepository cartRepository, VehicleRepository vehicleRepository, CartItemRepository cartItemRepository, TransactionRepository transactionRepository) {
+        this.cartRepository = cartRepository;
+        this.vehicleRepository = vehicleRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.transactionRepository = transactionRepository;
+    }
+
+    public Cart getOrCreateCart(KeycodeUser user) {
+        return cartRepository.findByKeycodeUser(user).orElseGet(() -> {
+            Cart newCart = new Cart();
+            newCart.setKeycodeUser(user);
+            return cartRepository.save(newCart);
+        });
+    }
+
+    @Transactional
+    public Cart addVehicleToCart(KeycodeUser user, Vehicle vehicle) {
+        Cart cart = getOrCreateCart(user);
+
+        if (cart.getCartItems().stream().anyMatch(item -> item.getVehicle().getId().equals(vehicle.getId()))) {
+            throw new IllegalArgumentException("Vehicle is already in the cart.");
+        }
+
+        CartItem cartItem = new CartItem(vehicle);
+        cartItem.setCart(cart);
+        cartItemRepository.save(cartItem);
+        cart.addCartItem(cartItem);
+
+        return cartRepository.save(cart);
+    }
+
+    @Transactional
+    public List<CartItem> getCartItems(KeycodeUser user) {
+        Cart cart = getOrCreateCart(user);
+        return cart.getCartItems();
+    }
+
+
+    @Transactional
+    public void removeVehicleFromCart(Long vehicleId) {
+        // Find the CartItem for the given vehicleId
+        CartItem cartItem = cartItemRepository.findByVehicleId(vehicleId)
+                .orElseThrow(() -> new IllegalArgumentException("Vehicle not found in any cart"));
+
+        // Get the associated Vehicle
+        Vehicle vehicle = cartItem.getVehicle();
+
+        // Remove related Transaction if it exists
+        if (vehicle != null) {
+            Optional<Transaction> existingTransaction = transactionRepository.findByVehiclesId(vehicle.getId());
+            existingTransaction.ifPresent(transaction -> {
+                transactionRepository.delete(transaction);
+                vehicle.setTransaction(null); // Break the relationship between vehicle and transaction
+            });
+        }
+
+        // Remove the CartItem
+        cartItemRepository.delete(cartItem);
+
+        // Finally, delete the Vehicle if it's no longer associated with anything
+        if (vehicle != null) {
+            vehicle.setCartItem(null); // Break relationship with CartItem
+            vehicle.setKeycodeUser(null); // Break relationship with User if necessary
+
+            // Check if the vehicle has any other relationships before deleting
+            if (vehicle.getCartItem() == null && vehicle.getTransaction() == null) {
+                vehicleRepository.delete(vehicle);
+            }
+        }
+    }
+
+    @Transactional
+    public void checkoutCart(Cart cart) {
+        cart.setStatus("CHECKED_OUT");
+
+        for (CartItem cartItem : cart.getCartItems()) {
+            Vehicle vehicle = cartItem.getVehicle();
+            if (vehicle != null) {
+               
+                vehicle.setCartItem(null);
+                vehicleRepository.save(vehicle);
+
+                Transaction transaction = transactionRepository.findById(vehicle.getTransaction().getId())
+                        .orElseGet(() -> {
+                            Transaction newTransaction = new Transaction();
+                            newTransaction.setConfirmationNumber(generateConfirmationNumber());
+                            newTransaction.setStatus("PENDING");
+                            newTransaction.setKeycodeUser(cart.getKeycodeUser());
+                            transactionRepository.save(newTransaction);
+                            return newTransaction;
+                        });
+
+                vehicle.setTransaction(transaction);
+                transaction.getVehicles().add(vehicle);
+                transactionRepository.save(transaction);
+            }
+        }
+
+        cart.getCartItems().clear();
+        cartRepository.save(cart);
+    }
+    private String generateConfirmationNumber() {
+        return "CONF-" + System.currentTimeMillis();
+    }
+}
