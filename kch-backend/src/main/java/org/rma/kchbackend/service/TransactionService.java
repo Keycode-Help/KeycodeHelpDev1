@@ -32,29 +32,6 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public String processCheckout(Long userId) throws IOException {
-        List<Transaction> pendingTransactions = getPendingTransactionsByUserId(userId);
-
-        if (pendingTransactions.isEmpty()) {
-            throw new IllegalArgumentException("No pending transactions found for user ID: " + userId);
-        }
-
-        for (Transaction transaction : pendingTransactions) {
-            // Ensure the vehicle is not already processed
-            if (!transaction.getStatus().equals("CHECKED_OUT")) {
-                transaction.setStatus("CHECKED_OUT");
-                transactionRepository.save(transaction);
-
-                String userEmail = transaction.getKeycodeUser().getEmail();
-                String adminEmail = System.getenv("SENDER_EMAIL");
-                String confirmationNumber = transaction.getConfirmationNumber();
-
-                emailService.sendEmail(userEmail, "Order Confirmation", "Thank you for your order. Your confirmation number is: " + confirmationNumber);
-                emailService.sendEmail(adminEmail, "New Transaction to Process", "Order with confirmation number: " + confirmationNumber + " is ready for processing.");
-            }
-        }
-
-        return "Checkout completed successfully. Confirmation email sent.";
-    }
+  
 
 }
