@@ -99,7 +99,7 @@ cd keycode-help
     
     Copy code
     
-    `cd backend` 
+    `cd kch-backend` 
     
 2.  Install dependencies:
     
@@ -138,7 +138,7 @@ cd keycode-help
     
     Copy code
     
-    `cd frontend` 
+    `cd kch-frontend` 
     
 2.  Open `index.html` in your browser to view the application.
 
