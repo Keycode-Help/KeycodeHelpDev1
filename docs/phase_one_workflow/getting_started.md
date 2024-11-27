@@ -100,9 +100,9 @@ Before starting, make sure you have the following software installed on your mac
 3. **Run the Frontend**:
    - Start the development server:
    ```sh
-   npm start
+   npm run dev
    ```
-   - The front end will be running at `http://localhost:3000`.
+   - The front end will be running at `http://localhost:5173`.
 
 ### **5. Managing JWT Tokens**
 
