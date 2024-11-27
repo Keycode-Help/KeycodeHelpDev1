@@ -195,10 +195,10 @@ The **Spring Boot** application will then read from the `.env` file, thanks to *
 ### **Frontend Directory Structure (`kch-frontend/`)**:
 
 - `src/`:
-  - `components/` - Holds reusable components like `LoginForm`, `VehicleForm`, `AdminDashboard`.
+  - `components/` - Holds reusable components like `navbar`.
   - `context/` - Contains the **AuthContext** for managing authentication status and JWTs.
-  - `pages/` - Main pages such as `LoginPage`, `CartPage`, `CheckoutPage`.
-  - `services/` - Files that handle communication with the backend API using **axios**.
+  - `pages/` - Main pages such as `Login`, `Cart`, `Checkout`.
+ 
 
 ---
 
