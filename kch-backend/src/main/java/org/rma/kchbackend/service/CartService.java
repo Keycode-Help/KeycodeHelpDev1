@@ -61,34 +61,28 @@ public class CartService {
 
     @Transactional
     public void removeVehicleFromCart(Long vehicleId) {
-        // Find the CartItem for the given vehicleId
         CartItem cartItem = cartItemRepository.findByVehicleId(vehicleId)
                 .orElseThrow(() -> new IllegalArgumentException("Vehicle not found in any cart"));
 
-        // Get the associated Vehicle
         Vehicle vehicle = cartItem.getVehicle();
 
-        // Remove related Transaction if it exists
         if (vehicle != null) {
             Optional<Transaction> existingTransaction = transactionRepository.findByVehiclesId(vehicle.getId());
             existingTransaction.ifPresent(transaction -> {
                 transactionRepository.delete(transaction);
-                vehicle.setTransaction(null); // Break the relationship between vehicle and transaction
+                vehicle.setTransaction(null);
             });
         }
 
-        // Remove the CartItem
         cartItemRepository.delete(cartItem);
 
-        // Finally, delete the Vehicle if it's no longer associated with anything
         if (vehicle != null) {
-            vehicle.setCartItem(null); // Break relationship with CartItem
-            vehicle.setKeycodeUser(null); // Break relationship with User if necessary
-
-            // Check if the vehicle has any other relationships before deleting
+            vehicle.setCartItem(null);
+            vehicle.setKeycodeUser(null);
             if (vehicle.getCartItem() == null && vehicle.getTransaction() == null) {
                 vehicleRepository.delete(vehicle);
             }
+
         }
     }
 
