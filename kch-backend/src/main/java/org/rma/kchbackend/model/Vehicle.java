@@ -41,21 +41,7 @@ public class Vehicle {
     private Transaction transaction;
 
 
-    private String status = "PENDING";  // e.g., "PENDING", "COMPLETED"
+    private String status = "PENDING";
 
-    // Utility methods to break relationships cleanly
-    public void removeCartItem() {
-        if (this.cartItem != null) {
-            this.cartItem.setVehicle(null);
-            this.cartItem = null;
-        }
-    }
-
-    public void removeTransaction() {
-        if (this.transaction != null) {
-            this.transaction.getVehicles().remove(this);
-            this.transaction = null;
-        }
-    }
 
 }
