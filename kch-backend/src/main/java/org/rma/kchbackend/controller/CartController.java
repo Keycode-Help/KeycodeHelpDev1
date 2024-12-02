@@ -64,6 +64,8 @@ public class CartController {
         return "Vehicle removed from cart.";
     }
 
+
+
     @PostMapping("/checkout")
     public String checkout() throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -76,10 +78,9 @@ public class CartController {
 
         // Notify user and admin about checkout
         String adminEmail = System.getenv("SENDER_EMAIL");
-        String confirmationNumber = cart.getCartItems().isEmpty() ? "N/A" : cart.getCartItems().get(0).getVehicle().getTransaction().getConfirmationNumber();
 
         String userEmailResult = emailService.sendEmail(user.getEmail(), "Order Confirmation",
-                "Thank you for your order. Your confirmation number is: " + confirmationNumber);
+                "Thank you for your order. Your confirmation number will be provided by the admin.");
         String adminEmailResult = emailService.sendEmail(adminEmail, "New Transaction to Process",
                 "Order from user " + user.getEmail() + " is ready for processing.");
 
@@ -92,4 +93,5 @@ public class CartController {
 
         return "Checkout successful.";
     }
+
 }

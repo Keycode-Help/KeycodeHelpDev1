@@ -25,16 +25,16 @@ public class Transaction {
 
     @Column(nullable = false)
     @NotBlank(message = "Status cannot be empty")
-    private String status; // e.g., "PENDING", "FULFILLED"
+    private String status;
 
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Prevents infinite recursion during serialization
-    private List<Vehicle> vehicles = new ArrayList<>(); // Initialize the list
+    @JsonManagedReference
+    private List<Vehicle> vehicles = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "keycode_user_id", nullable = false)
     @JsonIgnore
     private KeycodeUser keycodeUser;
 
-    private String keycode;
+
 }
