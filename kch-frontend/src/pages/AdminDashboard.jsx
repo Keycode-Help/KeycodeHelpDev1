@@ -133,7 +133,12 @@ function AdminDashboard() {
                       ))}
                   </td>
                   <td>
-                    {transaction.keycode ? transaction.keycode : "Not Provided"}
+                    {transaction.vehicles &&
+                      transaction.vehicles.map((vehicle, index) => (
+                        <div key={index}>
+                          {vehicle.keycode ? vehicle.keycode : "Not Provided"}
+                        </div>
+                      ))}
                   </td>
                 </tr>
               ))}
