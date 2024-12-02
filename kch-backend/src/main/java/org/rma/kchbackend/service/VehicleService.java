@@ -29,27 +29,31 @@ public class VehicleService {
         if (vehicle.getStatus() == null || vehicle.getStatus().isEmpty()) {
             vehicle.setStatus("PENDING"); // Set default status if not provided
         }
-        Vehicle savedVehicle = vehicleRepository.save(vehicle);
-        createTransaction(savedVehicle);
-        return savedVehicle;
+        return vehicleRepository.save(vehicle);
     }
 
     public List<Vehicle> getPendingVehicles() {
         return vehicleRepository.findByStatus("PENDING");
     }
 
+
+
     public String processVehicleRequest(Long vehicleId, String keycode) throws IOException {
         Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId);
         if (optionalVehicle.isPresent()) {
             Vehicle vehicle = optionalVehicle.get();
             vehicle.setStatus("COMPLETED");
+            vehicle.setKeycode(keycode);
             vehicleRepository.save(vehicle);
 
-            Optional<Transaction> optionalTransaction = transactionRepository.findByVehicles_Id(vehicle.getId());
-            if (optionalTransaction.isPresent()) {
-                Transaction transaction = optionalTransaction.get();
-                transaction.setKeycode(keycode);
-                transaction.setStatus("FULFILLED");
+            Transaction transaction = vehicle.getTransaction();
+            if (transaction != null) {
+
+                boolean allFulfilled = transaction.getVehicles().stream()
+                        .allMatch(v -> "COMPLETED".equals(v.getStatus()));
+                if (allFulfilled) {
+                    transaction.setStatus("FULFILLED");
+                }
                 transactionRepository.save(transaction);
 
                 String email = vehicle.getKeycodeUser().getEmail();
@@ -63,23 +67,6 @@ public class VehicleService {
         }
     }
 
-    private void createTransaction(Vehicle vehicle) {
-        // Check if a transaction already exists for the vehicle
-        if (transactionRepository.findByVehicles_Id(vehicle.getId()).isPresent()) {
-            return; // Transaction already exists, do not create another one
-        }
-
-        Transaction transaction = new Transaction();
-        transaction.setConfirmationNumber(generateConfirmationNumber());
-        transaction.setStatus("PENDING");
-        transaction.setKeycodeUser(vehicle.getKeycodeUser());
-
-        // Add this vehicle to the transaction
-        transaction.getVehicles().add(vehicle); // vehicles list is always initialized now
-        vehicle.setTransaction(transaction);
-
-        transactionRepository.save(transaction);
-    }
 
     private String generateConfirmationNumber() {
         return "CONF-" + System.currentTimeMillis(); // Generate a unique confirmation number

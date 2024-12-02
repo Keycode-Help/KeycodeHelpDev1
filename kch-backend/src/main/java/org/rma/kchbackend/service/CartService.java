@@ -61,6 +61,7 @@ public class CartService {
 
     @Transactional
     public void removeVehicleFromCart(Long vehicleId) {
+
         CartItem cartItem = cartItemRepository.findByVehicleId(vehicleId)
                 .orElseThrow(() -> new IllegalArgumentException("Vehicle not found in any cart"));
 
@@ -76,47 +77,53 @@ public class CartService {
 
         cartItemRepository.delete(cartItem);
 
+
         if (vehicle != null) {
             vehicle.setCartItem(null);
             vehicle.setKeycodeUser(null);
+
+
             if (vehicle.getCartItem() == null && vehicle.getTransaction() == null) {
                 vehicleRepository.delete(vehicle);
             }
-
         }
     }
+
+
 
     @Transactional
     public void checkoutCart(Cart cart) {
         cart.setStatus("CHECKED_OUT");
 
+
+        Transaction transaction = new Transaction();
+        transaction.setConfirmationNumber(generateConfirmationNumber());
+        transaction.setStatus("PENDING");
+        transaction.setKeycodeUser(cart.getKeycodeUser());
+
         for (CartItem cartItem : cart.getCartItems()) {
             Vehicle vehicle = cartItem.getVehicle();
             if (vehicle != null) {
-               
                 vehicle.setCartItem(null);
-                vehicleRepository.save(vehicle);
 
-                Transaction transaction = transactionRepository.findById(vehicle.getTransaction().getId())
-                        .orElseGet(() -> {
-                            Transaction newTransaction = new Transaction();
-                            newTransaction.setConfirmationNumber(generateConfirmationNumber());
-                            newTransaction.setStatus("PENDING");
-                            newTransaction.setKeycodeUser(cart.getKeycodeUser());
-                            transactionRepository.save(newTransaction);
-                            return newTransaction;
-                        });
 
                 vehicle.setTransaction(transaction);
+                vehicleRepository.save(vehicle);
+
+
                 transaction.getVehicles().add(vehicle);
-                transactionRepository.save(transaction);
             }
         }
+
+
+        transactionRepository.save(transaction);
 
         cart.getCartItems().clear();
         cartRepository.save(cart);
     }
+
     private String generateConfirmationNumber() {
         return "CONF-" + System.currentTimeMillis();
     }
+
 }

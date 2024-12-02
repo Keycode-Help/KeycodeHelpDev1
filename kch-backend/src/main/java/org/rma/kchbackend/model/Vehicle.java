@@ -43,5 +43,7 @@ public class Vehicle {
 
     private String status = "PENDING";
 
+    private String keycode;
+
 
 }
