@@ -1,13 +1,15 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+
+import "../styles/Navbar.css";
 
 function Navbar() {
   const { userRole, logout } = useAuth();
 
   return (
     <div className="navbar">
-      <div className="navbar-logo">Auto Arcade</div>
+      <div className="navbar-logo">Keycode Help</div>
       <ul>
         {!userRole && (
           <>

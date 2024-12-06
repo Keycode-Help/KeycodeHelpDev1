@@ -1,0 +1,93 @@
+/* Navbar.css */
+
+/* Root styles for color variables */
+:root {
+  --primary-color: #0b41e4; /* Main blue */
+  --secondary-color: #4ae66c; /* Accent green */
+  --background-color: #213341; /* Navbar background */
+  --text-color: #000000; /* Black for text */
+}
+
+/* Navbar container */
+.navbar {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Logo */
+.navbar-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Navigation links container */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Individual links */
+.navbar-links a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: var(--secondary-color);
+}
+
+/* Active link */
+.navbar-links .active {
+  color: var(--primary-color);
+  font-weight: bold;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+/* Button for calls-to-action */
+.navbar-button {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-button:hover {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .navbar-button {
+    align-self: flex-end;
+  }
+}
