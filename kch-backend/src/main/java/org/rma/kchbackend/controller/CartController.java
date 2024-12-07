@@ -1,18 +1,19 @@
 package org.rma.kchbackend.controller;
 
+import jakarta.validation.Valid;
 import org.rma.kchbackend.dto.CartItemDto;
-import org.rma.kchbackend.model.Cart;
-import org.rma.kchbackend.model.KeycodeUser;
-import org.rma.kchbackend.model.Vehicle;
+import org.rma.kchbackend.model.*;
 import org.rma.kchbackend.service.CartService;
 import org.rma.kchbackend.service.EmailService;
 import org.rma.kchbackend.service.KeycodeUserService;
+import org.rma.kchbackend.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,8 @@ public class CartController {
     private final EmailService emailService;
 
     @Autowired
-    public CartController(CartService cartService, KeycodeUserService keycodeUserService, EmailService emailService) {
+    public CartController(CartService cartService, KeycodeUserService keycodeUserService, EmailService emailService,
+                          SubscriptionService subscriptionService) {
         this.cartService = cartService;
         this.keycodeUserService = keycodeUserService;
         this.emailService = emailService;
@@ -38,13 +40,38 @@ public class CartController {
         KeycodeUser user = keycodeUserService.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        return cartService.getCartItems(user).stream()
+        /*List<CartItemDto> cartItems1 =  cartService.getCartItems(user).stream()
                 .map(cartItem -> new CartItemDto(
                         cartItem.getId(),
                         cartItem.getVehicle().getMake(),
                         cartItem.getVehicle().getModel(),
                         cartItem.getVehicle().getVin()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+        //Added by Nithya - To handle both Vehicles and Subscriptions
+        List<CartItem> tempCartItems = cartService.getCartItems(user);
+        List<CartItemDto> cartItems = new ArrayList<>();
+        for(CartItem cartItem : tempCartItems) {
+
+            //If cart item is vehicle
+            if(cartItem.getVehicle() != null){
+                CartItemDto cartItemDto = new CartItemDto(
+                        cartItem.getId(),
+                        cartItem.getVehicle().getMake(),
+                        cartItem.getVehicle().getModel(),
+                        cartItem.getVehicle().getVin()
+                );
+                cartItems.add(cartItemDto);
+            }
+            //If cart item is subscription
+            if(cartItem.getSubscription() != null){
+                CartItemDto cartItemDto = new CartItemDto(
+                        cartItem.getId(),
+                        cartItem.getSubscription().getTier()
+                );
+                cartItems.add(cartItemDto);
+            }
+        }
+        return cartItems;
     }
 
     @PostMapping("/add")
@@ -58,11 +85,11 @@ public class CartController {
         return "Vehicle added to cart successfully.";
     }
 
-    @DeleteMapping("/remove/{vehicleId}")
+   /* @DeleteMapping("/remove/{vehicleId}")
     public String removeVehicle(@PathVariable Long vehicleId) {
         cartService.removeVehicleFromCart(vehicleId);
         return "Vehicle removed from cart.";
-    }
+    }*/
 
 
 
@@ -92,6 +119,42 @@ public class CartController {
         }
 
         return "Checkout successful.";
+    }
+
+    //KH-10 - Update Cart Controller
+    //Add Subscription to Cart
+    @PostMapping("/addSubscription")
+    public String addSubscriptionToCart(@RequestBody Subscription subscription){
+        String message = null;
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = authentication.getName();
+            KeycodeUser user = keycodeUserService.findByEmail(userEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            subscription.setKeycodeUser(user);
+            //Subscription savedSubscription = subscriptionService.saveSubscription(subscription);
+            cartService.addSubscriptionToCart(user, subscription);
+            message = "Subscription added to cart successfully";
+        }catch(IllegalArgumentException e){
+            message = e.getMessage();
+
+        }
+        return message;
+    }
+
+    //KH-10 - Update Cart Controller
+    //To Remove Cart Item
+    @DeleteMapping("/remove/{cartItemId}")
+    public String removeCartItem(@PathVariable Long cartItemId){
+        String returnMessage = "";
+        int cartItemType = cartService.removeCartItem(cartItemId);
+        if(cartItemType == 1){
+            returnMessage = "Vehicle removed from Cart";
+        }else if(cartItemType == 2){
+            returnMessage = "Subscription removed from Cart";
+        }
+        return returnMessage;
     }
 
 }

@@ -45,6 +45,12 @@ public class KeycodeUser implements UserDetails {
     @JsonIgnore
     private List<Vehicle> vehicles;
 
+    //Added by Nithya - Include Subscription
+    //KH-12- Update KeycodeUser model
+    @OneToOne(mappedBy = "keycodeUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Subscription subscription;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
