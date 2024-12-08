@@ -28,6 +28,9 @@ function Navbar() {
               <Link to="/">Home</Link>
             </li>
             <li>
+              {subscription && `${subscription.tier}`}
+            </li>
+            <li>
               <Link to="/vehicle-keycode-request">Request Keycode</Link>
             </li>
             <li>

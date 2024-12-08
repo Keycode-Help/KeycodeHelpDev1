@@ -14,6 +14,11 @@ export const AuthProvider = ({ children }) => {
     return savedRole ? savedRole : null;
   });
 
+  const [subscription, setSubscription] = useState(() => {
+    const saveSubscription = localStorage.getItem("subscription");
+    return saveSubscription ? saveSubscription : null;
+  });
+
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
   useEffect(() => {
@@ -21,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userRole", user.role);
       localStorage.setItem("token", token);
+      localStorage.setItem("subscription", user.subscription.tier);
 
       // Set Axios default Authorization header
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -28,6 +34,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("user");
       localStorage.removeItem("userRole");
       localStorage.removeItem("token");
+      localStorage.removeItem("subscription");
 
       // Remove Axios default Authorization header
       delete axios.defaults.headers.common["Authorization"];
@@ -47,6 +54,7 @@ export const AuthProvider = ({ children }) => {
           setUser(user);
           setUserRole(user.role);
           setToken(token);
+          setSubscription(user.subscription.tier);
         } else {
           throw new Error("Login failed: Invalid response data.");
         }
@@ -63,18 +71,20 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setUserRole(null);
     setToken(null);
+    setSubscription(null);
 
     // Remove items from localStorage
     localStorage.removeItem("user");
     localStorage.removeItem("userRole");
     localStorage.removeItem("token");
+    localStorage.removeItem("subscription");
 
     // Remove default authorization header from axios
     delete axios.defaults.headers.common["Authorization"];
   };
 
   return (
-    <AuthContext.Provider value={{ user, userRole, token, login, logout }}>
+    <AuthContext.Provider value={{ user, userRole, token, login, logout, subscription }}>
       {children}
     </AuthContext.Provider>
   );
