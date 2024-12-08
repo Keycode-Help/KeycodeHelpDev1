@@ -68,7 +68,4 @@ public class VehicleService {
     }
 
 
-    private String generateConfirmationNumber() {
-        return "CONF-" + System.currentTimeMillis(); // Generate a unique confirmation number
-    }
 }
