@@ -1,6 +1,7 @@
 package org.rma.kchbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,7 +26,19 @@ public class CartItem {
     @JsonManagedReference
     private Vehicle vehicle;
 
+    //Added by Nithya - Including Subscription
+    //KH-13 - Update CartItem model
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "subscription_id")
+    @JsonManagedReference
+    private Subscription subscription;
+
     public CartItem(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    //Added by Nithya - Create a Subscription Cart Item
+    public CartItem(Subscription subscription){
+        this.subscription = subscription;
     }
 }
