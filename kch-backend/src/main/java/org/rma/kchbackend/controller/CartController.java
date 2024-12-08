@@ -143,18 +143,13 @@ public class CartController {
         return message;
     }
 
+
     //KH-10 - Update Cart Controller
     //To Remove Cart Item
     @DeleteMapping("/remove/{cartItemId}")
     public String removeCartItem(@PathVariable Long cartItemId){
-        String returnMessage = "";
-        int cartItemType = cartService.removeCartItem(cartItemId);
-        if(cartItemType == 1){
-            returnMessage = "Vehicle removed from Cart";
-        }else if(cartItemType == 2){
-            returnMessage = "Subscription removed from Cart";
-        }
-        return returnMessage;
+        cartService.removeCartItem(cartItemId);
+        return "Item removed from cart.";
     }
 
 }
