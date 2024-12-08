@@ -6,9 +6,11 @@ function AdminDashboard() {
   const { token } = useAuth();
   const [pendingRequests, setPendingRequests] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
   const [keycodes, setKeycodes] = useState({}); // Store keycodes for each request
 
   useEffect(() => {
+    // Fetch Pending Requests
     axios
       .get("http://localhost:8080/admin/pending-requests", {
         headers: {
@@ -20,6 +22,7 @@ function AdminDashboard() {
         console.error("Error fetching pending requests:", error)
       );
 
+    // Fetch Transactions
     axios
       .get("http://localhost:8080/admin/transactions", {
         headers: {
@@ -28,6 +31,19 @@ function AdminDashboard() {
       })
       .then((response) => setTransactions(response.data))
       .catch((error) => console.error("Error fetching transactions:", error));
+
+    // Fetch Subscriptions
+    axios
+      .get("http://localhost:8080/admin/subscriptions", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setSubscriptions(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => console.error("Error fetching subscriptions:", error));
   }, [token]);
 
   const handleProcessRequest = (vehicleId) => {
@@ -75,6 +91,7 @@ function AdminDashboard() {
   return (
     <div className="container admin-dashboard">
       <h1>Admin Dashboard</h1>
+
       {/* Pending Requests Section */}
       <section className="pending-requests">
         <h2>Pending Requests</h2>
@@ -139,6 +156,35 @@ function AdminDashboard() {
                           {vehicle.keycode ? vehicle.keycode : "Not Provided"}
                         </div>
                       ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+
+      {/* Subscriptions Section */}
+      <section className="subscriptions">
+        <h2>All Subscriptions</h2>
+        {subscriptions.length === 0 ? (
+          <p>No subscriptions available.</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Subscription ID</th>
+                <th>Tier</th>
+                <th>User Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subscriptions.map((subscription) => (
+                <tr key={subscription.id}>
+                  <td>{subscription.id}</td>
+                  <td>{subscription.tier}</td>
+                  <td>
+                    {subscription.userEmail ? subscription.userEmail : "N/A"}
                   </td>
                 </tr>
               ))}
