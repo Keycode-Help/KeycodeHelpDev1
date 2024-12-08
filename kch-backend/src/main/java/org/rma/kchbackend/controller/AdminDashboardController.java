@@ -1,6 +1,7 @@
 package org.rma.kchbackend.controller;
 
 import org.rma.kchbackend.dto.ProcessRequestDto;
+import org.rma.kchbackend.dto.SubscriptionDto;
 import org.rma.kchbackend.model.Subscription;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.model.Transaction;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
@@ -43,9 +45,20 @@ public class AdminDashboardController {
         return vehicleService.processVehicleRequest(request.getVehicleId(), request.getKeycode());
     }
 
-    //Added by Nithya - to retrieve all subscriptions
     @GetMapping("/subscriptions")
-    public List<Subscription> getAllSubscriptions(){
-        return subscriptionService.getAllSubscriptions();
+    public List<SubscriptionDto> getAllSubscriptions() {
+        return subscriptionService.getAllSubscriptions().stream()
+                .map(subscription -> new SubscriptionDto(
+                        subscription.getId(),
+                        subscription.getTier().name(),
+                        subscription.getKeycodeUser() != null ? subscription.getKeycodeUser().getEmail() : null
+                ))
+                .collect(Collectors.toList());
     }
+
+//    //Added by Nithya - to retrieve all subscriptions
+//    @GetMapping("/subscriptions")
+//    public List<Subscription> getAllSubscriptions(){
+//        return subscriptionService.getAllSubscriptions();
+//    }
 }
