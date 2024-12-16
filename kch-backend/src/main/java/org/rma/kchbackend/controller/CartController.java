@@ -1,19 +1,20 @@
 package org.rma.kchbackend.controller;
 
-import jakarta.validation.Valid;
 import org.rma.kchbackend.dto.CartItemDto;
-import org.rma.kchbackend.model.*;
+import org.rma.kchbackend.model.Cart;
+import org.rma.kchbackend.model.KeycodeUser;
+import org.rma.kchbackend.model.Subscription;
+import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.service.CartService;
 import org.rma.kchbackend.service.EmailService;
 import org.rma.kchbackend.service.KeycodeUserService;
-import org.rma.kchbackend.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +27,7 @@ public class CartController {
     private final EmailService emailService;
 
     @Autowired
-    public CartController(CartService cartService, KeycodeUserService keycodeUserService, EmailService emailService,
-                          SubscriptionService subscriptionService) {
+    public CartController(CartService cartService, KeycodeUserService keycodeUserService, EmailService emailService) {
         this.cartService = cartService;
         this.keycodeUserService = keycodeUserService;
         this.emailService = emailService;
@@ -40,42 +40,19 @@ public class CartController {
         KeycodeUser user = keycodeUserService.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        /*List<CartItemDto> cartItems1 =  cartService.getCartItems(user).stream()
+        return cartService.getCartItems(user).stream()
                 .map(cartItem -> new CartItemDto(
                         cartItem.getId(),
-                        cartItem.getVehicle().getMake(),
-                        cartItem.getVehicle().getModel(),
-                        cartItem.getVehicle().getVin()))
-                .collect(Collectors.toList());*/
-        //Added by Nithya - To handle both Vehicles and Subscriptions
-        List<CartItem> tempCartItems = cartService.getCartItems(user);
-        List<CartItemDto> cartItems = new ArrayList<>();
-        for(CartItem cartItem : tempCartItems) {
-
-            //If cart item is vehicle
-            if(cartItem.getVehicle() != null){
-                CartItemDto cartItemDto = new CartItemDto(
-                        cartItem.getId(),
-                        cartItem.getVehicle().getMake(),
-                        cartItem.getVehicle().getModel(),
-                        cartItem.getVehicle().getVin()
-                );
-                cartItems.add(cartItemDto);
-            }
-            //If cart item is subscription
-            if(cartItem.getSubscription() != null){
-                CartItemDto cartItemDto = new CartItemDto(
-                        cartItem.getId(),
-                        cartItem.getSubscription().getTier()
-                );
-                cartItems.add(cartItemDto);
-            }
-        }
-        return cartItems;
+                        cartItem.getVehicle() != null ? cartItem.getVehicle().getMake() : null,
+                        cartItem.getVehicle() != null ? cartItem.getVehicle().getModel() : null,
+                        cartItem.getVehicle() != null ? cartItem.getVehicle().getVin() : null,
+                        cartItem.getSubscription() != null ? cartItem.getSubscription().getTier().name() : null
+                ))
+                .collect(Collectors.toList());
     }
 
-    @PostMapping("/add")
-    public String addToCart(@RequestBody Vehicle vehicle) {
+    @PostMapping("/addVehicle")
+    public String addVehicleToCart(@RequestBody Vehicle vehicle) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
         KeycodeUser user = keycodeUserService.findByEmail(userEmail)
@@ -85,13 +62,44 @@ public class CartController {
         return "Vehicle added to cart successfully.";
     }
 
-   /* @DeleteMapping("/remove/{vehicleId}")
-    public String removeVehicle(@PathVariable Long vehicleId) {
-        cartService.removeVehicleFromCart(vehicleId);
-        return "Vehicle removed from cart.";
-    }*/
+//    @PostMapping("/addSubscription")
+//    public String addSubscriptionToCart(@RequestBody Subscription subscription) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String userEmail = authentication.getName();
+//        KeycodeUser user = keycodeUserService.findByEmail(userEmail)
+//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+//
+//        // Attach subscription to user before adding to cart
+//        subscription.setKeycodeUser(user);
+//        cartService.addSubscriptionToCart(user, subscription);
+//
+//        return "Subscription added to cart successfully.";
+//    }
 
 
+    @PostMapping("/addSubscription")
+    public ResponseEntity<String> addSubscriptionToCart(@RequestBody Subscription subscription) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        KeycodeUser user = keycodeUserService.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        try {
+            // Attach subscription to user before adding to cart
+            subscription.setKeycodeUser(user);
+            cartService.addSubscriptionToCart(user, subscription);
+            return ResponseEntity.ok("Subscription added to cart successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+    @DeleteMapping("/remove/{cartItemId}")
+    public String removeCartItem(@PathVariable Long cartItemId) {
+        cartService.removeCartItem(cartItemId);
+        return "Item removed from cart.";
+    }
 
     @PostMapping("/checkout")
     public String checkout() throws IOException {
@@ -103,53 +111,21 @@ public class CartController {
         Cart cart = cartService.getOrCreateCart(user);
         cartService.checkoutCart(cart);
 
-        // Notify user and admin about checkout
-        String adminEmail = System.getenv("SENDER_EMAIL");
-
-        String userEmailResult = emailService.sendEmail(user.getEmail(), "Order Confirmation",
-                "Thank you for your order. Your confirmation number will be provided by the admin.");
-        String adminEmailResult = emailService.sendEmail(adminEmail, "New Transaction to Process",
-                "Order from user " + user.getEmail() + " is ready for processing.");
-
-        if (!userEmailResult.startsWith("Email sent successfully")) {
-            System.err.println("Failed to send order confirmation email to user: " + user.getEmail());
-        }
-        if (!adminEmailResult.startsWith("Email sent successfully")) {
-            System.err.println("Failed to notify admin for the transaction.");
-        }
+//        // Notify user and admin about checkout
+//        String adminEmail = System.getenv("SENDER_EMAIL");
+//
+//        String userEmailResult = emailService.sendEmail(user.getEmail(), "Order Confirmation",
+//                "Thank you for your order. Your confirmation number will be provided by the admin.");
+//        String adminEmailResult = emailService.sendEmail(adminEmail, "New Transaction to Process",
+//                "Order from user " + user.getEmail() + " is ready for processing.");
+//
+//        if (!userEmailResult.startsWith("Email sent successfully")) {
+//            System.err.println("Failed to send order confirmation email to user: " + user.getEmail());
+//        }
+//        if (!adminEmailResult.startsWith("Email sent successfully")) {
+//            System.err.println("Failed to notify admin for the transaction.");
+//        }
 
         return "Checkout successful.";
     }
-
-    //KH-10 - Update Cart Controller
-    //Add Subscription to Cart
-    @PostMapping("/addSubscription")
-    public String addSubscriptionToCart(@RequestBody Subscription subscription){
-        String message = null;
-        try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userEmail = authentication.getName();
-            KeycodeUser user = keycodeUserService.findByEmail(userEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-            subscription.setKeycodeUser(user);
-            //Subscription savedSubscription = subscriptionService.saveSubscription(subscription);
-            cartService.addSubscriptionToCart(user, subscription);
-            message = "Subscription added to cart successfully";
-        }catch(IllegalArgumentException e){
-            message = e.getMessage();
-
-        }
-        return message;
-    }
-
-
-    //KH-10 - Update Cart Controller
-    //To Remove Cart Item
-    @DeleteMapping("/remove/{cartItemId}")
-    public String removeCartItem(@PathVariable Long cartItemId){
-        cartService.removeCartItem(cartItemId);
-        return "Item removed from cart.";
-    }
-
 }

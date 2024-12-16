@@ -1,5 +1,6 @@
 package org.rma.kchbackend.service;
 
+import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Transaction;
 import org.rma.kchbackend.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,13 @@ public class TransactionService {
         this.emailService = emailService;
     }
 
-    public List<Transaction> getPendingTransactionsByUserId(Long userId) {
-        return transactionRepository.findAll().stream()
-                .filter(transaction -> transaction.getKeycodeUser().getId().equals(userId) && transaction.getStatus().equals("PENDING"))
-                .toList();
-    }
-
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
 
-  
+    public List<Transaction> getTransactionsByUser(KeycodeUser user) {
+        return transactionRepository.findByKeycodeUser(user);
+    }
+
 
 }

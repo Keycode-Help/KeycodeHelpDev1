@@ -56,8 +56,8 @@ public class VehicleService {
                 }
                 transactionRepository.save(transaction);
 
-                String email = vehicle.getKeycodeUser().getEmail();
-                emailService.sendEmail(email, "Your Key Code is Ready", "The key code for your vehicle VIN " + vehicle.getVin() + " is: " + keycode);
+                //   String email = vehicle.getKeycodeUser().getEmail();
+                //   emailService.sendEmail(email, "Your Key Code is Ready", "The key code for your vehicle VIN " + vehicle.getVin() + " is: " + keycode);
                 return "Keycode processed and email sent.";
             } else {
                 return "Transaction not found for vehicle.";
@@ -68,4 +68,7 @@ public class VehicleService {
     }
 
 
+    private String generateConfirmationNumber() {
+        return "CONF-" + System.currentTimeMillis(); // Generate a unique confirmation number
+    }
 }
