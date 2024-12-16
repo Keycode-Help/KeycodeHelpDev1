@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../styles/home.css";
 
 function Home() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function Home() {
       <div className="hero-overlay"></div>
       <div className="hero-content">
         <h1>Unlock Your Vehicle Today</h1>
-        <p>Get keycodes instantly with Auto Arcade</p>
+        <p>Get keycodes instantly with Keycode Help</p>
         {userRole ? (
           <button className="hero-button" onClick={handleRequestKeycode}>
             Request Keycode

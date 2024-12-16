@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/register.css";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -36,7 +37,7 @@ function Register() {
   };
 
   return (
-    <div className="container">
+    <div className="container-register">
       <div className="form-section">
         <h1>Sign Up For An Account</h1>
         <form onSubmit={handleSubmit}>

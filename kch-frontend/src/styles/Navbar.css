@@ -1,80 +1,42 @@
-/* Navbar.css */
-
-/* Root styles for color variables */
-:root {
-  --primary-color: #0b41e4; /* Main blue */
-  --secondary-color: #4ae66c; /* Accent green */
-  --background-color: #213341; /* Navbar background */
-  --text-color: #000000; /* Black for text */
-}
-
-/* Navbar container */
 .navbar {
-  background-color: var(--background-color);
-  color: var(--text-color);
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
-  position: sticky;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #1f1f2f;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 100vw;
+  position: fixed;
   top: 0;
-  z-index: 10;
+  height: 15vh;
+  font-size: 1.5rem;
 }
 
-/* Logo */
-.navbar-logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-/* Navigation links container */
 .navbar-links {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  gap: 1.5rem;
+  list-style: none;
 }
 
-/* Individual links */
-.navbar-links a {
+.navbar-links li a {
+  color: #f5f5f5;
   text-decoration: none;
-  color: var(--text-color);
-  font-size: 16px;
-  font-weight: 500;
-  transition: color 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
 }
 
-.navbar-links a:hover {
-  color: var(--secondary-color);
-}
-
-/* Active link */
-.navbar-links .active {
-  color: var(--primary-color);
-  font-weight: bold;
-  border-bottom: 2px solid var(--primary-color);
-}
-
-/* Button for calls-to-action */
-.navbar-button {
-  background-color: var(--primary-color);
+.navbar-links li a:hover {
+  background-color: #e50914;
   color: #ffffff;
+}
+
+#logout {
+  background-color: #e50914;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-radius: 5px;
 }
 
-.navbar-button:hover {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
-}
-
-/* Mobile responsive styles */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
@@ -83,11 +45,7 @@
 
   .navbar-links {
     flex-direction: column;
-    gap: 10px;
     width: 100%;
-  }
-
-  .navbar-button {
-    align-self: flex-end;
+    gap: 0.5rem;
   }
 }
