@@ -1,0 +1,65 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  background-color: #121212;
+  color: #f5f5f5;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+/* Center Containers Globally */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto; /* Centers content horizontally */
+  padding: 2rem;
+  background-color: #1f1f2f;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.wrapper-sub {
+  height: 90vh;
+  width: 95vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subscription-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.subscription-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .container {
+    width: 95%; /* Adjusts container for smaller screens */
+    padding: 1rem;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-size: 1.5rem; /* Makes headings responsive */
+  }
+}

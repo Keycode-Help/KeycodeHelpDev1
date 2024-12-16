@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../styles/navbar.css";
 
 function Navbar() {
   const { userRole, logout } = useAuth();
 
   return (
     <div className="navbar">
-      <div className="navbar-logo">Auto Arcade</div>
-      <ul>
+      <div className="navbar-logo">Keycode Help</div>
+      <ul className="navbar-links">
         {!userRole && (
           <>
             <li>
@@ -29,8 +30,7 @@ function Navbar() {
               <Link to="/vehicle-keycode-request">Request Keycode</Link>
             </li>
             <li>
-              <Link to="/subscription">Subscription</Link>{" "}
-              {/* Added subscription link */}
+              <Link to="/subscription">Subscription</Link>
             </li>
             <li>
               <Link to="/cart">Cart</Link>
@@ -45,6 +45,9 @@ function Navbar() {
             </li>
             <li>
               <Link to="/admin">Admin Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/admin/user-history">User History</Link>
             </li>
           </>
         )}

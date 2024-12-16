@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../styles/login.css";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -38,8 +39,8 @@ function Login() {
   };
 
   return (
-    <div className="container">
-      <div className="form-section">
+    <div className="container-login">
+      <div className="form-section-login">
         <h1>Login to Your Account</h1>
         <form onSubmit={handleSubmit}>
           <input
