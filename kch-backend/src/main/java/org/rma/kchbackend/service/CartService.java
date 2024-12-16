@@ -1,10 +1,9 @@
 package org.rma.kchbackend.service;
 
 import org.rma.kchbackend.model.*;
-import org.rma.kchbackend.repository.CartItemRepository;
-import org.rma.kchbackend.repository.CartRepository;
-import org.rma.kchbackend.repository.VehicleRepository;
-import org.rma.kchbackend.repository.TransactionRepository;
+import org.rma.kchbackend.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,16 +18,18 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final TransactionRepository transactionRepository;
     private final SubscriptionService subscriptionService;
+    private final SubscriptionRepository subscriptionRepository;
 
     @Autowired
     public CartService(CartRepository cartRepository, VehicleRepository vehicleRepository,
                        CartItemRepository cartItemRepository, TransactionRepository transactionRepository,
-                       SubscriptionService subscriptionService) {
+                       SubscriptionService subscriptionService, SubscriptionRepository subscriptionRepository) {
         this.cartRepository = cartRepository;
         this.vehicleRepository = vehicleRepository;
         this.cartItemRepository = cartItemRepository;
         this.transactionRepository = transactionRepository;
         this.subscriptionService = subscriptionService;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     public Cart getOrCreateCart(KeycodeUser user) {
@@ -55,34 +56,26 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-
-        //KH-9 - Update CartService
-//New Method - addSubscriptionToCart() - To add subscription to cart
     @Transactional
     public Cart addSubscriptionToCart(KeycodeUser user, Subscription subscription) {
-
-        //Get the cart associated with user
         Cart cart = getOrCreateCart(user);
 
-        // Switch order of operactions to check if user's account already has a subscription
         // Validate if the user already has a subscription in the system
         subscriptionService.validateUserSubscription(user);
 
-        //Make sure the subscription is not already present in the cart
-        if(cart.getCartItems().stream().anyMatch(item -> item.getSubscription()!=null)){
-            throw new IllegalArgumentException("User already has a subscription in the cart");
+        // Ensure there is no subscription already in the cart
+        if (cart.getCartItems().stream().anyMatch(item -> item.getSubscription() != null)) {
+            throw new IllegalArgumentException("User already has a subscription in the cart.");
         }
 
         subscription.setKeycodeUser(user); // Setting the user reference in subscription
         subscription = subscriptionService.saveSubscription(subscription);
 
-        //Create Subscription cart item
         CartItem cartItem = new CartItem(subscription);
         cartItem.setCart(cart);
         cartItemRepository.save(cartItem);
-
-        //Add the cart item to the cart
         cart.addCartItem(cartItem);
+
         return cartRepository.save(cart);
     }
 
@@ -92,28 +85,70 @@ public class CartService {
         return cart.getCartItems();
     }
 
+
+    // updated method to implement service methods
     @Transactional
     public void removeCartItem(Long cartItemId) {
+        Logger log = LoggerFactory.getLogger(CartService.class);
+        log.debug("Attempting to remove CartItem with ID: {}", cartItemId);
+
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IllegalArgumentException("CartItem not found"));
+        log.debug("CartItem retrieved: {}", cartItem);
 
+        // Handle Vehicle Removal
         if (cartItem.getVehicle() != null) {
             Vehicle vehicle = cartItem.getVehicle();
+            log.debug("Handling vehicle removal for Vehicle ID: {}", vehicle.getId());
+
             vehicle.setCartItem(null);
+            vehicle.setKeycodeUser(null);
             vehicleRepository.save(vehicle);
-        } else if (cartItem.getSubscription() != null) {
-            Subscription subscription = cartItem.getSubscription();
-            subscription.setKeycodeUser(null);
-            subscriptionService.removeSubscription(subscription);
+            log.debug("Cleared associations for Vehicle ID: {}", vehicle.getId());
+
+            if (vehicle.getCartItem() == null && vehicle.getTransaction() == null) {
+                vehicleRepository.delete(vehicle);
+                log.debug("Vehicle deleted: {}", vehicle.getId());
+            }
         }
 
+        // Handle Subscription Removal
+        if (cartItem.getSubscription() != null) {
+            Subscription subscription = cartItem.getSubscription();
+            log.debug("Handling subscription removal for Subscription ID: {}", subscription.getId());
+
+            // Clear bidirectional associations
+            subscription.setCartItem(null);
+            cartItem.setSubscription(null);
+
+            // Clear the association with KeycodeUser
+            if (subscription.getKeycodeUser() != null) {
+                subscription.getKeycodeUser().setSubscription(null);
+                subscription.setKeycodeUser(null);
+            }
+
+            // Save changes to the CartItem and Subscription
+            cartItemRepository.save(cartItem);
+            subscriptionRepository.save(subscription);
+            log.debug("Cleared associations for Subscription ID: {}", subscription.getId());
+
+            // Delete the Subscription entity
+            subscriptionRepository.delete(subscription);
+            log.debug("Subscription deleted: {}", subscription.getId());
+        }
+
+        // Remove the CartItem itself
         cartItemRepository.delete(cartItem);
+        log.debug("CartItem deleted: {}", cartItemId);
     }
+
+
 
     @Transactional
     public void checkoutCart(Cart cart) {
         cart.setStatus("CHECKED_OUT");
 
+        // Create a new Transaction for the cart
         Transaction transaction = new Transaction();
         transaction.setConfirmationNumber(generateConfirmationNumber());
         transaction.setStatus("PENDING");
@@ -121,8 +156,10 @@ public class CartService {
 
         boolean hasSubscription = false;
 
+        // Store cart items to be deleted
         List<CartItem> cartItems = cart.getCartItems();
 
+        // Disassociate all cart items from the cart and handle associated entities
         for (CartItem cartItem : cartItems) {
             if (cartItem.getVehicle() != null) {
                 // Handle Vehicle
@@ -160,6 +197,7 @@ public class CartService {
             cartItemRepository.delete(cartItem);
         }
 
+        // Save the transaction in the repository
         transactionRepository.save(transaction);
     }
 
@@ -168,88 +206,4 @@ public class CartService {
     private String generateConfirmationNumber() {
         return "CONF-" + System.currentTimeMillis();
     }
-
-
-
-
-//
-//    @Transactional
-//    public void checkoutCart(Cart cart) {
-//
-//        cart.setStatus("CHECKED_OUT");
-//
-//        Transaction transaction = new Transaction();
-//        transaction.setConfirmationNumber(generateConfirmationNumber());
-//        transaction.setStatus("PENDING");
-//        transaction.setKeycodeUser(cart.getKeycodeUser());
-//
-//        //KH-9 - Update CartService
-//        //Modifying checkout to handle subscriptions
-//        for(CartItem cartItem : cart.getCartItems()) {
-//            //Check whether the cart item is a vehicle
-//            if(cartItem.getVehicle() != null){
-//                Vehicle vehicle = cartItem.getVehicle();
-//
-//                vehicle.setCartItem(null);
-//
-//                vehicle.setTransaction(transaction);
-//                vehicleRepository.save(vehicle);
-//
-//                transaction.getVehicles().add(vehicle);
-//            }
-//
-//            //Check if the cart item is a Subscription
-//            if(cartItem.getSubscription() != null){
-//                Subscription subscription = cartItem.getSubscription();
-//                subscription.setCartItem(null);
-//                subscriptionRepository.save(subscription);
-//            }
-//        }
-//
-//        transactionRepository.save(transaction);
-//
-//        cart.getCartItems().clear();
-//        cartRepository.save(cart);
-//    }
-
-//    //KH-9 - Udpate Cart Service
-////New Method - removeCartItem() - To remove cart item - both vehicle and subscription
-//    public int removeCartItem(Long cartItemId) {
-//        //Check whether the cart item is valid
-//        CartItem cartItem = cartItemRepository.findById(cartItemId).
-//                orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
-//
-//        int cartItemType = 0;   //1 for Vehicle, 2 for Subscription
-//
-//        //Check whether it is a vehicle
-//        if(cartItem.getVehicle() != null){
-//            Vehicle vehicle = cartItem.getVehicle();
-//            //Remove the vehicle from cartItemRepository
-//            cartItemRepository.delete(cartItem);
-//            vehicle.setCartItem(null);
-//            vehicle.setKeycodeUser(null);
-//
-//            //Remove vehicle in vehicle repository
-//            vehicleRepository.delete(vehicle);
-//
-//            cartItemType = 1;
-//        }
-//
-//        //Check whether it is a subscription
-//        if(cartItem.getSubscription() != null){
-//            Subscription subscription = cartItem.getSubscription();
-//
-//            subscription.setKeycodeUser(null);
-//            //Remove the subscription from cartItemRepository
-//            cartItemRepository.delete(cartItem);
-//            System.out.println("Cart Item deleted");
-//
-//            subscription.setCartItem(null);
-//            //remove the subscription in subscription repo
-//            subscriptionRepository.delete(subscription);
-//            System.out.println("Subscription deleted");
-//            cartItemType = 2;
-//        }
-//        return cartItemType;
-//    }
 }
