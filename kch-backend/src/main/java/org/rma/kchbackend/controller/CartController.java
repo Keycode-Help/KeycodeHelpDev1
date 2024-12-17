@@ -62,19 +62,7 @@ public class CartController {
         return "Vehicle added to cart successfully.";
     }
 
-//    @PostMapping("/addSubscription")
-//    public String addSubscriptionToCart(@RequestBody Subscription subscription) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String userEmail = authentication.getName();
-//        KeycodeUser user = keycodeUserService.findByEmail(userEmail)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-//
-//        // Attach subscription to user before adding to cart
-//        subscription.setKeycodeUser(user);
-//        cartService.addSubscriptionToCart(user, subscription);
-//
-//        return "Subscription added to cart successfully.";
-//    }
+
 
 
     @PostMapping("/addSubscription")
