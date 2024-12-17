@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import "../styles/vehicleKeycodeRequest.css"; // Import the CSS file
+import "../styles/vehicleKeycodeRequest.css";
 
 function VehicleKeycodeRequest() {
   const [formData, setFormData] = useState({

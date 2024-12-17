@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import "../styles/adminDashboard.css"; // Import the CSS file
+import "../styles/adminDashboard.css";
 
 function AdminDashboard() {
   const { token } = useAuth();

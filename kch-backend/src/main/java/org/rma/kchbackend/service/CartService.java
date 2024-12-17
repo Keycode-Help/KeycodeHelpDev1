@@ -86,7 +86,7 @@ public class CartService {
     }
 
 
-    // updated method to implement service methods
+
     @Transactional
     public void removeCartItem(Long cartItemId) {
         Logger log = LoggerFactory.getLogger(CartService.class);
