@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* General dark theme styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  color: #f5f5f5;
+  background-color: #121212;
+}
+
+/* Navbar styling */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1f1f1f;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #e50914;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar ul li {
+  font-size: 1.2rem;
+}
+
+.navbar a {
+  color: #f5f5f5;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #e50914;
+}
+
+#logout {
+  background-color: #e50914;
+  color: #f5f5f5;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#logout:hover {
+  background-color: #d40813;
+}
+
+/* Hero Section for Homepage */
+.hero-section {
+  background: url("./hero1.webp") no-repeat center center/cover;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-content {
+  position: relative;
+  color: #ffffff;
+  z-index: 2;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-button {
+  padding: 1rem 2rem;
+  background-color: #e50914;
+  color: #f5f5f5;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #d40813;
+}
+
+/* Container Styling */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: #1f1f1f;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Flexbox Alignment for Various Pages */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Footer Styling */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #1f1f1f;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.3);
+  color: #f5f5f5;
+}
+
+.footer .socials a {
+  color: #f5f5f5;
+  margin: 0 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.footer .socials a:hover {
+  color: #e50914;
+}
+
+/* Admin Dashboard Section */
+.admin-dashboard .pending-requests,
+.admin-dashboard .transactions {
+  margin-bottom: 2rem;
+}
+
+.pending-requests ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pending-requests li {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: #292929;
+  border-radius: 5px;
+}
+
+.admin-dashboard table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-dashboard table th,
+.admin-dashboard table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #3f3f3f;
+}
+
+/* Cart Items Styling */
+.cart-items table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.cart-items table th,
+.cart-items table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #3f3f3f;
+}
+
+.checkout-button,
+.continue-shopping-button {
+  background-color: #e50914;
+  color: #f5f5f5;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover,
+.continue-shopping-button:hover {
+  background-color: #d40813;
+}
+
+/* Login & Register Forms */
+.form-section {
+  background: #1f1f1f;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.form-section input {
+  width: 90%;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  border: 1px solid #3f3f3f;
+  border-radius: 5px;
+  background-color: #2a2a2a;
+  color: #f5f5f5;
+}
+
+.form-section button {
+  width: 50%;
+  padding: 1rem;
+  background-color: #e50914;
+  color: #f5f5f5;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-section button:hover {
+  background-color: #d40813;
+}
+
+/* Checkout Page Styling */
+.checkout-page .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.confirmation {
+  margin-top: 1.5rem;
+  background: #292929;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
