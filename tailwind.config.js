@@ -1,9 +1,10 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -17,8 +18,8 @@ export default {
         'cta-light': '#FFD84D', // Lighter gold
         'slate-light': '#2a4155',
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      backgroundColor: {
+        dark: '#000000',
       },
     },
   },

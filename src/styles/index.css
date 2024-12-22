@@ -51,10 +51,7 @@
 
   /* Navigation links */
   .nav-link {
-    @apply text-white/80 hover:text-success transition-colors duration-300
-           relative after:absolute after:bottom-0 after:left-0 after:w-0
-           after:h-0.5 after:bg-success after:transition-all
-           hover:after:w-full;
+    @apply text-white/80 hover:text-success transition-colors duration-300;
   }
 }
 
