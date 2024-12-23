@@ -47,6 +47,9 @@ function Navbar() {
               <Link to="/admin">Admin Dashboard</Link>
             </li>
             <li>
+              <Link to="/admin/registered-users">Registered Users</Link>
+            </li>
+            <li>
               <Link to="/admin/user-history">User History</Link>
             </li>
           </>

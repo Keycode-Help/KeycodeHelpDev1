@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import "../styles/userHistoryPage.css";
+import "../styles/userHistoryPage.css"; // Import the CSS file
 
 function UserHistoryPage() {
   const { token } = useAuth();

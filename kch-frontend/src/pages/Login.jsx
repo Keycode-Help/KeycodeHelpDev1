@@ -24,7 +24,6 @@ function Login() {
     e.preventDefault();
     try {
       await login(formData.email, formData.password);
-      alert("Login successful!");
 
       // Redirect based on user role
       if (userRole === "ADMIN") {

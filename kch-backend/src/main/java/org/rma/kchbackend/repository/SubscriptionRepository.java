@@ -1,14 +1,14 @@
 package org.rma.kchbackend.repository;
 
+
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * KH-4 - Implement Subscription Repo
- */
+@Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     Optional<Subscription> findByKeycodeUser(KeycodeUser user);
 }

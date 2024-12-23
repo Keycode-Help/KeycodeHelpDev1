@@ -49,6 +49,17 @@ public class KeycodeUser implements UserDetails {
     @JsonIgnore
     private Subscription subscription;
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] frontId;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] backId;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] insurance;
 
     @Override
     @JsonIgnore

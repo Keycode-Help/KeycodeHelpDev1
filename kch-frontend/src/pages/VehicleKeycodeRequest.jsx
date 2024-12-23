@@ -9,9 +9,16 @@ function VehicleKeycodeRequest() {
     make: "",
     model: "",
     vin: "",
+    frontId: null,
+    backId: null,
+    registration: null,
   });
+
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { token } = useAuth();
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,22 +28,66 @@ function VehicleKeycodeRequest() {
     });
   };
 
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+
+    // File validation: Check type and size
+    const file = files[0];
+    if (!file) {
+      setErrors((prev) => ({ ...prev, [name]: "File is required." }));
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "Only image files are allowed.",
+      }));
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "File size should not exceed 5MB.",
+      }));
+      return;
+    }
+
+    // If validation passes, clear any existing errors for this field
+    setErrors((prev) => ({ ...prev, [name]: null }));
+
+    setFormData({
+      ...formData,
+      [name]: file,
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formDataObj = new FormData();
+    formDataObj.append("make", formData.make);
+    formDataObj.append("model", formData.model);
+    formDataObj.append("vin", formData.vin);
+    formDataObj.append("frontId", formData.frontId);
+    formDataObj.append("backId", formData.backId);
+    formDataObj.append("registration", formData.registration);
+
     axios
-      .post("http://localhost:8080/vehicle/request-keycode", formData, {
+      .post("http://localhost:8080/vehicle/request-keycode", formDataObj, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
-        alert("Vehicle request added to cart.");
         navigate("/cart");
       })
       .catch((error) => {
         console.error("Error requesting keycode:", error);
-        alert("Failed to request keycode. Please try again.");
+        alert(
+          error.response?.data || "Failed to request keycode. Please try again."
+        );
       });
   };
 
@@ -81,6 +132,43 @@ function VehicleKeycodeRequest() {
               required
             />
           </div>
+          <label>
+            Upload Front ID:
+            <input
+              type="file"
+              name="frontId"
+              onChange={handleFileChange}
+              accept="image/*"
+              required
+            />
+            {errors.frontId && (
+              <p className="error-message">{errors.frontId}</p>
+            )}
+          </label>
+          <label>
+            Upload Back ID:
+            <input
+              type="file"
+              name="backId"
+              onChange={handleFileChange}
+              accept="image/*"
+              required
+            />
+            {errors.backId && <p className="error-message">{errors.backId}</p>}
+          </label>
+          <label>
+            Upload Registration:
+            <input
+              type="file"
+              name="registration"
+              onChange={handleFileChange}
+              accept="image/*"
+              required
+            />
+            {errors.registration && (
+              <p className="error-message">{errors.registration}</p>
+            )}
+          </label>
           <button type="submit" className="submit-button">
             Add to Cart
           </button>
