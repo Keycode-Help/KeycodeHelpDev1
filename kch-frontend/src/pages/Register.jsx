@@ -5,13 +5,17 @@ import "../styles/register.css";
 
 function Register() {
   const [formData, setFormData] = useState({
-    fname: "", // First Name
-    lname: "", // Last Name
-    email: "", // Email Address
-    phone: "", // Phone number (optional)
-    password: "", // Password
+    fname: "",
+    lname: "",
+    email: "",
+    phone: "",
+    password: "",
+    frontId: null,
+    backId: null,
+    insurance: null,
   });
 
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,17 +26,65 @@ function Register() {
     });
   };
 
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+
+    // File validation: Check type and size
+    const file = files[0];
+    if (!file) {
+      setErrors((prev) => ({ ...prev, [name]: "File is required." }));
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "Only image files are allowed.",
+      }));
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      // 5MB limit
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "File size should not exceed 5MB.",
+      }));
+      return;
+    }
+
+    // If validation passes, clear any existing errors for this field
+    setErrors((prev) => ({ ...prev, [name]: null }));
+
+    setFormData({
+      ...formData,
+      [name]: file,
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const formDataObj = new FormData();
+    formDataObj.append("fname", formData.fname);
+    formDataObj.append("lname", formData.lname);
+    formDataObj.append("email", formData.email);
+    formDataObj.append("phone", formData.phone);
+    formDataObj.append("password", formData.password);
+    formDataObj.append("frontId", formData.frontId);
+    formDataObj.append("backId", formData.backId);
+    formDataObj.append("insurance", formData.insurance);
+
     axios
-      .post("http://localhost:8080/auth/register", formData)
+      .post("http://localhost:8080/auth/register", formDataObj, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then((response) => {
-        alert(response.data); // Will display the appropriate message based on the backend response
         navigate("/login");
       })
       .catch((error) => {
         console.error("Registration failed", error);
-        alert("Registration failed. Please try again.");
+        alert(error.response?.data || "Registration failed. Please try again.");
       });
   };
 
@@ -70,7 +122,7 @@ function Register() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="Phone number"
+            placeholder="Phone Number"
           />
           <input
             type="password"
@@ -80,12 +132,49 @@ function Register() {
             placeholder="Password"
             required
           />
+          <label>
+            Upload Front ID:
+            <input
+              type="file"
+              name="frontId"
+              onChange={handleFileChange}
+              accept="image/*"
+              required
+            />
+            {errors.frontId && (
+              <p className="error-message">{errors.frontId}</p>
+            )}
+          </label>
+          <label>
+            Upload Back ID:
+            <input
+              type="file"
+              name="backId"
+              onChange={handleFileChange}
+              accept="image/*"
+              required
+            />
+            {errors.backId && <p className="error-message">{errors.backId}</p>}
+          </label>
+          <label>
+            Upload Insurance Document:
+            <input
+              type="file"
+              name="insurance"
+              onChange={handleFileChange}
+              accept="image/*"
+              required
+            />
+            {errors.insurance && (
+              <p className="error-message">{errors.insurance}</p>
+            )}
+          </label>
           <button type="submit" className="book-btn">
             Register
           </button>
         </form>
         <p>
-          Already a member?... <a href="/login">Sign in</a>
+          Already a member? <a href="/login">Sign in</a>
         </p>
       </div>
     </div>

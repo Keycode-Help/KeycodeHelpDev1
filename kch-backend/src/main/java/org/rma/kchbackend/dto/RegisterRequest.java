@@ -1,27 +1,28 @@
 package org.rma.kchbackend.dto;
 
-import lombok.Data;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class RegisterRequest {
 
-    @NotBlank(message = "First name is mandatory")
+    @NotBlank(message = "First name cannot be empty")
     private String fname;
 
-    @NotBlank(message = "Last name is mandatory")
+    @NotBlank(message = "Last name cannot be empty")
     private String lname;
 
-    @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
+    @NotBlank(message = "Email cannot be empty")
     private String email;
 
-    @Size(min = 8, message = "Password must be at least 8 characters")
-    @NotBlank(message = "Password is mandatory")
+    private String phone;
+
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    private String phone;
+    private byte[] frontId; 
+    private byte[] backId;
+    private byte[] insurance;
 }

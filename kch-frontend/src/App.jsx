@@ -10,6 +10,7 @@ import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
 import AdminDashboard from "./pages/AdminDashboard";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
+import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import "./styles/app.css";
 
 function App() {
@@ -29,6 +30,10 @@ function App() {
             />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route
+              path="/admin/registered-users"
+              element={<RegisteredUsersPage />} // Add the route for the new page
+            />
             <Route path="/admin/user-history" element={<UserHistoryPage />} />
             <Route path="*" element={<Home />} />
           </Routes>

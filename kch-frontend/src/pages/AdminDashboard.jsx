@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import "../styles/adminDashboard.css";
+import "../styles/adminDashboard.css"; // Import the CSS file
 
 function AdminDashboard() {
   const { token } = useAuth();
@@ -16,6 +16,7 @@ function AdminDashboard() {
     sortOrder: "asc",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   const handleApiError = (error, defaultMessage) => {
     console.error(error);
@@ -77,7 +78,6 @@ function AdminDashboard() {
         }
       )
       .then(() => {
-        alert("Keycode processed successfully.");
         setPendingRequests(
           pendingRequests.filter((request) => request.id !== vehicleId)
         );
@@ -95,6 +95,14 @@ function AdminDashboard() {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
+  };
+
+  const openModal = (imageSrc) => {
+    setModalImage(imageSrc);
+  };
+
+  const closeModal = () => {
+    setModalImage(null);
   };
 
   return (
@@ -162,6 +170,30 @@ function AdminDashboard() {
                     <p>
                       VIN: <strong>{request.vin}</strong>
                     </p>
+                    <p>
+                      Email:{" "}
+                      <strong>{request.keycodeUserEmail || "N/A"}</strong>
+                    </p>
+                  </div>
+                  <div className="pending-card-images">
+                    <img
+                      src={request.frontId}
+                      alt="Front ID"
+                      className="vehicle-image"
+                      onClick={() => openModal(request.frontId)}
+                    />
+                    <img
+                      src={request.backId}
+                      alt="Back ID"
+                      className="vehicle-image"
+                      onClick={() => openModal(request.backId)}
+                    />
+                    <img
+                      src={request.registration}
+                      alt="Registration"
+                      className="vehicle-image"
+                      onClick={() => openModal(request.registration)}
+                    />
                   </div>
                   <div className="pending-card-input">
                     <input
@@ -254,6 +286,17 @@ function AdminDashboard() {
           )}
         </section>
       </div>
+
+      {modalImage && (
+        <div className="modal" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+            <img src={modalImage} alt="Enlarged View" className="modal-image" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -46,4 +46,15 @@ public class Vehicle {
     private String keycode;
 
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] frontId;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] backId;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] registration;
 }
