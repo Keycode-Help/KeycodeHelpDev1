@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
+import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscription page
 import "./styles/app.css";
 
 function App() {
