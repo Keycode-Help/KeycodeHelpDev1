@@ -1,27 +1,24 @@
+import defaultTheme from 'tailwindcss/defaultTheme'
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: '#0b41e4',    // Deep Blue
-        success: '#4ae66c',    // Vibrant Green
-        cta: '#FFCE20',        // Gold
-        dark: '#000000',       // Black
-        slate: '#213341',      // Slate Gray
-        'primary-light': '#2255f5',
-        'success-light': '#5df77f',
-        'cta-light': '#FFD84D', // Lighter gold
-        'slate-light': '#2a4155',
-      },
-      backgroundColor: {
+        primary: '#0b41e4',
+        success: '#4ae66c',
+        cta: '#FFCE20',
         dark: '#000000',
+        slate: '#213341',
+      },
+      fontFamily: {
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
     },
   },
   plugins: [],
-} 
+}

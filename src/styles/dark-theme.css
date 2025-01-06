@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Dark theme styles */
 :root {
   --color-primary: #0b41e4;
@@ -17,6 +21,4 @@ body {
   --bg-primary: var(--color-dark);
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
-}
-
-/* Rest of dark theme styles... */
+} 

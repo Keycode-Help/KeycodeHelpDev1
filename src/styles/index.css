@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles */
+/* Dark theme styles */
+:root {
+  --color-primary: #0b41e4;
+  --color-success: #4ae66c;
+  --color-cta: #FFCE20;
+  --color-dark: #000000;
+  --color-slate: #213341;
+}
+
 @layer base {
   body {
     @apply bg-dark text-white m-0 min-h-screen font-sans antialiased;
@@ -13,9 +21,7 @@
   }
 }
 
-/* Custom components */
 @layer components {
-  /* Primary Action Button */
   .btn-primary {
     @apply px-6 py-3 bg-primary rounded-md font-medium
            relative overflow-hidden
@@ -26,7 +32,6 @@
            active:scale-95;
   }
 
-  /* CTA Button */
   .btn-cta {
     @apply px-6 py-3 bg-cta text-dark rounded-md font-medium
            relative overflow-hidden
@@ -37,19 +42,16 @@
            active:scale-95;
   }
 
-  /* Bento Box Container */
   .bento-container {
     @apply grid gap-6 p-6 rounded-lg border border-slate/50 bg-slate/50 backdrop-blur-sm;
   }
 
-  /* Bento Box Item */
   .bento-item {
     @apply p-6 rounded-lg border border-slate bg-slate/90 
            transition-all duration-300 hover:border-primary 
            hover:shadow-lg hover:shadow-primary/10;
   }
 
-  /* Navigation links */
   .nav-link {
     @apply text-white/80 hover:text-success transition-colors duration-300;
   }
