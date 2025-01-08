@@ -7,13 +7,14 @@ function RegisteredUsers() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState("");
 
+  // Fetch users from the backend and include isValidatedUser
   useEffect(() => {
     axios
       .get("http://localhost:8080/admin/users", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((response) => {
-        setUsers(response.data);
+        setUsers(response.data); // Ensure isValidatedUser is included
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -22,6 +23,26 @@ function RegisteredUsers() {
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
+  };
+
+  const handleValidateUser = (id) => {
+    axios
+      .patch(`http://localhost:8080/admin/validate-user/${id}`, null, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        alert("User validated successfully.");
+        // Update the local state to reflect the validated status
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === id ? { ...user, isValidatedUser: true } : user
+          )
+        );
+      })
+      .catch((error) => {
+        console.error("Error validating user:", error);
+        alert("Failed to validate user.");
+      });
   };
 
   const handleSendNotification = () => {
@@ -55,7 +76,9 @@ function RegisteredUsers() {
           {users.map((user) => (
             <div
               key={user.id}
-              className="user-card"
+              className={`user-card ${
+                user.isValidatedUser ? "validated" : "unvalidated"
+              }`}
               onClick={() => handleUserClick(user)}
             >
               <div className="user-card-content">
@@ -93,6 +116,12 @@ function RegisteredUsers() {
               <img src={selectedUser.backId} alt="Back ID" />
               <img src={selectedUser.insurance} alt="Insurance" />
             </div>
+            <button
+              className="validate-btn"
+              onClick={() => handleValidateUser(selectedUser.id)}
+            >
+              Validate User
+            </button>
             <textarea
               value={notificationMessage}
               onChange={(e) => setNotificationMessage(e.target.value)}

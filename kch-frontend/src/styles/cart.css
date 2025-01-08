@@ -79,18 +79,18 @@ button {
 }
 
 .remove-button {
-  background-color: #e50914;
+  background-color: #238636;
   color: #f5f5f5;
 }
 
 .remove-button:hover {
-  background-color: #bf0812;
+  background-color: #0c4e19;
 }
 
 .checkout-button,
 .add-subscription-button,
 .continue-shopping-button {
-  background-color: #e50914;
+  background-color: #238636;
   color: #f5f5f5;
   margin-top: 1rem;
   display: inline-block;
@@ -101,7 +101,7 @@ button {
 .checkout-button:hover,
 .add-subscription-button:hover,
 .continue-shopping-button:hover {
-  background-color: #bf0812;
+  background-color: #0c4e19;
 }
 
 .cart-actions {
@@ -119,5 +119,5 @@ button {
 }
 
 .cart-actions a:hover {
-  color: #e50914;
+  color: #0c4e19;
 }

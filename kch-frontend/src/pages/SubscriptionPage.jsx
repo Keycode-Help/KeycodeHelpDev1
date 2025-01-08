@@ -46,13 +46,19 @@ function SubscriptionPage() {
         <div className="subscription-options">
           <div className="subscription-option">
             <h2>Base Subscription</h2>
-            <button onClick={() => handleAddSubscription("BASE")}>
+            <button
+              className="sub-button"
+              onClick={() => handleAddSubscription("BASE")}
+            >
               Add Base Subscription to Cart
             </button>
           </div>
           <div className="subscription-option">
             <h2>Premium Subscription</h2>
-            <button onClick={() => handleAddSubscription("PREMIUM")}>
+            <button
+              className="sub-button"
+              onClick={() => handleAddSubscription("PREMIUM")}
+            >
               Add Premium Subscription to Cart
             </button>
           </div>

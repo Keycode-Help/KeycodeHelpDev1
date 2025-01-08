@@ -140,6 +140,7 @@ function Register() {
               onChange={handleFileChange}
               accept="image/*"
               required
+              title="(must be .jpg, .jpeg, .webp format)"
             />
             {errors.frontId && (
               <p className="error-message">{errors.frontId}</p>
@@ -152,17 +153,19 @@ function Register() {
               name="backId"
               onChange={handleFileChange}
               accept="image/*"
+              title="(must be .jpg, .jpeg, .webp format)"
               required
             />
             {errors.backId && <p className="error-message">{errors.backId}</p>}
           </label>
           <label>
-            Upload Insurance Document:
+            Upload Documentation(registration, title or insurance):
             <input
               type="file"
               name="insurance"
               onChange={handleFileChange}
               accept="image/*"
+              title="(must be .jpg, .jpeg, .webp format)"
               required
             />
             {errors.insurance && (
