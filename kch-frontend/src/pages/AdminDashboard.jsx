@@ -154,6 +154,33 @@ function AdminDashboard() {
       </div>
 
       <div className="dashboard-grid">
+        {/* Subscriptions Section */}
+        <section className="dashboard-card">
+          <h2>Subscriptions</h2>
+          {subscriptions.length === 0 ? (
+            <p>No subscriptions available.</p>
+          ) : (
+            <table className="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Subscription ID</th>
+                  <th>Tier</th>
+                  <th>User Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subscriptions.map((subscription) => (
+                  <tr key={subscription.id}>
+                    <td>{subscription.id}</td>
+                    <td>{subscription.tier}</td>
+                    <td>{subscription.userEmail || "N/A"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </section>
+
         {/* Pending Requests Section */}
         <section className="dashboard-card pending-requests">
           <h2>Pending Requests</h2>
@@ -172,7 +199,16 @@ function AdminDashboard() {
                     </p>
                     <p>
                       Email:{" "}
-                      <strong>{request.keycodeUserEmail || "N/A"}</strong>
+                      <strong>{request.keycodeUserEmail || "N/A"}</strong>{" "}
+                      <span
+                        className={
+                          request.isValidatedUser
+                            ? "validated-status"
+                            : "unvalidated-status"
+                        }
+                      >
+                        {request.isValidatedUser ? "Validated" : "Unvalidated"}
+                      </span>
                     </p>
                   </div>
                   <div className="pending-card-images">
@@ -252,33 +288,6 @@ function AdminDashboard() {
                         </div>
                       ))}
                     </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </section>
-
-        {/* Subscriptions Section */}
-        <section className="dashboard-card">
-          <h2>Subscriptions</h2>
-          {subscriptions.length === 0 ? (
-            <p>No subscriptions available.</p>
-          ) : (
-            <table className="dashboard-table">
-              <thead>
-                <tr>
-                  <th>Subscription ID</th>
-                  <th>Tier</th>
-                  <th>User Email</th>
-                </tr>
-              </thead>
-              <tbody>
-                {subscriptions.map((subscription) => (
-                  <tr key={subscription.id}>
-                    <td>{subscription.id}</td>
-                    <td>{subscription.tier}</td>
-                    <td>{subscription.userEmail || "N/A"}</td>
                   </tr>
                 ))}
               </tbody>

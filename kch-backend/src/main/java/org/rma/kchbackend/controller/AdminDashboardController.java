@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AdminDashboardController {
 
     private final VehicleService vehicleService;
@@ -43,6 +44,27 @@ public class AdminDashboardController {
 //        return vehicleService.getPendingVehicles();
 //    }
 
+//    @GetMapping("/pending-requests")
+//    public ResponseEntity<List<Map<String, Object>>> getPendingRequests() {
+//        List<Vehicle> vehicles = vehicleService.getPendingVehicles();
+//        List<Map<String, Object>> vehicleDetails = vehicles.stream().map(vehicle -> {
+//            Map<String, Object> vehicleData = new HashMap<>();
+//            vehicleData.put("id", vehicle.getId());
+//            vehicleData.put("make", vehicle.getMake());
+//            vehicleData.put("model", vehicle.getModel());
+//            vehicleData.put("vin", vehicle.getVin());
+//            vehicleData.put("status", vehicle.getStatus());
+//            vehicleData.put("keycode", vehicle.getKeycode());
+//            vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
+//            vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
+//            vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
+//            vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser() != null ? vehicle.getKeycodeUser().getEmail() : null);
+//            return vehicleData;
+//        }).collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(vehicleDetails);
+//    }
+
     @GetMapping("/pending-requests")
     public ResponseEntity<List<Map<String, Object>>> getPendingRequests() {
         List<Vehicle> vehicles = vehicleService.getPendingVehicles();
@@ -57,12 +79,21 @@ public class AdminDashboardController {
             vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
             vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
             vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
-            vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser() != null ? vehicle.getKeycodeUser().getEmail() : null);
+
+            // Include keycode user email and validation status
+            if (vehicle.getKeycodeUser() != null) {
+                vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser().getEmail());
+                vehicleData.put("isValidatedUser", vehicle.getKeycodeUser().isValidatedUser());
+            } else {
+                vehicleData.put("keycodeUserEmail", null);
+                vehicleData.put("isValidatedUser", false);
+            }
             return vehicleData;
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(vehicleDetails);
     }
+
 
     // Utility method to convert byte[] to Base64 string
     private String convertImageToBase64(byte[] image) {
@@ -154,6 +185,7 @@ public class AdminDashboardController {
             userData.put("fname", user.getFname());
             userData.put("lname", user.getLname());
             userData.put("phone", user.getPhone());
+            userData.put("isValidatedUser", user.isValidatedUser());
             userData.put("frontId", keycodeUserService.convertImageToBase64(user.getFrontId()));
             userData.put("backId", keycodeUserService.convertImageToBase64(user.getBackId()));
             userData.put("insurance", keycodeUserService.convertImageToBase64(user.getInsurance()));
@@ -180,4 +212,19 @@ public class AdminDashboardController {
             return ResponseEntity.status(500).body("Failed to notify user.");
         }
     }
+
+
+    @PatchMapping("/validate-user/{id}")
+    public ResponseEntity<String> validateUser(@PathVariable Long id) {
+        Optional<KeycodeUser> optionalUser = keycodeUserService.findById(id);
+        if (optionalUser.isPresent()) {
+            KeycodeUser user = optionalUser.get();
+            user.setValidatedUser(true);
+            keycodeUserService.saveUser(user);
+            return ResponseEntity.ok("User validated successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
+    }
+
 }
