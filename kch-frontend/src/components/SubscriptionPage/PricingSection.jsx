@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-export function PricingSection({ tier, selectedPeriod, setSelectedPeriod }) {
+export function PricingSection({ tier }) {
   const getPriceDisplay = (tier) => {
     return tier.pricing[0].amount;
   };

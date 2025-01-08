@@ -1,6 +1,6 @@
 const memberships = [
   {
-    id: "trial",
+    id: "Trial",
     title: "Starter",
     pricing: [{ amount: "9.99", period: "month" }],
     description:
@@ -14,7 +14,7 @@ const memberships = [
     ],
   },
   {
-    id: "professional",
+    id: "Professional",
     title: "Professional",
     pricing: [
       { amount: "49.99", period: "month" },
@@ -39,7 +39,7 @@ const memberships = [
     ],
   },
   {
-    id: "ultimate",
+    id: "Ultimate",
     title: "Ultimate",
     pricing: [{ amount: "179.00", period: "year" }, { setupFee: "49.00" }],
     description:
