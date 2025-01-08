@@ -1,13 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { FeaturesList } from "./FeaturesList";
 import { PricingSection } from "./PricingSection";
 
 /* eslint-disable react/prop-types */
-export function MembershipCard({ tier }) {
-  const [selectedPeriod, setSelectedPeriod] = useState({
-    professional: "month",
-  });
-
+export function MembershipCard({ tier, onSubscribe }) {
   return (
     <div
       className={`rounded-3xl overflow-hidden ${
@@ -18,14 +14,11 @@ export function MembershipCard({ tier }) {
     >
       <div className="p-6">
         <h2 className="text-2xl font-bold text-white">{tier.title}</h2>
-        <PricingSection
-          tier={tier}
-          selectedPeriod={selectedPeriod}
-          setSelectedPeriod={setSelectedPeriod}
-        />
+        <PricingSection tier={tier} />
         <p className="mt-4 text-base text-gray-400">{tier.description}</p>
 
         <button
+          onClick={onSubscribe}
           className={`w-full rounded-3xl mt-8 font-bold border-0 focus:outline-none focus:ring-0 ${
             tier.id === "professional"
               ? "bg-yellow-500 text-black hover:bg-yellow-500"

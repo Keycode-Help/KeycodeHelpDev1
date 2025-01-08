@@ -15,8 +15,16 @@ function MembershipPage() {
   const navigate = useNavigate();
 
   const handleAddSubscription = (tier) => {
+    // Mapping subscription tiers to match the backend names.
+    const subscriptionMapping = {
+      "Trial": "BASE",
+      "Professional": "PREMIUM",
+    };
+    
+    // Make sure the old subscription page still work. Remove "|| tier" if it's not needed.
+    const subscriptionType = subscriptionMapping[tier] || tier;
     const subscription = {
-      tier: tier,
+      tier: subscriptionType,
     };
 
     axios
@@ -134,7 +142,11 @@ function MembershipPage() {
             <div className="subscription-membership-grid">
               {memberships.map((tier) => (
                 // Membership Card, tier is the object identified with id.
-                <MembershipCard key={tier.id} tier={tier} />
+                <MembershipCard
+                  key={tier.id}
+                  tier={tier}
+                  onSubscribe={() => handleAddSubscription(tier.id)}
+                />
               ))}
             </div>
           </section>
