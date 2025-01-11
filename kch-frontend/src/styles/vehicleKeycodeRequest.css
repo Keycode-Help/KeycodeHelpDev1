@@ -1,10 +1,4 @@
-/* General styling for dark mode */
-body {
-  background-color: #121212;
-  color: #f5f5f5;
-  font-family: Arial, sans-serif;
-}
-
+/* Skyvern-Themed Vehicle Keycode Request Page */
 .wrapper-vr {
   height: 90vh;
   width: 95vw;
@@ -16,72 +10,46 @@ body {
 .keycode-request-container {
   width: 90%;
   max-width: 600px;
-  margin: 2rem auto;
-  background-color: #1f1f2f;
   padding: 2rem;
+  background-color: #1a1a1d;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  text-align: center;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
-  color: #e50914;
-  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  color: #00ff85;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-/* Form styling */
-.keycode-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-}
-
-label {
-  font-size: 1.1rem;
-  font-weight: bold;
+.keycode-form label {
+  font-size: 1.2rem;
   color: #f5f5f5;
+  margin-bottom: 0.5rem;
 }
 
-input {
+.keycode-form input {
   width: 100%;
   padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #3f3f3f;
+  margin-bottom: 1rem;
+  border: 1px solid #444;
   border-radius: 5px;
-  background-color: #0d0d18;
-  color: #f5f5f5;
+  background-color: #292929;
+  color: #00ff85;
 }
 
-input::placeholder {
-  color: #ccc;
-}
-
-input:focus {
-  border-color: #e50914;
-  outline: none;
-  box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
-}
-
-/* Submit button styling */
 .submit-button {
-  background-color: #e50914;
-  color: #f5f5f5;
-  font-size: 1.2rem;
-  font-weight: bold;
+  width: 100%;
   padding: 1rem;
+  font-size: 1.2rem;
+  background-color: #00ff85;
+  color: #121212;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
-  background-color: #bf0812;
+  background-color: #00e07a;
 }
