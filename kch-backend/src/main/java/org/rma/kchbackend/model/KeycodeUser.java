@@ -61,6 +61,8 @@ public class KeycodeUser implements UserDetails {
     @Column(columnDefinition = "LONGBLOB")
     private byte[] insurance;
 
+    private boolean isValidatedUser = false;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
