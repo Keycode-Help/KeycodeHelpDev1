@@ -92,7 +92,7 @@ function MembershipPage() {
           {/* Key Features */}
           <section className="subscription-key-features">
             <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-white">
                 Unlock Your Automotive Potential with KeyCode Help
               </h2>
               <p className="mt-4 text-lg text-white/50">
@@ -115,7 +115,7 @@ function MembershipPage() {
                     />
                   </div>
                   <div className="text-center">
-                    <h3 className="mb-4 text-lg md:text-xl font-semibold">
+                    <h3 className="mb-4 text-lg md:text-xl font-semibold text-white">
                       {feature.title}
                     </h3>
                     <p className="text-gray-400">{feature.description}</p>
@@ -131,7 +131,7 @@ function MembershipPage() {
             className="subscription-membership-tiers py-12"
           >
             <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-white">
                 Membership Plans
               </h2>
               <p className="mt-4 text-lg text-white/50">
@@ -154,7 +154,7 @@ function MembershipPage() {
           {/* FAQ Section */}
           <section className="subscription-faq-section py-16">
             <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-white">
                 Frequently Asked Questions
               </h2>
               <p className="mt-4 text-lg text-white/50">
