@@ -7,7 +7,7 @@ export function MembershipCard({ tier, onSubscribe }) {
   return (
     <div
       className={`rounded-3xl overflow-hidden ${
-        tier.id === "professional"
+        tier.id === "Professional"
           ? "border-2 border-yellow-500 bg-black"
           : "border border-gray-800 bg-black"
       }`}
@@ -20,7 +20,7 @@ export function MembershipCard({ tier, onSubscribe }) {
         <button
           onClick={onSubscribe}
           className={`w-full rounded-3xl mt-8 font-bold border-0 focus:outline-none focus:ring-0 ${
-            tier.id === "professional"
+            tier.id === "Professional"
               ? "bg-yellow-500 text-black hover:bg-yellow-500"
               : "bg-white text-black hover:bg-white"
           }`}

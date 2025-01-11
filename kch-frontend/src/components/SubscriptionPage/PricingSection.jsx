@@ -15,7 +15,7 @@ export function PricingSection({ tier }) {
         <span className="text-gray-400 ml-1">/{getPeriodDisplay(tier)}</span>
       </div>
 
-      {tier.id === "ultimate" && (
+      {tier.id === "Ultimate" && (
         <p className="mt-1 text-sm text-gray-400">
           One-Time Setup Fee: ${tier.pricing[1].setupFee}
         </p>

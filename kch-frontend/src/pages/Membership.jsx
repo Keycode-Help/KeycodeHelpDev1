@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../styles/SubscriptionPage.css";
+import "../styles/MembershipPage.css";
 import features from "../components/SubscriptionPage/features";
 import memberships from "../components/SubscriptionPage/memberships";
 import faqitems from "../components/SubscriptionPage/FAQItems";
