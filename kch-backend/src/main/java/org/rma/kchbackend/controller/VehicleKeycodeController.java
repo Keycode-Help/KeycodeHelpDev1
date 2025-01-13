@@ -6,6 +6,7 @@ import org.rma.kchbackend.service.VehicleService;
 import org.rma.kchbackend.service.KeycodeUserService;
 import org.rma.kchbackend.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/vehicle")
@@ -88,4 +91,66 @@ public class VehicleKeycodeController {
     public List<Vehicle> getPendingVehicles() {
         return vehicleService.getPendingVehicles();
     }
+
+
+    @GetMapping("/user-requests")
+    public ResponseEntity<Map<String, List<Vehicle>>> getUserRequests(Authentication authentication) {
+        String email = authentication.getName();
+        KeycodeUser user = keycodeUserService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Vehicle> pendingRequests = vehicleService.getVehiclesByStatus(user, "PENDING");
+        List<Vehicle> fulfilledRequests = vehicleService.getVehiclesByStatus(user, "COMPLETED");
+
+        Map<String, List<Vehicle>> response = new HashMap<>();
+        response.put("pendingRequests", pendingRequests);
+        response.put("fulfilledRequests", fulfilledRequests);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/update-request/{vehicleId}")
+    public ResponseEntity<String> updateVehicleRequest(
+            @PathVariable Long vehicleId,
+            @RequestParam(value = "make", required = false) String make,
+            @RequestParam(value = "model", required = false) String model,
+            @RequestParam(value = "vin", required = false) String vin,
+            @RequestParam(value = "frontId", required = false) MultipartFile frontId,
+            @RequestParam(value = "backId", required = false) MultipartFile backId,
+            @RequestParam(value = "registration", required = false) MultipartFile registration,
+            Authentication authentication) {
+
+        // Get the authenticated user's email
+        String email = authentication.getName();
+
+        // Check if the vehicle exists and belongs to the authenticated user
+        Vehicle vehicle = vehicleService.findById(vehicleId)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+
+        if (!vehicle.getKeycodeUser().getEmail().equals(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to update this vehicle.");
+        }
+
+        // Update the vehicle details only if the new values are provided
+        if (make != null && !make.isEmpty()) vehicle.setMake(make);
+        if (model != null && !model.isEmpty()) vehicle.setModel(model);
+        if (vin != null && !vin.isEmpty()) vehicle.setVin(vin);
+
+        // Handle file updates
+        try {
+            if (frontId != null && !frontId.isEmpty()) vehicle.setFrontId(frontId.getBytes());
+            if (backId != null && !backId.isEmpty()) vehicle.setBackId(backId.getBytes());
+            if (registration != null && !registration.isEmpty()) vehicle.setRegistration(registration.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Error processing file uploads", e);
+        }
+
+        // Save the updated vehicle
+        vehicleService.saveVehicle(vehicle);
+        return ResponseEntity.ok("Vehicle request updated successfully");
+    }
+
+
+
+
 }

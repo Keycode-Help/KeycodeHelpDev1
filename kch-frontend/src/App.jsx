@@ -11,10 +11,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
-
+import UserDash from "./pages/UserDash";
 import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscription page
-
-import UpdateUserProfile from "./pages/UpdateUserProfile";
+import UserProfile from "./pages/UserProfile";
 
 import "./styles/app.css";
 
@@ -34,7 +33,9 @@ function App() {
               element={<VehicleKeycodeRequest />}
             />
             <Route path="/subscription" element={<SubscriptionPage />} />
-            <Route path="/profile" element={<UpdateUserProfile/>}/>
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/user-dash" element={<UserDash />} />
+            <Route path="/membership" element={<MembershipPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route
               path="/admin/registered-users"
