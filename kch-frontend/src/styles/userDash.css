@@ -1,6 +1,5 @@
 .user-dash-container {
   display: flex;
-
   gap: 2rem;
   padding: 2rem;
   background-color: #0d0d14;
@@ -16,6 +15,12 @@
 .user-button {
   background-color: rgba(0, 0, 128, 0.805);
 }
+.userdash-h1 {
+  margin-top: 5rem;
+  color: rgb(16, 198, 31);
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
 
 .request-card {
   background-color: #121212;
@@ -25,6 +30,9 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+.request-images {
+  display: flex;
 }
 
 .request-images img {

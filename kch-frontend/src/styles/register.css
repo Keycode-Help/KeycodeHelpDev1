@@ -31,7 +31,6 @@
   font-size: 1rem;
   border-radius: 5px;
   border: 1px solid #444;
-  background-color: #292929;
   color: #00ff85;
 }
 
@@ -44,7 +43,6 @@
   padding: 0.75rem;
   font-size: 1.2rem;
   background-color: #00ff85;
-  color: #121212;
   border: none;
   border-radius: 5px;
   cursor: pointer;

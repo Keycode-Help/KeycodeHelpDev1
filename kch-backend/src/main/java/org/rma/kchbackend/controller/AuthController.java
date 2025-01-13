@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -147,6 +149,79 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+
+
+    @PutMapping("/updateProfile")
+    public ResponseEntity<String> updateUserProfile(@RequestParam("fname") String fname,
+                                                    @RequestParam("lname") String lname,
+                                                    @RequestParam("phone") String phone,
+                                                    @RequestParam(value = "frontId", required = false) MultipartFile frontId,
+                                                    @RequestParam(value = "backId", required = false) MultipartFile backId,
+                                                    @RequestParam(value = "insurance", required = false) MultipartFile insurance){
+        System.out.println("in update profile");
+
+        try {
+            // Get the authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = authentication.getName();
+            KeycodeUser user = keycodeUserService.findByEmail(userEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+
+            //Set the fields to new values
+            user.setFname(fname);
+            user.setLname(lname);
+            user.setPhone(phone);
+            if(frontId != null){
+                user.setFrontId(frontId.getBytes());
+                user.setFrontIdFileName(frontId.getOriginalFilename());
+            }
+            if(backId != null){
+                user.setBackId(backId.getBytes());
+                user.setBackIdFileName(backId.getOriginalFilename());
+            }
+            if(insurance != null){
+                user.setInsurance(insurance.getBytes());
+                user.setInsuranceFileName(insurance.getOriginalFilename());
+            }
+
+            keycodeUserService.saveUser(user);
+
+            return ResponseEntity.status(200).body("User Details Updated Successfully");
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getUserProfile/{keycodeUserId}")
+    public ResponseEntity<?> getUserProfile(@PathVariable("keycodeUserId") Long keycodeUserId) {
+        try {
+            // Get the authenticated users
+            System.out.println("User Id: "+keycodeUserId);
+            KeycodeUser user = keycodeUserService.findById(keycodeUserId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("id", user.getId());
+            userData.put("email", user.getEmail());
+            userData.put("fname", user.getFname());
+            userData.put("lname", user.getLname());
+            userData.put("phone", user.getPhone());
+            userData.put("frontIdFileName", user.getFrontIdFileName());
+            userData.put("backIdFileName", user.getBackIdFileName());
+            userData.put("insuranceFileName", user.getInsuranceFileName());
+            userData.put("frontIdImage", keycodeUserService.convertImageToBase64(user.getFrontId()));
+            userData.put("backIdImage", keycodeUserService.convertImageToBase64(user.getBackId()));
+            userData.put("insuranceImage", keycodeUserService.convertImageToBase64(user.getInsurance()));
+
+            return ResponseEntity.status(200).body(userData);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
 
 
     static class LoginRequest {

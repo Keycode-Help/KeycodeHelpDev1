@@ -91,7 +91,7 @@ function Register() {
   return (
     <div className="container-register">
       <div className="form-section">
-        <h1>Sign Up For An Account</h1>
+        <h1 className="form-h1">Sign Up For An Account</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
