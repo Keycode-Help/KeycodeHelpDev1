@@ -61,6 +61,12 @@ public class KeycodeUser implements UserDetails {
     @Column(columnDefinition = "LONGBLOB")
     private byte[] insurance;
 
+    private String frontIdFileName;
+
+    private String backIdFileName;
+
+    private String insuranceFileName;
+
     private boolean isValidatedUser = false;
 
     @Override
