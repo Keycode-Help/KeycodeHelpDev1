@@ -30,13 +30,16 @@ function Navbar() {
               <Link to="/vehicle-keycode-request">Request Keycode</Link>
             </li>
             <li>
-              <Link to="/subscription">Subscription</Link>
+              <Link to="/membership">Membership</Link>
             </li>
             <li>
-              <Link to="/cart">Cart</Link>
+              <Link to="/user-dash">User Dashboard</Link>
             </li>
             <li>
               <Link to="/profile">Profile</Link>
+            </li>
+            <li>
+              <Link to="/cart">Cart</Link>
             </li>
           </>
         )}

@@ -1,11 +1,13 @@
 package org.rma.kchbackend.service;
 
+import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Transaction;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.repository.TransactionRepository;
 import org.rma.kchbackend.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,10 +34,46 @@ public class VehicleService {
         return vehicleRepository.save(vehicle);
     }
 
+
+    public Optional<Vehicle> findById(Long vehicleId) {
+        return vehicleRepository.findById(vehicleId);
+    }
     public List<Vehicle> getPendingVehicles() {
         return vehicleRepository.findByStatus("PENDING");
     }
 
+    public List<Vehicle> getVehiclesByStatus(KeycodeUser user, String status) {
+        return vehicleRepository.findByKeycodeUserAndStatus(user, status);
+    }
+
+    public void updateVehicleRequest(Long vehicleId, String userEmail, String make, String model, String vin,
+                                     MultipartFile frontId, MultipartFile backId, MultipartFile registration) {
+
+        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new RuntimeException("Vehicle request not found"));
+
+        if (!"PENDING".equals(vehicle.getStatus())) {
+            throw new IllegalArgumentException("You cannot update a completed vehicle request.");
+        }
+
+        if (!vehicle.getKeycodeUser().getEmail().equals(userEmail)) {
+            throw new SecurityException("You are not authorized to update this vehicle request.");
+        }
+
+        vehicle.setMake(make);
+        vehicle.setModel(model);
+        vehicle.setVin(vin);
+
+        try {
+            if (frontId != null) vehicle.setFrontId(frontId.getBytes());
+            if (backId != null) vehicle.setBackId(backId.getBytes());
+            if (registration != null) vehicle.setRegistration(registration.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Error processing file uploads", e);
+        }
+
+        vehicleRepository.save(vehicle);
+    }
 
 
     public String processVehicleRequest(Long vehicleId, String keycode) throws IOException {
