@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+    "Source Han Sans CN", sans-serif;
+  overflow-x: hidden;
+}
+
+.subscription-hero-section {
+  background: linear-gradient(-135deg, #30ce6a, #2052bd, #143591);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 6rem;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  @apply shadow-xl
+  shadow-gray-800/80;
+}
+@media (min-width: 768px) {
+  .subscription-hero-section {
+    padding: 3rem;
+  }
+}
+
+/* Wave animation */
+
+@keyframes wave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.subscription-hero-section::before,
+.subscription-hero-section::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' opacity='.25' fill='%23FFFFFF'/%3E%3C/svg%3E");
+  background-size: 50% 100%;
+  background-repeat: repeat-x;
+  animation: wave 17s linear infinite;
+}
+
+.subscription-hero-section::before {
+  bottom: 15px;
+  height: 40px;
+  opacity: 0.15;
+  animation-delay: -3s;
+  z-index: 1;
+}
+
+.subscription-hero-section::after {
+  bottom: 0;
+  height: 30px;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+.subscription-hero-section > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Wave animation section ends here. */
+
+.subscription-hero-section h1 {
+  margin-top: 1.5rem;
+  max-width: 56rem;
+  span {
+    @apply text-2xl
+    sm:text-3xl
+    md:text-4xl
+    text-gray-200;
+  }
+}
+
+.subscription-hero-section p {
+  margin-top: 1.5rem;
+  max-width: 42rem;
+}
+
+.subscription-hero-button {
+  margin-top: 2rem;
+}
+
+.subscription-hero-button button {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.subscription-key-features {
+  margin-bottom: 5rem;
+}
+
+.subscription-features-grid {
+  margin-top: 3rem;
+  display: grid;
+  gap: 1.5rem;
+  @apply sm:grid-cols-2
+  lg:grid-cols-3;
+}
+
+.sub-features-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-width: 1px;
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  @apply border-white/[0.08]
+  hover:bg-[#1A1B1E]/60 
+  transition-all 
+  duration-300 
+  shadow-md 
+  shadow-gray-800/30;
+}
+
+.subscription-membership-grid {
+  margin-top: 4rem;
+  display: grid;
+  gap: 1.5rem;
+  @apply md:grid-cols-2
+  lg:grid-cols-3;
+}
+
+.subscription-faq-questions {
+  margin-top: 4rem;
+  @apply space-y-6;
+}
