@@ -8,9 +8,11 @@
   width: 100vw;
   position: fixed;
   top: 0;
+
   height: 7vh;
   font-size: 1.2rem;
   margin-bottom: 100px;
+
 }
 
 .navbar-links {
