@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
+import UpdateUserProfile from "./pages/UpdateUserProfile";
 import "./styles/app.css";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
               element={<VehicleKeycodeRequest />}
             />
             <Route path="/subscription" element={<SubscriptionPage />} />
+            <Route path="/profile" element={<UpdateUserProfile/>}/>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route
               path="/admin/registered-users"
