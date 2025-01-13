@@ -174,15 +174,12 @@ public class AuthController {
             user.setPhone(phone);
             if(frontId != null){
                 user.setFrontId(frontId.getBytes());
-                user.setFrontIdFileName(frontId.getOriginalFilename());
             }
             if(backId != null){
                 user.setBackId(backId.getBytes());
-                user.setBackIdFileName(backId.getOriginalFilename());
             }
             if(insurance != null){
                 user.setInsurance(insurance.getBytes());
-                user.setInsuranceFileName(insurance.getOriginalFilename());
             }
 
             keycodeUserService.saveUser(user);
@@ -208,9 +205,6 @@ public class AuthController {
             userData.put("fname", user.getFname());
             userData.put("lname", user.getLname());
             userData.put("phone", user.getPhone());
-            userData.put("frontIdFileName", user.getFrontIdFileName());
-            userData.put("backIdFileName", user.getBackIdFileName());
-            userData.put("insuranceFileName", user.getInsuranceFileName());
             userData.put("frontIdImage", keycodeUserService.convertImageToBase64(user.getFrontId()));
             userData.put("backIdImage", keycodeUserService.convertImageToBase64(user.getBackId()));
             userData.put("insuranceImage", keycodeUserService.convertImageToBase64(user.getInsurance()));
