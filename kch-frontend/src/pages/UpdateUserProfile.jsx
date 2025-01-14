@@ -22,10 +22,6 @@ const UpdateUserProfile = () => {
   const backIdRef = useRef(null);
   const insuranceRef = useRef(null);
   const navigate = useNavigate();
-  const [isFrontIdChanged, setIsFrontIdChanged] = useState(false);
-  const [isBackIdChanged, setIsBackIdChanged] = useState(false);
-  const [isInsuranceChanged, setIsInsuranceChanged] = useState(false);
-
   // Handle text input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
