@@ -81,7 +81,7 @@ function MembershipPage() {
             <div className="subscription-hero-button">
               <a
                 href="#membership-tiers"
-                className="py-2.5 px-12 rounded-3xl font-bold border-0 focus:outline-none focus:ring-0 inline-flex items-center text-blue-500 bg-white hover:bg-green-500 hover:text-white"
+                className="py-2.5 px-12 rounded-3xl font-bold border-0 focus:outline-none focus:ring-0 inline-flex items-center text-blue-500 bg-white hover:bg-green-500 hover:text-white transition duration-100"
               >
                 Membership Plans
                 <MoveRight className="w-4 h-4 ml-2" />
@@ -171,7 +171,7 @@ function MembershipPage() {
               <p className="text-white font-bold text-lg">
                 Still have questions? Contact us!
               </p>
-              <button className="mt-4 py-2.5 px-10 rounded-3xl font-bold border-0 focus:outline-none focus:ring-0 bg-white text-black hover:bg-green-500 hover:text-white">
+              <button className="mt-4 py-2.5 px-10 rounded-3xl font-bold border-0 focus:outline-none focus:ring-0 bg-white text-black hover:bg-green-500 hover:text-white transition duration-100">
                 Contact Support
               </button>
             </div>
