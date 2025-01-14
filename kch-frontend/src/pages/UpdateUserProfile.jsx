@@ -22,7 +22,6 @@ const UpdateUserProfile = () => {
   const backIdRef = useRef(null);
   const insuranceRef = useRef(null);
   const navigate = useNavigate();
-
   // Handle text input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,9 +110,6 @@ const UpdateUserProfile = () => {
         fname: userData.fname || "",
         lname: userData.lname || "",
         phone: userData.phone || "",
-        frontIdFileName: userData.frontIdFileName || "",
-        backIdFileName: userData.backIdFileName || "",
-        insuranceFileName: userData.insuranceFileName || "",
         frontIdImage: userData.frontIdImage || null,
         backIdImage: userData.backIdImage || null,
         insuranceImage: userData.insuranceImage || null,
@@ -202,6 +198,13 @@ const UpdateUserProfile = () => {
           />
           <label>
             Front ID:
+            {
+                !formData.frontId &&
+                <label style={{cursor:"pointer", marginLeft:'23em'}} onClick={() => {openModal(formData.frontIdImage)}}>
+                View
+              </label>
+              }
+
             <input
               type="file"
               name="frontId"
@@ -218,6 +221,13 @@ const UpdateUserProfile = () => {
           </label>
           <label>
             Back ID:
+            {
+                !formData.backId &&
+                <label style={{cursor:"pointer", marginLeft:'23em'}} onClick={() => {openModal(formData.backIdImage)}}>
+                View
+              </label>
+              }
+
             <input
               type="file"
               name="backId"
@@ -232,6 +242,13 @@ const UpdateUserProfile = () => {
           </label>
           <label>
             Insurance Document:
+            {
+                !formData.insurance &&
+                <label style={{cursor:"pointer", marginLeft:'17em'}} onClick={() => {openModal(formData.insuranceImage)}}>
+                View
+              </label>
+              }
+
             <input
               type="file"
               name="insurance"
