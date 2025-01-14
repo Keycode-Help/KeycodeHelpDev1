@@ -198,13 +198,17 @@ const UpdateUserProfile = () => {
           />
           <label>
             Front ID:
-            {
-                !formData.frontId &&
-                <label style={{cursor:"pointer", marginLeft:'23em'}} onClick={() => {openModal(formData.frontIdImage)}}>
+            {!formData.frontId && (
+              <label
+                className="view-style"
+                style={{ cursor: "pointer", marginLeft: "23em" }}
+                onClick={() => {
+                  openModal(formData.frontIdImage);
+                }}
+              >
                 View
               </label>
-              }
-
+            )}
             <input
               type="file"
               name="frontId"
@@ -221,13 +225,17 @@ const UpdateUserProfile = () => {
           </label>
           <label>
             Back ID:
-            {
-                !formData.backId &&
-                <label style={{cursor:"pointer", marginLeft:'23em'}} onClick={() => {openModal(formData.backIdImage)}}>
+            {!formData.backId && (
+              <label
+                className="view-style"
+                style={{ cursor: "pointer", marginLeft: "23em" }}
+                onClick={() => {
+                  openModal(formData.backIdImage);
+                }}
+              >
                 View
               </label>
-              }
-
+            )}
             <input
               type="file"
               name="backId"
@@ -242,13 +250,17 @@ const UpdateUserProfile = () => {
           </label>
           <label>
             Insurance Document:
-            {
-                !formData.insurance &&
-                <label style={{cursor:"pointer", marginLeft:'17em'}} onClick={() => {openModal(formData.insuranceImage)}}>
+            {!formData.insurance && (
+              <label
+                className="view-style"
+                style={{ cursor: "pointer", marginLeft: "17em" }}
+                onClick={() => {
+                  openModal(formData.insuranceImage);
+                }}
+              >
                 View
               </label>
-              }
-
+            )}
             <input
               type="file"
               name="insurance"
