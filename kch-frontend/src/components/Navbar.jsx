@@ -33,10 +33,15 @@ function Navbar() {
               <Link to="/membership">Membership</Link>
             </li>
             <li>
+              <Link to="/landingpage">LandingPage</Link>
+            </li>
+            <li>
               <Link to="/user-dash">User Dashboard</Link>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link Link to="/profile">
+                Profile
+              </Link>
             </li>
             <li>
               <Link to="/cart">Cart</Link>

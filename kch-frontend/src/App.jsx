@@ -15,6 +15,7 @@ import UserDash from "./pages/UserDash";
 import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscription page
 import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
+import LandingPage from "./pages/LandingPage";
 import "./styles/app.css";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/profile" element={<UpdateUserProfile />} />
+            <Route path="/landingpage" element={<LandingPage />} />
             {/* <Route path="/profile" element={<UserProfile />} /> */}
             <Route path="/user-dash" element={<UserDash />} />
             <Route path="/membership" element={<MembershipPage />} />
