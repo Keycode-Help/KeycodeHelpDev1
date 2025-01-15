@@ -51,4 +51,30 @@ public class EmailService {
             return "Error sending email: " + ex.getMessage();
         }
     }
+
+    public Response sendNotificationEmail(String firstName,String toEmail, String subject, String body) throws IOException{
+        Email from = new Email(senderEmail);
+        Email to = new Email(toEmail);
+        String messageBody = "<div>" +
+                                "<p>Dear "+firstName+",</p>" +
+                                "<p>"+body+"</p>"+
+                                "<p>Regards</p>"+
+                                "<p>KeyCode Help Team</p>"+
+                                "</div>";
+        Content content = new Content("text/html", messageBody);
+        Mail mail = new Mail(from, subject, to, content);
+
+        Request request = new Request();
+
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sendGridClient.api(request);
+
+            System.out.println("Response Status Code: " + response.getStatusCode());
+            System.out.println("Response Body: " + response.getBody());
+            System.out.println("Response Headers: " + response.getHeaders());
+
+            return response;
+    }
 }

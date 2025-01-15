@@ -76,6 +76,7 @@ public class AuthController {
             @RequestParam("email") String email,
             @RequestParam("phone") String phone,
             @RequestParam("password") String password,
+            @RequestParam("state") String state,
             @RequestParam("frontId") MultipartFile frontId,
             @RequestParam("backId") MultipartFile backId,
             @RequestParam("insurance") MultipartFile insurance) {
@@ -98,6 +99,11 @@ public class AuthController {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
             }
 
+            //Check whether the user email already exists
+            Optional<KeycodeUser> userExists = keycodeUserService.findByEmail(email);
+            if(userExists.isPresent()){
+                return ResponseEntity.status(500).body("User already exists");
+            }
             // Create and save the user
             KeycodeUser user = new KeycodeUser();
             user.setFname(fname);
@@ -106,6 +112,7 @@ public class AuthController {
             user.setPhone(phone);
             user.setPassword(passwordEncoder.encode(password));
             user.setRole(Role.BASEUSER);
+            user.setState(state);
             user.setFrontId(frontId.getBytes());
             user.setBackId(backId.getBytes());
             user.setInsurance(insurance.getBytes());
@@ -155,6 +162,7 @@ public class AuthController {
     public ResponseEntity<String> updateUserProfile(@RequestParam("fname") String fname,
                                                     @RequestParam("lname") String lname,
                                                     @RequestParam("phone") String phone,
+                                                    @RequestParam("state") String state,
                                                     @RequestParam(value = "frontId", required = false) MultipartFile frontId,
                                                     @RequestParam(value = "backId", required = false) MultipartFile backId,
                                                     @RequestParam(value = "insurance", required = false) MultipartFile insurance){
@@ -172,6 +180,7 @@ public class AuthController {
             user.setFname(fname);
             user.setLname(lname);
             user.setPhone(phone);
+            user.setState(state);
             if(frontId != null){
                 user.setFrontId(frontId.getBytes());
             }
@@ -205,6 +214,7 @@ public class AuthController {
             userData.put("fname", user.getFname());
             userData.put("lname", user.getLname());
             userData.put("phone", user.getPhone());
+            userData.put("state", user.getState());
             userData.put("frontIdImage", keycodeUserService.convertImageToBase64(user.getFrontId()));
             userData.put("backIdImage", keycodeUserService.convertImageToBase64(user.getBackId()));
             userData.put("insuranceImage", keycodeUserService.convertImageToBase64(user.getInsurance()));

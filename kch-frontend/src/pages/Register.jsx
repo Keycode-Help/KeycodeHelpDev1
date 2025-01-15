@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/register.css";
+import StatesDropDown from "../components/statesDropDown";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ function Register() {
   });
 
   const [errors, setErrors] = useState({});
+  const [states, setStates] = useState([]);
+  const [selectedState, setSelectedState] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -71,6 +74,7 @@ function Register() {
     formDataObj.append("email", formData.email);
     formDataObj.append("phone", formData.phone);
     formDataObj.append("password", formData.password);
+    formDataObj.append("state",selectedState);
     formDataObj.append("frontId", formData.frontId);
     formDataObj.append("backId", formData.backId);
     formDataObj.append("insurance", formData.insurance);
@@ -87,6 +91,29 @@ function Register() {
         alert(error.response?.data || "Registration failed. Please try again.");
       });
   };
+
+  const getStates = async() => {
+    await axios.get("http://localhost:8080/states/")
+    .then((response)=>{
+      //alert(JSON.stringify(response.data));
+      const data = response.data;
+      const sortedStates = [...data].sort((a,b) => a.code.toLowerCase().localeCompare(b.code.toLowerCase()));
+      setStates(sortedStates);
+    })
+    .catch((error) => {
+      console.error("Error loading states", error);
+      alert(error.response?.data || "Unable to load states.");
+    })
+  }
+
+  const handleStateSelect = (event) => {
+    //alert(event.target.value);
+    setSelectedState(event.target.value);
+  }
+
+  useEffect(() => {
+    getStates();
+  }, []);
 
   return (
     <div className="container-register">
@@ -132,6 +159,11 @@ function Register() {
             placeholder="Password"
             required
           />
+          <StatesDropDown
+              selectedState={selectedState}
+              options={states}
+              onChange={handleStateSelect}
+              />
           <label>
             Upload Front ID:
             <input
@@ -172,6 +204,7 @@ function Register() {
               <p className="error-message">{errors.insurance}</p>
             )}
           </label>
+          
           <button type="submit" className="book-btn">
             Register
           </button>
@@ -180,7 +213,9 @@ function Register() {
           Already a member? <a href="/login">Sign in</a>
         </p>
       </div>
+      
     </div>
+    
   );
 }
 

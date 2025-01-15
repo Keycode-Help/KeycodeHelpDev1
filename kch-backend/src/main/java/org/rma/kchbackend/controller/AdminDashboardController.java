@@ -1,5 +1,6 @@
 package org.rma.kchbackend.controller;
 
+import com.sendgrid.Response;
 import org.rma.kchbackend.dto.ProcessRequestDto;
 import org.rma.kchbackend.dto.SubscriptionDto;
 import org.rma.kchbackend.model.KeycodeUser;
@@ -185,6 +186,7 @@ public class AdminDashboardController {
             userData.put("fname", user.getFname());
             userData.put("lname", user.getLname());
             userData.put("phone", user.getPhone());
+            userData.put("state", user.getState());
             userData.put("isValidatedUser", user.isValidatedUser());
             userData.put("frontId", keycodeUserService.convertImageToBase64(user.getFrontId()));
             userData.put("backId", keycodeUserService.convertImageToBase64(user.getBackId()));
@@ -198,19 +200,22 @@ public class AdminDashboardController {
 
     @PostMapping("/notify-user/{id}")
     public ResponseEntity<String> notifyUser(@PathVariable Long id, @RequestParam("message") String message) {
+        Response response = null;
         try {
             Optional<KeycodeUser> optionalUser = keycodeUserService.findById(id);
             if (optionalUser.isEmpty()) {
                 return ResponseEntity.badRequest().body("User not found.");
             }
             KeycodeUser user = optionalUser.get();
+            System.out.println("To Email:"+user.getEmail());
+            response = emailService.sendNotificationEmail(user.getFname(),user.getEmail(), "UPDATE REQUIRED!", message);
 
-            emailService.sendEmail(user.getEmail(), "Update Required", message);
-            return ResponseEntity.ok("Notification sent to " + user.getEmail());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Failed to notify user.");
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         }
+        System.out.println("Response: "+response.toString());
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
 

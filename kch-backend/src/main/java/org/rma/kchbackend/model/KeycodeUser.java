@@ -61,6 +61,9 @@ public class KeycodeUser implements UserDetails {
     @Column(columnDefinition = "LONGBLOB")
     private byte[] insurance;
 
+    @NotBlank(message = "State cannot be empty")
+    private String state;
+
     private boolean isValidatedUser = false;
 
     @Override
