@@ -53,7 +53,7 @@ function RegisteredUsers() {
     }
     //Set message to formData
     const formData = new FormData();
-    formData.append("message", notificationMessage);
+    formData.append("message", notificationMessage)
     axios
       .post(
         `http://localhost:8080/admin/notify-user/${selectedUser.id}`,
@@ -133,13 +133,13 @@ function RegisteredUsers() {
                 className="usercard-image"
                 onClick={() => openModal(selectedUser.frontId)}
               ></img>
-              <img
+               <img
                 src={selectedUser.backId}
                 alt="Back ID"
                 className="usercard-image"
                 onClick={() => openModal(selectedUser.backId)}
               ></img>
-              <img
+               <img
                 src={selectedUser.insurance}
                 alt="Insurance"
                 className="usercard-image"

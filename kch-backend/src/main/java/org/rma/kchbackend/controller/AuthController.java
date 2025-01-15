@@ -75,11 +75,11 @@ public class AuthController {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
             }
 
+            //Check whether the user email already exists
             Optional<KeycodeUser> userExists = keycodeUserService.findByEmail(email);
             if(userExists.isPresent()){
                 return ResponseEntity.status(500).body("User already exists");
             }
-
             // Create and save the user
             KeycodeUser user = new KeycodeUser();
             user.setFname(fname);

@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/updateProfile.css";
 import axios from "axios";
-import StatesDropDown from "../components/StatesDropDown";
-import states from "../data/states";
+import StatesDropDown from "../components/statesDropDown";
 
 const UpdateUserProfile = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +24,9 @@ const UpdateUserProfile = () => {
   const backIdRef = useRef(null);
   const insuranceRef = useRef(null);
   const navigate = useNavigate();
-
+  const [states, setStates] = useState([]);
+  const [selectedState, setSelectedState] = useState('');
+  // Handle text input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -108,7 +109,9 @@ const UpdateUserProfile = () => {
         `http://localhost:8080/auth/getUserProfile/${userId}`
       );
       const userData = response.data;
-
+   
+      const state = userData.state;
+      
       setFormData({
         fname: userData.fname || "",
         lname: userData.lname || "",
@@ -118,6 +121,9 @@ const UpdateUserProfile = () => {
         insuranceImage: userData.insuranceImage || null,
         state: userData.state || "",
       });
+      setSelectedState(state);
+      console.log(state);
+
     } catch (error) {
       console.error("Failed to load user profile:", error);
       alert(
@@ -142,7 +148,7 @@ const UpdateUserProfile = () => {
       updateUserObject.append("fname", formData.fname);
       updateUserObject.append("lname", formData.lname);
       updateUserObject.append("phone", formData.phone);
-      updateUserObject.append("state", formData.state);
+      updateUserObject.append("state", selectedState);
       updateUserObject.append("frontId", formData.frontId);
       updateUserObject.append("backId", formData.backId);
       updateUserObject.append("insurance", formData.insurance);
@@ -165,7 +171,27 @@ const UpdateUserProfile = () => {
     }
   };
 
+  const getStates = async() => {
+    await axios.get("http://localhost:8080/states/")
+    .then((response)=>{
+      //alert(JSON.stringify(response.data));
+      const data = response.data;
+      const sortedStates = [...data].sort((a,b) => a.code.toLowerCase().localeCompare(b.code.toLowerCase()));
+      setStates(sortedStates);
+    })
+    .catch((error) => {
+      console.error("Error loading states", error);
+      alert(error.response?.data || "Unable to load states.");
+    })
+  }
+
+  const handleStateSelect = (event) => {
+    //alert(event.target.value);
+    setSelectedState(event.target.value);
+  }
+  // Fetch user profile on component mount
   useEffect(() => {
+    getStates();
     fetchUserProfile();
   }, []);
 
@@ -197,6 +223,11 @@ const UpdateUserProfile = () => {
             onChange={handleChange}
             placeholder="Phone Number"
           />
+          <StatesDropDown
+              selectedState={selectedState}
+              options={states}
+              onChange={handleStateSelect}
+              />
           <label>
             State:
             <StatesDropDown
