@@ -6,11 +6,7 @@ import { PricingSection } from "./PricingSection";
 export function MembershipCard({ tier, onSubscribe }) {
   return (
     <div
-      className={`rounded-3xl overflow-hidden ${
-        tier.id === "Professional"
-          ? "border-2 border-yellow-500 bg-black"
-          : "border border-gray-800 bg-black"
-      }`}
+      className={`rounded-3xl overflow-hidden bg-black hover:border-yellow-500 border-2 border-white/[0.12] transition duration-300 ease-in-out`}
     >
       <div className="p-6">
         <h2 className="text-2xl font-bold text-white">{tier.title}</h2>
@@ -19,11 +15,8 @@ export function MembershipCard({ tier, onSubscribe }) {
 
         <button
           onClick={onSubscribe}
-          className={`w-full rounded-3xl mt-8 font-bold border-0 focus:outline-none focus:ring-0 ${
-            tier.id === "Professional"
-              ? "bg-yellow-500 text-black hover:bg-yellow-500"
-              : "bg-white text-black hover:bg-white"
-          }`}
+          // focus:outline-none focus:ring-0
+          className={`w-full rounded-3xl mt-8 font-bold border-0 bg-white text-black hover:bg-yellow-500 hover:text-black transition duration-100`}
         >
           Get Started
         </button>

@@ -6,7 +6,7 @@ export function FAQSection({ faqitems }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-gray-800 rounded-3xl">
+    <div className="border border-white/[0.12] rounded-3xl transition-all duration-300">
       <button
         className="flex items-center justify-between w-full px-6 py-4 rounded-3xl bg-black border-0 focus:outline-none focus:ring-0 hover:bg-black"
         onClick={() => setIsOpen(!isOpen)}
@@ -15,17 +15,16 @@ export function FAQSection({ faqitems }) {
           {faqitems.question}
         </span>
         <ChevronDown
-          className={`h-5 w-5 text-white transform ${
+          className={`h-5 w-5 text-white transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
       {/* Subtle animation would be good here. Dropdown drop down smoother and text slides in. */}
-      {isOpen && (
-        <div className="p-6 bg-zinc-950 rounded-b-3xl">
+      <div className={`overflow-hidden transition-all duration-300 bg-zinc-950 ${
+        isOpen ? "rounded-b-3xl max-h-auto p-6" : "max-h-0"}`}>
           <p className="text-white text-lg">{faqitems.answer}</p>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
