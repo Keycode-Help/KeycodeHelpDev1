@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark theme styles */
+:root {
+  --color-primary: #0b41e4;
+  --color-success: #4ae66c;
+  --color-cta: #ffce20;
+  --color-dark: #000000;
+  --color-slate: #213341;
+}
+
+body {
+  background-color: var(--color-dark);
+  color: #ffffff;
+}
+
+/* Dark mode specific styles */
+.dark {
+  --bg-primary: var(--color-dark);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+}
