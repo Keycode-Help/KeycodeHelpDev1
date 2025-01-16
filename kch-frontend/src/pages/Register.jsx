@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/register.css";
+import StatesDropDown from "../components/StatesDropDown";
+import states from "../data/states";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ function Register() {
     insurance: null,
   });
 
+  const [selectedState, setSelectedState] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -28,8 +31,6 @@ function Register() {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-
-    // File validation: Check type and size
     const file = files[0];
     if (!file) {
       setErrors((prev) => ({ ...prev, [name]: "File is required." }));
@@ -45,7 +46,6 @@ function Register() {
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      // 5MB limit
       setErrors((prev) => ({
         ...prev,
         [name]: "File size should not exceed 5MB.",
@@ -53,9 +53,7 @@ function Register() {
       return;
     }
 
-    // If validation passes, clear any existing errors for this field
     setErrors((prev) => ({ ...prev, [name]: null }));
-
     setFormData({
       ...formData,
       [name]: file,
@@ -71,6 +69,7 @@ function Register() {
     formDataObj.append("email", formData.email);
     formDataObj.append("phone", formData.phone);
     formDataObj.append("password", formData.password);
+    formDataObj.append("state", selectedState); // Add selected state
     formDataObj.append("frontId", formData.frontId);
     formDataObj.append("backId", formData.backId);
     formDataObj.append("insurance", formData.insurance);
@@ -79,7 +78,7 @@ function Register() {
       .post("http://localhost:8080/auth/register", formDataObj, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-      .then((response) => {
+      .then(() => {
         navigate("/login");
       })
       .catch((error) => {
@@ -133,6 +132,14 @@ function Register() {
             required
           />
           <label>
+            State:
+            <StatesDropDown
+              selectedState={selectedState}
+              options={states}
+              onChange={(e) => setSelectedState(e.target.value)}
+            />
+          </label>
+          <label>
             Upload Front ID:
             <input
               type="file"
@@ -140,7 +147,6 @@ function Register() {
               onChange={handleFileChange}
               accept="image/*"
               required
-              title="(must be .jpg, .jpeg, .webp format)"
             />
             {errors.frontId && (
               <p className="error-message">{errors.frontId}</p>
@@ -153,19 +159,17 @@ function Register() {
               name="backId"
               onChange={handleFileChange}
               accept="image/*"
-              title="(must be .jpg, .jpeg, .webp format)"
               required
             />
             {errors.backId && <p className="error-message">{errors.backId}</p>}
           </label>
           <label>
-            Upload Documentation(registration, title or insurance):
+            Upload Documentation (e.g., registration or insurance):
             <input
               type="file"
               name="insurance"
               onChange={handleFileChange}
               accept="image/*"
-              title="(must be .jpg, .jpeg, .webp format)"
               required
             />
             {errors.insurance && (

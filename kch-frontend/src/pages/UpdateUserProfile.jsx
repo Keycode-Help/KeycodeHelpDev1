@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/updateProfile.css";
 import axios from "axios";
+import StatesDropDown from "../components/StatesDropDown";
+import states from "../data/states";
 
 const UpdateUserProfile = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,7 @@ const UpdateUserProfile = () => {
     frontIdImage: null,
     backIdImage: null,
     insuranceImage: null,
+    state: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -22,7 +25,7 @@ const UpdateUserProfile = () => {
   const backIdRef = useRef(null);
   const insuranceRef = useRef(null);
   const navigate = useNavigate();
-  // Handle text input changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -31,12 +34,10 @@ const UpdateUserProfile = () => {
     });
   };
 
-  // Handle file input changes
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
 
-    // File validation: Check type and size
     if (!file.type.startsWith("image/")) {
       setErrors((prev) => ({
         ...prev,
@@ -53,7 +54,6 @@ const UpdateUserProfile = () => {
       return;
     }
 
-    // Clear any existing errors for this field
     setErrors((prev) => ({ ...prev, [name]: null }));
 
     setFormData({
@@ -62,7 +62,13 @@ const UpdateUserProfile = () => {
     });
   };
 
-  // Reset front ID file
+  const handleStateChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      state: e.target.value,
+    }));
+  };
+
   const handleFrontIdReset = () => {
     frontIdRef.current.value = "";
     setFormData((prev) => ({
@@ -71,7 +77,6 @@ const UpdateUserProfile = () => {
     }));
   };
 
-  // Reset back ID file
   const handleBackIdReset = () => {
     backIdRef.current.value = "";
     setFormData((prev) => ({
@@ -80,7 +85,6 @@ const UpdateUserProfile = () => {
     }));
   };
 
-  // Reset insurance document file
   const handleInsuranceReset = () => {
     insuranceRef.current.value = "";
     setFormData((prev) => ({
@@ -89,7 +93,6 @@ const UpdateUserProfile = () => {
     }));
   };
 
-  // Load user profile data
   const fetchUserProfile = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -113,6 +116,7 @@ const UpdateUserProfile = () => {
         frontIdImage: userData.frontIdImage || null,
         backIdImage: userData.backIdImage || null,
         insuranceImage: userData.insuranceImage || null,
+        state: userData.state || "",
       });
     } catch (error) {
       console.error("Failed to load user profile:", error);
@@ -122,17 +126,14 @@ const UpdateUserProfile = () => {
     }
   };
 
-  // Open modal for image preview
   const openModal = (imageSrc) => {
     setModalImage(imageSrc);
   };
 
-  // Close modal
   const closeModal = () => {
     setModalImage(null);
   };
 
-  // Handle profile update
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -141,6 +142,7 @@ const UpdateUserProfile = () => {
       updateUserObject.append("fname", formData.fname);
       updateUserObject.append("lname", formData.lname);
       updateUserObject.append("phone", formData.phone);
+      updateUserObject.append("state", formData.state);
       updateUserObject.append("frontId", formData.frontId);
       updateUserObject.append("backId", formData.backId);
       updateUserObject.append("insurance", formData.insurance);
@@ -163,7 +165,6 @@ const UpdateUserProfile = () => {
     }
   };
 
-  // Fetch user profile on component mount
   useEffect(() => {
     fetchUserProfile();
   }, []);
@@ -171,7 +172,7 @@ const UpdateUserProfile = () => {
   return (
     <div className="container-register">
       <div className="form-section">
-        <h1>Profile</h1>
+        <h1>Update Profile</h1>
         <form onSubmit={handleUpdate}>
           <input
             type="text"
@@ -197,14 +198,20 @@ const UpdateUserProfile = () => {
             placeholder="Phone Number"
           />
           <label>
+            State:
+            <StatesDropDown
+              selectedState={formData.state}
+              options={states}
+              onChange={handleStateChange}
+            />
+          </label>
+          <label>
             Front ID:
             {!formData.frontId && (
               <label
                 className="view-style"
                 style={{ cursor: "pointer", marginLeft: "23em" }}
-                onClick={() => {
-                  openModal(formData.frontIdImage);
-                }}
+                onClick={() => openModal(formData.frontIdImage)}
               >
                 View
               </label>
@@ -229,9 +236,7 @@ const UpdateUserProfile = () => {
               <label
                 className="view-style"
                 style={{ cursor: "pointer", marginLeft: "23em" }}
-                onClick={() => {
-                  openModal(formData.backIdImage);
-                }}
+                onClick={() => openModal(formData.backIdImage)}
               >
                 View
               </label>
@@ -254,9 +259,7 @@ const UpdateUserProfile = () => {
               <label
                 className="view-style"
                 style={{ cursor: "pointer", marginLeft: "17em" }}
-                onClick={() => {
-                  openModal(formData.insuranceImage);
-                }}
+                onClick={() => openModal(formData.insuranceImage)}
               >
                 View
               </label>
