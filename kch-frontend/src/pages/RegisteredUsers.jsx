@@ -6,6 +6,7 @@ function RegisteredUsers() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [modalImage, setModalImage] = useState(null);
 
   // Fetch users from the backend and include isValidatedUser
   useEffect(() => {
@@ -50,10 +51,13 @@ function RegisteredUsers() {
       alert("Please enter a message to send.");
       return;
     }
+    //Set message to formData
+    const formData = new FormData();
+    formData.append("message", notificationMessage);
     axios
       .post(
         `http://localhost:8080/admin/notify-user/${selectedUser.id}`,
-        { message: notificationMessage },
+        formData,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -66,6 +70,14 @@ function RegisteredUsers() {
         console.error("Error sending notification:", error);
         alert("Failed to send notification.");
       });
+  };
+
+  const openModal = (imageSrc) => {
+    setModalImage(imageSrc);
+  };
+
+  const closeModal = () => {
+    setModalImage(null);
   };
 
   return (
@@ -111,11 +123,34 @@ function RegisteredUsers() {
             <p>
               <strong>Phone:</strong> {selectedUser.phone}
             </p>
-            <div className="user-images">
+            <p>
+              <strong>Location:</strong> {selectedUser.state}
+            </p>
+            <div className="pending-user-card-images">
+              <img
+                src={selectedUser.frontId}
+                alt="Front ID"
+                className="usercard-image"
+                onClick={() => openModal(selectedUser.frontId)}
+              ></img>
+              <img
+                src={selectedUser.backId}
+                alt="Back ID"
+                className="usercard-image"
+                onClick={() => openModal(selectedUser.backId)}
+              ></img>
+              <img
+                src={selectedUser.insurance}
+                alt="Insurance"
+                className="usercard-image"
+                onClick={() => openModal(selectedUser.insurance)}
+              ></img>
+            </div>
+            {/* <div className="user-images">
               <img src={selectedUser.frontId} alt="Front ID" />
               <img src={selectedUser.backId} alt="Back ID" />
               <img src={selectedUser.insurance} alt="Insurance" />
-            </div>
+            </div> */}
             <button
               className="validate-btn"
               onClick={() => handleValidateUser(selectedUser.id)}
@@ -133,6 +168,16 @@ function RegisteredUsers() {
           </div>
         )}
       </div>
+      {modalImage && (
+        <div className="modal" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+            <img src={modalImage} alt="Enlarged View" className="modal-image" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
