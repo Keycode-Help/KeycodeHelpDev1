@@ -43,31 +43,7 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest registerRequest, BindingResult bindingResult) throws IOException {
-//        if (bindingResult.hasErrors()) {
-//            StringBuilder errors = new StringBuilder();
-//            bindingResult.getAllErrors().forEach(error -> errors.append(error.getDefaultMessage()).append("; "));
-//            return ResponseEntity.badRequest().body("Validation errors: " + errors.toString());
-//        }
-//
-//        if (keycodeUserService.findByEmail(registerRequest.getEmail()).isPresent()) {
-//            return ResponseEntity.badRequest().body("Email already in use.");
-//        }
-//
-//        KeycodeUser user = new KeycodeUser();
-//        user.setFname(registerRequest.getFname());
-//        user.setLname(registerRequest.getLname());
-//        user.setEmail(registerRequest.getEmail());
-//        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-//        user.setPhone(registerRequest.getPhone());
-//        user.setRole(Role.BASEUSER);
-//
-//        keycodeUserService.saveUser(user);
-//
-//
-//        return ResponseEntity.ok("User registered successfully!");
-//    }
+
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
