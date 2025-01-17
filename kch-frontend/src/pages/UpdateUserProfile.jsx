@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/updateProfile.css";
 import axios from "axios";
-import StatesDropDown from "../components/statesDropDown";
 
 const UpdateUserProfile = () => {
   const [formData, setFormData] = useState({
