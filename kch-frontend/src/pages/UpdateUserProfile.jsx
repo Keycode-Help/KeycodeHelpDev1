@@ -229,14 +229,6 @@ const UpdateUserProfile = () => {
               onChange={handleStateSelect}
               />
           <label>
-            State:
-            <StatesDropDown
-              selectedState={formData.state}
-              options={states}
-              onChange={handleStateChange}
-            />
-          </label>
-          <label>
             Front ID:
             {!formData.frontId && (
               <label

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/register.css";
-import StatesDropDown from "../components/statesDropDown";
+import StatesDropDown from "../components/StatesDropDown";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -159,14 +159,6 @@ function Register() {
               options={states}
               onChange={handleStateSelect}
               />
-          <label>
-            State:
-            <StatesDropDown
-              selectedState={selectedState}
-              options={states}
-              onChange={(e) => setSelectedState(e.target.value)}
-            />
-          </label>
           <label>
             Upload Front ID:
             <input
