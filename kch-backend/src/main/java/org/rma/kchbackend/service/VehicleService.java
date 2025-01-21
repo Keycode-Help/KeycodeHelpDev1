@@ -1,5 +1,6 @@
 package org.rma.kchbackend.service;
 
+import com.sendgrid.Response;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Transaction;
 import org.rma.kchbackend.model.Vehicle;
@@ -40,6 +41,10 @@ public class VehicleService {
     }
     public List<Vehicle> getPendingVehicles() {
         return vehicleRepository.findByStatus("PENDING");
+    }
+
+    public List<Vehicle> getInProgressVehicles(){
+        return vehicleRepository.findByStatus("INPROGRESS");
     }
 
     public List<Vehicle> getVehiclesByStatus(KeycodeUser user, String status) {
@@ -97,6 +102,32 @@ public class VehicleService {
              //   String email = vehicle.getKeycodeUser().getEmail();
              //   emailService.sendEmail(email, "Your Key Code is Ready", "The key code for your vehicle VIN " + vehicle.getVin() + " is: " + keycode);
                 return "Keycode processed and email sent.";
+            } else {
+                return "Transaction not found for vehicle.";
+            }
+        } else {
+            return "Vehicle request not found.";
+        }
+    }
+
+    public String updatePendingRequestStatus(Long vehicleId) throws IOException {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId);
+        if (optionalVehicle.isPresent()) {
+            Vehicle vehicle = optionalVehicle.get();
+            vehicle.setStatus("INPROGRESS");
+            vehicleRepository.save(vehicle);
+
+            Transaction transaction = vehicle.getTransaction();
+            if (transaction != null) {
+                    transaction.setStatus("INPROGRESS");
+                transactionRepository.save(transaction);
+
+                //Send Email to user regarding Status Update
+                String email = vehicle.getKeycodeUser().getEmail();
+                String body = "Your Keycode Request is In Progress.";
+                Response response = emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),
+                        email, "Keycode Request Status Update!", body);
+                return "Status Updated to In Progress";
             } else {
                 return "Transaction not found for vehicle.";
             }
