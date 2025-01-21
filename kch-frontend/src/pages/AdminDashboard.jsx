@@ -17,6 +17,7 @@ function AdminDashboard() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [modalImage, setModalImage] = useState(null);
+  const [inProgressRequests, setInProgressRequests] = useState([])
 
   const handleApiError = (error, defaultMessage) => {
     console.error(error);
@@ -27,6 +28,7 @@ function AdminDashboard() {
     fetchPendingRequests();
     fetchSubscriptions();
     fetchTransactions();
+    fetchInProgressRequests();
   }, [filters]);
 
   const fetchPendingRequests = () => {
@@ -38,6 +40,19 @@ function AdminDashboard() {
       .then((response) => setPendingRequests(response.data))
       .catch((error) =>
         handleApiError(error, "Error fetching pending requests.")
+      )
+      .finally(() => setIsLoading(false));
+  };
+
+  const fetchInProgressRequests = () => {
+    setIsLoading(true);
+    axios
+      .get("http://localhost:8080/admin/in-progress-requests", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => setInProgressRequests(response.data))
+      .catch((error) =>
+        handleApiError(error, "Error fetching In Progress requests.")
       )
       .finally(() => setIsLoading(false));
   };
@@ -81,6 +96,7 @@ function AdminDashboard() {
         setPendingRequests(
           pendingRequests.filter((request) => request.id !== vehicleId)
         );
+        fetchInProgressRequests();
         fetchTransactions();
       })
       .catch((error) =>
@@ -103,6 +119,27 @@ function AdminDashboard() {
 
   const closeModal = () => {
     setModalImage(null);
+  };
+
+  const updateRequestStatus = (vehicleId) => {
+    //alert("Start button clicked");
+    axios
+      .post(
+        "http://localhost:8080/admin/update-request-status/"+vehicleId,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        alert("Status updated to In Progress")
+         fetchPendingRequests();
+         fetchInProgressRequests();
+         fetchTransactions();
+         
+      })
+      .catch((error) =>
+        handleApiError(error, "Error Update Request Status.")
+      );
   };
 
   return (
@@ -129,6 +166,7 @@ function AdminDashboard() {
           >
             <option value="">All Statuses</option>
             <option value="PENDING">Pending</option>
+            <option value="INPROGRESS">In Progress</option>
             <option value="FULFILLED">Fulfilled</option>
           </select>
           <select
@@ -191,9 +229,74 @@ function AdminDashboard() {
               {pendingRequests.map((request) => (
                 <div className="pending-card" key={request.id}>
                   <div className="pending-card-header">
+                    <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
                     <h3>
                       {request.make} {request.model}
                     </h3>
+                    <button className="start-button"
+                            onClick={() => updateRequestStatus(request.id)}>
+                      Start
+                    </button>
+                    </div>
+                    <p>
+                      VIN: <strong>{request.vin}</strong>
+                    </p>
+                    <p>
+                      Email:{" "}
+                      <strong>{request.keycodeUserEmail || "N/A"}</strong>{" "}
+                      <span
+                        className={
+                          request.isValidatedUser
+                            ? "validated-status"
+                            : "unvalidated-status"
+                        }
+                      >
+                        {request.isValidatedUser ? "Validated" : "Unvalidated"}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="pending-card-images">
+                    <img
+                      src={request.frontId}
+                      alt="Front ID"
+                      className="vehicle-image"
+                      onClick={() => openModal(request.frontId)}
+                    />
+                    <img
+                      src={request.backId}
+                      alt="Back ID"
+                      className="vehicle-image"
+                      onClick={() => openModal(request.backId)}
+                    />
+                    <img
+                      src={request.registration}
+                      alt="Registration"
+                      className="vehicle-image"
+                      onClick={() => openModal(request.registration)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* In Progress Requests Section */}
+        <section className="dashboard-card in-progress-requests">
+          <h2>In Progress Requests</h2>
+          {inProgressRequests.length === 0 ? (
+            <p className="no-requests">No In Progress Requests at the moment.</p>
+          ) : (
+            <div className="in-progress-grid">
+              {inProgressRequests.map((request) => (
+                <div className="in-progress-card" key={request.id}>
+                  <div className="pending-card-header">
+                    <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                    <h3 style={{paddingLeft:'5em'}}>
+                      {request.make} {request.model}
+                    </h3>
+
+                    </div>
                     <p>
                       VIN: <strong>{request.vin}</strong>
                     </p>

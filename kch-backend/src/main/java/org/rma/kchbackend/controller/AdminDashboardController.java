@@ -95,6 +95,36 @@ public class AdminDashboardController {
         return ResponseEntity.ok(vehicleDetails);
     }
 
+    @GetMapping("/in-progress-requests")
+    public ResponseEntity<List<Map<String, Object>>> getInProgressRequests() {
+        List<Vehicle> vehicles = vehicleService.getInProgressVehicles();
+        List<Map<String, Object>> vehicleDetails = vehicles.stream().map(vehicle -> {
+            Map<String, Object> vehicleData = new HashMap<>();
+            vehicleData.put("id", vehicle.getId());
+            vehicleData.put("make", vehicle.getMake());
+            vehicleData.put("model", vehicle.getModel());
+            vehicleData.put("vin", vehicle.getVin());
+            vehicleData.put("status", vehicle.getStatus());
+            vehicleData.put("keycode", vehicle.getKeycode());
+            vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
+            vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
+            vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
+
+            // Include keycode user email and validation status
+            if (vehicle.getKeycodeUser() != null) {
+                vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser().getEmail());
+                vehicleData.put("isValidatedUser", vehicle.getKeycodeUser().isValidatedUser());
+            } else {
+                vehicleData.put("keycodeUserEmail", null);
+                vehicleData.put("isValidatedUser", false);
+            }
+            return vehicleData;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(vehicleDetails);
+    }
+
+
 
     // Utility method to convert byte[] to Base64 string
     private String convertImageToBase64(byte[] image) {
@@ -253,4 +283,11 @@ public class AdminDashboardController {
         }
     }
 
+    //To update the pending request status to In Progress
+
+    @PostMapping("/update-request-status/{vehicleId}")
+    public String updatePendingRequestStatus(@PathVariable Long vehicleId) throws IOException {
+        
+        return vehicleService.updatePendingRequestStatus(vehicleId);
+    }
 }
