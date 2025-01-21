@@ -12,6 +12,9 @@
 .section-two {
   flex: 1;
 }
+.section-three{
+  flex: 1;
+}
 .user-button {
   background-color: rgba(0, 0, 128, 0.805);
 }
@@ -77,3 +80,27 @@
   color: white;
   cursor: pointer;
 }
+
+.pending-card-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.vehicle-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #1f1f2f;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.vehicle-image:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
