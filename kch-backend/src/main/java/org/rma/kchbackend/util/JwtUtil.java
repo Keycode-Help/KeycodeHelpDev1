@@ -15,7 +15,7 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "your-secret-key-with-at-least-256-bits";
+    private final String SECRET_KEY = "e9e257359365b5a3fad8a7dec5015b90970f208365bbc4dade828ecd2db03c1d476b9d7dd083f0865b805ee972c5c5de49f647e95858092bc8797a583092cdd1d0a50883413f834064ff71ba26af25f482b9868fe9990cd11e01aa34479bf7e23993d0918c76124b2d6dbc3851237e822d366d136d6501020d45a60d937971e65c3b4badd3c58b4054857771d0eb42a91d04e47f09f4fb30254d7363c53daf016e248adcdaf3db511b739dc745a1452b4b8cf8e76ade9b2f7793b2b924bfd7fd6390fdd0a702cc2efea215e50f132509355b92c577a299ef091ea83d13069844694876d309323263d76ad7449e584767645dd137b9b";
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     public String generateToken(UserDetails userDetails) {

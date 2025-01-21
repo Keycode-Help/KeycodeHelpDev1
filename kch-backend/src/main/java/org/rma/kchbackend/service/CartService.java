@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 @Service
 public class CartService {
 
@@ -101,6 +100,7 @@ public class CartService {
             log.debug("Handling vehicle removal for Vehicle ID: {}", vehicle.getId());
 
             vehicle.setCartItem(null);
+            cartItem.setVehicle(null);
             vehicle.setKeycodeUser(null);
             vehicleRepository.save(vehicle);
             log.debug("Cleared associations for Vehicle ID: {}", vehicle.getId());
