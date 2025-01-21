@@ -111,6 +111,18 @@ public class VehicleKeycodeController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/user-requests-all")
+    public ResponseEntity<List<Vehicle>> getAllStatusUserRequests(Authentication authentication) {
+        String email = authentication.getName();
+        KeycodeUser user = keycodeUserService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        List<Vehicle> allRequests = vehicleService.getVehiclesByUser(user);
+
+        return ResponseEntity.ok(allRequests);
+    }
+
     @PutMapping("/update-request/{vehicleId}")
     public ResponseEntity<String> updateVehicleRequest(
             @PathVariable Long vehicleId,
