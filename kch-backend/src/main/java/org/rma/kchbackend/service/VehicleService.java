@@ -51,6 +51,10 @@ public class VehicleService {
         return vehicleRepository.findByKeycodeUserAndStatus(user, status);
     }
 
+    public List<Vehicle> getVehiclesByUser(KeycodeUser user) {
+        return vehicleRepository.findByKeycodeUser(user);
+    }
+
     public void updateVehicleRequest(Long vehicleId, String userEmail, String make, String model, String vin,
                                      MultipartFile frontId, MultipartFile backId, MultipartFile registration) {
 
