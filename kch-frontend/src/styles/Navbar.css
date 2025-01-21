@@ -16,10 +16,24 @@
   margin-bottom: 100px;
 }
 
+.navbar-logo {
+  color: #c9d1d9; 
+}
+
+.navbar-logo:hover {
+  color: #c9d1d9; 
+}
+
 .navbar-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 0.5rem;
   list-style: none;
+}
+
+.navbar-links li {
+  display: flex;
+  text-align: center;
+  align-items: center;
 }
 
 .navbar-links li a {
@@ -49,9 +63,17 @@
     flex-direction: column;
   }
 
+  .navbar-logo {
+    margin-bottom: 1rem;
+  }
+
   .navbar-links {
     flex-direction: column;
     width: 100%;
-    gap: 1.5rem;
+    gap: 1rem;
+  }
+
+  .navbar-links li {
+    display: block;
   }
 }
