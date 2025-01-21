@@ -13,6 +13,12 @@ h1 {
   padding: 20px;
 }
 
+.registered-users-container h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #58a6ff;
+}
+
 .users-list {
   display: flex;
   flex-wrap: wrap;
