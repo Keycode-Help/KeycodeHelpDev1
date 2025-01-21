@@ -101,9 +101,11 @@ public class VehicleKeycodeController {
 
         List<Vehicle> pendingRequests = vehicleService.getVehiclesByStatus(user, "PENDING");
         List<Vehicle> fulfilledRequests = vehicleService.getVehiclesByStatus(user, "COMPLETED");
+        List<Vehicle> inProgressRequests = vehicleService.getVehiclesByStatus(user, "INPROGRESS");
 
         Map<String, List<Vehicle>> response = new HashMap<>();
         response.put("pendingRequests", pendingRequests);
+        response.put("inProgressRequests", inProgressRequests);
         response.put("fulfilledRequests", fulfilledRequests);
 
         return ResponseEntity.ok(response);
