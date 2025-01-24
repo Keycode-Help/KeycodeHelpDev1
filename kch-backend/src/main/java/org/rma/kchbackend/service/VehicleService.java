@@ -105,6 +105,8 @@ public class VehicleService {
 
              //   String email = vehicle.getKeycodeUser().getEmail();
              //   emailService.sendEmail(email, "Your Key Code is Ready", "The key code for your vehicle VIN " + vehicle.getVin() + " is: " + keycode);
+                String email = vehicle.getKeycodeUser().getEmail();
+                emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),email, "Your Key Code is Ready!", "The key code for <b>VIN :" + generateHashedVin(vehicle.getVin()) + "</b> is <b>" + keycode+"</b>.");
                 return "Keycode processed and email sent.";
             } else {
                 return "Transaction not found for vehicle.";
@@ -128,7 +130,9 @@ public class VehicleService {
 
                 //Send Email to user regarding Status Update
                 String email = vehicle.getKeycodeUser().getEmail();
-                String body = "Your Keycode Request is In Progress.";
+                System.out.println("In Progress Email:"+email);
+                String hashedVin = generateHashedVin(vehicle.getVin());
+                String body = "Your Keycode Request for <b>VIN : "+hashedVin+"</b> is <b>In Progress</b>.";
                 Response response = emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),
                         email, "Keycode Request Status Update!", body);
                 return "Status Updated to In Progress";
@@ -143,5 +147,14 @@ public class VehicleService {
 
     private String generateConfirmationNumber() {
         return "CONF-" + System.currentTimeMillis();
+    }
+
+    private String generateHashedVin(String vin){
+        String hashedVin = "";
+
+        String lastFourCharactersOfVin = vin.substring(13);
+        System.out.println(lastFourCharactersOfVin);
+        hashedVin = "XXXXXXXXXXXXX"+lastFourCharactersOfVin;
+        return hashedVin;
     }
 }
