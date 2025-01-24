@@ -229,7 +229,7 @@ function UserDash() {
                 </h3>
                 <p>VIN: {request.vin}</p>
                 <p>Status: In Progress</p>
-                <div className="pending-card-images">
+                <div className="request-images">
                     <img
                       src={`data:image/jpeg;base64,${request.frontId}`}
                       alt="Front ID"
