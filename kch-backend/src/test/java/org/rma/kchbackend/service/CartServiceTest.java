@@ -149,7 +149,7 @@ public class CartServiceTest {
             vehicle.setId(1L);
             vehicle.setMake("Ford");
             vehicle.setModel("Mustang");
-            vehicle.setVin("AD32C245T");
+            vehicle.setVin("AD32C245T9Y1");
             cartItem = new CartItem();
             cartItem.setId(1L);
         }
@@ -195,20 +195,16 @@ public class CartServiceTest {
         @Test
         public void shouldThrowExceptionWhenSameVehicleExists() {
             //Arrange
+            when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
+            when(cartRepository.save(any(Cart.class))).thenAnswer(invocation -> invocation.getArgument(0));
+            when(cartItemRepository.save(any(CartItem.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            CartItem existingCartItem = new CartItem(vehicle);
-            existingCartItem.setCart(existingCart);
-            existingCartItem.setVehicle(vehicle);
-            existingCart.addCartItem(existingCartItem);
-
-            //Mock
-            when(cartService.getOrCreateCart(keycodeUser)).thenReturn(existingCart);
+            existingCart = cartService.addVehicleToCart(keycodeUser, vehicle);
 
             //Act
             Throwable thrown = catchThrowable(() -> {
                 cartService.addVehicleToCart(keycodeUser, vehicle);
             });
-
 
             //Assert
             assertThat(thrown)
@@ -217,36 +213,43 @@ public class CartServiceTest {
 
             assertThat(existingCart.getCartItems())
                     .hasSize(1);
-            verify(cartItemRepository, never()).save(any(CartItem.class));
+
+            verify(cartItemRepository, times(1)).save(any(CartItem.class));
 
         }
+
+
     }
 
+    @Nested
+    class addSubscriptionTest{
+        @BeforeEach
+        void subscriptionSetUp(){
+            
+        }
+        @Test
+        public void shouldAddSubscriptionToCart() {
+            //Arrange
+            Role role = Role.BASEUSER;
+            Subscription subscription = new Subscription();
+            SubscriptionTier tier = SubscriptionTier.BASE;
+            subscription.setId(1L);
+            subscription.setTier(tier);
 
-    @Test
-    public void shouldAddSubscriptionToCart() {
-        //Arrange
-        Role role = Role.BASEUSER;
-        Subscription subscription = new Subscription();
-        SubscriptionTier tier = SubscriptionTier.BASE;
-        subscription.setId(1L);
-        subscription.setTier(tier);
-        keycodeUser.setId(1L);
+            //Mock
+            when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
+            doNothing().when(subscriptionService).validateUserSubscription(keycodeUser);
 
-        //Mock
-        when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
-        doNothing().when(subscriptionService).validateUserSubscription(keycodeUser);
+            //Act
+            cartService.addSubscriptionToCart(keycodeUser, subscription);
 
-        //Act
-        cartService.addSubscriptionToCart(keycodeUser, subscription);
+            //Assert
+            verify(subscriptionService).validateUserSubscription(keycodeUser);
+            verify(subscriptionService).saveSubscription(subscription);
+            verify(cartRepository).save(existingCart);
 
-        //Assert
-        verify(subscriptionService).validateUserSubscription(keycodeUser);
-        verify(subscriptionService).saveSubscription(subscription);
-        verify(cartRepository).save(existingCart);
-
-        assertThat(existingCart.getCartItems())
-                .hasSize(1)
+            assertThat(existingCart.getCartItems())
+                    .hasSize(1)
                     .first()
                     .satisfies(cartItem -> {
                         // Basic null check first
@@ -259,41 +262,41 @@ public class CartServiceTest {
                                 .isNotNull()
                                 .isEqualTo(subscription);
                     });
-    }
+        }
 
-    @Test
-    public void shouldThrowExceptionWhenASubscriptionExists() {
-        //Arrange
-        Role role = Role.BASEUSER;
-        Subscription subscription = new Subscription();
-        SubscriptionTier tier = SubscriptionTier.BASE;
-        subscription.setId(1L);
-        subscription.setTier(tier);
-        keycodeUser.setId(1L);
+        @Test
+        public void shouldThrowExceptionWhenASubscriptionExists() {
+            //Arrange
+            Role role = Role.BASEUSER;
+            Subscription subscription = new Subscription();
+            SubscriptionTier tier = SubscriptionTier.BASE;
+            subscription.setId(1L);
+            subscription.setTier(tier);
 
-        existingCart.setKeycodeUser(keycodeUser);
-        CartItem existingItem = new CartItem(subscription);
-        existingItem.setCart(existingCart);
-        existingItem.setSubscription(subscription);
-        existingCart.addCartItem(existingItem);
+            existingCart.setKeycodeUser(keycodeUser);
+            CartItem existingItem = new CartItem(subscription);
+            existingItem.setCart(existingCart);
+            existingItem.setSubscription(subscription);
+            existingCart.addCartItem(existingItem);
 
-        //Mock
-        when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
-        doThrow(new IllegalStateException("User already has an active subscription"))
-                .when(subscriptionService).validateUserSubscription(keycodeUser);
+            //Mock
+            when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
+            doThrow(new IllegalStateException("User already has an active subscription"))
+                    .when(subscriptionService).validateUserSubscription(keycodeUser);
 
-        //Act
-        assertThatThrownBy(() -> cartService.addSubscriptionToCart(keycodeUser, subscription))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("User already has an active subscription");
+            //Act
+            assertThatThrownBy(() -> cartService.addSubscriptionToCart(keycodeUser, subscription))
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessageContaining("User already has an active subscription");
 
 
-        //Assert
-        verify(subscriptionService).validateUserSubscription(keycodeUser);
-        verify(subscriptionService, never()).saveSubscription(any());
+            //Assert
+            verify(subscriptionService).validateUserSubscription(keycodeUser);
+            verify(subscriptionService, never()).saveSubscription(any());
 
-        assertThat(existingCart.getCartItems()).hasSize(1);
+            assertThat(existingCart.getCartItems()).hasSize(1);
 
+        }
     }
 
     @Test
@@ -375,7 +378,7 @@ public class CartServiceTest {
         vehicle.setMake("Dodge");
         vehicle.setModel("Neon");
         vehicle.setStatus("PENDING");
-        vehicle.setVin("123456MAD");
+        vehicle.setVin("123456MAD1N4");
 
         CartItem cartItem = new CartItem();
         cartItem.setId(2L);
