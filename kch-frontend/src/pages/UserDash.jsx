@@ -7,6 +7,7 @@ function UserDash() {
   const { token } = useAuth();
   const [requests, setRequests] = useState({
     pendingRequests: [],
+    inProgressRequests : [],
     fulfilledRequests: [],
   });
   const [modalImage, setModalImage] = useState(null);
@@ -213,9 +214,62 @@ function UserDash() {
           )}
         </section>
 
-        {/* Fulfilled Requests Section */}
+        {/* In Progress Requests Section */}
         <section className="section-two">
-          <h2>Fulfilled Requests</h2>
+        <h2>InProgress Requests</h2>
+          {requests.inProgressRequests.length === 0 ? (
+            <p>No In Progress requests.</p>
+          ) :
+            (
+            requests.inProgressRequests.map((request) => (
+              
+              <div key={request.id} className="request-card">
+                <h3>
+                  {request.make} {request.model}
+                </h3>
+                <p>VIN: {request.vin}</p>
+                <p>Status: In Progress</p>
+                <div className="request-images">
+                    <img
+                      src={`data:image/jpeg;base64,${request.frontId}`}
+                      alt="Front ID"
+                      onClick={() =>
+                        handleImageClick(
+                          `data:image/jpeg;base64,${request.frontId}`
+                        )
+                      }
+                      className="vehicle-image"
+                    />
+                    <img
+                      src={`data:image/jpeg;base64,${request.backId}`}
+                      alt="Back ID"
+                      onClick={() =>
+                        handleImageClick(
+                          `data:image/jpeg;base64,${request.backId}`
+                        )
+                      }
+                      className="vehicle-image"
+                    />
+                    <img
+                      src={`data:image/jpeg;base64,${request.registration}`}
+                      alt="Registration"
+                      onClick={() =>
+                        handleImageClick(
+                          `data:image/jpeg;base64,${request.registration}`
+                        )
+                      }
+                      className="vehicle-image"
+                    />
+                  </div>
+              </div>
+              
+            ))
+          )}
+          
+        </section>
+        {/* Fulfilled Requests Section */}
+        <section className="section-three">
+        <h2>Fulfilled Requests</h2>
           {requests.fulfilledRequests.length === 0 ? (
             <p>No fulfilled requests.</p>
           ) : (
