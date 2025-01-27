@@ -1,5 +1,6 @@
 package org.rma.kchbackend.service;
 
+import com.sendgrid.Response;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Transaction;
 import org.rma.kchbackend.model.Vehicle;
@@ -42,8 +43,16 @@ public class VehicleService {
         return vehicleRepository.findByStatus("PENDING");
     }
 
+    public List<Vehicle> getInProgressVehicles(){
+        return vehicleRepository.findByStatus("INPROGRESS");
+    }
+
     public List<Vehicle> getVehiclesByStatus(KeycodeUser user, String status) {
         return vehicleRepository.findByKeycodeUserAndStatus(user, status);
+    }
+
+    public List<Vehicle> getVehiclesByUser(KeycodeUser user) {
+        return vehicleRepository.findByKeycodeUser(user);
     }
 
     public void updateVehicleRequest(Long vehicleId, String userEmail, String make, String model, String vin,
@@ -96,7 +105,37 @@ public class VehicleService {
 
              //   String email = vehicle.getKeycodeUser().getEmail();
              //   emailService.sendEmail(email, "Your Key Code is Ready", "The key code for your vehicle VIN " + vehicle.getVin() + " is: " + keycode);
+                String email = vehicle.getKeycodeUser().getEmail();
+                emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),email, "Your Key Code is Ready!", "The key code for <b>VIN :" + generateHashedVin(vehicle.getVin()) + "</b> is <b>" + keycode+"</b>.");
                 return "Keycode processed and email sent.";
+            } else {
+                return "Transaction not found for vehicle.";
+            }
+        } else {
+            return "Vehicle request not found.";
+        }
+    }
+
+    public String updatePendingRequestStatus(Long vehicleId) throws IOException {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId);
+        if (optionalVehicle.isPresent()) {
+            Vehicle vehicle = optionalVehicle.get();
+            vehicle.setStatus("INPROGRESS");
+            vehicleRepository.save(vehicle);
+
+            Transaction transaction = vehicle.getTransaction();
+            if (transaction != null) {
+                    transaction.setStatus("INPROGRESS");
+                transactionRepository.save(transaction);
+
+                //Send Email to user regarding Status Update
+                String email = vehicle.getKeycodeUser().getEmail();
+                System.out.println("In Progress Email:"+email);
+                String hashedVin = generateHashedVin(vehicle.getVin());
+                String body = "Your Keycode Request for <b>VIN : "+hashedVin+"</b> is <b>In Progress</b>.";
+                Response response = emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),
+                        email, "Keycode Request Status Update!", body);
+                return "Status Updated to In Progress";
             } else {
                 return "Transaction not found for vehicle.";
             }
@@ -108,5 +147,14 @@ public class VehicleService {
 
     private String generateConfirmationNumber() {
         return "CONF-" + System.currentTimeMillis();
+    }
+
+    private String generateHashedVin(String vin){
+        String hashedVin = "";
+
+        String lastFourCharactersOfVin = vin.substring(13);
+        System.out.println(lastFourCharactersOfVin);
+        hashedVin = "XXXXXXXXXXXXX"+lastFourCharactersOfVin;
+        return hashedVin;
     }
 }
