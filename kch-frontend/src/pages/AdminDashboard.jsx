@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { ModalContent } from "../components/ModalContent";
 import "../styles/adminDashboard.css"; // Import the CSS file
 
 function AdminDashboard() {
@@ -400,14 +401,10 @@ function AdminDashboard() {
       </div>
 
       {modalImage && (
-        <div className="modal" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close" onClick={closeModal}>
-              &times;
-            </span>
-            <img src={modalImage} alt="Enlarged View" className="modal-image" />
-          </div>
-        </div>
+        <ModalContent 
+          modalImage={modalImage} 
+          closeModal={closeModal} 
+        />
       )}
     </div>
   );
