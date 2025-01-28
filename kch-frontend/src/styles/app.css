@@ -134,8 +134,8 @@ textarea:focus {
   box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
 }
 
-/* Modal */
-.modal {
+/* Modal (Delete) */
+/* .modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -171,4 +171,4 @@ textarea:focus {
   font-weight: bold;
   color: #ffffff;
   cursor: pointer;
-}
+} */

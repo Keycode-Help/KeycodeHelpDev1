@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/registered-users.css";
+import { ModalContent } from "../components/ModalContent";
 
 function RegisteredUsers() {
   const [users, setUsers] = useState([]);
@@ -169,14 +170,10 @@ function RegisteredUsers() {
         )}
       </div>
       {modalImage && (
-        <div className="modal" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close" onClick={closeModal}>
-              &times;
-            </span>
-            <img src={modalImage} alt="Enlarged View" className="modal-image" />
-          </div>
-        </div>
+        <ModalContent 
+          modalImage={modalImage} 
+          closeModal={closeModal} 
+        />
       )}
     </div>
   );

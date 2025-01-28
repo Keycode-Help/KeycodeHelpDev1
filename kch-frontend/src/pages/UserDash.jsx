@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import "../styles/userDash.css";
+import { ModalContent } from "../components/ModalContent";
 
 function UserDash() {
   const { token } = useAuth();
@@ -287,18 +288,10 @@ function UserDash() {
 
         {/* Modal for Image Preview */}
         {modalImage && (
-          <div className="modal" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <span className="close" onClick={closeModal}>
-                &times;
-              </span>
-              <img
-                src={modalImage}
-                alt="Enlarged View"
-                className="modal-image"
-              />
-            </div>
-          </div>
+          <ModalContent 
+            modalImage={modalImage} 
+            closeModal={closeModal} 
+          />
         )}
       </div>
     </>
