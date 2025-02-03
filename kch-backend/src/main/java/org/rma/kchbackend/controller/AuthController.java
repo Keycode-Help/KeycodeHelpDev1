@@ -75,26 +75,45 @@ public class AuthController {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
             }
 
+            //Check whether the user already exists
             Optional<KeycodeUser> userExists = keycodeUserService.findByEmail(email);
+            //If the user already exists and is active, display error message user already exists
             if(userExists.isPresent()){
-                return ResponseEntity.status(500).body("User already exists");
+                if(userExists.get().isActive()){
+                    return ResponseEntity.status(500).body("User already exists");
+                }else{
+                    //User exists and currently inactive - change isActive to true, isValidated to false and set the values to the user
+                    KeycodeUser user = userExists.get();
+                    user.setActive(true);
+                    user.setValidatedUser(false);
+                    user.setFname(fname);
+                    user.setLname(lname);
+                    user.setEmail(email);
+                    user.setPhone(phone);
+                    user.setPassword(passwordEncoder.encode(password));
+                    user.setRole(Role.BASEUSER);
+                    user.setState(state);
+                    user.setFrontId(frontId.getBytes());
+                    user.setBackId(backId.getBytes());
+                    user.setInsurance(insurance.getBytes());
+                    keycodeUserService.saveUser(user);
+                }
+            }else{
+                // Create and save the user
+                KeycodeUser user = new KeycodeUser();
+                user.setFname(fname);
+                user.setLname(lname);
+                user.setEmail(email);
+                user.setPhone(phone);
+                user.setPassword(passwordEncoder.encode(password));
+                user.setRole(Role.BASEUSER);
+                user.setState(state);
+                user.setFrontId(frontId.getBytes());
+                user.setBackId(backId.getBytes());
+                user.setInsurance(insurance.getBytes());
+
+                keycodeUserService.saveUser(user);
             }
-
-            // Create and save the user
-            KeycodeUser user = new KeycodeUser();
-            user.setFname(fname);
-            user.setLname(lname);
-            user.setEmail(email);
-            user.setPhone(phone);
-            user.setPassword(passwordEncoder.encode(password));
-            user.setRole(Role.BASEUSER);
-            user.setState(state);
-            user.setFrontId(frontId.getBytes());
-            user.setBackId(backId.getBytes());
-            user.setInsurance(insurance.getBytes());
-
-            keycodeUserService.saveUser(user);
-
             return ResponseEntity.ok("User registered successfully!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,6 +139,8 @@ public class AuthController {
         Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(loginRequest.getEmail());
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(401).body("Invalid email or password.");
+        }else if(!userOptional.get().isActive()){
+            return ResponseEntity.status(401).body("Account is Inactive.");
         }
 
         KeycodeUser user = userOptional.get();
@@ -165,6 +186,11 @@ public class AuthController {
             }
             if(insurance != null){
                 user.setInsurance(insurance.getBytes());
+            }
+
+            //If any one ID has been changed, admin has to validate user again
+            if (frontId!=null || backId!=null || insurance!=null){
+                user.setValidatedUser(false);
             }
 
             keycodeUserService.saveUser(user);
