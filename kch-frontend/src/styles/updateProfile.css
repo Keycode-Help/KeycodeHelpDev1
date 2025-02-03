@@ -165,3 +165,8 @@
 .remove-button:hover {
   background-color: #bf0812;
 }
+
+a{
+  padding-left: 20em;
+  cursor: pointer;
+}

@@ -59,7 +59,11 @@ public class KeycodeUserService {
     }
 
     public List<KeycodeUser> getAllUsers() {
-        return keycodeUserRepository.findAll();
+        return keycodeUserRepository.findByRole(Role.BASEUSER);
+    }
+
+    public List<KeycodeUser> getAllActiveUsers() {
+        return keycodeUserRepository.findByRoleAndIsActive(Role.BASEUSER, true);
     }
 
     public Optional<KeycodeUser> findById(Long id) {
