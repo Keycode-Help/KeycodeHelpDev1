@@ -23,7 +23,7 @@ function RegisteredUsers() {
   }, []);
 
   const handleUserClick = (user) => {
-    setSelectedUser(user);
+   setSelectedUser(user);
   };
 
   const handleValidateUser = (id) => {
@@ -86,10 +86,19 @@ function RegisteredUsers() {
         <h1>Registered Users</h1>
         <div className="users-list">
           {users.map((user) => (
+            // <div
+            //   key={user.id}
+            //   className={`user-card ${
+            //     user.isValidatedUser ? "validated" : "unvalidated"
+            //   }`}
+            //   onClick={() => handleUserClick(user)}
+            // >
             <div
               key={user.id}
               className={`user-card ${
-                user.isValidatedUser ? "validated" : "unvalidated"
+                user.isValidatedUser && user.isActive ? "validated" : "unvalidated"
+              } ${
+                !user.isActive ? "inActiveUser":""
               }`}
               onClick={() => handleUserClick(user)}
             >
@@ -102,6 +111,12 @@ function RegisteredUsers() {
                 </p>
                 <p>
                   <strong>Last Name:</strong> {user.lname}
+                </p>
+                <p>
+                  <strong>Status:</strong> {user.isActive ? "Active" : "Inactive"}
+                </p>
+                <p>
+                  <strong>Validated:</strong> {user.isValidatedUser ? "Yes" : "No"}
                 </p>
               </div>
             </div>
@@ -151,13 +166,23 @@ function RegisteredUsers() {
               <img src={selectedUser.backId} alt="Back ID" />
               <img src={selectedUser.insurance} alt="Insurance" />
             </div> */}
-            <button
+            {/* Display Valiate User button for users who are active and not validated*/}
+            {
+              selectedUser.isActive && !selectedUser.isValidatedUser &&
+              <>
+              <button
               className="validate-btn"
               onClick={() => handleValidateUser(selectedUser.id)}
             >
               Validate User
             </button>
-            <textarea
+            </>
+            }
+            {/* Display send notification only to active users*/}
+            {
+              selectedUser.isActive && 
+              <>
+              <textarea
               value={notificationMessage}
               onChange={(e) => setNotificationMessage(e.target.value)}
               placeholder="Enter a message for the user"
@@ -165,6 +190,12 @@ function RegisteredUsers() {
             <button className="send-note" onClick={handleSendNotification}>
               Send Notification
             </button>
+            </>
+            }
+           
+            
+            
+            
           </div>
         )}
       </div>

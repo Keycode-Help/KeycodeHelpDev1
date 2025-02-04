@@ -97,6 +97,10 @@ button:hover {
   border: 2px solid red;
 }
 
+.user-card.inActiveUser {
+  border: 2px solid yellow;
+}
+
 .user-card:hover {
   background-color: #0056b3;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

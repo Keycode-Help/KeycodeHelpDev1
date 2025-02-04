@@ -4,6 +4,7 @@ import "../styles/updateProfile.css";
 import axios from "axios";
 import StatesDropDown from "../components/StatesDropDown";
 import states from "../data/states";
+import { useAuth } from "../context/AuthContext";
 
 const UpdateUserProfile = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +26,7 @@ const UpdateUserProfile = () => {
   const backIdRef = useRef(null);
   const insuranceRef = useRef(null);
   const navigate = useNavigate();
+  const {logout} = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -165,6 +167,20 @@ const UpdateUserProfile = () => {
     }
   };
 
+  const handleDelete = async() => {
+    //alert("Delete Profile clicked");
+    try{
+      await axios.put("http://localhost:8080/keycode-user/delete");
+      alert("User Profile deleted successfully.");
+      logout();
+      navigate("/login")      
+    }catch(error){
+      console.error("Delete user profile failed:", error);
+      alert(
+        error.response?.data || "Delete user profile failed. Please try again."
+      );
+    }
+  }
   useEffect(() => {
     fetchUserProfile();
   }, []);
@@ -173,6 +189,7 @@ const UpdateUserProfile = () => {
     <div className="container-register">
       <div className="form-section">
         <h1>Update Profile</h1>
+        <a onClick={() => handleDelete()}>Delete Profile</a>
         <form onSubmit={handleUpdate}>
           <input
             type="text"
