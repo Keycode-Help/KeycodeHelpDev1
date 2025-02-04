@@ -166,6 +166,7 @@ function RegisteredUsers() {
               <img src={selectedUser.backId} alt="Back ID" />
               <img src={selectedUser.insurance} alt="Insurance" />
             </div> */}
+            {/* Display Valiate User button for users who are active and not validated*/}
             {
               selectedUser.isActive && !selectedUser.isValidatedUser &&
               <>
@@ -175,7 +176,13 @@ function RegisteredUsers() {
             >
               Validate User
             </button>
-            <textarea
+            </>
+            }
+            {/* Display send notification only to active users*/}
+            {
+              selectedUser.isActive && 
+              <>
+              <textarea
               value={notificationMessage}
               onChange={(e) => setNotificationMessage(e.target.value)}
               placeholder="Enter a message for the user"
@@ -185,6 +192,9 @@ function RegisteredUsers() {
             </button>
             </>
             }
+           
+            
+            
             
           </div>
         )}
