@@ -38,16 +38,12 @@ public class SubscriptionService {
     @Transactional
     public void removeSubscription(Subscription subscription) {
         if (subscription.getKeycodeUser() != null) {
-            subscription.getKeycodeUser().setSubscription(null);
             subscription.setKeycodeUser(null);
         }
-        if (subscription.getCartItem() != null) {
-            subscription.getCartItem().setSubscription(null);
-            subscription.setCartItem(null);
-        }
+
         subscriptionRepository.save(subscription);
 
-        subscriptionRepository.delete(subscription);
+        //subscriptionRepository.delete(subscription);
     }
 
 

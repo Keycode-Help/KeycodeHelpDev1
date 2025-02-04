@@ -221,6 +221,7 @@ public class AdminDashboardController {
             userData.put("frontId", keycodeUserService.convertImageToBase64(user.getFrontId()));
             userData.put("backId", keycodeUserService.convertImageToBase64(user.getBackId()));
             userData.put("insurance", keycodeUserService.convertImageToBase64(user.getInsurance()));
+            userData.put("isActive", user.isActive());
             return userData;
         }).collect(Collectors.toList());
 
