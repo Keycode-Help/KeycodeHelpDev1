@@ -212,7 +212,7 @@ function AdminDashboard() {
                   <tr key={subscription.id}>
                     <td>{subscription.id}</td>
                     <td>{subscription.tier}</td>
-                    <td>{subscription.userEmail || "N/A"}</td>
+                    <td>{subscription.userEmail || "User Inactive"}</td>
                   </tr>
                 ))}
               </tbody>
