@@ -66,6 +66,8 @@ public class KeycodeUser implements UserDetails {
 
     private boolean isValidatedUser = false;
 
+    private boolean isActive = true;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {

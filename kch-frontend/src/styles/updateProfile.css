@@ -165,3 +165,7 @@
 .remove-button:hover {
   background-color: #bf0812;
 }
+
+.form-section a {
+  cursor: pointer;
+}

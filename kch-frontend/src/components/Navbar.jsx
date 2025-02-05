@@ -1,11 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../styles/navbar.css";
 
 function Navbar() {
   const { userRole, logout } = useAuth();
-
+  const navigate = useNavigate();
+  const onClickLogout = () => {
+      logout();
+      navigate("/login");
+  }
   return (
     <div className="navbar">
       <Link to="/" className="navbar-logo">Keycode Help</Link>
@@ -68,7 +72,7 @@ function Navbar() {
 
         {userRole && (
           <li>
-            <button id="logout" onClick={logout}>
+            <button id="logout" onClick={() => onClickLogout()}>
               Logout
             </button>
           </li>
