@@ -23,6 +23,24 @@
   color: #58a6ff; 
 }
 
+.filters input, 
+.filters select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #21262d;
+  background-color: #0d1117;
+  color: #c9d1d9;
+}
+
+.filters input:focus, 
+.filters select:focus {
+  border-color: #58ff8a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
+}
+
 .filter-section,
 .dashboard-card {
   padding: 1rem;
