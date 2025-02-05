@@ -32,11 +32,18 @@
 .keycode-form input {
   width: 100%;
   padding: 0.75rem;
+  font-size: 1rem;
   margin-bottom: 1rem;
   border: 1px solid #444;
   border-radius: 5px;
   background-color: #292929;
   color: #00ff85;
+}
+
+.keycode-form input:focus {
+  border-color: #58ff8a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
 }
 
 .submit-button {
