@@ -6,9 +6,32 @@
   border-radius: 12px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
 }
+.user-dash-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #58a6ff;
+}
+
 .section-one {
   flex: 1;
 }
+
+.section-one input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #21262d;
+  background-color: #0d1117;
+  color: #c9d1d9;
+}
+
+.section-one input:focus {
+  border-color: #58a6ff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
+}
+
 .section-two {
   flex: 1;
 }
@@ -23,6 +46,8 @@
   color: rgb(16, 198, 31);
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .request-card {

@@ -12,7 +12,7 @@ function Navbar() {
   }
   return (
     <div className="navbar">
-      <div className="navbar-logo">Keycode Help</div>
+      <Link to="/" className="navbar-logo">Keycode Help</Link>
       <ul className="navbar-links">
         {!userRole && (
           <>

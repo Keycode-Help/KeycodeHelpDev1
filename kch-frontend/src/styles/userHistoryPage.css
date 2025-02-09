@@ -30,11 +30,19 @@
 }
 
 .email-input {
+  width: 100%;
+  font-size: 1rem;
   padding: 0.75rem;
   border: 1px solid #444;
   border-radius: 5px;
   background-color: #292929;
   color: #00ff85;
+}
+
+.email-input:focus {
+  border-color: #58ff8a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
 }
 
 .fetch-button {
