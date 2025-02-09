@@ -15,8 +15,7 @@ export function MembershipCard({ tier, onSubscribe }) {
 
         <button
           onClick={onSubscribe}
-          // focus:outline-none focus:ring-0
-          className={`w-full rounded-3xl mt-8 font-bold border-0 bg-white text-black hover:bg-yellow-500 hover:text-black transition duration-100`}
+          className={`w-full rounded-3xl mt-8 font-bold border-0 bg-white text-black hover:bg-yellow-500 hover:text-black transition duration-100 focus:outline-none focus:ring-0`}
         >
           Get Started
         </button>

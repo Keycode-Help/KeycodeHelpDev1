@@ -166,7 +166,6 @@
   background-color: #bf0812;
 }
 
-a{
-  padding-left: 20em;
+.form-section a {
   cursor: pointer;
 }

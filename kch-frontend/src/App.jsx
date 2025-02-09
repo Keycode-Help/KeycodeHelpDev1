@@ -16,7 +16,6 @@ import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscri
 import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
-import "./styles/app.css";
 
 function App() {
   return (
