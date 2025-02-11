@@ -136,7 +136,7 @@ public class CartServiceTest {
 
 
     @Nested
-    class AddVehicleTest{
+    class CartVehicleTest{
         Vehicle vehicle;
         Vehicle vehicle2;
         CartItem cartItem;
@@ -218,24 +218,71 @@ public class CartServiceTest {
 
         }
 
+        @Test
+        public void shouldRemoveVehicleFromCartWhenNoTransaction(){
+            //Mock
+            when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
+
+            cartItem.setVehicle(vehicle);
+            cartItem.setCart(existingCart);
+
+            //Act
+            cartService.removeCartItem(cartItem.getId());
+
+            assertThat(cartItem.getVehicle()).isNull();
+            assertThat(vehicle.getKeycodeUser()).isNull();
+            assertThat(vehicle.getCartItem()).isNull();
+            assertThat(keycodeUser.getVehicles()).doesNotContain(vehicle);
+            assertThat(existingCart.getCartItems()).doesNotContain(cartItem);
+            verify(vehicleRepository).delete(vehicle);
+            verify(cartItemRepository).delete(cartItem);
+
+        }
+
+        @Test
+        void shouldRemoveFromCartWhenHasTransaction(){
+            //Arrange
+            vehicle.setTransaction(new Transaction());
+            when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
+
+            cartItem.setVehicle(vehicle);
+            cartItem.setCart(existingCart);
+
+            //Act
+            cartService.removeCartItem(cartItem.getId());
+
+            //Assert
+            verify(vehicleRepository, never()).delete(vehicle);
+            assertThat(cartItem.getVehicle()).isNull();
+            assertThat(vehicle.getKeycodeUser()).isNull();
+            assertThat(vehicle.getCartItem()).isNull();
+            assertThat(keycodeUser.getVehicles()).doesNotContain(vehicle);
+            assertThat(existingCart.getCartItems()).doesNotContain(cartItem);
+            verify(cartItemRepository).delete(cartItem);
+
+        }
 
     }
 
     @Nested
-    class addSubscriptionTest{
+    class CartSubscriptionTest{
+        Role role;
+        Subscription subscription;
+        SubscriptionTier tier;
+        CartItem cartItem;
+
         @BeforeEach
         void subscriptionSetUp(){
-            
+            role = Role.BASEUSER;
+            subscription = new Subscription();
+            tier = SubscriptionTier.BASE;
+            subscription.setId(1L);
+            subscription.setTier(tier);
+            cartItem = new CartItem();
+            cartItem.setId(1L);
         }
         @Test
         public void shouldAddSubscriptionToCart() {
-            //Arrange
-            Role role = Role.BASEUSER;
-            Subscription subscription = new Subscription();
-            SubscriptionTier tier = SubscriptionTier.BASE;
-            subscription.setId(1L);
-            subscription.setTier(tier);
-
             //Mock
             when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
             doNothing().when(subscriptionService).validateUserSubscription(keycodeUser);
@@ -267,12 +314,6 @@ public class CartServiceTest {
         @Test
         public void shouldThrowExceptionWhenASubscriptionExists() {
             //Arrange
-            Role role = Role.BASEUSER;
-            Subscription subscription = new Subscription();
-            SubscriptionTier tier = SubscriptionTier.BASE;
-            subscription.setId(1L);
-            subscription.setTier(tier);
-
             existingCart.setKeycodeUser(keycodeUser);
             CartItem existingItem = new CartItem(subscription);
             existingItem.setCart(existingCart);
@@ -293,8 +334,32 @@ public class CartServiceTest {
             //Assert
             verify(subscriptionService).validateUserSubscription(keycodeUser);
             verify(subscriptionService, never()).saveSubscription(any());
-
             assertThat(existingCart.getCartItems()).hasSize(1);
+
+        }
+
+        @Test
+        void shouldRemoveSubscriptionFromCart(){
+            //Arrange
+            keycodeUser.setSubscription(subscription);
+            cartItem.setSubscription(subscription);
+            subscription.setCartItem(cartItem);
+
+            //Mock
+            when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
+            when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
+
+            //Act
+            cartService.removeCartItem(cartItem.getId());
+
+            //Assert
+            verify(subscriptionRepository).delete(subscription);
+            verify(cartItemRepository).delete(cartItem);
+            assertThat(cartItem.getSubscription()).isNull();
+            assertThat(subscription.getKeycodeUser()).isNull();
+            assertThat(subscription.getCartItem()).isNull();
+            assertThat(keycodeUser.getSubscription()).isNull();
+            assertThat(existingCart.getCartItems()).doesNotContain(cartItem);
 
         }
     }
@@ -339,67 +404,6 @@ public class CartServiceTest {
 
 
     @Test
-    void shouldRemoveVehicleFromCartWhenNoTransaction(){
-        //Arrange
-        Vehicle vehicle = new Vehicle();
-        vehicle.setId(1L);
-        vehicle.setMake("Dodge");
-        vehicle.setModel("Neon");
-        vehicle.setStatus("PENDING");
-        vehicle.setVin("123456MAD");
-        keycodeUser.setVehicles(new ArrayList<>());
-
-        CartItem cartItem = new CartItem();
-        cartItem.setId(2L);
-        cartItem.setVehicle(vehicle);
-        vehicle.setCartItem(cartItem);
-
-        //Mock
-        when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
-
-        //Act
-        cartService.removeCartItem(cartItem.getId());
-
-        assertThat(cartItem.getVehicle()).isNull();
-        assertThat(vehicle.getKeycodeUser()).isNull();
-        assertThat(vehicle.getCartItem()).isNull();
-        assertThat(keycodeUser.getVehicles()).doesNotContain(vehicle);
-        assertThat(existingCart.getCartItems()).doesNotContain(cartItem);
-        verify(vehicleRepository).delete(vehicle);
-        verify(cartItemRepository).delete(cartItem);
-
-    }
-
-    @Test
-    void shouldRemoveFromCartWhenHasTransaction(){
-        //Arrange
-        Vehicle vehicle = new Vehicle();
-        vehicle.setId(1L);
-        vehicle.setMake("Dodge");
-        vehicle.setModel("Neon");
-        vehicle.setStatus("PENDING");
-        vehicle.setVin("123456MAD1N4");
-
-        CartItem cartItem = new CartItem();
-        cartItem.setId(2L);
-        cartItem.setVehicle(vehicle);
-        vehicle.setCartItem(cartItem);
-
-        vehicle.setTransaction(new Transaction());
-        when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
-
-        //Act
-        cartService.removeCartItem(cartItem.getId());
-
-        //Assert
-        verify(vehicleRepository, never()).delete(vehicle);
-        assertThat(cartItem.getVehicle()).isNull();
-        assertThat(vehicle.getKeycodeUser()).isNull();
-        assertThat(vehicle.getCartItem()).isNull();
-        assertThat(existingCart.getCartItems()).doesNotContain(cartItem);
-    }
-
-    @Test
     void shouldThrowErrorWhenCartItemDoesNotExist() {
         CartItem cartItem = new CartItem();
         cartItem.setId(1L);
@@ -413,36 +417,7 @@ public class CartServiceTest {
                 .hasMessageContaining("CartItem not found");
     }
 
-    @Test
-    void shouldRemoveSubscriptionFromCart(){
-        //Arrange
-        Subscription subscription = new Subscription();
-        subscription.setId(1L);
-        subscription.setTier(SubscriptionTier.BASE);
-        subscription.setKeycodeUser(keycodeUser);
-        keycodeUser.setSubscription(subscription);
 
-        CartItem cartItem = new CartItem();
-        cartItem.setSubscription(subscription);
-        subscription.setCartItem(cartItem);
-        cartItem.setId(2L);
-
-        //Mock
-        when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
-
-        //Act
-        cartService.removeCartItem(cartItem.getId());
-
-        //Assert
-        verify(subscriptionRepository).delete(subscription);
-        verify(cartItemRepository).delete(cartItem);
-        assertThat(cartItem.getSubscription()).isNull();
-        assertThat(subscription.getKeycodeUser()).isNull();
-        assertThat(subscription.getCartItem()).isNull();
-        assertThat(keycodeUser.getSubscription()).isNull();
-        assertThat(existingCart.getCartItems()).doesNotContain(cartItem);
-
-    }
 
     @Test
     void shouldCheckoutUserWithSubscription() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
