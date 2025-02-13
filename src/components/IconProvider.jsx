@@ -16,7 +16,8 @@ import {
     Timer,
     DollarSign,
     BadgeCheck,
-    HelpCircle
+    HelpCircle,
+    RefreshCw
 } from 'lucide-react';
 
 export const Icons = {
@@ -36,7 +37,8 @@ export const Icons = {
     timer: Timer,
     dollarSign: DollarSign,
     badgeCheck: BadgeCheck,
-    helpCircle: HelpCircle
+    helpCircle: HelpCircle,
+    refresh: RefreshCw
 };
 
 export function Icon({ name, size = 24, className = "", ...props }) {

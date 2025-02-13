@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Icon } from "../components/IconProvider";
+import VehicleTracker from '../components/VehicleTracker/VehicleTracker.jsx';
 
 export default function VehicleUpdate() {
   const { userId, vehicleId } = useParams();
@@ -117,15 +118,22 @@ export default function VehicleUpdate() {
                 <Icon name="clipboardList" size={24} className="text-success" />
                 Request Status
               </h2>
+              
+              {/* Vehicle Tracker Component */}
+              <div className="mb-6">
+                <VehicleTracker />
+              </div>
+
+              {/* Status Controls */}
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-white/80">Status</label>
+                  <label className="text-white/80">Update Status</label>
                   <select
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
                     className="w-full bg-slate/50 border border-slate rounded-md px-4 py-2
-                                                 focus:outline-none focus:border-primary"
+                             focus:outline-none focus:border-primary"
                   >
                     <option value="pending">Pending</option>
                     <option value="in_progress">In Progress</option>
@@ -141,7 +149,7 @@ export default function VehicleUpdate() {
                     onChange={handleChange}
                     rows={4}
                     className="w-full bg-slate/50 border border-slate rounded-md px-4 py-2
-                                                 focus:outline-none focus:border-primary"
+                             focus:outline-none focus:border-primary"
                     placeholder="Add any additional notes or comments"
                   />
                 </div>
