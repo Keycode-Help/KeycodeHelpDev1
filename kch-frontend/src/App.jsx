@@ -17,6 +17,8 @@ import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
 
+import NewLogin from "./pages/NewPagesForms/Login";
+
 function App() {
   return (
     <AuthProvider>
@@ -45,6 +47,7 @@ function App() {
             />
             <Route path="/admin/user-history" element={<UserHistoryPage />} />
             <Route path="*" element={<Home />} />
+            <Route path= "/newlogin" element={<NewLogin />} />  {/* Test, remove */}
           </Routes>
         </Router>
       </div>

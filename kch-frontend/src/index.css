@@ -24,16 +24,12 @@ a {
   font-weight: 500;
 } 
 
+/* Admin Dashboard, Registered Users, User History, Login, Register, Request KeyCode, User Dash, Update Profile, Cart */
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
   background-color: #0d1117; /* Dark background */
   color: #c9d1d9; /* Muted text color */
   font-family: "Inter", sans-serif;
-  line-height: 1.6;
 }
 
 h1 {
