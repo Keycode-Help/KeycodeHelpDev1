@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Login from "./pages/NewPagesForms/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
@@ -16,8 +16,6 @@ import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscri
 import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
-
-import NewLogin from "./pages/NewPagesForms/Login";
 
 function App() {
   return (
@@ -47,7 +45,6 @@ function App() {
             />
             <Route path="/admin/user-history" element={<UserHistoryPage />} />
             <Route path="*" element={<Home />} />
-            <Route path= "/newlogin" element={<NewLogin />} />  {/* Test, remove */}
           </Routes>
         </Router>
       </div>

@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Mail, LockKeyhole } from "lucide-react";
+import { loginForm } from "../../data/authpage"
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const seeHidePassword = showPassword ? "text" : "password";
 
   const navigate = useNavigate();
   const { login, userRole } = useAuth(); // Fetch the userRole from the context after login
@@ -48,74 +52,81 @@ export default function Login() {
             Professional keycode solutions for automotive security
           </p>
         </div>
-        <form className="space-y-6">
-          <div className="bg-gray-900/50 p-5 px-6 md:p-6 border border-gray-800 rounded-2xl hover:border-green-600 
-          hover:border-2 transition duration-200 shadow-lg"
-          >
-            <label className="block text-sm md:text-base font-medium text-gray-300 mb-1">
-              Email
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          { loginForm.map((form) =>(
+            <div key={form.id} className="bg-gray-900/50 p-5 px-6 md:p-6 border border-gray-800 rounded-2xl 
+            hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"
+            > {/* Email, Password */}
+              <label className="block text-sm md:text-base font-medium text-gray-300 mb-1">
+                {form.label}
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
+                  <form.icon className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
+                </div>
+
+                <input
+                  type={form.id === 'password' ? seeHidePassword : form.type}
+                  name={form.name}
+                  value={formData[form.name]}
+                  onChange={handleChange}
+                  placeholder={form.placeholder}
+                  required
+                  className="block w-full pl-10 pr-3 py-2 bg-transparent border-0 text-white placeholder-gray-500
+                  focus:outline-none text-sm md:text-base"
+                />
+
+                {form.id === 'password' && ( // Show/Hide Password
+                  <div className="absolute inset-y-0 right-0 pr-2 flex items-center">
+                    {showPassword ? (
+                      <EyeOff
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="h-6 w-6 md:h-7 md:w-7 text-gray-500 hover:text-green-600 cursor-pointer 
+                        transition-colors duration-100"
+                      />
+                    ) : (
+                      <Eye
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="h-6 w-6 md:h-7 md:w-7 text-gray-500 hover:text-green-600 cursor-pointer 
+                        transition-colors duration-100"
+                      />
+                    )}
+                  </div>
+                )}
               </div>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email Address"
-                required
-                className="block w-full pl-10 pr-3 py-2 bg-transparent border-0 text-white placeholder-gray-500 
-                focus:outline-none text-sm md:text-base"
-              />
             </div>
-          </div>
-          <div className="bg-gray-900/50 p-5 px-6 md:p-6 border border-gray-800 rounded-2xl hover:border-green-600 
-          hover:border-2 transition duration-200 shadow-lg"
-          >
-            <label className="block text-sm md:text-base font-medium text-gray-300 mb-1">
-              Password
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
-                <LockKeyhole className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
-              </div>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                required
-                className="block w-full pl-10 pr-3 py-2 bg-transparent border-0 text-white placeholder-gray-500 
-                focus:outline-none text-sm md:text-base"
-              />
+          ))}
+
+          <div className="flex items-center justify-between">{/* Remember me, Forget Password -> Needs to be implement. */}
+            <div className="flex items-center">
+              <input type="checkbox" className="h-4 w-4 md:h-5 md:w-5 text-gray-600" />
+              <label className="text-gray-400 text-sm md:text-base font-medium ml-2">Remember me</label>
             </div>
+            <a href="" className="text-sm md:text-base text-green-600 hover:text-green-500 
+            transition-colors duration-100"
+            >
+              Forget Password?
+            </a>
           </div>
+          
+          <button type="submit" className="group relative w-full bg-green-600 hover:bg-green-500 text-white 
+          font-medium p-4 md:p-5 rounded-2xl transition-colors duration-200" 
+          > {/* Sign-in Button */}
+            Sign-in
+            <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white inline-block ml-1 group-hover:translate-x-2 
+            transition-transform" 
+            />
+          </button>
+
+          <p className="text-center text-gray-400 text-sm md:text-base">{/* Sign-up */}
+            <span className="font-medium">Don&apos;t have an account?{" "} </span>
+            <a href="/register" className="text-green-600 hover:text-green-500 transition-colors 
+            duration-100 ml-1"
+            >
+              Sign up
+            </a>
+          </p>
         </form>
-        {/* <form onSubmit={handleSubmit}>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Email Address"
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Password"
-                        required
-                    />
-                    <button type="submit">Login</button>
-                </form>
-                <p>
-                    Don't have an account?... <a href="/register">Sign up</a>
-                </p> */}
       </div>
     </div>
   );
