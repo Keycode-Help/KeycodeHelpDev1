@@ -3,8 +3,6 @@ package org.rma.kchbackend.service;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.rma.kchbackend.model.*;
 import org.rma.kchbackend.repository.*;
@@ -18,10 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,25 +51,7 @@ public class CartServiceTest {
 
     @BeforeEach
     public void setUp() {
-//        byte [] fIdPath;
-//        try {
-//            fIdPath = getClass().getClassLoader().getResourceAsStream("src/test/java/resources/john_driver_b_id.jpg").readAllBytes();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        byte[] bIdPath;
-//        try {
-//            bIdPath = getClass().getClassLoader().getResourceAsStream("src/test/java/resources/john_driver_b_id.jpg").readAllBytes();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        byte[] insurancePath;
-//        try {
-//            insurancePath = getClass().getClassLoader().getResourceAsStream("src/test/java/resources/insurance_card.jpg").readAllBytes();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+
         keycodeUser = new KeycodeUser();
         keycodeUser.setId(1L);
         keycodeUser.setFname("John");
@@ -86,9 +62,6 @@ public class CartServiceTest {
         keycodeUser.setRole(Role.BASEUSER);
         keycodeUser.setVehicles(new ArrayList<>());
         keycodeUser.setSubscription(null);
-//        keycodeUser.setFrontId(fIdPath);
-//        keycodeUser.setBackId(bIdPath);
-//        keycodeUser.setInsurance(insurancePath);
         existingCart = new Cart();
         existingCart.setKeycodeUser(keycodeUser);
         existingCart.setCartItems(new ArrayList<>());
@@ -319,6 +292,10 @@ public class CartServiceTest {
             existingItem.setCart(existingCart);
             existingItem.setSubscription(subscription);
             existingCart.addCartItem(existingItem);
+            tier = SubscriptionTier.BASE;
+            subscription.setKeycodeUser(keycodeUser);
+            subscription.setCartItem(existingItem);
+            subscription.setTier(tier);
 
             //Mock
             when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
@@ -341,13 +318,15 @@ public class CartServiceTest {
         @Test
         void shouldRemoveSubscriptionFromCart(){
             //Arrange
-            keycodeUser.setSubscription(subscription);
+            tier = SubscriptionTier.BASE;
+
             cartItem.setSubscription(subscription);
             subscription.setCartItem(cartItem);
+            subscription.setKeycodeUser(keycodeUser);
+            keycodeUser.setSubscription(subscription);
 
             //Mock
             when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
-            when(cartRepository.findByKeycodeUser(keycodeUser)).thenReturn(Optional.of(existingCart));
 
             //Act
             cartService.removeCartItem(cartItem.getId());
@@ -418,35 +397,37 @@ public class CartServiceTest {
     }
 
 
-
     @Test
-    void shouldCheckoutUserWithSubscription() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void shouldCheckoutUserWithSubscription() {
+        //Arrange
         Subscription subscription = new Subscription();
         subscription.setId(1L);
-        subscription.setTier(SubscriptionTier.BASE);
-        subscription.setKeycodeUser(keycodeUser);
-        keycodeUser.setSubscription(subscription);
+        CartItem newSubscription = new CartItem(subscription);
+        newSubscription.setSubscription(subscription);
+        newSubscription.setCart(existingCart);
+        existingCart.addCartItem(newSubscription);
 
-        Class<?> clazz = cartService.getClass();
-        Method method = clazz.getDeclaredMethod("generateConfirmationNumber");
-        method.setAccessible(true);
-        String confirmationNumber = (String) method.invoke(cartService);
+        //Act
+        cartService.checkoutCart(existingCart);
 
-        Transaction transaction = new Transaction();
-        transaction.setId(1L);
-        transaction.setKeycodeUser(existingCart.getKeycodeUser());
-        transaction.setConfirmationNumber(confirmationNumber);
-
-        CartItem cartItem = new CartItem();
-        cartItem.setSubscription(subscription);
-        subscription.setCartItem(cartItem);
-        cartItem.setId(2L);
-
-
-        when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
-
+        //Assert
+        verify(subscriptionService).saveSubscription(any(Subscription.class));
+        assertThat(existingCart.getStatus())
+                .isEqualTo("CHECKED_OUT");
+        assertThat(existingCart.getCartItems()).isEmpty();
+        verify(cartRepository).save(existingCart);
+        verify(transactionRepository).save(any(Transaction.class));
     }
-//    @Test
-//    void checkoutCart() {
-//    }
+
+    @Test
+    void checkoutUserWithoutSubscription() {
+        //Act
+        cartService.checkoutCart(existingCart);
+
+        //Assert
+        assertThat(existingCart.getCartItems()).isEmpty();
+        verify(cartRepository).save(existingCart);
+        verify(transactionRepository).save(any(Transaction.class));
+    }
+
 }
