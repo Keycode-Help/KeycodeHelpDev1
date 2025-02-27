@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { Mail, LockKeyhole } from "lucide-react";
 import { loginForm } from "../../data/authpage"
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
 
@@ -43,28 +42,27 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="w-full max-w-lg">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            Sign in to Continue
+      <div className="w-full max-w-md">
+        <div className="text-center mt-20 mb-6"> {/* Sign-in Header */}
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            Sign-in to Continue
           </h1>
-          <p className="text-gray-400 text-md md:text-lg">
+          <p className="text-gray-400 text-sm md:text-base">
             Professional keycode solutions for automotive security
           </p>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit}>
           { loginForm.map((form) =>(
-            <div key={form.id} className="bg-gray-900/50 p-5 px-6 md:p-6 border border-gray-800 rounded-2xl 
+            <div key={form.id} className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl 
             hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"
             > {/* Email, Password */}
-              <label className="block text-sm md:text-base font-medium text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
                 {form.label}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
                   <form.icon className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
                 </div>
-
                 <input
                   type={form.id === 'password' ? seeHidePassword : form.type}
                   name={form.name}
@@ -75,9 +73,8 @@ export default function Login() {
                   className="block w-full pl-10 pr-3 py-2 bg-transparent border-0 text-white placeholder-gray-500
                   focus:outline-none text-sm md:text-base"
                 />
-
                 {form.id === 'password' && ( // Show/Hide Password
-                  <div className="absolute inset-y-0 right-0 pr-2 flex items-center">
+                  <div className="absolute inset-y-0 right-0 pr-1 flex items-center">
                     {showPassword ? (
                       <EyeOff
                         onClick={() => setShowPassword(!showPassword)}
@@ -96,31 +93,28 @@ export default function Login() {
               </div>
             </div>
           ))}
-
           <div className="flex items-center justify-between">{/* Remember me, Forget Password -> Needs to be implement. */}
             <div className="flex items-center">
-              <input type="checkbox" className="h-4 w-4 md:h-5 md:w-5 text-gray-600" />
-              <label className="text-gray-400 text-sm md:text-base font-medium ml-2">Remember me</label>
+              <input type="checkbox" className="h-4 w-4 text-gray-600" />
+              <label className="text-gray-400 text-sm font-medium ml-2">Remember me</label>
             </div>
-            <a href="" className="text-sm md:text-base text-green-600 hover:text-green-500 
+            <a href="" className="text-sm text-blue-500 hover:text-green-500 
             transition-colors duration-100"
             >
               Forget Password?
             </a>
           </div>
-          
           <button type="submit" className="group relative w-full bg-green-600 hover:bg-green-500 text-white 
-          font-medium p-4 md:p-5 rounded-2xl transition-colors duration-200" 
+          font-semibold p-4 rounded-2xl transition-colors duration-200" 
           > {/* Sign-in Button */}
             Sign-in
             <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white inline-block ml-1 group-hover:translate-x-2 
             transition-transform" 
             />
           </button>
-
-          <p className="text-center text-gray-400 text-sm md:text-base">{/* Sign-up */}
-            <span className="font-medium">Don&apos;t have an account?{" "} </span>
-            <a href="/register" className="text-green-600 hover:text-green-500 transition-colors 
+          <p className="text-center text-gray-400 text-sm">{/* Sign-up */}
+            <span className="font-medium">Don&apos;t have an account?{" "}</span>
+            <a href="/register" className="text-blue-500 hover:text-green-500 transition-colors 
             duration-100 ml-1"
             >
               Sign up

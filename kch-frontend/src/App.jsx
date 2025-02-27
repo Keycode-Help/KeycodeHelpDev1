@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
 import Login from "./pages/NewPagesForms/Login";
-import Register from "./pages/Register";
+import Register from "./pages/NewPagesForms/Register";
 import Cart from "./pages/Cart";
 import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
 import AdminDashboard from "./pages/AdminDashboard";
