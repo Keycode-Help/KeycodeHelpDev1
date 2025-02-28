@@ -24,7 +24,7 @@ const registerForm = [
         id: 'firstName', 
         label: 'First Name', 
         type: 'text', 
-        name: 'fName', 
+        name: 'fname', 
         placeholder: 'First Name', 
         icon: User
     },
@@ -32,7 +32,7 @@ const registerForm = [
         id: 'lastName', 
         label: 'Last Name', 
         type: 'text', 
-        name: 'lName', 
+        name: 'lname', 
         placeholder: 'Last Name', 
         icon: User
     },

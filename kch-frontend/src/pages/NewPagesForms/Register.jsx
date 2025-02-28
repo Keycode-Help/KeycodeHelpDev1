@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";;
 import StatesDropDown from "./components/StatesDropDown";
 import states from "../../data/states";
 import { registerForm } from "../../data/authpage";
-import { ChevronDown, Eye, EyeOff, MapPin, ArrowRight } from "lucide-react";
+import { 
+  ChevronDown, 
+  Eye, 
+  EyeOff, 
+  MapPin, 
+  ArrowRight, 
+  Upload,
+  FileText, 
+} from "lucide-react";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -23,6 +31,19 @@ function Register() {
   const [selectedState, setSelectedState] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  
+  const frontIdRef = useRef(null);
+  const backIdRef = useRef(null);
+  const insuranceRef = useRef(null);
+
+  // Format file size
+  const formatFileSize = (size) => {
+    if (size <= 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB"];
+    const i = Math.floor(Math.log(size) / Math.log(k));
+    return parseFloat((size / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,8 +113,9 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-black flex  items-center justify-center">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-6"> {/* Register Header */}
+      <div className="w-full max-w-md mt-20 mb-10">
+        <div className="text-center mb-6"> 
+        {/* Register Header */}
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
             Create an Account
           </h1>
@@ -104,8 +126,8 @@ function Register() {
         <form className="space-y-5" onSubmit={handleSubmit}>  
           { registerForm.map((form) =>(
             <div key={form.id} className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl 
-            hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"
-            > {/* First Name, Last Name, Email, Phone, Password */}
+            hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"> 
+            {/* First Name, Last Name, Email, Phone, Password */}
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 {form.label}
               </label>
@@ -144,8 +166,8 @@ function Register() {
             </div>
           ))}
           <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600 
-          hover:border-2 transition duration-200 shadow-lg"
-          > {/* State*/}
+          hover:border-2 transition duration-200 shadow-lg"> 
+          {/* State*/}
             <label className="block text-sm font-medium text-gray-300 mb-2">
               State
             </label>
@@ -164,30 +186,167 @@ function Register() {
             </div>
           </div>
           <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600
-          hover:border-2 transition duration-200 shadow-lg group"
-          > {/* Front Identification */}
+          hover:border-2 transition duration-200 shadow-lg group"> 
+          {/* Front Identification */}
             <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
               Front Indentification
               <span className="text-blue-500 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
-            <div className="border-2 border-dashed border-gray-800 rounded-lg p-4 cursor-pointer hover:border-green-600
-            transition duration-200 mb-2"
-            >
+            <div 
+              className="border-2 border-dashed border-gray-800 rounded-lg p-4 cursor-pointer 
+              hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
+              onClick={() => frontIdRef.current?.click()}
+            > 
+            {/* Front ID Upload */}
               <input
                 type="file"
                 name="frontId"
+                ref={frontIdRef}
                 onChange={handleFileChange}
                 accept="image/*"
                 required
-                className="w-full py-2 bg-transparent border-0 text-white placeholder-gray-500
-                focus:outline-none text-sm md:text-base"
+                className="hidden"
               />
+              {!formData.frontId ? (
+                <div className="flex items-center justify-center py-2">
+                  <Upload className="h-7 w-7 md:h-8 md:w-8 text-gray-500 group-hover/uploadArea:text-green-500 
+                  transition duration-200" />
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <FileText className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500
+                    transition duration-200" />
+                    <div>
+                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
+                      text-sm font-medium truncate max-w-[230px]">
+                        {formData.frontId.name}
+                      </p>
+                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
+                      text-xs">
+                        {formatFileSize(formData.frontId.size)} bytes
+                      </p>
+                    </div>
+                  </div>
+                  <Upload className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500 
+                  transition duration-200" />
+                </div>
+              )}
             </div>
             {errors.frontId && (
               <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
             )}
           </div>
-          <div className="flex items-center">
+          <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600
+          hover:border-2 transition duration-200 shadow-lg group"> 
+          {/* Back Identification */}
+            <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
+              Back Indentification
+              <span className="text-blue-500 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
+            </label>
+            <div 
+              className="border-2 border-dashed border-gray-800 rounded-lg p-4 cursor-pointer 
+              hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
+              onClick={() => backIdRef.current?.click()}
+            > 
+            {/* Back ID Upload */}
+              <input
+                type="file"
+                name="backId"
+                ref={backIdRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                required
+                className="hidden"
+              />
+              {!formData.backId ? (
+                <div className="flex items-center justify-center py-2">
+                  <Upload className="h-7 w-7 md:h-8 md:w-8 text-gray-500 group-hover/uploadArea:text-green-500 
+                  transition duration-200" />
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <FileText className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500
+                    transition duration-200" />
+                    <div>
+                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
+                      text-sm font-medium truncate max-w-[230px]">
+                        {formData.backId.name}
+                      </p>
+                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
+                      text-xs">
+                        {formatFileSize(formData.backId.size)} bytes
+                      </p>
+                    </div>
+                  </div>
+                  <Upload className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500 
+                  transition duration-200" />
+                </div>
+              )}
+            </div>
+            {errors.backId && (
+              <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
+            )}
+          </div>
+          <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600
+          hover:border-2 transition duration-200 shadow-lg group">
+          {/* Insurance */}
+            <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
+              <div>
+                Upload Documentation
+                <br /> 
+                <span className="text-xs text-gray-500">Registeration, Insurance, etc.</span>
+              </div>
+              <span className="text-blue-500 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
+            </label>
+            <div 
+              className="border-2 border-dashed border-gray-800 rounded-lg p-4 cursor-pointer 
+              hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
+              onClick={() => insuranceRef.current?.click()}
+            > 
+            {/* Insurance Upload */}
+              <input
+                type="file"
+                name="insurance"
+                ref={insuranceRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                required
+                className="hidden"
+              />
+              {!formData.insurance ? (
+                <div className="flex items-center justify-center py-2">
+                  <Upload className="h-7 w-7 md:h-8 md:w-8 text-gray-500 group-hover/uploadArea:text-green-500 
+                  transition duration-200" />
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <FileText className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500
+                    transition duration-200" />
+                    <div>
+                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
+                      text-sm font-medium truncate max-w-[230px]">
+                        {formData.insurance.name}
+                      </p>
+                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
+                      text-xs">
+                        {formatFileSize(formData.insurance.size)} bytes
+                      </p>
+                    </div>
+                  </div>
+                  <Upload className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500 
+                  transition duration-200" />
+                </div>
+              )}
+            </div>
+            {errors.insurance && (
+              <p className="text-red-500 text-center text-sm">{errors.insurance}</p>
+            )}
+          </div>
+          <div className="flex items-center"> 
+          {/* Terms of Service */}
             <input type="checkbox" className="h-4 w-4 text-gray-600" required />
             <div className="ml-2">
               <label className="text-gray-400 text-sm font-medium">
@@ -203,8 +362,8 @@ function Register() {
             </div>
           </div>
           <button type="submit" className="group relative w-full bg-green-600 hover:bg-green-500 text-white 
-          font-semibold p-4 rounded-2xl transition-colors duration-200" 
-          > {/* Sign-up Button */}
+          font-semibold p-4 rounded-2xl transition-colors duration-200" > 
+          {/* Sign-up Button */}
             Sign-up
             <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white inline-block ml-1 group-hover:translate-x-2 
             transition-transform" 
@@ -213,114 +372,13 @@ function Register() {
           <p className="text-center text-gray-400 text-sm">{/* Sign-up */}
             <span className="font-medium">Already have an account?{" "}</span>
             <a href="/login" className="text-blue-500 hover:text-green-500 transition-colors 
-            duration-100 ml-1"
-            >
+            duration-100 ml-1">
               Sign in
             </a>
           </p>
         </form>
       </div>
     </div>
-    
-    
-    
-    // <div className="container-register">
-    //   <div className="form-section">
-    //     <h1 className="form-h1">Sign Up For An Account</h1>
-    //     <form onSubmit={handleSubmit}>
-    //       <input
-    //         type="text"
-    //         name="fname"
-    //         value={formData.fname}
-    //         onChange={handleChange}
-    //         placeholder="First Name"
-    //         required
-    //       />
-    //       <input
-    //         type="text"
-    //         name="lname"
-    //         value={formData.lname}
-    //         onChange={handleChange}
-    //         placeholder="Last Name"
-    //         required
-    //       />
-    //       <input
-    //         type="email"
-    //         name="email"
-    //         value={formData.email}
-    //         onChange={handleChange}
-    //         placeholder="Email Address"
-    //         required
-    //       />
-    //       <input
-    //         type="tel"
-    //         name="phone"
-    //         value={formData.phone}
-    //         onChange={handleChange}
-    //         placeholder="Phone Number"
-    //       />
-    //       <input
-    //         type="password"
-    //         name="password"
-    //         value={formData.password}
-    //         onChange={handleChange}
-    //         placeholder="Password"
-    //         required
-    //       />
-    //       <label>
-    //         State:
-    //         <StatesDropDown
-    //           selectedState={selectedState}
-    //           options={states}
-    //           onChange={(e) => setSelectedState(e.target.value)}
-    //         />
-    //       </label>
-    //       <label>
-    //         Upload Front ID:
-    //         <input
-    //           type="file"
-    //           name="frontId"
-    //           onChange={handleFileChange}
-    //           accept="image/*"
-    //           required
-    //         />
-    //         {errors.frontId && (
-    //           <p className="error-message">{errors.frontId}</p>
-    //         )}
-    //       </label>
-    //       <label>
-    //         Upload Back ID:
-    //         <input
-    //           type="file"
-    //           name="backId"
-    //           onChange={handleFileChange}
-    //           accept="image/*"
-    //           required
-    //         />
-    //         {errors.backId && <p className="error-message">{errors.backId}</p>}
-    //       </label>
-    //       <label>
-    //         Upload Documentation (e.g., registration or insurance):
-    //         <input
-    //           type="file"
-    //           name="insurance"
-    //           onChange={handleFileChange}
-    //           accept="image/*"
-    //           required
-    //         />
-    //         {errors.insurance && (
-    //           <p className="error-message">{errors.insurance}</p>
-    //         )}
-    //       </label>
-    //       <button type="submit" className="book-btn">
-    //         Register
-    //       </button>
-    //     </form>
-    //     <p>
-    //       Already a member? <a href="/login">Sign in</a>
-    //     </p>
-    //   </div>
-    // </div>
   );
 }
 
