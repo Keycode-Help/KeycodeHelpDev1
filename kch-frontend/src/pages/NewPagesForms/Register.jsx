@@ -224,7 +224,7 @@ function Register() {
                       </p>
                       <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
                       text-xs">
-                        {formatFileSize(formData.frontId.size)} bytes
+                        {formatFileSize(formData.frontId.size)}
                       </p>
                     </div>
                   </div>
@@ -276,7 +276,7 @@ function Register() {
                       </p>
                       <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
                       text-xs">
-                        {formatFileSize(formData.backId.size)} bytes
+                        {formatFileSize(formData.backId.size)}
                       </p>
                     </div>
                   </div>
@@ -332,7 +332,7 @@ function Register() {
                       </p>
                       <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
                       text-xs">
-                        {formatFileSize(formData.insurance.size)} bytes
+                        {formatFileSize(formData.insurance.size)}
                       </p>
                     </div>
                   </div>
