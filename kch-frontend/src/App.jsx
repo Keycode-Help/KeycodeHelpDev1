@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
@@ -17,12 +17,26 @@ import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
 
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const pagesWithoutNavbar = ["/landingpage"];
+  const isNavbarHidden = pagesWithoutNavbar.includes(location.pathname);
+  
+  return (
+    <div className="min-h-screen flex flex-col">
+      {!isNavbarHidden && <Navbar />}
+      <div className="flex-1">
+        {children}
+      </div>
+    </div>
+  );
+};
+
 function App() {
   return (
     <AuthProvider>
-      <div>
-        <Router>
-          <Navbar />
+      <Router>
+        <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -46,8 +60,8 @@ function App() {
             <Route path="/admin/user-history" element={<UserHistoryPage />} />
             <Route path="*" element={<Home />} />
           </Routes>
-        </Router>
-      </div>
+        </Layout>
+      </Router>
     </AuthProvider>
   );
 }

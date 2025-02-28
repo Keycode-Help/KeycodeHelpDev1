@@ -93,7 +93,7 @@ function Register() {
   return (
     <div className="min-h-screen bg-black flex  items-center justify-center">
       <div className="w-full max-w-md">
-        <div className="text-center mt-20 mb-6"> {/* Register Header */}
+        <div className="text-center mb-6"> {/* Register Header */}
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
             Create an Account
           </h1>
