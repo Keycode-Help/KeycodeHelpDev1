@@ -9,7 +9,7 @@ import Cart from "./pages/Cart";
 import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
 import AdminDashboard from "./pages/AdminDashboard";
 import SubscriptionPage from "./pages/SubscriptionPage";
-import UserHistoryPage from "./pages/UserHistoryPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
 import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscription page
@@ -57,7 +57,7 @@ function App() {
               path="/admin/registered-users"
               element={<RegisteredUsersPage />} // Add the route for the new page
             />
-            <Route path="/admin/user-history" element={<UserHistoryPage />} />
+            <Route path="/admin/user-history" element={<OrderHistoryPage />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Layout>
