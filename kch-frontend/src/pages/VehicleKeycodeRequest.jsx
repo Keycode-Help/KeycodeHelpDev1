@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import "../styles/vehicleKeycodeRequest.css";
+import MakeDropDown from "../components/MakeDropDown";
 
 function VehicleKeycodeRequest() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,9 @@ function VehicleKeycodeRequest() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { token } = useAuth();
+  const [makes, setMakes] = useState([]);
+  const [selectedMake, setSelectedMake] = useState("");
+  const [selectedMakePrice, setSelectedMakePrice] = useState(0.0);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
 
@@ -66,7 +70,8 @@ function VehicleKeycodeRequest() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formDataObj = new FormData();
-    formDataObj.append("make", formData.make);
+    formDataObj.append("make", selectedMake);
+    formDataObj.append("price", selectedMakePrice);
     formDataObj.append("model", formData.model);
     formDataObj.append("vin", formData.vin);
     formDataObj.append("frontId", formData.frontId);
@@ -91,13 +96,36 @@ function VehicleKeycodeRequest() {
       });
   };
 
+  const setMakePrice = (selectedMakeValue) => {
+    console.log("Make ", selectedMakeValue); 
+    console.log(makes);
+    const selectedMakeItem = makes.find(make => (make.manufacturerName === selectedMakeValue));
+    if(selectedMakeItem){
+      setSelectedMakePrice(selectedMakeItem.keyCodePrice);
+    }else{
+      setSelectedMakePrice(0);
+    }
+    console.log(selectedMakeItem);
+  }
+  useEffect(() => {
+    axios
+    .get("http://localhost:8080/makes/getMakes")
+    .then((response) => {
+      console.log(response.data);
+      setMakes(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching make:", error);
+    });
+  },[]);
+
   return (
     <div className="wrapper-vr">
       <div className="keycode-request-container">
         <h1>Request a Keycode for Your Vehicle</h1>
         <form onSubmit={handleSubmit} className="keycode-form">
-          <div className="form-group">
-            <label htmlFor="make">Vehicle Make</label>
+          <div>
+            {/* <label htmlFor="make">Vehicle Make</label>
             <input
               type="text"
               id="make"
@@ -106,6 +134,28 @@ function VehicleKeycodeRequest() {
               onChange={handleChange}
               placeholder="Enter Vehicle Make"
               required
+            /> */}
+            <label>
+            Make
+            <MakeDropDown
+              selectedMake={selectedMake}
+              options={makes}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setSelectedMake(e.target.value);
+                setMakePrice(e.target.value);
+              }
+            }
+            />
+          </label>
+          </div>
+          <div className="form-group">
+            <label htmlFor="model">Price</label>
+            <input
+              type="text"
+              id="model"
+              name="model"
+              value={selectedMakePrice}
             />
           </div>
           <div className="form-group">

@@ -16,8 +16,14 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Make cannot be empty")
-    private String make;
+    //Commented by Nithya - Adding Many to One relationship between Vehicle and Make
+    //@NotBlank(message = "Make cannot be empty")
+    //private String make;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="make_id")
+    @JsonIgnore
+    private Make make;
 
     @NotBlank(message = "Model cannot be empty")
     private String model;
@@ -45,7 +51,8 @@ public class Vehicle {
 
     private String keycode;
 
-
+    //Added by Nithya - key code price
+    private double keycodePrice;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] frontId;
