@@ -27,6 +27,9 @@ public class Transaction {
     @NotBlank(message = "Status cannot be empty")
     private String status;
 
+    //Added by Nithya - Transaction Amount
+    private double transactionAmount;
+
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Vehicle> vehicles = new ArrayList<>();

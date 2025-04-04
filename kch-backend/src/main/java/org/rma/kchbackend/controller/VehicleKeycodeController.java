@@ -1,7 +1,9 @@
 package org.rma.kchbackend.controller;
 
+import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.model.KeycodeUser;
+import org.rma.kchbackend.service.MakeService;
 import org.rma.kchbackend.service.VehicleService;
 import org.rma.kchbackend.service.KeycodeUserService;
 import org.rma.kchbackend.service.CartService;
@@ -25,12 +27,15 @@ public class VehicleKeycodeController {
     private final VehicleService vehicleService;
     private final KeycodeUserService keycodeUserService;
     private final CartService cartService;
+    private final MakeService makeService;
 
     @Autowired
-    public VehicleKeycodeController(VehicleService vehicleService, KeycodeUserService keycodeUserService, CartService cartService) {
+    public VehicleKeycodeController(VehicleService vehicleService, KeycodeUserService keycodeUserService,
+                                    CartService cartService, MakeService makeService) {
         this.vehicleService = vehicleService;
         this.keycodeUserService = keycodeUserService;
         this.cartService = cartService;
+        this.makeService = makeService;
     }
 
     @PostMapping("/request-keycode")
@@ -68,7 +73,10 @@ public class VehicleKeycodeController {
 
             // Create and save the vehicle
             Vehicle vehicle = new Vehicle();
-            vehicle.setMake(make);
+
+            //Added by Nithya - Get the vehicle make
+            Make vehicleMake = makeService.getMakeDetails(make);
+            vehicle.setMake(vehicleMake);
             vehicle.setModel(model);
             vehicle.setVin(vin);
             vehicle.setFrontId(frontId.getBytes());
@@ -146,7 +154,8 @@ public class VehicleKeycodeController {
         }
 
         // Update the vehicle details only if the new values are provided
-        if (make != null && !make.isEmpty()) vehicle.setMake(make);
+        //Changed by Nithya
+        if (make != null && !make.isEmpty()) vehicle.setMake(makeService.getMakeDetails(make));
         if (model != null && !model.isEmpty()) vehicle.setModel(model);
         if (vin != null && !vin.isEmpty()) vehicle.setVin(vin);
 

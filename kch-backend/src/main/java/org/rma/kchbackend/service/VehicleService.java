@@ -2,8 +2,10 @@ package org.rma.kchbackend.service;
 
 import com.sendgrid.Response;
 import org.rma.kchbackend.model.KeycodeUser;
+import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Transaction;
 import org.rma.kchbackend.model.Vehicle;
+import org.rma.kchbackend.repository.MakeRepository;
 import org.rma.kchbackend.repository.TransactionRepository;
 import org.rma.kchbackend.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,15 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final TransactionRepository transactionRepository;
     private final EmailService emailService;
+    private final MakeRepository makeRepository;
 
     @Autowired
-    public VehicleService(VehicleRepository vehicleRepository, TransactionRepository transactionRepository, EmailService emailService) {
+    public VehicleService(VehicleRepository vehicleRepository, TransactionRepository transactionRepository,
+                          EmailService emailService, MakeRepository makeRepository) {
         this.vehicleRepository = vehicleRepository;
         this.transactionRepository = transactionRepository;
         this.emailService = emailService;
+        this.makeRepository = makeRepository;
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
@@ -69,7 +74,8 @@ public class VehicleService {
             throw new SecurityException("You are not authorized to update this vehicle request.");
         }
 
-        vehicle.setMake(make);
+        Make vehicleMake = makeRepository.findByManufacturerName(make);
+        vehicle.setMake(vehicleMake);
         vehicle.setModel(model);
         vehicle.setVin(vin);
 

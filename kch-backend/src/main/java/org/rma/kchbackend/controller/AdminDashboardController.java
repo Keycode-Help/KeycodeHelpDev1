@@ -180,7 +180,8 @@ public class AdminDashboardController {
 
     @GetMapping("/subscriptions")
     public List<SubscriptionDto> getAllSubscriptions() {
-        return subscriptionService.getAllSubscriptions().stream()
+        //Changed by Nithya - Retrieving subscriptions which are checked out by the user
+        return subscriptionService.getActivatedSubscriptions().stream()
                 .map(subscription -> new SubscriptionDto(
                         subscription.getId(),
                         subscription.getTier().name(),
