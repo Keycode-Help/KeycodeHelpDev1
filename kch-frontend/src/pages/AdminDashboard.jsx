@@ -18,7 +18,7 @@ function AdminDashboard() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [modalImage, setModalImage] = useState(null);
-  const [inProgressRequests, setInProgressRequests] = useState([])
+  const [inProgressRequests, setInProgressRequests] = useState([]);
 
   const handleApiError = (error, defaultMessage) => {
     console.error(error);
@@ -123,24 +123,21 @@ function AdminDashboard() {
   };
 
   const updateRequestStatus = (vehicleId) => {
-    //alert("Start button clicked");
     axios
       .post(
-        "http://localhost:8080/admin/update-request-status/"+vehicleId,
+        "http://localhost:8080/admin/update-request-status/" + vehicleId,
+        null,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
       .then(() => {
-        alert("Status updated to In Progress")
-         fetchPendingRequests();
-         fetchInProgressRequests();
-         fetchTransactions();
-         
+        alert("Status updated to In Progress");
+        fetchPendingRequests();
+        fetchInProgressRequests();
+        fetchTransactions();
       })
-      .catch((error) =>
-        handleApiError(error, "Error Update Request Status.")
-      );
+      .catch((error) => handleApiError(error, "Error Update Request Status."));
   };
 
   return (
@@ -193,7 +190,6 @@ function AdminDashboard() {
       </div>
 
       <div className="dashboard-grid">
-        {/* Subscriptions Section */}
         <section className="dashboard-card">
           <h2>Subscriptions</h2>
           {subscriptions.length === 0 ? (
@@ -220,7 +216,6 @@ function AdminDashboard() {
           )}
         </section>
 
-        {/* Pending Requests Section */}
         <section className="dashboard-card pending-requests">
           <h2>Pending Requests</h2>
           {pendingRequests.length === 0 ? (
@@ -230,14 +225,22 @@ function AdminDashboard() {
               {pendingRequests.map((request) => (
                 <div className="pending-card" key={request.id}>
                   <div className="pending-card-header">
-                    <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-                    <h3>
-                      {request.make} {request.model}
-                    </h3>
-                    <button className="start-button"
-                            onClick={() => updateRequestStatus(request.id)}>
-                      Start
-                    </button>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h3>
+                        {request.make?.manufacturerName || "Unknown Make"}{" "}
+                        {request.model}
+                      </h3>
+                      <button
+                        className="start-button"
+                        onClick={() => updateRequestStatus(request.id)}
+                      >
+                        Start
+                      </button>
                     </div>
                     <p>
                       VIN: <strong>{request.vin}</strong>
@@ -282,21 +285,27 @@ function AdminDashboard() {
           )}
         </section>
 
-        {/* In Progress Requests Section */}
         <section className="dashboard-card in-progress-requests">
           <h2>In Progress Requests</h2>
           {inProgressRequests.length === 0 ? (
-            <p className="no-requests">No In Progress Requests at the moment.</p>
+            <p className="no-requests">
+              No In Progress Requests at the moment.
+            </p>
           ) : (
             <div className="in-progress-grid">
               {inProgressRequests.map((request) => (
                 <div className="in-progress-card" key={request.id}>
                   <div className="pending-card-header">
-                    <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-                    <h3 style={{paddingLeft:'5em'}}>
-                      {request.make} {request.model}
-                    </h3>
-
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h3>
+                        {request.make?.manufacturerName || "Unknown Make"}{" "}
+                        {request.model}
+                      </h3>
                     </div>
                     <p>
                       VIN: <strong>{request.vin}</strong>
@@ -358,7 +367,6 @@ function AdminDashboard() {
           )}
         </section>
 
-        {/* Transactions Section */}
         <section className="dashboard-card">
           <h2>Transactions</h2>
           {transactions.length === 0 ? (
@@ -381,7 +389,8 @@ function AdminDashboard() {
                     <td>
                       {transaction.vehicles.map((vehicle) => (
                         <div key={vehicle.id}>
-                          {vehicle.make} {vehicle.model} (VIN: {vehicle.vin})
+                          {vehicle.make?.manufacturerName || "Unknown Make"}{" "}
+                          {vehicle.model} (VIN: {vehicle.vin})
                         </div>
                       ))}
                     </td>
@@ -401,10 +410,7 @@ function AdminDashboard() {
       </div>
 
       {modalImage && (
-        <ModalContent 
-          modalImage={modalImage} 
-          closeModal={closeModal} 
-        />
+        <ModalContent modalImage={modalImage} closeModal={closeModal} />
       )}
     </div>
   );
