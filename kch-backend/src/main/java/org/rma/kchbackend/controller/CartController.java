@@ -2,10 +2,7 @@ package org.rma.kchbackend.controller;
 
 import com.sendgrid.Response;
 import org.rma.kchbackend.dto.CartItemDto;
-import org.rma.kchbackend.model.Cart;
-import org.rma.kchbackend.model.KeycodeUser;
-import org.rma.kchbackend.model.Subscription;
-import org.rma.kchbackend.model.Vehicle;
+import org.rma.kchbackend.model.*;
 import org.rma.kchbackend.service.CartService;
 import org.rma.kchbackend.service.EmailService;
 import org.rma.kchbackend.service.KeycodeUserService;
@@ -42,13 +39,33 @@ public class CartController {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return cartService.getCartItems(user).stream()
-                .map(cartItem -> new CartItemDto(
-                        cartItem.getId(),
-                        cartItem.getVehicle() != null ? cartItem.getVehicle().getMake() : null,
-                        cartItem.getVehicle() != null ? cartItem.getVehicle().getModel() : null,
-                        cartItem.getVehicle() != null ? cartItem.getVehicle().getVin() : null,
-                        cartItem.getSubscription() != null ? cartItem.getSubscription().getTier().name() : null
-                ))
+                .map(cartItem ->
+                {
+
+                   double cartItemStandardPrice = 0.0;
+                   if(cartItem.getVehicle() !=null){
+                       //If cart item is vehicle, standard price will be the keycode price associated with make
+                       cartItemStandardPrice = cartItem.getVehicle().getMake().getKeyCodePrice();
+                   }else if(cartItem.getSubscription() != null){
+                       //If the cart item is a subscription, standard price will be the subscription tier price
+                       String subscriptionTier = cartItem.getSubscription().getTier().name();
+                       if(subscriptionTier.equals("BASE")){
+                           cartItemStandardPrice = 9.99;
+                       }else if(subscriptionTier.equals("PREMIUM")){
+                           cartItemStandardPrice = 49.99;
+                       }
+                   }
+                   return new CartItemDto(
+                            cartItem.getId(),   //cart item id
+                            cartItem.getVehicle() != null ? cartItem.getVehicle().getMake().getManufacturerName() : null, //make
+                            cartItem.getVehicle() != null ? cartItem.getVehicle().getModel() : null,    //model
+                            cartItem.getVehicle() != null ? cartItem.getVehicle().getVin() : null, //vin
+                            cartItemStandardPrice,  //standard price
+                            cartItem.getVehicle() != null || cartItem.getSubscription() != null ? cartItem.getCartItemFinalPrice() : 0.00,  //final price
+                            cartItem.getSubscription() != null ? cartItem.getSubscription().getTier().name() : null //subscription tier
+                    );
+                }
+                        )
                 .collect(Collectors.toList());
     }
 
@@ -86,8 +103,26 @@ public class CartController {
 
     @DeleteMapping("/remove/{cartItemId}")
     public String removeCartItem(@PathVariable Long cartItemId) {
-        cartService.removeCartItem(cartItemId);
-        return "Item removed from cart.";
+
+        //Changed by Nithya - Getting the user info and passing it to update vehicle prices
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        KeycodeUser user = keycodeUserService.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        try {
+            //Check whether the cart item removed is Subscription or Vehicle
+            boolean isSubscriptionRemoved = cartService.removeCartItem(cartItemId);
+
+            //Update the vehicle prices if the cart item removed is a subscription
+            //Update the cart total
+            cartService.updateVehiclePrices(isSubscriptionRemoved, user);
+            return "Item removed from cart.";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
+
+
     }
 
     @PostMapping("/checkout")

@@ -30,6 +30,9 @@ public class Subscription {
     @JsonIgnore
     private CartItem cartItem;
 
+    //Added by Nithya - To check whether the user has checked out the subscription or still in cart
+    private boolean isActivated;
+
     public Subscription(SubscriptionTier tier) {
         this.tier = tier;
     }

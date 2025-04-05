@@ -30,6 +30,9 @@ public class CartItem {
     @JsonManagedReference
     private Subscription subscription;
 
+    //Added by Nithya - final amount after discount if subscription is there or it will be the standardPrice
+    private double cartItemFinalPrice;
+
     public CartItem(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
