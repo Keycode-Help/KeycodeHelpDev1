@@ -23,7 +23,11 @@ public class SubscriptionService {
     public void validateUserSubscription(KeycodeUser user) {
         Optional<Subscription> existingSubscription = subscriptionRepository.findByKeycodeUser(user);
         if (existingSubscription.isPresent()) {
-            throw new IllegalArgumentException("User already has an active subscription.");
+            //Check whether the user has activated the subscription i.e checked out from cart
+            if(existingSubscription.get().isActivated()){
+                throw new IllegalArgumentException("User already has an active subscription.");
+            }
+
         }
     }
     public Optional<Subscription> getSubscriptionForUser(KeycodeUser user) {
@@ -50,6 +54,10 @@ public class SubscriptionService {
 
     public List<Subscription> getAllSubscriptions() {
         return subscriptionRepository.findAll();
+    }
+
+    public List<Subscription> getActivatedSubscriptions() {
+        return subscriptionRepository.findByIsActivated(true);
     }
 
 
