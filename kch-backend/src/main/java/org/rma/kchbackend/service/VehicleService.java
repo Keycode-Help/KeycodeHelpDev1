@@ -158,7 +158,8 @@ public class VehicleService {
     private String generateHashedVin(String vin){
         String hashedVin = "";
 
-        String lastFourCharactersOfVin = vin.substring(13);
+        String lastFourCharactersOfVin = vin.substring(1);
+       // String lastFourCharactersOfVin = vin.substring(13);
         System.out.println(lastFourCharactersOfVin);
         hashedVin = "XXXXXXXXXXXXX"+lastFourCharactersOfVin;
         return hashedVin;
