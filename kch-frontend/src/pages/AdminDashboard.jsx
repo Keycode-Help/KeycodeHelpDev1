@@ -232,8 +232,7 @@ function AdminDashboard() {
                       }}
                     >
                       <h3>
-                        {request.make?.manufacturerName || "Unknown Make"}{" "}
-                        {request.model}
+                        {request.make || "Unknown Make"} {request.model}
                       </h3>
                       <button
                         className="start-button"
@@ -303,8 +302,7 @@ function AdminDashboard() {
                       }}
                     >
                       <h3>
-                        {request.make?.manufacturerName || "Unknown Make"}{" "}
-                        {request.model}
+                        {request.make || "Unknown Make"} {request.model}
                       </h3>
                     </div>
                     <p>
