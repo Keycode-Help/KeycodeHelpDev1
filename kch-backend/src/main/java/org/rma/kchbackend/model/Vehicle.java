@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 @NoArgsConstructor
 @Entity
@@ -20,9 +22,8 @@ public class Vehicle {
     //@NotBlank(message = "Make cannot be empty")
     //private String make;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="make_id")
-    @JsonIgnore
     private Make make;
 
     @NotBlank(message = "Model cannot be empty")
