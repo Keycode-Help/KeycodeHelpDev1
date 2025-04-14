@@ -77,4 +77,22 @@ public class KeycodeUserController {
             return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
         }
     }
+
+    //To get User Subscription
+    @GetMapping("/subscription")
+    public ResponseEntity<Subscription> getUserSubscription(Authentication authentication) {
+        String email = authentication.getName();
+        KeycodeUser user = keycodeUserService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<Subscription> optionalSubscription = subscriptionService.getSubscriptionForUser(user);
+        Subscription userSubscription = null;
+        if(optionalSubscription.isPresent()){
+            if(optionalSubscription.get().isActivated())
+            {
+                userSubscription = optionalSubscription.get();
+            }
+
+        }
+        return ResponseEntity.ok(userSubscription);
+    }
 }

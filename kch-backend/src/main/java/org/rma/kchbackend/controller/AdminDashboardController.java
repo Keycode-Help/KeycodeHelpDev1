@@ -4,6 +4,7 @@ import com.sendgrid.Response;
 import org.rma.kchbackend.dto.ProcessRequestDto;
 import org.rma.kchbackend.dto.SubscriptionDto;
 import org.rma.kchbackend.model.KeycodeUser;
+import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Transaction;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.service.*;
@@ -40,48 +41,26 @@ public class AdminDashboardController {
         this.emailService = emailService;
     }
 
-//    @GetMapping("/pending-requests")
-//    public List<Vehicle> getPendingRequests() {
-//        return vehicleService.getPendingVehicles();
-//    }
 
-//    @GetMapping("/pending-requests")
-//    public ResponseEntity<List<Map<String, Object>>> getPendingRequests() {
-//        List<Vehicle> vehicles = vehicleService.getPendingVehicles();
-//        List<Map<String, Object>> vehicleDetails = vehicles.stream().map(vehicle -> {
-//            Map<String, Object> vehicleData = new HashMap<>();
-//            vehicleData.put("id", vehicle.getId());
-//            vehicleData.put("make", vehicle.getMake());
-//            vehicleData.put("model", vehicle.getModel());
-//            vehicleData.put("vin", vehicle.getVin());
-//            vehicleData.put("status", vehicle.getStatus());
-//            vehicleData.put("keycode", vehicle.getKeycode());
-//            vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
-//            vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
-//            vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
-//            vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser() != null ? vehicle.getKeycodeUser().getEmail() : null);
-//            return vehicleData;
-//        }).collect(Collectors.toList());
-//
-//        return ResponseEntity.ok(vehicleDetails);
-//    }
 
     @GetMapping("/pending-requests")
     public ResponseEntity<List<Map<String, Object>>> getPendingRequests() {
         List<Vehicle> vehicles = vehicleService.getPendingVehicles();
+        System.out.println("Fetched " + vehicles.size() + " pending vehicles");
+
         List<Map<String, Object>> vehicleDetails = vehicles.stream().map(vehicle -> {
             Map<String, Object> vehicleData = new HashMap<>();
             vehicleData.put("id", vehicle.getId());
-            vehicleData.put("make", vehicle.getMake());
+            Make make = vehicle.getMake();
+            vehicleData.put("make", make != null ? make.getManufacturerName() : null);
+
             vehicleData.put("model", vehicle.getModel());
             vehicleData.put("vin", vehicle.getVin());
             vehicleData.put("status", vehicle.getStatus());
             vehicleData.put("keycode", vehicle.getKeycode());
-            vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
-            vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
-            vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
-
-            // Include keycode user email and validation status
+        vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
+        vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
+        vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
             if (vehicle.getKeycodeUser() != null) {
                 vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser().getEmail());
                 vehicleData.put("isValidatedUser", vehicle.getKeycodeUser().isValidatedUser());
@@ -95,19 +74,24 @@ public class AdminDashboardController {
         return ResponseEntity.ok(vehicleDetails);
     }
 
+
+
     @GetMapping("/in-progress-requests")
     public ResponseEntity<List<Map<String, Object>>> getInProgressRequests() {
         List<Vehicle> vehicles = vehicleService.getInProgressVehicles();
         List<Map<String, Object>> vehicleDetails = vehicles.stream().map(vehicle -> {
             Map<String, Object> vehicleData = new HashMap<>();
             vehicleData.put("id", vehicle.getId());
-            vehicleData.put("make", vehicle.getMake());
+            Make make = vehicle.getMake();
+            vehicleData.put("make", make != null ? make.getManufacturerName() : null);
+
             vehicleData.put("model", vehicle.getModel());
             vehicleData.put("vin", vehicle.getVin());
             vehicleData.put("status", vehicle.getStatus());
             vehicleData.put("keycode", vehicle.getKeycode());
-            vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
-            vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
+            vehicleData.put("frontId", (vehicle.getFrontId() != null && vehicle.getFrontId().length > 0) ? convertImageToBase64(vehicle.getFrontId()) : null);
+            vehicleData.put("backId", (vehicle.getBackId() != null && vehicle.getBackId().length > 0) ? convertImageToBase64(vehicle.getBackId()) : null);
+            vehicleData.put("registration", (vehicle.getRegistration() != null && vehicle.getRegistration().length > 0) ? convertImageToBase64(vehicle.getRegistration()) : null);
             vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
 
             // Include keycode user email and validation status
@@ -128,7 +112,12 @@ public class AdminDashboardController {
 
     // Utility method to convert byte[] to Base64 string
     private String convertImageToBase64(byte[] image) {
-        return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(image);
+        try {
+            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(image);
+        } catch (Exception e) {
+            System.err.println("Failed to encode image to base64: " + e.getMessage());
+            return null; // or a placeholder string
+        }
     }
 
 
@@ -180,7 +169,8 @@ public class AdminDashboardController {
 
     @GetMapping("/subscriptions")
     public List<SubscriptionDto> getAllSubscriptions() {
-        return subscriptionService.getAllSubscriptions().stream()
+        //Changed by Nithya - Retrieving subscriptions which are checked out by the user
+        return subscriptionService.getActivatedSubscriptions().stream()
                 .map(subscription -> new SubscriptionDto(
                         subscription.getId(),
                         subscription.getTier().name(),
@@ -229,25 +219,7 @@ public class AdminDashboardController {
     }
 
 
-//    @PostMapping("/notify-user/{id}")
-//    public ResponseEntity<String> notifyUser(@PathVariable Long id, @RequestParam("message") String message) {
-//             Response response = null;
-//        try {
-//            Optional<KeycodeUser> optionalUser = keycodeUserService.findById(id);
-//            if (optionalUser.isEmpty()) {
-//                return ResponseEntity.badRequest().body("User not found.");
-//            }
-//            KeycodeUser user = optionalUser.get();
-//
-//            System.out.println("To Email:"+user.getEmail());
-//            response = emailService.sendNotificationEmail(user.getFname(),user.getEmail(), "UPDATE REQUIRED!", message);
-//            emailService.sendEmail(user.getEmail(), "Update Required", message);
-//            return ResponseEntity.ok("Notification sent to " + user.getEmail());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(500).body("Failed to notify user.");
-//        }
-//    }
+
 
     @PostMapping("/notify-user/{id}")
     public ResponseEntity<String> notifyUser(@PathVariable Long id, @RequestParam("message") String message) {
@@ -284,11 +256,11 @@ public class AdminDashboardController {
         }
     }
 
-    //To update the pending request status to In Progress
+
 
     @PostMapping("/update-request-status/{vehicleId}")
     public String updatePendingRequestStatus(@PathVariable Long vehicleId) throws IOException {
-        
+
         return vehicleService.updatePendingRequestStatus(vehicleId);
     }
 }

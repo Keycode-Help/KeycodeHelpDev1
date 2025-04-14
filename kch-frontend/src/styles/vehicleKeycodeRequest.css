@@ -1,11 +1,10 @@
 /* Skyvern-Themed Vehicle Keycode Request Page */
 .wrapper-vr {
   height: 100vh;
-  width: 100vw;
+  width: 95vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1.6;
 }
 
 .keycode-request-container {
@@ -60,4 +59,13 @@
 
 .submit-button:hover {
   background-color: #00e07a;
+}
+.keycode-form select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background-color: #292929;
+  color: #c9d1d9;
 }

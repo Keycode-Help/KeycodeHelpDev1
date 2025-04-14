@@ -28,6 +28,9 @@ public class Cart {
 
     private String status = "ACTIVE";
 
+    //Added by Nithya - to keep track of cartTotal
+    private double cartTotal;
+
     public void addCartItem(CartItem cartItem) {
         cartItems.add(cartItem);
         cartItem.setCart(this);
