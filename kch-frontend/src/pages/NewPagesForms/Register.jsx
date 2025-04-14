@@ -112,23 +112,24 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex  items-center justify-center">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md mt-20 mb-10">
         <div className="text-center mb-6"> 
         {/* Register Header */}
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-            Create an Account
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Create An
+            <span className="text-green-400"> Account</span>
           </h1>
           <p className="text-gray-400 text-sm md:text-base">
-            Find your Automotive Security solutions with KeyCode
+            Find your automotive security solutions with KeyCode
           </p>
         </div>
         <form className="space-y-5" onSubmit={handleSubmit}>  
           { registerForm.map((form) =>(
-            <div key={form.id} className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl 
+            <div key={form.id} className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl
             hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"> 
             {/* First Name, Last Name, Email, Phone, Password */}
-              <label className="block text-sm font-medium text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-100 mb-1">
                 {form.label}
               </label>
               <div className="relative">
@@ -165,10 +166,10 @@ function Register() {
               </div>
             </div>
           ))}
-          <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600 
+          <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg"> 
-          {/* State*/}
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+          {/* State */}
+            <label className="block text-sm font-medium text-gray-100 mb-2">
               State
             </label>
             <div className="relative">
@@ -185,15 +186,15 @@ function Register() {
               </div>
             </div>
           </div>
-          <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600
+          <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg group"> 
           {/* Front Identification */}
-            <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
+            <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
               Front Indentification
-              <span className="text-blue-500 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
+              <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
             <div 
-              className="border-2 border-dashed border-gray-800 rounded-lg p-4 cursor-pointer 
+              className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
               hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
               onClick={() => frontIdRef.current?.click()}
             > 
@@ -237,15 +238,15 @@ function Register() {
               <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
             )}
           </div>
-          <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600
+          <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg group"> 
           {/* Back Identification */}
-            <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
+            <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
               Back Indentification
-              <span className="text-blue-500 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
+              <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
             <div 
-              className="border-2 border-dashed border-gray-800 rounded-lg p-4 cursor-pointer 
+              className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
               hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
               onClick={() => backIdRef.current?.click()}
             > 
@@ -289,19 +290,19 @@ function Register() {
               <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
             )}
           </div>
-          <div className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl hover:border-green-600
+          <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg group">
           {/* Insurance */}
-            <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
+            <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
               <div>
                 Upload Documentation
                 <br /> 
                 <span className="text-xs text-gray-500">Registeration, Insurance, etc.</span>
               </div>
-              <span className="text-blue-500 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
+              <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
             <div 
-              className="border-2 border-dashed border-gray-800 rounded-lg p-4 cursor-pointer 
+              className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
               hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
               onClick={() => insuranceRef.current?.click()}
             > 
@@ -352,11 +353,11 @@ function Register() {
               <label className="text-gray-400 text-sm font-medium">
                 I agree to the{" "}
                 <span>
-                  <a href="" className="text-blue-500 hover:text-green-500 transition-colors duration-100">Terms of Service</a>
+                  <a href="" className="text-green-600 hover:text-green-400 transition-colors duration-100">Terms of Service</a>
                 </span>
                 {" "}and{" "}
                 <span>
-                <a href="" className="text-blue-500 hover:text-green-500 transition-colors duration-100">Privacy Policy</a>
+                  <a href="" className="text-green-600 hover:text-green-400 transition-colors duration-100">Privacy Policy</a>
                 </span>
               </label>
             </div>
@@ -371,7 +372,7 @@ function Register() {
           </button>
           <p className="text-center text-gray-400 text-sm">{/* Sign-up */}
             <span className="font-medium">Already have an account?{" "}</span>
-            <a href="/login" className="text-blue-500 hover:text-green-500 transition-colors 
+            <a href="/login" className="text-green-600 hover:text-green-400 transition-colors
             duration-100 ml-1">
               Sign in
             </a>

@@ -111,7 +111,6 @@ function VehicleKeycodeRequest() {
     axios
     .get("http://localhost:8080/makes/getMakes")
     .then((response) => {
-      console.log(response.data);
       setMakes(response.data);
     })
     .catch((error) => {

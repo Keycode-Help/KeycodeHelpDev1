@@ -41,11 +41,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-6"> {/* Sign-in Header */}
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-            Sign-in to Continue
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Sign-In To
+            <span className="text-green-400"> Continue</span>
           </h1>
           <p className="text-gray-400 text-sm md:text-base">
             Professional keycode solutions for automotive security
@@ -53,10 +54,10 @@ export default function Login() {
         </div>
         <form className="space-y-6" onSubmit={handleSubmit}>
           { loginForm.map((form) =>(
-            <div key={form.id} className="bg-gray-900/50 p-5 md:p-6 md:py-5 border border-gray-800 rounded-2xl 
+            <div key={form.id} className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl
             hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"
             > {/* Email, Password */}
-              <label className="block text-sm font-medium text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-100 mb-1">
                 {form.label}
               </label>
               <div className="relative">
@@ -78,7 +79,7 @@ export default function Login() {
                     {showPassword ? (
                       <EyeOff
                         onClick={() => setShowPassword(!showPassword)}
-                        className="h-6 w-6 md:h-7 md:w-7 text-gray-500 hover:text-green-600 cursor-pointer 
+                        className="h-6 w-6 md:h-7 md:w-7 text-gray-500 hover:text-green-600 cursor-pointer
                         transition-colors duration-100"
                       />
                     ) : (
@@ -98,13 +99,13 @@ export default function Login() {
               <input type="checkbox" className="h-4 w-4 text-gray-600" />
               <label className="text-gray-400 text-sm font-medium ml-2">Remember me</label>
             </div>
-            <a href="" className="text-sm text-blue-500 hover:text-green-500 
+            <a href="" className="text-sm text-green-600 hover:text-green-400
             transition-colors duration-100"
             >
               Forget Password?
             </a>
           </div>
-          <button type="submit" className="group relative w-full bg-green-600 hover:bg-green-500 text-white 
+          <button type="submit" className="group relative w-full bg-green-600 hover:bg-green-500 text-white
           font-semibold p-4 rounded-2xl transition-colors duration-200" 
           > {/* Sign-in Button */}
             Sign-in
@@ -114,7 +115,7 @@ export default function Login() {
           </button>
           <p className="text-center text-gray-400 text-sm">{/* Sign-up */}
             <span className="font-medium">Don&apos;t have an account?{" "}</span>
-            <a href="/register" className="text-blue-500 hover:text-green-500 transition-colors 
+            <a href="/register" className="text-green-600 hover:text-green-400 transition-colors
             duration-100 ml-1"
             >
               Sign up
