@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
-import MakeDropDown from "./components/MakeDropDown.jsx";
+import MakeDropDown from "./components/KeycodeRequest/MakeDropDown.jsx";
+import makepriceslist from "../../data/makepriceslist.js";
+import {ChevronDown} from "lucide-react";
+import InputTextBox from "./components/KeycodeRequest/InputTextBox.jsx";
+import UploadFileForm from "./components/KeycodeRequest/UploadFileForm.jsx";
+import { ArrowRight } from "lucide-react";
 
 function VehicleKeycodeRequest() {
   const [formData, setFormData] = useState({
@@ -65,9 +70,34 @@ function VehicleKeycodeRequest() {
       [name]: file,
     });
   };
+  const filesExistCheck = (frontId, backId, registration) => {
+    let hasErrors = false;
 
+    if (!frontId) {
+      setErrors(prev => ({ ...prev, frontId: "Front ID is required" }));
+      hasErrors = true;
+    }
+
+    if (!backId) {
+      setErrors(prev => ({ ...prev, backId: "Back ID is required" }));
+      hasErrors = true;
+    }
+
+    if (!registration) {
+      setErrors(prev => ({ ...prev, registration: "Registration is required" }));
+      hasErrors = true;
+    }
+
+    return hasErrors;
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Checks if user have the required files.
+    if (filesExistCheck(formData.frontId, formData.backId, formData.registration)) {
+      return;
+    }
+
     const formDataObj = new FormData();
     formDataObj.append("make", selectedMake);
     formDataObj.append("price", selectedMakePrice);
@@ -117,6 +147,17 @@ function VehicleKeycodeRequest() {
       console.error("Error fetching make:", error);
     });
   },[]);
+
+  // Page Stylization utilities
+  const [makeIsOpen, setMakeIsOpen] = useState(false);
+  const makeManufacturerPrice = (selectedMake) => {
+    const brand = makepriceslist.find(make => make.manufacturerName === selectedMake)
+    return brand.nonMemberPrice
+  }
+
+  const frontIdRef = useRef(null);
+  const backIdRef = useRef(null);
+  const registrationRef = useRef(null);
 
   return (
     // <div className="wrapper-vr">
@@ -224,8 +265,140 @@ function VehicleKeycodeRequest() {
     //     </form>
     //   </div>
     // </div>
-    <div>
+    <div className="min-h-screen bg-black">
+      {/* Header and Request Form */}
+      <section className="relative py-12 md:py-24 px-4 mb-12">
+        <div className="mx-auto text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+            Request a <span className="text-green-400">Keycode</span>
+            <br/>
+            for Your Vehicle
+          </h1>
+        </div>
 
+        {/* Request Form */}
+        <div className="mx-auto max-w-xl p-5 md:p-6 bg-[#0A0A0A] rounded-2xl border border-[#1A1A1A] shadow-md shadow-[#1A1A1A]">
+          <form className="flex flex-col gap-3 md:gap-4" onSubmit={handleSubmit}>
+            {/* Make */}
+            <div className="relative" onClick={() => setMakeIsOpen(!makeIsOpen)}>
+              <label className="block text-sm font-medium text-gray-100 mb-2">Make</label>
+              <MakeDropDown
+                selectedMake={selectedMake}
+                options={makepriceslist}
+                onChange={(e) => {
+                  setSelectedMake(e.target.value);
+                  setMakePrice(e.target.value);
+                }}
+              />
+              <div className="absolute inset-y-0 right-0 pr-2 pt-7 flex items-center pointer-events-none">
+                <ChevronDown className={`h-5 w-5 md:h-6 md:w-6 text-gray-500 transition-transform duration-150 ${makeIsOpen ? "rotate-180" : ""}`} />
+              </div>
+            </div>
+
+            {/* Price */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Price</label>
+              <div className="w-full bg-[#111111] border border-[#1A1A1A] rounded-lg p-3 py-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider">Selected Brand</div>
+                    {selectedMake ? (
+                      <div className="text-white text-sm md:text-base font-medium">{selectedMake}'s Keycode</div>
+                    ) : (
+                      <div className="text-gray-100 text-sm md:text-base font-bold italic">Please select a car's brand</div>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <div className="text-xs text-gray-400">Service Fee</div>
+                    <div className="text-2xl font-semibold text-green-500">
+                      {selectedMake ?
+                        `$${makeManufacturerPrice(selectedMake)}`
+                        :
+                        "$0"
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Vehicle Model */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Vehicle Model</label>
+              <InputTextBox
+                id="model"
+                name="model"
+                value={formData.model}
+                onChange={handleChange}
+                placeholder="Enter Vehicle Model"
+              />
+            </div>
+
+            {/* Vehicle VIN */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Vehicle VIN</label>
+              <InputTextBox
+                id="vin"
+                name="vin"
+                value={formData.vin}
+                onChange={handleChange}
+                placeholder="Enter Vehicle VIN"
+              />
+            </div>
+
+            {/* Upload Front ID */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Upload Front ID</label>
+              <UploadFileForm
+                fileRef={frontIdRef}
+                name="frontId"
+                onChange={handleFileChange}
+                accept="image/*"
+                value={formData.frontId}
+              />
+              {errors.frontId && (
+                <p className="text-red-500 text-sm mt-2 text-center">{errors.frontId}</p>
+              )}
+            </div>
+
+            {/* Upload Back ID */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Upload Back ID</label>
+              <UploadFileForm
+                fileRef={backIdRef}
+                name="backId"
+                onChange={handleFileChange}
+                accept="image/*"
+                value={formData.backId}
+              />
+              {errors.backId && (
+                <p className="text-red-500 text-sm mt-2 text-center">{errors.backId}</p>
+              )}
+            </div>
+
+            {/* Upload Registration */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Upload Registration</label>
+              <UploadFileForm
+                fileRef={registrationRef}
+                name="registration"
+                onChange={handleFileChange}
+                accept="image/*"
+                value={formData.registration}
+              />
+              {errors.registration && (
+                <p className="text-red-500 text-sm mt-2 text-center">{errors.registration}</p>
+              )}
+            </div>
+            <button type="submit" className="mt-4 group relative w-full p-3 md:p-4 bg-green-600 hover:bg-green-500 text-white
+            font-semibold transition-colors duration-200">
+              Add to Cart
+              <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white inline-block ml-1 group-hover:translate-x-2
+              transition-transform" />
+            </button>
+          </form>
+        </div>
+      </section>
     </div>
   );
 }

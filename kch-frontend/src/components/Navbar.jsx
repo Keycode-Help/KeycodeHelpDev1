@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import navbarLogo from "../assets/images/Revised versions corrected/Archive/SVG/LogoWhiteText.svg";
 import { useAuth } from "../context/AuthContext";
 import "../styles/navbar.css";
+import {ShoppingBag} from "lucide-react";
 
 function Navbar() {
   const { userRole, logout } = useAuth();
@@ -92,6 +93,19 @@ function Navbar() {
               Profile
             </Link>
           </li>
+          {isMenuOpen && (
+            <li>
+              <Link
+                to="/cart"
+                className={`text-white hover:text-[#4ae66c] transition-colors duration-300 ${className}`}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <ShoppingBag className="size-5 sm:size-6" />
+                  Cart
+                </div>
+              </Link>
+            </li>
+          )}
         </>
       )}
 
@@ -211,7 +225,7 @@ function Navbar() {
           </button>
 
           <div className="flex flex-col items-center justify-center h-full">
-            <ul className="space-y-4 sm:space-y-6 text-center">
+            <ul className="space-y-4 sm:space-y-5 text-center">
               <NavLinks className="text-base sm:text-lg" />
             </ul>
           </div>

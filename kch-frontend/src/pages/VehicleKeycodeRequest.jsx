@@ -112,6 +112,7 @@ function VehicleKeycodeRequest() {
     .get("http://localhost:8080/makes/getMakes")
     .then((response) => {
       setMakes(response.data);
+      console.log(response.data);
     })
     .catch((error) => {
       console.error("Error fetching make:", error);

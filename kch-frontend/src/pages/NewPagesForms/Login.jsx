@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { loginForm } from "../../data/authpage"
+import { loginForm } from "./components/authpage.js"
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {

@@ -12,7 +12,8 @@ import SubscriptionPage from "./pages/SubscriptionPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
-import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscription page
+import MembershipPage from "./pages/Membership";
+import TempKeyCodeRequest from "./pages/NewPagesForms/VehicleKeycodeRequest.jsx"
 import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
@@ -46,7 +47,7 @@ function App() {
               path="/vehicle-keycode-request"
               element={<VehicleKeycodeRequest />}
             />
-            <Route path="/subscription" element={<SubscriptionPage />} />
+            {/*<Route path="/subscription" element={<SubscriptionPage />} /> Remove this if not needed. */}
             <Route path="/profile" element={<UpdateUserProfile />} />
             <Route path="/landingpage" element={<LandingPage />} />
             {/* <Route path="/profile" element={<UserProfile />} /> */}
@@ -58,6 +59,7 @@ function App() {
               element={<RegisteredUsersPage />} // Add the route for the new page
             />
             <Route path="/admin/user-history" element={<OrderHistoryPage />} />
+            <Route path="/tempkeycoderequest" element={<TempKeyCodeRequest />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Layout>

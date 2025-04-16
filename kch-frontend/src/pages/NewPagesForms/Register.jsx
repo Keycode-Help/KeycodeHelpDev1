@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";;
-import StatesDropDown from "./components/StatesDropDown";
+import StatesDropDown from "./components/RegisterPage/StatesDropDown.jsx";
 import states from "../../data/states";
-import { registerForm } from "../../data/authpage";
+import { registerForm } from "./components/authpage.js";
 import { 
   ChevronDown, 
   Eye, 
@@ -166,6 +166,7 @@ function Register() {
               </div>
             </div>
           ))}
+
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg"> 
           {/* State */}
@@ -186,6 +187,7 @@ function Register() {
               </div>
             </div>
           </div>
+
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg group"> 
           {/* Front Identification */}
@@ -197,8 +199,7 @@ function Register() {
               className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
               hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
               onClick={() => frontIdRef.current?.click()}
-            > 
-            {/* Front ID Upload */}
+            >
               <input
                 type="file"
                 name="frontId"
@@ -238,19 +239,19 @@ function Register() {
               <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
             )}
           </div>
+
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg group"> 
           {/* Back Identification */}
             <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
-              Back Indentification
+              Back Identification
               <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
             <div 
               className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
               hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
               onClick={() => backIdRef.current?.click()}
-            > 
-            {/* Back ID Upload */}
+            >
               <input
                 type="file"
                 name="backId"
@@ -290,6 +291,7 @@ function Register() {
               <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
             )}
           </div>
+
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
           hover:border-2 transition duration-200 shadow-lg group">
           {/* Insurance */}
@@ -305,8 +307,7 @@ function Register() {
               className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
               hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
               onClick={() => insuranceRef.current?.click()}
-            > 
-            {/* Insurance Upload */}
+            >
               <input
                 type="file"
                 name="insurance"
@@ -346,6 +347,7 @@ function Register() {
               <p className="text-red-500 text-center text-sm">{errors.insurance}</p>
             )}
           </div>
+
           <div className="flex items-center"> 
           {/* Terms of Service */}
             <input type="checkbox" className="h-4 w-4 text-gray-600" required />
@@ -362,6 +364,7 @@ function Register() {
               </label>
             </div>
           </div>
+
           <button type="submit" className="group relative w-full bg-green-600 hover:bg-green-500 text-white 
           font-semibold p-4 rounded-2xl transition-colors duration-200" > 
           {/* Sign-up Button */}
