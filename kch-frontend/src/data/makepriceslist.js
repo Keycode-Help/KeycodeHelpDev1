@@ -56,7 +56,7 @@ const carMakes = [
   },
   {
     manufacturerName: 'Mitsubishi',
-    nonMemberPrice: '70*',
+    nonMemberPrice: 70,
     memberPrice: 'Ask'
   },
   {

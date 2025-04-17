@@ -84,8 +84,34 @@ function Register() {
     });
   };
 
+  const filesExistCheck = (frontId, backId, insurance) => {
+    let hasErrors = false;
+
+    if (!frontId) {
+      setErrors(prev => ({ ...prev, frontId: "Front ID is required" }));
+      hasErrors = true;
+    }
+
+    if (!backId) {
+      setErrors(prev => ({ ...prev, backId: "Back ID is required" }));
+      hasErrors = true;
+    }
+
+    if (!insurance) {
+      setErrors(prev => ({ ...prev, insurance: "Documentation is required" }));
+      hasErrors = true;
+    }
+
+    return hasErrors;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Checks if user have the required files.
+    if (filesExistCheck(formData.frontId, formData.backId, formData.insurance)) {
+      return;
+    }
 
     const formDataObj = new FormData();
     formDataObj.append("fname", formData.fname);
@@ -206,7 +232,6 @@ function Register() {
                 ref={frontIdRef}
                 onChange={handleFileChange}
                 accept="image/*"
-                required
                 className="hidden"
               />
               {!formData.frontId ? (
@@ -258,7 +283,6 @@ function Register() {
                 ref={backIdRef}
                 onChange={handleFileChange}
                 accept="image/*"
-                required
                 className="hidden"
               />
               {!formData.backId ? (
@@ -288,7 +312,7 @@ function Register() {
               )}
             </div>
             {errors.backId && (
-              <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
+              <p className="text-red-500 text-center text-sm">{errors.backId}</p>
             )}
           </div>
 
@@ -299,7 +323,7 @@ function Register() {
               <div>
                 Upload Documentation
                 <br /> 
-                <span className="text-xs text-gray-500">Registeration, Insurance, etc.</span>
+                <span className="text-xs text-gray-500">Registration, Insurance, etc.</span>
               </div>
               <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
@@ -314,7 +338,6 @@ function Register() {
                 ref={insuranceRef}
                 onChange={handleFileChange}
                 accept="image/*"
-                required
                 className="hidden"
               />
               {!formData.insurance ? (

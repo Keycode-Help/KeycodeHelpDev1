@@ -8,6 +8,7 @@ import {ChevronDown} from "lucide-react";
 import InputTextBox from "./components/KeycodeRequest/InputTextBox.jsx";
 import UploadFileForm from "./components/KeycodeRequest/UploadFileForm.jsx";
 import { ArrowRight } from "lucide-react";
+import carMakes from "../../data/makepriceslist.js";
 
 function VehicleKeycodeRequest() {
   const [formData, setFormData] = useState({
@@ -160,7 +161,7 @@ function VehicleKeycodeRequest() {
   const registrationRef = useRef(null);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black overflow-y-hidden ">
       {/* Header and Request Form */}
       <section className="relative py-12 md:py-24 px-4 mb-12">
         <div className="mx-auto text-center mb-12">
@@ -172,7 +173,7 @@ function VehicleKeycodeRequest() {
         </div>
 
         {/* Request Form */}
-        <div className="mx-auto max-w-xl p-5 md:p-6 bg-[#0A0A0A] rounded-2xl border border-[#1A1A1A] shadow-md shadow-[#1A1A1A]">
+        <div className="mx-auto max-w-xl p-5 md:p-6 bg-[#0A0A0A] rounded-2xl border border-[#1A1A1A] shadow-lg shadow-[#1A1A1A]">
           <form className="flex flex-col gap-3 md:gap-4" onSubmit={handleSubmit}>
             {/* Make */}
             <div className="relative" onClick={() => setMakeIsOpen(!makeIsOpen)}>
@@ -200,7 +201,7 @@ function VehicleKeycodeRequest() {
                     {selectedMake ? (
                       <div className="text-white text-sm md:text-base font-medium">{selectedMake}'s Keycode</div>
                     ) : (
-                      <div className="text-gray-100 text-sm md:text-base font-bold italic">Please select a car's brand</div>
+                      <div className="text-gray-100 text-sm md:text-base font-bold italic">Please select a Car Make</div>
                     )}
                   </div>
                   <div className="flex flex-col items-end">
@@ -293,6 +294,51 @@ function VehicleKeycodeRequest() {
             </button>
           </form>
         </div>
+      </section>
+
+      {/* Car Makes & Keycode Prices Table */}
+      <section className="relative py-12 md:py-24 px-4 mb-12">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-12">Pricing</h2>
+          <div className="rounded-2xl bg-[#0A0A0A] border border-[#1A1A1A] overflow-hidden shadow-xl shadow-[#1A1A1A]">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-black text-green-400">
+                    <th className="p-5 md:p-6 font-bold border-b border-[#1A1A1A]">Make</th>
+                    <th className="p-5 md:p-6 font-bold border-b border-[#1A1A1A]">Non-Member Price</th>
+                    <th className="p-5 md:p-6 font-bold border-b border-[#1A1A1A]">Member Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {carMakes.map((make, index) => (
+                    <tr
+                      key={make.manufacturerName}
+                      className={`border-b border-[#1A1A1A] ${ index % 2 === 0 ? 'bg-[#0A0A0A]' : 'bg-black'}`}
+                    >
+                      <td className="p-5 md:p-6 font-medium text-white">{make.manufacturerName}</td>
+                      <td className="p-5 md:p-6 font-medium text-white">${make.nonMemberPrice}</td>
+                      <td className="p-5 md:p-6 font-medium text-white">
+                        {make.memberPrice === "Ask" ? "Ask" : `$${make.memberPrice}`}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p className="text-xs sm:text-sm text-gray-400 mt-10">
+            *Prices may vary depending on vehicle year or data source availability.
+          </p>
+          <p className="text-xs sm:text-sm font-bold text-gray-400">
+            Other models available — just ask.
+          </p>
+        </div>
+      </section>
+
+      {/* FAQs Section */}
+      <section className="relative py-12 md:py-24 px-4 mb-12">
+
       </section>
     </div>
   );
