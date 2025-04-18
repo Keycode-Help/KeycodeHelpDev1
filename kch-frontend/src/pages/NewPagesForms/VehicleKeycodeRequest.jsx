@@ -9,6 +9,7 @@ import InputTextBox from "./components/KeycodeRequest/InputTextBox.jsx";
 import UploadFileForm from "./components/KeycodeRequest/UploadFileForm.jsx";
 import { ArrowRight } from "lucide-react";
 import carMakes from "../../data/makepriceslist.js";
+import faqs from "./components/KeycodeRequest/FAQs.js"
 
 function VehicleKeycodeRequest() {
   const [formData, setFormData] = useState({
@@ -127,8 +128,6 @@ function VehicleKeycodeRequest() {
   };
 
   const setMakePrice = (selectedMakeValue) => {
-    console.log("Make ", selectedMakeValue); 
-    console.log(makes);
     const selectedMakeItem = makes.find(make => (make.manufacturerName === selectedMakeValue));
     if(selectedMakeItem){
       setSelectedMakePrice(selectedMakeItem.keyCodePrice);
@@ -142,7 +141,6 @@ function VehicleKeycodeRequest() {
     .get("http://localhost:8080/makes/getMakes")
     .then((response) => {
       setMakes(response.data);
-      console.log(response.data);
     })
     .catch((error) => {
       console.error("Error fetching make:", error);
@@ -151,11 +149,6 @@ function VehicleKeycodeRequest() {
 
   // Page Stylization utilities
   const [makeIsOpen, setMakeIsOpen] = useState(false);
-  const makeManufacturerPrice = (selectedMake) => {
-    const brand = makepriceslist.find(make => make.manufacturerName === selectedMake)
-    return brand.nonMemberPrice
-  }
-
   const frontIdRef = useRef(null);
   const backIdRef = useRef(null);
   const registrationRef = useRef(null);
@@ -180,7 +173,7 @@ function VehicleKeycodeRequest() {
               <label className="block text-sm font-medium text-gray-100 mb-2">Make</label>
               <MakeDropDown
                 selectedMake={selectedMake}
-                options={makepriceslist}
+                options={makes}
                 onChange={(e) => {
                   setSelectedMake(e.target.value);
                   setMakePrice(e.target.value);
@@ -199,7 +192,7 @@ function VehicleKeycodeRequest() {
                   <div>
                     <div className="text-xs text-gray-400 uppercase tracking-wider">Selected Brand</div>
                     {selectedMake ? (
-                      <div className="text-white text-sm md:text-base font-medium">{selectedMake}'s Keycode</div>
+                      <div className="text-white text-sm md:text-base font-medium">{selectedMake}</div>
                     ) : (
                       <div className="text-gray-100 text-sm md:text-base font-bold italic">Please select a Car Make</div>
                     )}
@@ -208,7 +201,7 @@ function VehicleKeycodeRequest() {
                     <div className="text-xs text-gray-400">Service Fee</div>
                     <div className="text-2xl font-semibold text-green-500">
                       {selectedMake ?
-                        `$${makeManufacturerPrice(selectedMake)}`
+                        `$${selectedMakePrice}`
                         :
                         "$0"
                       }
@@ -304,7 +297,7 @@ function VehicleKeycodeRequest() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-black text-green-400">
+                  <tr className="text-base md:text-lg bg-gradient-to-br from-[#050505] via-[#070707] to-[#050505] text-green-400">
                     <th className="p-5 md:p-6 font-bold border-b border-[#1A1A1A]">Make</th>
                     <th className="p-5 md:p-6 font-bold border-b border-[#1A1A1A]">Non-Member Price</th>
                     <th className="p-5 md:p-6 font-bold border-b border-[#1A1A1A]">Member Price</th>
@@ -314,12 +307,14 @@ function VehicleKeycodeRequest() {
                   {carMakes.map((make, index) => (
                     <tr
                       key={make.manufacturerName}
-                      className={`border-b border-[#1A1A1A] ${ index % 2 === 0 ? 'bg-[#0A0A0A]' : 'bg-black'}`}
+                      className={`text-base md:text-lg border-b border-[#1A1A1A] ${ index % 2 === 0 ? 'bg-gradient-to-br from-[#0E0E0E] via-[#0C0C0C] to-[#0E0E0E]' : 'bg-gradient-to-br from-[#0A0A0A] via-[#0C0C0C] to-[#0A0A0A]'}`}
                     >
                       <td className="p-5 md:p-6 font-medium text-white">{make.manufacturerName}</td>
-                      <td className="p-5 md:p-6 font-medium text-white">${make.nonMemberPrice}</td>
                       <td className="p-5 md:p-6 font-medium text-white">
-                        {make.memberPrice === "Ask" ? "Ask" : `$${make.memberPrice}`}
+                        {typeof make.nonMemberPrice === "number" ? `$${make.nonMemberPrice}` : make.nonMemberPrice}
+                      </td>
+                      <td className="p-5 md:p-6 font-medium text-white">
+                        {typeof make.memberPrice === "number" ? `$${make.memberPrice}` : make.memberPrice}
                       </td>
                     </tr>
                   ))}
@@ -338,7 +333,25 @@ function VehicleKeycodeRequest() {
 
       {/* FAQs Section */}
       <section className="relative py-12 md:py-24 px-4 mb-12">
-
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-12">Frequently Asked <span className="text-green-400">Questions</span></h2>
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <details
+               key={index}
+               className="group bg-gradient-to-br from-[#0A0A0A] via-[#0C0C0C] to-[#0A0A0A] rounded-2xl border border-[#1A1A1A] shadow-md shadow-[#1A1A1A]"
+              >
+                <summary className="flex justify-between items-center cursor-pointer p-6 md:p-8">
+                  <span className="font-semibold text-white text-sm sm:text-base md:text-lg">{faq.question}</span>
+                  <ChevronDown className="w-5 h-5 md:w-6 md:h-6 transition-transform group-open:rotate-180 duration-200" />
+                </summary>
+                <div className="px-6 pb-6 md:px-8 md:pb-8 text-sm md:text-base text-white">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

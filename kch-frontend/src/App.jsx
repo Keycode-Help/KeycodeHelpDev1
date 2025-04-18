@@ -6,9 +6,8 @@ import Home from "./pages/Home";
 import Login from "./pages/NewPagesForms/Login";
 import Register from "./pages/NewPagesForms/Register";
 import Cart from "./pages/Cart";
-import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
+import VehicleKeycodeRequest from "./pages/NewPagesForms/VehicleKeycodeRequest.jsx";
 import AdminDashboard from "./pages/AdminDashboard";
-import SubscriptionPage from "./pages/SubscriptionPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
@@ -47,7 +46,6 @@ function App() {
               path="/vehicle-keycode-request"
               element={<VehicleKeycodeRequest />}
             />
-            {/*<Route path="/subscription" element={<SubscriptionPage />} /> Remove this if not needed. */}
             <Route path="/profile" element={<UpdateUserProfile />} />
             <Route path="/landingpage" element={<LandingPage />} />
             {/* <Route path="/profile" element={<UserProfile />} /> */}

@@ -27,7 +27,7 @@ const carMakes = [
   {
     manufacturerName: 'Infiniti (Key + PIN)',
     nonMemberPrice: 70,
-    memberPrice: 56
+    memberPrice: '$36 + $20'
   },
   {
     manufacturerName: 'Kia',
@@ -37,7 +37,7 @@ const carMakes = [
   {
     manufacturerName: 'Nissan (Key + PIN)',
     nonMemberPrice: 70,
-    memberPrice: 56
+    memberPrice: '$36 + $20'
   },
   {
     manufacturerName: 'Toyota/Lexus',
