@@ -10,6 +10,7 @@ function AdminDashboard() {
   const [transactions, setTransactions] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [keycodes, setKeycodes] = useState({});
+  const [pin, setPin] = useState({});
   const [filters, setFilters] = useState({
     status: "",
     search: "",
@@ -88,7 +89,7 @@ function AdminDashboard() {
     axios
       .post(
         "http://localhost:8080/admin/process-request",
-        { vehicleId, keycode: keycodes[vehicleId] },
+        { vehicleId, keycode: keycodes[vehicleId], pincode: pin[vehicleId] },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -107,6 +108,10 @@ function AdminDashboard() {
 
   const handleKeycodeChange = (vehicleId, value) => {
     setKeycodes((prev) => ({ ...prev, [vehicleId]: value }));
+  };
+
+  const handlePinChange = (vehicleId, value) => {
+    setPin((prev) => ({ ...prev, [vehicleId]: value }));
   };
 
   const handleFilterChange = (e) => {
@@ -245,6 +250,9 @@ function AdminDashboard() {
                       VIN: <strong>{request.vin}</strong>
                     </p>
                     <p>
+                      Price: <strong>${request.price}</strong>
+                    </p>
+                    <p>
                       Email:{" "}
                       <strong>{request.keycodeUserEmail || "N/A"}</strong>{" "}
                       <span
@@ -309,6 +317,9 @@ function AdminDashboard() {
                       VIN: <strong>{request.vin}</strong>
                     </p>
                     <p>
+                      Price: <strong>${request.price}</strong>
+                    </p>
+                    <p>
                       Email:{" "}
                       <strong>{request.keycodeUserEmail || "N/A"}</strong>{" "}
                       <span
@@ -350,6 +361,15 @@ function AdminDashboard() {
                         handleKeycodeChange(request.id, e.target.value)
                       }
                       placeholder="Enter Keycode"
+                      className="keycode-input"
+                    />
+                    <input
+                      type="text"
+                      value={pin[request.id] || ""}
+                      onChange={(e) =>
+                        handlePinChange(request.id, e.target.value)
+                      }
+                      placeholder="Enter Pin"
                       className="keycode-input"
                     />
                     <button

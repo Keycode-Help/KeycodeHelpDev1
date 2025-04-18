@@ -91,7 +91,7 @@ public class VehicleService {
     }
 
 
-    public String processVehicleRequest(Long vehicleId, String keycode) throws IOException {
+    public String processVehicleRequest(Long vehicleId, String keycode, String pinCode) throws IOException {
         Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId);
         if (optionalVehicle.isPresent()) {
             Vehicle vehicle = optionalVehicle.get();
@@ -112,7 +112,9 @@ public class VehicleService {
              //   String email = vehicle.getKeycodeUser().getEmail();
              //   emailService.sendEmail(email, "Your Key Code is Ready", "The key code for your vehicle VIN " + vehicle.getVin() + " is: " + keycode);
                 String email = vehicle.getKeycodeUser().getEmail();
-                emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),email, "Your Key Code is Ready!", "The key code for <b>VIN :" + generateHashedVin(vehicle.getVin()) + "</b> is <b>" + keycode+"</b>.");
+                String hashedVin = generateHashedVin(vehicle.getVin());
+                emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),email, "Your Key Code is Ready!", "The Key Code for <b>VIN :" + hashedVin + "</b> is <b>" + keycode+"</b>.<br/>" +
+                        "The PIN Code for <b>VIN:"+ hashedVin +"</b> is <b>"+pinCode+"</b>.");
                 return "Keycode processed and email sent.";
             } else {
                 return "Transaction not found for vehicle.";
@@ -158,8 +160,8 @@ public class VehicleService {
     private String generateHashedVin(String vin){
         String hashedVin = "";
 
-        String lastFourCharactersOfVin = vin.substring(1);
-       // String lastFourCharactersOfVin = vin.substring(13);
+        //String lastFourCharactersOfVin = vin.substring(1);
+        String lastFourCharactersOfVin = vin.substring(13);
         System.out.println(lastFourCharactersOfVin);
         hashedVin = "XXXXXXXXXXXXX"+lastFourCharactersOfVin;
         return hashedVin;

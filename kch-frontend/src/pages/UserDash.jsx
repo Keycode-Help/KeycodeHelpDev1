@@ -120,10 +120,14 @@ function UserDash() {
           ) : (
             requests.pendingRequests.map((request) => (
               <div key={request.id} className="request-card">
-                <h3>
-                  {request.make} {request.model}
-                </h3>
+                <p>
+                Make: {request.make.manufacturerName}
+                </p>
+                <p>
+                  Model: {request.model}
+                </p>
                 <p>VIN: {request.vin}</p>
+                <p>Price: ${request.keycodePrice}</p>
                 <div className="request-images">
                   <img
                     src={`data:image/jpeg;base64,${request.frontId}`}
@@ -157,13 +161,6 @@ function UserDash() {
                   />
                 </div>
                 <form>
-                  <label>Make:</label>
-                  <input
-                    type="text"
-                    name="make"
-                    value={updateData[request.id]?.make || request.make}
-                    onChange={(e) => handleInputChange(e, request.id)}
-                  />
                   <label>Model:</label>
                   <input
                     type="text"
@@ -225,10 +222,14 @@ function UserDash() {
             requests.inProgressRequests.map((request) => (
               
               <div key={request.id} className="request-card">
-                <h3>
-                  {request.make} {request.model}
-                </h3>
+                <p>
+                Make: {request.make.manufacturerName}
+                </p>
+                <p>
+                  Model: {request.model}
+                </p>
                 <p>VIN: {request.vin}</p>
+                <p>Price: ${request.keycodePrice}</p>
                 <p>Status: In Progress</p>
                 <div className="request-images">
                     <img
@@ -276,10 +277,14 @@ function UserDash() {
           ) : (
             requests.fulfilledRequests.map((request) => (
               <div key={request.id} className="request-card">
-                <h3>
-                  {request.make} {request.model}
-                </h3>
+                <p>
+                Make: {request.make.manufacturerName}
+                </p>
+                <p>
+                  Model: {request.model}
+                </p>
                 <p>VIN: {request.vin}</p>
+                <p>Price: ${request.keycodePrice}</p>
                 <p>Status: Completed</p>
               </div>
             ))

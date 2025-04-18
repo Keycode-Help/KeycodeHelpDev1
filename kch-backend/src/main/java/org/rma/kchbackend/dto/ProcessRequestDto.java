@@ -11,4 +11,7 @@ public class ProcessRequestDto {
 
     @NotBlank(message = "Keycode cannot be empty")
     private String keycode;
+
+    @NotBlank(message = "PIN cannot be empty")
+    private String pincode;
 }
