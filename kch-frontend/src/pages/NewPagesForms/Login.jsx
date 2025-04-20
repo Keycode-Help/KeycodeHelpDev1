@@ -55,7 +55,7 @@ export default function Login() {
         <form className="space-y-6" onSubmit={handleSubmit}>
           { loginForm.map((form) =>(
             <div key={form.id} className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl
-            hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"
+            hover:border-green-600 transition duration-200 shadow-lg"
             > {/* Email, Password */}
               <label className="block text-sm font-medium text-gray-100 mb-1">
                 {form.label}

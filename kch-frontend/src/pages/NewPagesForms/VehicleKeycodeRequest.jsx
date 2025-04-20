@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import MakeDropDown from "./components/KeycodeRequest/MakeDropDown.jsx";
-import makepriceslist from "../../data/makepriceslist.js";
+import makepriceslist from "./components/KeycodeRequest/makepriceslist.js";
 import {ChevronDown} from "lucide-react";
 import InputTextBox from "./components/KeycodeRequest/InputTextBox.jsx";
 import UploadFileForm from "./components/KeycodeRequest/UploadFileForm.jsx";
 import { ArrowRight } from "lucide-react";
-import carMakes from "../../data/makepriceslist.js";
+import carMakes from "./components/KeycodeRequest/makepriceslist.js";
 import faqs from "./components/KeycodeRequest/FAQs.js"
 
 function VehicleKeycodeRequest() {
@@ -169,11 +169,12 @@ function VehicleKeycodeRequest() {
         <div className="mx-auto max-w-xl p-5 md:p-6 bg-[#0A0A0A] rounded-2xl border border-[#1A1A1A] shadow-lg shadow-[#1A1A1A]">
           <form className="flex flex-col gap-3 md:gap-4" onSubmit={handleSubmit}>
             {/* Make */}
-            <div className="relative" onClick={() => setMakeIsOpen(!makeIsOpen)}>
+            <div className="relative">
               <label className="block text-sm font-medium text-gray-100 mb-2">Make</label>
               <MakeDropDown
                 selectedMake={selectedMake}
                 options={makes}
+                onClick={() => setMakeIsOpen(!makeIsOpen)}
                 onChange={(e) => {
                   setSelectedMake(e.target.value);
                   setMakePrice(e.target.value);

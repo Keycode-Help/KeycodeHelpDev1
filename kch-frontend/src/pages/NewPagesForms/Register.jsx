@@ -25,16 +25,10 @@ function Register() {
     backId: null,
     insurance: null,
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const seeHidePassword = showPassword ? "text" : "password";
 
   const [selectedState, setSelectedState] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  
-  const frontIdRef = useRef(null);
-  const backIdRef = useRef(null);
-  const insuranceRef = useRef(null);
 
   // Format file size
   const formatFileSize = (size) => {
@@ -137,6 +131,16 @@ function Register() {
       });
   };
 
+  // Frontend utilities
+  const [showPassword, setShowPassword] = useState(false);
+  const seeHidePassword = showPassword ? "text" : "password";
+  const [statesIsOpen, setStatesIsOpen] = useState(false);
+
+  const frontIdRef = useRef(null);
+  const backIdRef = useRef(null);
+  const insuranceRef = useRef(null);
+
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md mt-20 mb-10">
@@ -153,7 +157,7 @@ function Register() {
         <form className="space-y-5" onSubmit={handleSubmit}>  
           { registerForm.map((form) =>(
             <div key={form.id} className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl
-            hover:border-green-600 hover:border-2 transition duration-200 shadow-lg"> 
+            hover:border-green-600 transition duration-200 shadow-lg">
             {/* First Name, Last Name, Email, Phone, Password */}
               <label className="block text-sm font-medium text-gray-100 mb-1">
                 {form.label}
@@ -194,7 +198,7 @@ function Register() {
           ))}
 
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
-          hover:border-2 transition duration-200 shadow-lg"> 
+          transition duration-200 shadow-lg">
           {/* State */}
             <label className="block text-sm font-medium text-gray-100 mb-2">
               State
@@ -206,16 +210,17 @@ function Register() {
               <StatesDropDown
                 selectedState={selectedState}
                 options={states}
+                onClick={() => setStatesIsOpen(!statesIsOpen)}
                 onChange={(e) => setSelectedState(e.target.value)}
               />
               <div className="absolute inset-y-0 right-0 pr-1 flex items-center pointer-events-none">
-                <ChevronDown className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
+                <ChevronDown className={`h-5 w-5 md:h-6 md:w-6 text-gray-500 transition-transform duration-150 ${statesIsOpen ? "rotate-180" : ""}`} />
               </div>
             </div>
           </div>
 
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
-          hover:border-2 transition duration-200 shadow-lg group"> 
+          transition duration-200 shadow-lg group">
           {/* Front Identification */}
             <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
               Front Indentification
@@ -266,7 +271,7 @@ function Register() {
           </div>
 
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
-          hover:border-2 transition duration-200 shadow-lg group"> 
+          transition duration-200 shadow-lg group">
           {/* Back Identification */}
             <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
               Back Identification
@@ -317,7 +322,7 @@ function Register() {
           </div>
 
           <div className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl hover:border-green-600
-          hover:border-2 transition duration-200 shadow-lg group">
+          transition duration-200 shadow-lg group">
           {/* Insurance */}
             <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
               <div>

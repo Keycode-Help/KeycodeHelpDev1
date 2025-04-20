@@ -12,7 +12,6 @@ import OrderHistoryPage from "./pages/OrderHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
 import MembershipPage from "./pages/Membership";
-import TempKeyCodeRequest from "./pages/NewPagesForms/VehicleKeycodeRequest.jsx"
 import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
@@ -57,7 +56,6 @@ function App() {
               element={<RegisteredUsersPage />} // Add the route for the new page
             />
             <Route path="/admin/user-history" element={<OrderHistoryPage />} />
-            <Route path="/tempkeycoderequest" element={<TempKeyCodeRequest />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Layout>
