@@ -8,7 +8,7 @@ import Register from "./pages/NewPagesForms/Register";
 import Cart from "./pages/Cart";
 import VehicleKeycodeRequest from "./pages/NewPagesForms/VehicleKeycodeRequest.jsx";
 import AdminDashboard from "./pages/AdminDashboard";
-import OrderHistoryPage from "./pages/OrderHistoryPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage.jsx";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
 import MembershipPage from "./pages/Membership";
@@ -55,7 +55,7 @@ function App() {
               path="/admin/registered-users"
               element={<RegisteredUsersPage />} // Add the route for the new page
             />
-            <Route path="/admin/user-history" element={<OrderHistoryPage />} />
+            <Route path="/admin/order-history" element={<OrderHistoryPage />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Layout>
