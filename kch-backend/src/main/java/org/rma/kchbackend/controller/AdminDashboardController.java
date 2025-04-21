@@ -61,6 +61,7 @@ public class AdminDashboardController {
         vehicleData.put("frontId", vehicle.getFrontId() != null ? convertImageToBase64(vehicle.getFrontId()) : null);
         vehicleData.put("backId", vehicle.getBackId() != null ? convertImageToBase64(vehicle.getBackId()) : null);
         vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
+        vehicleData.put("price", vehicle.getKeycodePrice());
             if (vehicle.getKeycodeUser() != null) {
                 vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser().getEmail());
                 vehicleData.put("isValidatedUser", vehicle.getKeycodeUser().isValidatedUser());
@@ -93,7 +94,7 @@ public class AdminDashboardController {
             vehicleData.put("backId", (vehicle.getBackId() != null && vehicle.getBackId().length > 0) ? convertImageToBase64(vehicle.getBackId()) : null);
             vehicleData.put("registration", (vehicle.getRegistration() != null && vehicle.getRegistration().length > 0) ? convertImageToBase64(vehicle.getRegistration()) : null);
             vehicleData.put("registration", vehicle.getRegistration() != null ? convertImageToBase64(vehicle.getRegistration()) : null);
-
+            vehicleData.put("price", vehicle.getKeycodePrice());
             // Include keycode user email and validation status
             if (vehicle.getKeycodeUser() != null) {
                 vehicleData.put("keycodeUserEmail", vehicle.getKeycodeUser().getEmail());
@@ -181,7 +182,7 @@ public class AdminDashboardController {
 
     @PostMapping("/process-request")
     public String processRequest(@RequestBody ProcessRequestDto request) throws IOException {
-        return vehicleService.processVehicleRequest(request.getVehicleId(), request.getKeycode());
+        return vehicleService.processVehicleRequest(request.getVehicleId(), request.getKeycode(), request.getPincode());
     }
 
     @GetMapping("/user-history")
