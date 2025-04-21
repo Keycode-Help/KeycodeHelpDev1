@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/updateProfile.css";
 import axios from "axios";
-import StatesDropDown from "../components/StatesDropDown";
-import states from "../data/states";
-import { ModalContent } from "../components/ModalContent";
-import { useAuth } from "../context/AuthContext";
+import StatesDropDown from "../NewPagesForms/components/UpdateProfile/StatesDropDownProfile.jsx";
+import states from "../../data/states.js";
+import { ModalContent } from "../../components/ModalContent.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 const UpdateUserProfile = () => {
   const [formData, setFormData] = useState({
@@ -187,127 +186,139 @@ const UpdateUserProfile = () => {
   }, []);
 
   return (
-    <div className="container-register">
-      <div className="form-section">
-        <h1>Update Profile</h1>
-        <a onClick={() => handleDelete()}>Delete Profile</a>
-        <form onSubmit={handleUpdate}>
-          <input
-            type="text"
-            name="fname"
-            value={formData.fname}
-            onChange={handleChange}
-            placeholder="First Name"
-            required
-          />
-          <input
-            type="text"
-            name="lname"
-            value={formData.lname}
-            onChange={handleChange}
-            placeholder="Last Name"
-            required
-          />
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Phone Number"
-          />
-          <label>
-            State:
-            <StatesDropDown
-              selectedState={formData.state}
-              options={states}
-              onChange={handleStateChange}
-            />
-          </label>
-          <label>
-            Front ID:
-            {!formData.frontId && (
-              <label
-                className="view-style"
-                style={{ cursor: "pointer", marginLeft: "23em" }}
-                onClick={() => openModal(formData.frontIdImage)}
-              >
-                View
-              </label>
-            )}
-            <input
-              type="file"
-              name="frontId"
-              ref={frontIdRef}
-              onChange={handleFileChange}
-              accept="image/*"
-            />
-            <button type="button" onClick={handleFrontIdReset}>
-              Reset
-            </button>
-            {errors.frontId && (
-              <p className="error-message">{errors.frontId}</p>
-            )}
-          </label>
-          <label>
-            Back ID:
-            {!formData.backId && (
-              <label
-                className="view-style"
-                style={{ cursor: "pointer", marginLeft: "23em" }}
-                onClick={() => openModal(formData.backIdImage)}
-              >
-                View
-              </label>
-            )}
-            <input
-              type="file"
-              name="backId"
-              ref={backIdRef}
-              onChange={handleFileChange}
-              accept="image/*"
-            />
-            <button type="button" onClick={handleBackIdReset}>
-              Reset
-            </button>
-            {errors.backId && <p className="error-message">{errors.backId}</p>}
-          </label>
-          <label>
-            Insurance Document:
-            {!formData.insurance && (
-              <label
-                className="view-style"
-                style={{ cursor: "pointer", marginLeft: "17em" }}
-                onClick={() => openModal(formData.insuranceImage)}
-              >
-                View
-              </label>
-            )}
-            <input
-              type="file"
-              name="insurance"
-              ref={insuranceRef}
-              onChange={handleFileChange}
-              accept="image/*"
-            />
-            <button type="button" onClick={handleInsuranceReset}>
-              Reset
-            </button>
-            {errors.insurance && (
-              <p className="error-message">{errors.insurance}</p>
-            )}
-          </label>
-          <button type="submit" className="book-btn">
-            Update Profile
-          </button>
-        </form>
-      </div>
-
-      {modalImage && (
-        <ModalContent 
-          modalImage={modalImage} 
-          closeModal={closeModal} 
-        />
-      )}
+    // <div className="container-register">
+    //   <div className="form-section">
+    //     <h1>Update Profile</h1>
+    //     <a onClick={() => handleDelete()}>Delete Profile</a>
+    //     <form onSubmit={handleUpdate}>
+    //       <input
+    //         type="text"
+    //         name="fname"
+    //         value={formData.fname}
+    //         onChange={handleChange}
+    //         placeholder="First Name"
+    //         required
+    //       />
+    //       <input
+    //         type="text"
+    //         name="lname"
+    //         value={formData.lname}
+    //         onChange={handleChange}
+    //         placeholder="Last Name"
+    //         required
+    //       />
+    //       <input
+    //         type="tel"
+    //         name="phone"
+    //         value={formData.phone}
+    //         onChange={handleChange}
+    //         placeholder="Phone Number"
+    //       />
+    //       <label>
+    //         State:
+    //         <StatesDropDown
+    //           selectedState={formData.state}
+    //           options={states}
+    //           onChange={handleStateChange}
+    //         />
+    //       </label>
+    //       <label>
+    //         Front ID:
+    //         {!formData.frontId && (
+    //           <label
+    //             className="view-style"
+    //             style={{ cursor: "pointer", marginLeft: "23em" }}
+    //             onClick={() => openModal(formData.frontIdImage)}
+    //           >
+    //             View
+    //           </label>
+    //         )}
+    //         <input
+    //           type="file"
+    //           name="frontId"
+    //           ref={frontIdRef}
+    //           onChange={handleFileChange}
+    //           accept="image/*"
+    //         />
+    //         <button type="button" onClick={handleFrontIdReset}>
+    //           Reset
+    //         </button>
+    //         {errors.frontId && (
+    //           <p className="error-message">{errors.frontId}</p>
+    //         )}
+    //       </label>
+    //       <label>
+    //         Back ID:
+    //         {!formData.backId && (
+    //           <label
+    //             className="view-style"
+    //             style={{ cursor: "pointer", marginLeft: "23em" }}
+    //             onClick={() => openModal(formData.backIdImage)}
+    //           >
+    //             View
+    //           </label>
+    //         )}
+    //         <input
+    //           type="file"
+    //           name="backId"
+    //           ref={backIdRef}
+    //           onChange={handleFileChange}
+    //           accept="image/*"
+    //         />
+    //         <button type="button" onClick={handleBackIdReset}>
+    //           Reset
+    //         </button>
+    //         {errors.backId && <p className="error-message">{errors.backId}</p>}
+    //       </label>
+    //       <label>
+    //         Insurance Document:
+    //         {!formData.insurance && (
+    //           <label
+    //             className="view-style"
+    //             style={{ cursor: "pointer", marginLeft: "17em" }}
+    //             onClick={() => openModal(formData.insuranceImage)}
+    //           >
+    //             View
+    //           </label>
+    //         )}
+    //         <input
+    //           type="file"
+    //           name="insurance"
+    //           ref={insuranceRef}
+    //           onChange={handleFileChange}
+    //           accept="image/*"
+    //         />
+    //         <button type="button" onClick={handleInsuranceReset}>
+    //           Reset
+    //         </button>
+    //         {errors.insurance && (
+    //           <p className="error-message">{errors.insurance}</p>
+    //         )}
+    //       </label>
+    //       <button type="submit" className="book-btn">
+    //         Update Profile
+    //       </button>
+    //     </form>
+    //   </div>
+    //
+    //   {modalImage && (
+    //     <ModalContent
+    //       modalImage={modalImage}
+    //       closeModal={closeModal}
+    //     />
+    //   )}
+    // </div>
+    <div className="min-h-screen bg-black overflow-y-hidden">
+      <section className="relative py-12 md:py-24 px-4 mb-12">
+        <div className="mx-auto text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+            <span className="text-green-400">Profile</span> Manager
+          </h1>
+          <p className="text-gray-400 text-sm md:text-base mt-4">
+            Manage your account and update information
+          </p>
+        </div>
+      </section>
     </div>
   );
 };
