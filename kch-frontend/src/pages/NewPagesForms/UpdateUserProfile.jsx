@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import StatesDropDown from "../NewPagesForms/components/UpdateProfile/StatesDropDownProfile.jsx";
 import states from "../../data/states.js";
 import { ModalContent } from "../../components/ModalContent.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
+import InputTextBox from "./components/KeycodeRequest/InputTextBox.jsx";
+import StatesDropDownProfile from "../NewPagesForms/components/UpdateProfile/StatesDropDownProfile.jsx";
+import {ArrowRight, ChevronDown, Trash2} from "lucide-react";
+import UploadFileUpdateForm from "./components/UpdateProfile/UploadFileUpdateForm.jsx";
 
 const UpdateUserProfile = () => {
   const [formData, setFormData] = useState({
@@ -111,6 +114,10 @@ const UpdateUserProfile = () => {
       );
       const userData = response.data;
 
+      if(userData) {
+        setDisplayInitials(userData.fname[0] + userData.lname[0]);
+      }
+
       setFormData({
         fname: userData.fname || "",
         lname: userData.lname || "",
@@ -184,6 +191,10 @@ const UpdateUserProfile = () => {
   useEffect(() => {
     fetchUserProfile();
   }, []);
+
+  // Frontend Utilities
+  const [statesMenuOpen, setStatesMenuOpen] = useState(false);
+  const [displayInitials, setDisplayInitials] = useState("");
 
   return (
     // <div className="container-register">
@@ -308,8 +319,8 @@ const UpdateUserProfile = () => {
     //     />
     //   )}
     // </div>
-    <div className="min-h-screen bg-black overflow-y-hidden">
-      <section className="relative py-12 md:py-24 px-4 mb-12">
+    <div className="min-h-screen bg-black px-4 overflow-y-hidden">
+      <section className="relative py-12 md:py-24 mb-12">
         <div className="mx-auto text-center mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
             <span className="text-green-400">Profile</span> Manager
@@ -318,7 +329,160 @@ const UpdateUserProfile = () => {
             Manage your account and update information
           </p>
         </div>
+
+        <div className="mx-auto max-w-xl p-5 md:p-6 bg-[#0A0A0A] rounded-2xl border border-[#1A1A1A] shadow-lg shadow-[#1A1A1A]">
+          {/* Avatar */}
+          <div className="flex items-center justify-center mb-6 md:mb-9">
+            <div className="size-32 md:size-48 relative overflow-hidden rounded-full bg-[#060606]">
+              <div className="flex h-full w-full items-center justify-center">
+                <div className="text-green-400 text-5xl md:text-6xl font-bold">
+                  {displayInitials}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Update Form */}
+          <form className="flex flex-col gap-3 md:gap-4" onSubmit={handleUpdate}>
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">First Name</label>
+              <InputTextBox
+                name="fname"
+                value={formData.fname}
+                onChange={handleChange}
+                placeholder="First Name"
+                required
+              />
+            </div>
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Last Name</label>
+              <InputTextBox
+                name="lname"
+                value={formData.lname}
+                onChange={handleChange}
+                placeholder="Last Name"
+              />
+            </div>
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Phone Number"
+                className="w-full bg-[#111111] border border-[#1A1A1A] rounded-lg p-3 text-white focus:outline-none hover:border-green-500 transition-colors duration-200"
+              />
+            </div>
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-100 mb-2">State</label>
+              <StatesDropDownProfile
+                selectedState={formData.state}
+                options={states}
+                onChange={handleStateChange}
+                onClick={() => setStatesMenuOpen(!statesMenuOpen)}
+              />
+              <div className="absolute inset-y-0 right-0 pr-2 pt-7 flex items-center pointer-events-none">
+                <ChevronDown className={`h-5 w-5 md:h-6 md:w-6 text-gray-500 transition-transform duration-150 ${statesMenuOpen ? "rotate-180" : ""}`} />
+              </div>
+            </div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-100">Front ID</label>
+                {!formData.frontId && (
+                  <label
+                    className="block text-xs text-green-600 hover:text-green-400 cursor-pointer"
+                    onClick={() => openModal(formData.frontIdImage)}
+                  >
+                    View Current
+                  </label>
+                )}
+              </div>
+              <UploadFileUpdateForm
+                name="frontId"
+                fileRef={frontIdRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                value={formData.frontId}
+                reset={handleFrontIdReset}
+              />
+              {errors.frontId && (
+                <p className="text-red-500 text-sm mt-2 text-center">{errors.frontId}</p>
+              )}
+            </div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-100">Back ID</label>
+                {!formData.backId && (
+                  <label
+                    className="block text-xs text-green-600 hover:text-green-400 cursor-pointer"
+                    onClick={() => openModal(formData.backIdImage)}
+                  >
+                    View Current
+                  </label>
+                )}
+              </div>
+              <UploadFileUpdateForm
+                name="backId"
+                fileRef={backIdRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                value={formData.backId}
+                reset={handleBackIdReset}
+              />
+              {errors.backId && (
+                <p className="text-red-500 text-sm mt-2 text-center">{errors.backId}</p>
+              )}
+            </div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-100">Insurance Document</label>
+                {!formData.insurance && (
+                  <label
+                    className="block text-xs text-green-600 hover:text-green-400 cursor-pointer"
+                    onClick={() => openModal(formData.insuranceImage)}
+                  >
+                    View Current
+                  </label>
+                )}
+              </div>
+              <UploadFileUpdateForm
+                name="insurance"
+                fileRef={insuranceRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                value={formData.insurance}
+                reset={handleInsuranceReset}
+              />
+              {errors.insurance && (
+                <p className="text-red-500 text-sm mt-2 text-center">{errors.insurance}</p>
+              )}
+            </div>
+            <button type="submit" className="mt-4 group relative w-full p-3 md:p-4 bg-green-600 hover:bg-green-500 text-white
+            font-semibold transition-colors duration-200">
+              Update Profile
+              <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white inline-block ml-1 group-hover:translate-x-2
+              transition-transform" />
+            </button>
+          </form>
+
+          {/* Delete Account */}
+          <button
+            className="mt-4 relative w-full p-3 md:p-4 bg-[#0A0A0A] border-2 border-red-600 hover:border-red-400 text-white font-semibold
+            hover:bg-[#0A0A0A] transition-colors duration-200 group flex items-center justify-center"
+            onClick={handleDelete}
+          >
+            <span className="text-red-600 group-hover:text-red-400 transition-colors duration-200">Delete Account</span>
+            <Trash2 className="h-4 w-4 md:h-5 md:w-5 text-red-600 group-hover:text-red-400 transition-colors duration-200 inline-block ml-1" />
+          </button>
+        </div>
       </section>
+
+      {modalImage && (
+        <ModalContent
+          modalImage={modalImage}
+          closeModal={closeModal}
+        />
+      )}
     </div>
   );
 };

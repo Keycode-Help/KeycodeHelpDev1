@@ -12,8 +12,7 @@ import OrderHistoryPage from "./pages/OrderHistoryPage.jsx";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
 import MembershipPage from "./pages/Membership";
-import TempUpdateProfile from "./pages/NewPagesForms/UpdateUserProfile.jsx";
-import UpdateUserProfile from "./pages/UpdateUserProfile";
+import UpdateUserProfile from "./pages/NewPagesForms/UpdateUserProfile.jsx";
 import LandingPage from "./pages/LandingPage";
 
 const Layout = ({ children }) => {
@@ -56,7 +55,6 @@ function App() {
               element={<RegisteredUsersPage />} // Add the route for the new page
             />
             <Route path="/admin/order-history" element={<OrderHistoryPage />} />
-            <Route path="/tempProfile" element={<TempUpdateProfile />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Layout>
