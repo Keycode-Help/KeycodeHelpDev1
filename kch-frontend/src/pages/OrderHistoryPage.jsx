@@ -12,7 +12,7 @@ function UserHistoryPage() {
   const fetchHistory = () => {
     setIsLoading(true);
     axios
-      .get(`http://localhost:8080/admin/order-history?email=${email}`, {
+      .get(`http://localhost:8080/admin/user-history?email=${email}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => setHistory(response.data))
