@@ -8,7 +8,7 @@ const frequentQuestions = [
   {
     question: 'How long does getting the code usually take?',
     answer: 'Typically or Tech Guru’s are moving on your order once the Payment and Required' +
-      ' documents are sent. This approval and key code process can take between 5 min - 15 minutes on' +
+      ' documents are sent. This approval and key code process can take between 5 minutes - 15 minutes on' +
       ' average. The approval process is essential to security and the integrity of our service. If it takes' +
       ' longer we apologize for any issues between your approval. Be sure to follow all instructions to' +
       ' avoid delays.'

@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import navbarLogo from "../assets/images/Revised versions corrected/Archive/SVG/LogoWhiteText.svg";
 import { useAuth } from "../context/AuthContext";
-import "../styles/navbar.css";
 import {ShoppingBag} from "lucide-react";
 
 function Navbar() {
@@ -93,6 +92,20 @@ function Navbar() {
               Profile
             </Link>
           </li>
+          {/* Temporary placeholder until we add a floating cart button for PC view. */}
+          {!isMenuOpen && (
+            <li>
+              <Link
+                to="/cart"
+                className={`text-white hover:text-[#4ae66c] transition-colors duration-300 ${className}`}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <ShoppingBag className="size-5 sm:size-6" />
+                  Cart
+                </div>
+              </Link>
+            </li>
+          )}
           {isMenuOpen && (
             <li>
               <Link
@@ -143,7 +156,7 @@ function Navbar() {
           <button
             id="logout"
             onClick={() => onClickLogout()}
-            className={`px-4 py-2 bg-[#4ae66c] text-white rounded hover:bg-[#3cbf58] transition duration-300 ${className}`}
+            className={`px-4 py-2 bg-[#238636] text-white rounded border-0 hover:bg-[#3cbf58] transition duration-300`}
           >
             Logout
           </button>

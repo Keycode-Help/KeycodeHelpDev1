@@ -3,16 +3,16 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
-import Login from "./pages/NewPagesForms/Login";
-import Register from "./pages/NewPagesForms/Register";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 import Cart from "./pages/Cart";
-import VehicleKeycodeRequest from "./pages/NewPagesForms/VehicleKeycodeRequest.jsx";
+import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest.jsx";
 import AdminDashboard from "./pages/AdminDashboard";
 import OrderHistoryPage from "./pages/OrderHistoryPage.jsx";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
 import MembershipPage from "./pages/Membership";
-import UpdateUserProfile from "./pages/NewPagesForms/UpdateUserProfile.jsx";
+import UpdateUserProfile from "./pages/UpdateUserProfile.jsx";
 import LandingPage from "./pages/LandingPage";
 
 const Layout = ({ children }) => {
