@@ -1,28 +1,40 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 import Cart from "./pages/Cart";
-import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
+import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest.jsx";
 import AdminDashboard from "./pages/AdminDashboard";
-import SubscriptionPage from "./pages/SubscriptionPage";
-import UserHistoryPage from "./pages/UserHistoryPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage.jsx";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
-import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscription page
-import UserProfile from "./pages/UserProfile";
-import UpdateUserProfile from "./pages/UpdateUserProfile";
+import MembershipPage from "./pages/Membership";
+import UpdateUserProfile from "./pages/UpdateUserProfile.jsx";
 import LandingPage from "./pages/LandingPage";
+
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const pagesWithoutNavbar = ["/landingpage"];
+  const isNavbarHidden = pagesWithoutNavbar.includes(location.pathname);
+  
+  return (
+    <div className="min-h-screen flex flex-col">
+      {!isNavbarHidden && <Navbar />}
+      <div className="flex-1">
+        {children}
+      </div>
+    </div>
+  );
+};
 
 function App() {
   return (
     <AuthProvider>
-      <div>
-        <Router>
-          <Navbar />
+      <Router>
+        <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -32,7 +44,6 @@ function App() {
               path="/vehicle-keycode-request"
               element={<VehicleKeycodeRequest />}
             />
-            <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/profile" element={<UpdateUserProfile />} />
             <Route path="/landingpage" element={<LandingPage />} />
             {/* <Route path="/profile" element={<UserProfile />} /> */}
@@ -43,11 +54,11 @@ function App() {
               path="/admin/registered-users"
               element={<RegisteredUsersPage />} // Add the route for the new page
             />
-            <Route path="/admin/user-history" element={<UserHistoryPage />} />
+            <Route path="/admin/order-history" element={<OrderHistoryPage />} />
             <Route path="*" element={<Home />} />
           </Routes>
-        </Router>
-      </div>
+        </Layout>
+      </Router>
     </AuthProvider>
   );
 }

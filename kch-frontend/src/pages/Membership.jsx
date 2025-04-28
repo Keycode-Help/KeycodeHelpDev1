@@ -56,15 +56,12 @@ function MembershipPage() {
 
   return (
     <div className="bg-black">
-      {/* Missing css styling and unclear, ask Antthony about RegionNotice */}
-      {/* <RegionNotice /> */}
 
       {/* Main Page -- Subscription Page */}
-      <div className="min-h-screen w-screen">
+      <div className="min-h-screen">
         <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
           {/* Hero Section */}
           <section className="subscription-hero-section">
-            {/* Tiny header on top. */}
             <div className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-sm backdrop-blur-md font-semibold">
               <KeyRound className="h-4 w-4 mr-2" />
               <span className="text-white">KeyCode&apos;s Pricing</span>

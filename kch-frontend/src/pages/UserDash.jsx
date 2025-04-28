@@ -109,7 +109,7 @@ function UserDash() {
 
   // Render the component
   return (
-    <>
+    <div className="user-dash">
       <h1 className="userdash-h1">User Dashboard</h1>
       <div className="user-dash-container">
         {/* Pending Requests Section */}
@@ -299,7 +299,7 @@ function UserDash() {
           />
         )}
       </div>
-    </>
+    </div>
   );
 }
 

@@ -1,14 +1,15 @@
-/* Skyvern-Themed Login Page */
-.container-login {
+/* Skyvern-Themed Register Page */
+.container-register {
   height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #121212;
+  line-height: 1.6;
 }
 
-.form-section-login {
+.form-section {
   text-align: center;
   background-color: #1a1a1d;
   border-radius: 12px;
@@ -19,56 +20,51 @@
   max-width: 500px;
 }
 
-.form-section-login h1 {
+.form-section h1 {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
   color: #00ff85;
 }
 
-.form-section-login input {
+.form-section input,
+.form-section select {
   width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
-  margin-bottom: 1rem;
   border-radius: 5px;
-  border: 1px solid #444;
-  background-color: #292929;
-  color: #00ff85;
+  border: 1px solid #21262d;
+  background-color: #0d1117;
+  color: #c9d1d9;
 }
 
-.form-section-login input:focus {
+.form-section input::placeholder {
+  color: #888888;
+}
+
+.form-section input:focus, 
+.form-section select:focus {
   border-color: #58ff8a;
   outline: none;
   box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
 }
 
-.form-section-login button {
+
+.form-section button {
   width: 100%;
   padding: 0.75rem;
   font-size: 1.2rem;
   background-color: #00ff85;
-  color: #121212;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 1rem;
 }
 
-.form-section-login button:hover {
+.form-section button:hover {
   background-color: #00e07a;
 }
 
-.form-section-login p {
-  margin-top: 1rem;
-  font-size: 1rem;
-  color: #aaa;
-}
-
-.form-section-login a {
-  color: #00ff85;
-  text-decoration: none;
-}
-
-.form-section-login a:hover {
-  color: #00e07a;
+.error-message {
+  color: #e50914;
+  font-size: 0.9rem;
 }

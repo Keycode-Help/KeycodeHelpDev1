@@ -46,7 +46,7 @@ const memberships = [
       "Unlimited access to all manufacturer keycodes. 24/7 support. Comprehensive programming resources and exclusive benefits.",
     features: [
       { text: "Unlimited key codes/month across all manufacturers" },
-      { text: "Full access: Toyota, Lexus, Acura, BMW, Subaru, Chrysler" },
+      { text: "Full access: Toyota, Lexus, Acura, Subaru, Chrysler" },
       { text: "24/7 keycode retrieval for emergencies" },
       { text: "Dedicated account manager for personalized support" },
       { text: "Live chat and phone support (7 PM - 11 PM EST)" },

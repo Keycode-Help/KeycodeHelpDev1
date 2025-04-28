@@ -25,3 +25,6 @@ replay_pid*
 node_modules/
 .env
 .DS_Store
+
+# Ignoring miscellaneous files.
+TASKLIST.md

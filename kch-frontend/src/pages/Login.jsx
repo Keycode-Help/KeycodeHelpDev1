@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import "../styles/login.css";
-function Login() {
+import { useAuth } from "../context/AuthContext.jsx";
+import { loginForm } from "../components/authpage.js"
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
+
+export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const seeHidePassword = showPassword ? "text" : "password";
 
   const navigate = useNavigate();
   const { login, userRole } = useAuth(); // Fetch the userRole from the context after login
@@ -32,42 +36,93 @@ function Login() {
       }
     } catch (error) {
       console.error("Login failed", error);
-      alert("Login failed. "+error.response.data);
-      //alert("Login Failed."+JSON.stringify(error));
+      alert("Login failed. " + error.response.data);
     }
   };
 
   return (
-    <div className="container-login">
-      <div className="form-section-login">
-        <h1>Login to Your Account</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-          />
-          <button type="submit" className="book-btn">
-            Login
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-6"> {/* Sign-in Header */}
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Sign-In To
+            <span className="text-green-400"> Continue</span>
+          </h1>
+          <p className="text-gray-400 text-sm md:text-base">
+            Professional keycode solutions for automotive security
+          </p>
+        </div>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          { loginForm.map((form) =>(
+            <div key={form.id} className="bg-[#0A0A0A] p-5 md:p-6 md:py-5 border border-[#1A1A1A] rounded-2xl
+            hover:border-green-600 transition duration-200 shadow-lg"
+            > {/* Email, Password */}
+              <label className="block text-sm font-medium text-gray-100 mb-1">
+                {form.label}
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
+                  <form.icon className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
+                </div>
+                <input
+                  type={form.id === 'password' ? seeHidePassword : form.type}
+                  name={form.name}
+                  value={formData[form.name]}
+                  onChange={handleChange}
+                  placeholder={form.placeholder}
+                  required
+                  className="block w-full pl-10 pr-3 py-2 bg-transparent border-0 text-white placeholder-gray-500
+                  focus:outline-none text-sm md:text-base"
+                />
+                {form.id === 'password' && ( // Show/Hide Password
+                  <div className="absolute inset-y-0 right-0 pr-1 flex items-center">
+                    {showPassword ? (
+                      <EyeOff
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="h-6 w-6 md:h-7 md:w-7 text-gray-500 hover:text-green-600 cursor-pointer
+                        transition-colors duration-100"
+                      />
+                    ) : (
+                      <Eye
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="h-6 w-6 md:h-7 md:w-7 text-gray-500 hover:text-green-600 cursor-pointer 
+                        transition-colors duration-100"
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+          <div className="flex items-center justify-between">{/* Remember me, Forget Password -> Needs to be implement. */}
+            <div className="flex items-center">
+              <input type="checkbox" className="h-4 w-4 text-gray-600" />
+              <label className="text-gray-400 text-sm font-medium ml-2">Remember me</label>
+            </div>
+            <a href="" className="text-sm text-green-600 hover:text-green-400
+            transition-colors duration-100"
+            >
+              Forget Password?
+            </a>
+          </div>
+          <button type="submit" className="group relative w-full bg-green-600 hover:bg-green-500 text-white
+          font-semibold p-4 rounded-2xl transition-colors duration-200" 
+          > {/* Sign-in Button */}
+            Sign-in
+            <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white inline-block ml-1 group-hover:translate-x-2 
+            transition-transform" 
+            />
           </button>
+          <p className="text-center text-gray-400 text-sm">{/* Sign-up */}
+            <span className="font-medium">Don&apos;t have an account?{" "}</span>
+            <a href="/register" className="text-green-600 hover:text-green-400 transition-colors
+            duration-100 ml-1"
+            >
+              Sign up
+            </a>
+          </p>
         </form>
-        <p>
-          Don't have an account?... <a href="/register">Sign up</a>
-        </p>
       </div>
     </div>
   );
 }
-
-export default Login;

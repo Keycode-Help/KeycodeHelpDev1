@@ -17,8 +17,8 @@ function UserHistoryPage() {
       })
       .then((response) => setHistory(response.data))
       .catch((error) => {
-        alert("Failed to fetch user history.");
-        console.error("Error fetching user history:", error);
+        alert("Failed to fetch order history.");
+        console.error("Error fetching order history:", error);
       })
       .finally(() => setIsLoading(false));
   };

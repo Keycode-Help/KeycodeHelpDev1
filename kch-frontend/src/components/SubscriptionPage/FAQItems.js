@@ -3,7 +3,7 @@ const faqitems = [
     id: 1,
     question: "What manufacturers do you support?",
     answer:
-      "Our service covers a wide range of manufacturers including Ford, GM, Toyota, Lexus, Acura, BMW, Subaru, and Chrysier. More manufacturers are available depending your membership tier.",
+      "Our service covers a wide range of manufacturers including Ford, GM, Toyota, Lexus, Acura, Subaru, and Chrysier. More manufacturers are available depending your membership tier.",
     category: "General",
   },
   {
