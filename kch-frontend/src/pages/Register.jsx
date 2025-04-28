@@ -9,10 +9,9 @@ import {
   Eye, 
   EyeOff, 
   MapPin, 
-  ArrowRight, 
-  Upload,
-  FileText, 
+  ArrowRight,
 } from "lucide-react";
+import UploadRegisterFileForm from "../components/RegisterPage/UploadRegisterFileForm.jsx";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -29,15 +28,6 @@ function Register() {
   const [selectedState, setSelectedState] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-
-  // Format file size
-  const formatFileSize = (size) => {
-    if (size <= 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB"];
-    const i = Math.floor(Math.log(size) / Math.log(k));
-    return parseFloat((size / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -223,48 +213,16 @@ function Register() {
           transition duration-200 shadow-lg group">
           {/* Front Identification */}
             <label className="flex items-center justify-between text-sm font-medium text-gray-100 mb-2">
-              Front Indentification
+              Front Identification
               <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
-            <div 
-              className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
-              hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
-              onClick={() => frontIdRef.current?.click()}
-            >
-              <input
-                type="file"
-                name="frontId"
-                ref={frontIdRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                className="hidden"
-              />
-              {!formData.frontId ? (
-                <div className="flex items-center justify-center py-2">
-                  <Upload className="h-7 w-7 md:h-8 md:w-8 text-gray-500 group-hover/uploadArea:text-green-500 
-                  transition duration-200" />
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <FileText className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500
-                    transition duration-200" />
-                    <div>
-                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
-                      text-sm font-medium truncate max-w-[230px]">
-                        {formData.frontId.name}
-                      </p>
-                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
-                      text-xs">
-                        {formatFileSize(formData.frontId.size)}
-                      </p>
-                    </div>
-                  </div>
-                  <Upload className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500 
-                  transition duration-200" />
-                </div>
-              )}
-            </div>
+            <UploadRegisterFileForm
+              fileRef={frontIdRef}
+              name="frontId"
+              onChange={handleFileChange}
+              accept="image/*"
+              value={formData.frontId}
+            />
             {errors.frontId && (
               <p className="text-red-500 text-center text-sm">{errors.frontId}</p>
             )}
@@ -277,45 +235,13 @@ function Register() {
               Back Identification
               <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
-            <div 
-              className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
-              hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
-              onClick={() => backIdRef.current?.click()}
-            >
-              <input
-                type="file"
-                name="backId"
-                ref={backIdRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                className="hidden"
-              />
-              {!formData.backId ? (
-                <div className="flex items-center justify-center py-2">
-                  <Upload className="h-7 w-7 md:h-8 md:w-8 text-gray-500 group-hover/uploadArea:text-green-500 
-                  transition duration-200" />
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <FileText className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500
-                    transition duration-200" />
-                    <div>
-                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
-                      text-sm font-medium truncate max-w-[230px]">
-                        {formData.backId.name}
-                      </p>
-                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
-                      text-xs">
-                        {formatFileSize(formData.backId.size)}
-                      </p>
-                    </div>
-                  </div>
-                  <Upload className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500 
-                  transition duration-200" />
-                </div>
-              )}
-            </div>
+            <UploadRegisterFileForm
+              fileRef={backIdRef}
+              name="backId"
+              onChange={handleFileChange}
+              accept="image/*"
+              value={formData.backId}
+            />
             {errors.backId && (
               <p className="text-red-500 text-center text-sm">{errors.backId}</p>
             )}
@@ -332,45 +258,13 @@ function Register() {
               </div>
               <span className="text-green-600 text-xs group-hover:text-green-500 transition-colors duration-100">Required</span>
             </label>
-            <div 
-              className="border-2 border-dashed border-[#303030] rounded-lg p-4 cursor-pointer
-              hover:border-green-600 transition duration-200 mb-2 group/uploadArea" 
-              onClick={() => insuranceRef.current?.click()}
-            >
-              <input
-                type="file"
-                name="insurance"
-                ref={insuranceRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                className="hidden"
-              />
-              {!formData.insurance ? (
-                <div className="flex items-center justify-center py-2">
-                  <Upload className="h-7 w-7 md:h-8 md:w-8 text-gray-500 group-hover/uploadArea:text-green-500 
-                  transition duration-200" />
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <FileText className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500
-                    transition duration-200" />
-                    <div>
-                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
-                      text-sm font-medium truncate max-w-[230px]">
-                        {formData.insurance.name}
-                      </p>
-                      <p className="text-gray-400 group-hover/uploadArea:text-green-500 transition duration-200 
-                      text-xs">
-                        {formatFileSize(formData.insurance.size)}
-                      </p>
-                    </div>
-                  </div>
-                  <Upload className="h-5 w-5 md:h-6 md:w-6 text-gray-500 group-hover/uploadArea:text-green-500 
-                  transition duration-200" />
-                </div>
-              )}
-            </div>
+            <UploadRegisterFileForm
+             fileRef={insuranceRef}
+              name="insurance"
+              onChange={handleFileChange}
+              accept="image/*"
+              value={formData.insurance}
+            />
             {errors.insurance && (
               <p className="text-red-500 text-center text-sm">{errors.insurance}</p>
             )}
