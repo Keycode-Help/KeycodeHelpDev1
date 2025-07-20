@@ -65,4 +65,5 @@ public class Vehicle {
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] registration;
+
 }

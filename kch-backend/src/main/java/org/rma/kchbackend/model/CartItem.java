@@ -40,4 +40,5 @@ public class CartItem {
     public CartItem(Subscription subscription) {
         this.subscription = subscription;
     }
+
 }
