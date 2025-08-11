@@ -14,16 +14,16 @@
   text-align: center;
   font-size: 2.5rem;
   color: #3dd15a;
-  margin-top: 100px;
+  margin-top: 2rem; /* Reduced from 100px since we have global navbar spacing */
 }
 
 .dashboard-container h2 {
   text-align: center;
   margin-bottom: 1rem;
-  color: #58a6ff; 
+  color: #58a6ff;
 }
 
-.filters input, 
+.filters input,
 .filters select {
   width: 100%;
   padding: 0.75rem;
@@ -34,7 +34,7 @@
   color: #c9d1d9;
 }
 
-.filters input:focus, 
+.filters input:focus,
 .filters select:focus {
   border-color: #58ff8a;
   outline: none;
@@ -312,7 +312,6 @@
 }
 
 .in-progress-button {
-  
   background-color: orange;
   color: black;
 }
@@ -324,7 +323,6 @@
 .in-progress-button:hover {
   background-color: #783d02;
 }
-
 
 @media (max-width: 768px) {
   .dashboard-grid {

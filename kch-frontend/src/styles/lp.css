@@ -22,3 +22,71 @@ body {
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
 }
+
+/* Fix header spacing to account for fixed navbar */
+.bg-dark {
+  margin-top: 80px; /* Add top margin to account for fixed navbar */
+}
+
+/* Ensure proper spacing between navbar and landing page content */
+.bg-dark main {
+  margin-top: 2rem; /* Add margin to main content */
+  width: 100% !important; /* Force full width */
+  max-width: none !important; /* Remove max-width constraints */
+}
+
+/* Logo section styling */
+.bg-dark .flex.justify-center.py-8 {
+  margin-top: 1rem; /* Add some space after the region banner */
+}
+
+.bg-dark .flex.justify-center.py-8 img {
+  max-width: 100%; /* Ensure logo is responsive */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Fix any potential z-index issues */
+.bg-dark {
+  position: relative;
+  z-index: 1; /* Ensure proper layering */
+  width: 100% !important; /* Force full width */
+}
+
+/* Ensure all sections fill full width */
+.bg-dark section,
+.bg-dark .bento-container,
+.bg-dark .bento-item {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Make sure the grid sections expand properly */
+.bg-dark .grid {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Button styles for landing page */
+.btn-primary {
+  @apply px-6 py-3 bg-primary rounded-md font-medium
+         relative overflow-hidden
+         transition-all duration-300
+         transform hover:scale-105
+         hover:bg-success hover:text-dark
+         hover:shadow-lg hover:shadow-success/20
+         active:scale-95;
+}
+
+.btn-cta {
+  @apply px-6 py-3 bg-cta text-dark rounded-md font-medium
+         relative overflow-hidden
+         transition-all duration-300
+         transform hover:scale-105
+         hover:bg-success
+         hover:shadow-lg hover:shadow-success/20
+         active:scale-95;
+}
+
+.nav-link {
+  @apply text-white/80 hover:text-success transition-colors duration-300;
+}

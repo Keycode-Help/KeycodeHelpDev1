@@ -1,6 +1,5 @@
 package org.rma.kchbackend.service;
 
-import com.sendgrid.Response;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Transaction;
@@ -141,7 +140,7 @@ public class VehicleService {
                 System.out.println("In Progress Email:"+email);
                 String hashedVin = generateHashedVin(vehicle.getVin());
                 String body = "Your Keycode Request for <b>VIN : "+hashedVin+"</b> is <b>In Progress</b>.";
-                Response response = emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),
+                emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),
                         email, "Keycode Request Status Update!", body);
                 return "Status Updated to In Progress";
             } else {

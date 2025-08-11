@@ -1,10 +1,11 @@
 /* Skyvern-Themed User History Page */
 .wrapper-history {
-  height: 90vh;
+  min-height: calc(100vh - 80px); /* Account for navbar height */
   width: 95vw;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: 20px; /* Additional top spacing */
 }
 
 .user-history-container {

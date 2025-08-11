@@ -8,7 +8,7 @@ function Navbar() {
   const navigate = useNavigate();
   const onClickLogout = () => {
       logout();
-      navigate("/login");
+      navigate("/");
   }
   return (
     <div className="navbar">
@@ -37,13 +37,10 @@ function Navbar() {
               <Link to="/membership">Membership</Link>
             </li>
             <li>
-              <Link to="/landingpage">LandingPage</Link>
-            </li>
-            <li>
               <Link to="/user-dash">User Dashboard</Link>
             </li>
             <li>
-              <Link Link to="/profile">
+              <Link to="/profile">
                 Profile
               </Link>
             </li>
@@ -57,6 +54,26 @@ function Navbar() {
           <>
             <li>
               <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/admin/registered-users">Registered Users</Link>
+            </li>
+            <li>
+              <Link to="/admin/user-history">User History</Link>
+            </li>
+          </>
+        )}
+
+        {userRole === "SUPER_ADMIN" && (
+          <>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/super-admin">Super Admin Dashboard</Link>
             </li>
             <li>
               <Link to="/admin">Admin Dashboard</Link>

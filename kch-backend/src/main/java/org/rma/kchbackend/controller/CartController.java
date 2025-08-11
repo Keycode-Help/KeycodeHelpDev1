@@ -1,6 +1,6 @@
 package org.rma.kchbackend.controller;
 
-import com.sendgrid.Response;
+import org.rma.kchbackend.model.Cart;
 import org.rma.kchbackend.dto.CartItemDto;
 import org.rma.kchbackend.model.*;
 import org.rma.kchbackend.service.CartService;
@@ -135,36 +135,21 @@ public class CartController {
         Cart cart = cartService.getOrCreateCart(user);
         cartService.checkoutCart(cart);
 
-//        // Notify user and admin about checkout
-//        String adminEmail = System.getenv("SENDER_EMAIL");
-//
-//        String userEmailResult = emailService.sendEmail(user.getEmail(), "Order Confirmation",
-//                "Thank you for your order. Your confirmation number will be provided by the admin.");
-//        String adminEmailResult = emailService.sendEmail(adminEmail, "New Transaction to Process",
-//                "Order from user " + user.getEmail() + " is ready for processing.");
-//
-//        if (!userEmailResult.startsWith("Email sent successfully")) {
-//            System.err.println("Failed to send order confirmation email to user: " + user.getEmail());
-//        }
-//        if (!adminEmailResult.startsWith("Email sent successfully")) {
-//            System.err.println("Failed to notify admin for the transaction.");
-//        }
-
-           String adminEmail = System.getenv("SENDER_EMAIL");
-//
-           Response userEmailResponse = emailService.sendNotificationEmail(user.getFname(),
+        String adminEmail = System.getenv("SENDER_EMAIL");
+        
+        String userEmailResult = emailService.sendNotificationEmail(user.getFname(),
                                             user.getEmail(), "Order Confirmation!",
                                         "Thank you for your order. Your confirmation number will be provided by the admin.");
-            Response adminEmailResponse = emailService.sendNotificationEmail(user.getFname(),
+        String adminEmailResult = emailService.sendNotificationEmail(user.getFname(),
                                             adminEmail,"New Transaction to Process",
                                         "Order from user " + user.getEmail() + " is ready for processing.");
-    //
-            if (userEmailResponse.getStatusCode() != 202) {
-                System.err.println("Failed to send order confirmation email to user: " + user.getEmail());
-            }
-            if (adminEmailResponse.getStatusCode() != 202) {
-                System.err.println("Failed to notify admin for the transaction.");
-            }
+    
+        if (!userEmailResult.startsWith("Notification email sent successfully")) {
+            System.err.println("Failed to send order confirmation email to user: " + user.getEmail());
+        }
+        if (!adminEmailResult.startsWith("Notification email sent successfully")) {
+            System.err.println("Failed to notify admin for the transaction.");
+        }
 
         return "Checkout successful.";
     }

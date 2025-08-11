@@ -1,6 +1,5 @@
 package org.rma.kchbackend.controller;
 
-import com.sendgrid.Response;
 import org.rma.kchbackend.dto.ProcessRequestDto;
 import org.rma.kchbackend.dto.SubscriptionDto;
 import org.rma.kchbackend.model.KeycodeUser;
@@ -224,7 +223,6 @@ public class AdminDashboardController {
 
     @PostMapping("/notify-user/{id}")
     public ResponseEntity<String> notifyUser(@PathVariable Long id, @RequestParam("message") String message) {
-        Response response = null;
         try {
             Optional<KeycodeUser> optionalUser = keycodeUserService.findById(id);
             if (optionalUser.isEmpty()) {
@@ -232,14 +230,13 @@ public class AdminDashboardController {
             }
             KeycodeUser user = optionalUser.get();
             System.out.println("To Email:"+user.getEmail());
-            response = emailService.sendNotificationEmail(user.getFname(),user.getEmail(), "UPDATE REQUIRED!", message);
+            emailService.sendNotificationEmail(user.getFname(),user.getEmail(), "UPDATE REQUIRED!", message);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            return ResponseEntity.status(500).body("Failed to send notification email.");
         }
-        System.out.println("Response: "+response.toString());
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return ResponseEntity.ok("Notification email sent successfully.");
     }
 
 

@@ -60,7 +60,7 @@ function MembershipPage() {
       {/* <RegionNotice /> */}
 
       {/* Main Page -- Subscription Page */}
-      <div className="min-h-screen w-screen">
+      <div className="min-h-screen w-screen pt-20">
         <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
           {/* Hero Section */}
           <section className="subscription-hero-section">

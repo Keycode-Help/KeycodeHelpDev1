@@ -1,81 +1,47 @@
 package org.rma.kchbackend.service;
 
-import com.sendgrid.Method;
-import com.sendgrid.Request;
-import com.sendgrid.Response;
-import com.sendgrid.SendGrid;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 public class EmailService {
 
-    private final SendGrid sendGridClient;
-    private final String senderEmail;
-
     @Autowired
-    public EmailService(SendGrid sendGridClient) {
-        this.sendGridClient = sendGridClient;
-
-        // Get sender email from environment variable, fallback to a default email if not found
-        this.senderEmail = System.getenv("SENDER_EMAIL");
-        if (this.senderEmail == null || this.senderEmail.isEmpty()) {
-            throw new RuntimeException("SENDER_EMAIL not found in environment variables.");
-        }
-    }
+    private JavaMailSender mailSender;
+    
+    @Value("${spring.mail.username:}")
+    private String fromEmail;
 
     public String sendEmail(String toEmail, String subject, String body) {
-        Email from = new Email(senderEmail);
-        Email to = new Email(toEmail);
-        Content content = new Content("text/plain", body);
-        Mail mail = new Mail(from, subject, to, content);
-
-        Request request = new Request();
         try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            Response response = sendGridClient.api(request);
-
-            System.out.println("Response Status Code: " + response.getStatusCode());
-            System.out.println("Response Body: " + response.getBody());
-            System.out.println("Response Headers: " + response.getHeaders());
-
-            return "Email sent successfully. Status Code: " + response.getStatusCode();
-        } catch (IOException ex) {
-            return "Error sending email: " + ex.getMessage();
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(toEmail);
+            message.setSubject(subject);
+            message.setText(body);
+            
+            mailSender.send(message);
+            return "Email sent successfully to " + toEmail;
+        } catch (Exception e) {
+            return "Error sending email: " + e.getMessage();
         }
     }
 
-    public Response sendNotificationEmail(String firstName,String toEmail, String subject, String body) throws IOException{
-        Email from = new Email(senderEmail);
-        Email to = new Email(toEmail);
-        String messageBody = "<div>" +
-                "<p>Dear "+firstName+",</p>" +
-                "<p>"+body+"</p>"+
-                "<p>Regards</p>"+
-                "<p>KeyCode Help Team</p>"+
-                "</div>";
-        Content content = new Content("text/html", messageBody);
-        Mail mail = new Mail(from, subject, to, content);
-
-        Request request = new Request();
-
-        request.setMethod(Method.POST);
-        request.setEndpoint("mail/send");
-        request.setBody(mail.build());
-        Response response = sendGridClient.api(request);
-
-        System.out.println("Response Status Code: " + response.getStatusCode());
-        System.out.println("Response Body: " + response.getBody());
-        System.out.println("Response Headers: " + response.getHeaders());
-
-        return response;
+    public String sendNotificationEmail(String firstName, String toEmail, String subject, String body) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(toEmail);
+            message.setSubject(subject);
+            message.setText(body);
+            
+            mailSender.send(message);
+            return "Notification email sent successfully to " + toEmail;
+        } catch (Exception e) {
+            return "Error sending notification email: " + e.getMessage();
+        }
     }
-
 }
