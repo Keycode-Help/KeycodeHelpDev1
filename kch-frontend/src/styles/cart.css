@@ -5,12 +5,13 @@ body {
   font-family: Arial, sans-serif;
 }
 .wrapper-cart {
-  height: 100vh;
+  min-height: calc(100vh - 80px); /* Account for navbar height */
   width: 95vw;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding-top: 20px; /* Additional top spacing */
 }
 
 .cart-container {
@@ -25,13 +26,13 @@ body {
   max-height: 100%;
 }
 
-.cart-container h1{
+.cart-container h1 {
   text-align: center;
   color: #58a6ff;
   margin-bottom: 1rem;
 }
 
-.cart-container h2{
+.cart-container h2 {
   text-align: left;
   color: #58a6ff;
   margin-bottom: 1rem;
@@ -115,7 +116,7 @@ button {
 }
 
 .checkout-button:disabled,
-.add-subscription-button:disabled{
+.add-subscription-button:disabled {
   background-color: #238636;
   color: gray;
 }

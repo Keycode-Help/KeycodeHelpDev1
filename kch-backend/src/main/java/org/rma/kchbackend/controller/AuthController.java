@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:51731", "http://localhost:51732", "http://localhost:51733", "http://localhost:51734"})
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -121,6 +121,54 @@ public class AuthController {
         }
     }
 
+    /**
+     * Admin registration endpoint - requires admin code and creates unapproved admin account
+     */
+    @PostMapping("/admin-register")
+    public ResponseEntity<String> adminRegister(
+            @RequestParam("fname") String fname,
+            @RequestParam("lname") String lname,
+            @RequestParam("email") String email,
+            @RequestParam("phone") String phone,
+            @RequestParam("password") String password,
+            @RequestParam("company") String company,
+            @RequestParam("adminCode") String adminCode) {
+        try {
+            // Validate admin code (this should be configurable in production)
+            if (!"ADMIN2024".equals(adminCode)) {
+                return ResponseEntity.badRequest().body("Invalid admin registration code.");
+            }
+
+            // Check if user already exists
+            Optional<KeycodeUser> userExists = keycodeUserService.findByEmail(email);
+            if (userExists.isPresent() && userExists.get().isActive()) {
+                return ResponseEntity.status(500).body("User already exists");
+            }
+
+            // Create new admin user (unapproved by default)
+            KeycodeUser adminUser = new KeycodeUser();
+            adminUser.setFname(fname);
+            adminUser.setLname(lname);
+            adminUser.setEmail(email);
+            adminUser.setPhone(phone);
+            adminUser.setPassword(passwordEncoder.encode(password));
+            adminUser.setRole(Role.ADMIN);
+            adminUser.setCompany(company);
+            adminUser.setAdminCode(adminCode);
+            adminUser.setAdminApproved(false); // Requires super admin approval
+            adminUser.setActive(false); // Inactive until approved
+            adminUser.setState("N/A"); // Admin users don't need state
+            adminUser.setValidatedUser(false);
+
+            keycodeUserService.saveUser(adminUser);
+            
+            return ResponseEntity.ok("Admin account created successfully! Pending super admin approval.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
@@ -139,11 +187,19 @@ public class AuthController {
         Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(loginRequest.getEmail());
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(401).body("Invalid email or password.");
-        }else if(!userOptional.get().isActive()){
-            return ResponseEntity.status(401).body("Account is Inactive.");
         }
-
+        
         KeycodeUser user = userOptional.get();
+        
+        // Check if account is active
+        if (!user.isActive()) {
+            return ResponseEntity.status(401).body("Account is inactive.");
+        }
+        
+        // Check if admin account is approved
+        if (user.getRole() == Role.ADMIN && !user.isAdminApproved()) {
+            return ResponseEntity.status(401).body("Admin account pending approval. Please contact super administrator.");
+        }
         String jwt = jwtUtil.generateToken(user);
 
         // Include user information in the response, including role.

@@ -1,11 +1,12 @@
 /* Skyvern-Themed Register Page */
 .container-register {
-  height: 100vh;
+  min-height: calc(100vh - 80px); /* Account for navbar height */
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #121212;
+  padding-top: 20px; /* Additional top spacing */
 }
 
 .form-section {
@@ -40,13 +41,12 @@
   color: #888888;
 }
 
-.form-section input:focus, 
+.form-section input:focus,
 .form-section select:focus {
   border-color: #58ff8a;
   outline: none;
   box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
 }
-
 
 .form-section button {
   width: 100%;

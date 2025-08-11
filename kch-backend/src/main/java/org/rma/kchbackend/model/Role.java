@@ -1,5 +1,5 @@
 package org.rma.kchbackend.model;
 
 public enum Role {
-    ADMIN, BASEUSER;
+    SUPER_ADMIN, ADMIN, BASEUSER;
 }

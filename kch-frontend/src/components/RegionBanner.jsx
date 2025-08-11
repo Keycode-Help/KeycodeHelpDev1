@@ -9,7 +9,7 @@ export default function RegionBanner({
 }) {
     return (
         <div className={`bg-slate/80 text-white text-sm py-2 ${className}`}>
-            <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
+            <div className="w-full px-4 md:px-8 flex justify-between items-center">
                 <p className="flex items-center gap-2">
                     <span className="text-success">●</span>
                     {message}

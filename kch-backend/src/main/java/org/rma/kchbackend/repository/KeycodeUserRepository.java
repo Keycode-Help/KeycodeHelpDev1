@@ -12,4 +12,5 @@ public interface KeycodeUserRepository extends JpaRepository<KeycodeUser, Long> 
     KeycodeUser findByEmail(String email);
     List<KeycodeUser> findByRole(Role role);
     List<KeycodeUser> findByRoleAndIsActive(Role role, boolean isActive);
+    List<KeycodeUser> findByRoleAndIsAdminApproved(Role role, boolean isAdminApproved);
 }

@@ -65,6 +65,11 @@ function Login() {
         <p>
           Don't have an account?... <a href="/register">Sign up</a>
         </p>
+        <div className="admin-login-link">
+          <p>
+            <a href="/admin-login">🔐 Admin Access</a>
+          </p>
+        </div>
       </div>
     </div>
   );

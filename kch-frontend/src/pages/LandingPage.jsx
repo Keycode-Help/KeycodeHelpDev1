@@ -12,28 +12,17 @@ export default function LandingPage() {
     <div className="bg-dark text-white min-h-screen">
       <RegionBanner />
 
-      {/* Minimal Header - only icons removed */}
-      <header className="flex items-center justify-between px-8 py-6 border-b border-navy">
+      {/* Logo Section */}
+      <div className="flex justify-center py-8">
         <img
           src="/assets/images/logos/Logodarktheme.png"
           alt="KeyCode Help Logo"
-          className="h-12 md:h-16"
+          className="h-16 md:h-20"
         />
-        <nav className="flex items-center space-x-8">
-          <Link to="/keycode-service" className="nav-link">
-            Get KeyCode
-          </Link>
-          <Link to="/membership" className="nav-link">
-            Membership
-          </Link>
-          <Link to="/login" className="btn-primary">
-            Login
-          </Link>
-        </nav>
-      </header>
+      </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-8 py-12 space-y-16">
+      <main className="w-full px-4 md:px-8 py-12 space-y-16">
         {/* Quick Action Banner */}
         <div className="bento-container bg-primary/10 border-primary/20">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4">
@@ -170,7 +159,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-navy mt-16">
-        <div className="max-w-7xl mx-auto px-8 py-6 text-center text-white/60">
+        <div className="w-full px-4 md:px-8 py-6 text-center text-white/60">
           &copy; 2024 KeyCode Help. All rights reserved.
         </div>
       </footer>

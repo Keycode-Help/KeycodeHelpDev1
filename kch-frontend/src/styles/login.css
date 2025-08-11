@@ -1,11 +1,12 @@
 /* Skyvern-Themed Login Page */
 .container-login {
-  height: 100vh;
+  min-height: calc(100vh - 80px); /* Account for navbar height */
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #121212;
+  padding-top: 20px; /* Additional top spacing */
 }
 
 .form-section-login {
@@ -71,4 +72,30 @@
 
 .form-section-login a:hover {
   color: #00e07a;
+}
+
+.admin-login-link {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #444;
+  text-align: center;
+}
+
+.admin-login-link p {
+  margin: 0;
+}
+
+.admin-login-link a {
+  color: #4ae66c;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-login-link a:hover {
+  color: #3dd15a;
+  text-decoration: underline;
 }

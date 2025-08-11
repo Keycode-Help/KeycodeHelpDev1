@@ -35,14 +35,14 @@
 .section-two {
   flex: 1;
 }
-.section-three{
+.section-three {
   flex: 1;
 }
 .user-button {
   background-color: rgba(0, 0, 128, 0.805);
 }
 .userdash-h1 {
-  margin-top: 5rem;
+  margin-top: 2rem; /* Reduced from 5rem since we have global navbar spacing */
   color: rgb(16, 198, 31);
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
@@ -128,4 +128,3 @@
   transform: scale(1.1);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
-

@@ -51,7 +51,7 @@ function SubscriptionPage() {
   };
 
   return (
-    <div className="wrapper-sub">
+    <div className="wrapper-sub pt-20">
       <div style={containerStyle} className="subscription-page">
         <h1 style={{marginBottom: '1rem'}}>Select a Subscription</h1>
         <div className="subscription-options">
