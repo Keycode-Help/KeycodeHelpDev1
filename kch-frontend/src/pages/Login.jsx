@@ -1,27 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { canSeeAdmin, isSuper } from "../utils/roles";
+import AuthForm from "../components/forms/AuthForm";
 import "../styles/login.css";
 function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
   const navigate = useNavigate();
-  const { login, userRole } = useAuth(); // Fetch the userRole from the context after login
+  const { login, userRole } = useAuth();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (formData) => {
     try {
       await login(formData.email, formData.password);
 
@@ -38,7 +25,6 @@ function Login() {
     } catch (error) {
       console.error("Login failed", error);
       alert("Login failed. "+error.response.data);
-      //alert("Login Failed."+JSON.stringify(error));
     }
   };
 
@@ -46,27 +32,7 @@ function Login() {
     <div className="container-login">
       <div className="form-section-login">
         <h1>Login to Your Account</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-          />
-          <button type="submit" className="book-btn">
-            Login
-          </button>
-        </form>
+        <AuthForm mode="login" onSubmit={handleSubmit} />
         <p>
           Don't have an account?... <a href="/register">Sign up</a>
         </p>
