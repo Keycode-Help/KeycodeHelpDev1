@@ -1,11 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import axios from "axios";
+import api from "./services/request";
 
 // Configure axios to use credentials
-axios.defaults.withCredentials = true;
+api.defaults.withCredentials = true;
 
 // Add response interceptor for automatic token refresh
-axios.interceptors.response.use(
+api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -14,8 +14,8 @@ axios.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
-        await axios.post('http://localhost:8080/auth/refresh');
-        return axios(originalRequest);
+        await api.post('/auth/refresh');
+        return api(originalRequest);
       } catch (refreshError) {
         // Refresh failed, redirect to login
         window.location.href = '/login';
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", {
+      const response = await api.post("/auth/login", {
         email,
         password,
       });
