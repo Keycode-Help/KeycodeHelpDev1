@@ -17,14 +17,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
 
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:51731", "http://localhost:51732", "http://localhost:51733", "http://localhost:51734"})
 @RestController
@@ -203,14 +207,65 @@ public class AuthController {
         if (user.getRole() == Role.ADMIN && !user.isAdminApproved()) {
             return ResponseEntity.status(401).body("Admin account pending approval. Please contact super administrator.");
         }
-        String jwt = jwtUtil.generateToken(user);
+        String accessJwt = jwtUtil.generateToken(user);
+        String refreshJwt = jwtUtil.generateRefreshToken(user);
 
-        // Include user information in the response, including role.
+        // Set cookies
+        ResponseCookie access = ResponseCookie.from("access_token", accessJwt)
+            .httpOnly(true).secure(false).path("/")
+            .sameSite("Lax").maxAge(Duration.ofMinutes(15)).build();
+
+        ResponseCookie refresh = ResponseCookie.from("refresh_token", refreshJwt)
+            .httpOnly(true).secure(false).path("/auth/refresh")
+            .sameSite("Lax").maxAge(Duration.ofDays(7)).build();
+
+        // Include user information in the response, but not the token
         Map<String, Object> response = new HashMap<>();
-        response.put("token", jwt);
+        response.put("status", "ok");
         response.put("user", user);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, access.toString())
+            .header(HttpHeaders.SET_COOKIE, refresh.toString())
+            .body(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@CookieValue("refresh_token") String refreshToken) {
+        try {
+            if (refreshToken == null || refreshToken.isEmpty()) {
+                return ResponseEntity.status(401).body("Refresh token not found");
+            }
+
+            // Validate refresh token and get user
+            if (!jwtUtil.validateToken(refreshToken)) {
+                return ResponseEntity.status(401).body("Invalid refresh token");
+            }
+
+            String userEmail = jwtUtil.getUsernameFromToken(refreshToken);
+            Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(userEmail);
+            
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(401).body("User not found");
+            }
+
+            KeycodeUser user = userOptional.get();
+            
+            // Generate new access token
+            String newAccessToken = jwtUtil.generateToken(user);
+            
+            // Set new access token cookie
+            ResponseCookie access = ResponseCookie.from("access_token", newAccessToken)
+                .httpOnly(true).secure(false).path("/")
+                .sameSite("Lax").maxAge(Duration.ofMinutes(15)).build();
+
+            return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, access.toString())
+                .body(Map.of("status", "ok", "message", "Token refreshed"));
+                
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Token refresh failed");
+        }
     }
 
 
