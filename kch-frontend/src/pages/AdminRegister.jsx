@@ -15,6 +15,10 @@ function AdminRegister() {
     phone: ""
   });
 
+  const [codeRequested, setCodeRequested] = useState(false);
+  const [codeRequestLoading, setCodeRequestLoading] = useState(false);
+  const [codeRequestMessage, setCodeRequestMessage] = useState("");
+
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { register } = useAuth();
@@ -32,6 +36,51 @@ function AdminRegister() {
         ...errors,
         [name]: ""
       });
+    }
+  };
+
+  const requestRegistrationCode = async () => {
+    // Validate required fields for code request
+    if (!formData.email || !formData.firstName || !formData.lastName) {
+      setErrors({
+        email: !formData.email ? "Email is required" : "",
+        firstName: !formData.firstName ? "First name is required" : "",
+        lastName: !formData.lastName ? "Last name is required" : ""
+      });
+      return;
+    }
+
+    setCodeRequestLoading(true);
+    setCodeRequestMessage("");
+
+    try {
+      const response = await fetch("http://localhost:8080/admin-registration-code/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setCodeRequested(true);
+        setCodeRequestMessage("✅ Registration code sent successfully! Check your email.");
+        // Clear the admin code field so user can enter the new code
+        setFormData(prev => ({ ...prev, adminCode: "" }));
+      } else {
+        setCodeRequestMessage("❌ " + (result.error || "Failed to send registration code"));
+      }
+    } catch (error) {
+      console.error("Error requesting registration code:", error);
+      setCodeRequestMessage("❌ Error requesting registration code. Please try again.");
+    } finally {
+      setCodeRequestLoading(false);
     }
   };
 
@@ -59,12 +108,12 @@ function AdminRegister() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    // Admin code validation
-    if (!formData.adminCode) {
-      newErrors.adminCode = "Admin registration code is required";
-    } else if (formData.adminCode !== "ADMIN2024") { // This should be configurable
-      newErrors.adminCode = "Invalid admin registration code";
-    }
+               // Admin code validation
+           if (!formData.adminCode) {
+             newErrors.adminCode = "Admin registration code is required";
+           } else if (formData.adminCode.length < 6) {
+             newErrors.adminCode = "Please enter the registration code sent to your email";
+           }
 
     // Required fields
     if (!formData.firstName) newErrors.firstName = "First name is required";
@@ -167,19 +216,53 @@ function AdminRegister() {
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="company">Company/Organization *</label>
-            <input
-              id="company"
-              type="text"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              placeholder="Enter company name"
-              className={errors.company ? "error" : ""}
-            />
-            {errors.company && <span className="error-message">{errors.company}</span>}
-          </div>
+                           <div className="form-group">
+                   <label htmlFor="company">Company/Organization *</label>
+                   <input
+                     id="company"
+                     type="text"
+                     name="company"
+                     value={formData.company}
+                     onChange={handleChange}
+                     placeholder="Enter company name"
+                     className={errors.company ? "error" : ""}
+                   />
+                   {errors.company && <span className="error-message">{errors.company}</span>}
+                 </div>
+
+                 {/* Registration Code Request Section */}
+                 <div className="form-group">
+                   <label htmlFor="adminCode">Admin Registration Code *</label>
+                   <div className="code-request-section">
+                     <input
+                       id="adminCode"
+                       type="text"
+                       name="adminCode"
+                       value={formData.adminCode}
+                       onChange={handleChange}
+                       placeholder="Enter registration code from email"
+                       className={errors.adminCode ? "error" : ""}
+                       disabled={!codeRequested}
+                     />
+                     <button
+                       type="button"
+                       onClick={requestRegistrationCode}
+                       disabled={codeRequestLoading || codeRequested}
+                       className="request-code-btn"
+                     >
+                       {codeRequestLoading ? "Sending..." : codeRequested ? "Code Sent" : "Request Code"}
+                     </button>
+                   </div>
+                   {errors.adminCode && <span className="error-message">{errors.adminCode}</span>}
+                   {codeRequestMessage && (
+                     <div className={`code-message ${codeRequestMessage.includes("✅") ? "success" : "error"}`}>
+                       {codeRequestMessage}
+                     </div>
+                   )}
+                   <small className="help-text">
+                     Click "Request Code" to receive a registration code via email. The code will expire in 24 hours.
+                   </small>
+                 </div>
 
           <div className="form-group">
             <label htmlFor="phone">Phone Number *</label>
@@ -195,20 +278,7 @@ function AdminRegister() {
             {errors.phone && <span className="error-message">{errors.phone}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="adminCode">Admin Registration Code *</label>
-            <input
-              id="adminCode"
-              type="password"
-              name="adminCode"
-              value={formData.adminCode}
-              onChange={handleChange}
-              placeholder="Enter admin registration code"
-              className={errors.adminCode ? "error" : ""}
-            />
-            {errors.adminCode && <span className="error-message">{errors.adminCode}</span>}
-            <small className="help-text">Contact system administrator for the registration code</small>
-          </div>
+          
 
           <div className="form-row">
             <div className="form-group">

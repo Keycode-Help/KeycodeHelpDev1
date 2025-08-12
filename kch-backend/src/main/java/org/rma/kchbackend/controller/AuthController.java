@@ -5,6 +5,7 @@ import org.rma.kchbackend.dto.RegisterRequest;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Role;
 import org.rma.kchbackend.service.KeycodeUserService;
+import org.rma.kchbackend.service.AdminRegistrationCodeService;
 import org.rma.kchbackend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +35,15 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final AdminRegistrationCodeService adminRegistrationCodeService;
 
     @Autowired
-    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService) {
         this.keycodeUserService = keycodeUserService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.adminRegistrationCodeService = adminRegistrationCodeService;
     }
 
 
@@ -134,9 +137,9 @@ public class AuthController {
             @RequestParam("company") String company,
             @RequestParam("adminCode") String adminCode) {
         try {
-            // Validate admin code (this should be configurable in production)
-            if (!"ADMIN2024".equals(adminCode)) {
-                return ResponseEntity.badRequest().body("Invalid admin registration code.");
+            // Validate admin registration code using the service
+            if (!adminRegistrationCodeService.validateAdminRegistrationCode(email, adminCode)) {
+                return ResponseEntity.badRequest().body("Invalid or expired admin registration code. Please request a new code.");
             }
 
             // Check if user already exists

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { canSeeAdmin, isSuper } from "../utils/roles";
 import "../styles/adminLogin.css";
 
 function AdminLogin() {
@@ -26,9 +27,9 @@ function AdminLogin() {
       await login(formData.email, formData.password);
 
       // Check if the logged-in user is actually an admin
-      if (userRole === "ADMIN") {
+      if (canSeeAdmin(userRole) && !isSuper(userRole)) {
         navigate("/admin");
-      } else if (userRole === "SUPER_ADMIN") {
+      } else if (isSuper(userRole)) {
         navigate("/super-admin");
       } else {
         // If not admin, show error and redirect back to admin login

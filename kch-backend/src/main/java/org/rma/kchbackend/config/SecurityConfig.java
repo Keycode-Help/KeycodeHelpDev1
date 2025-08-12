@@ -33,8 +33,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/auth/**", "/register", "/send-email", "/makes/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/vehicle/**", "/cart/**").hasAuthority("ROLE_BASEUSER")
+                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "SUPER_ADMIN")
+                        .requestMatchers("/super-admin/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers("/user/**", "/api/v1/keycodes/**").hasAnyAuthority("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

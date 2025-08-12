@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { canSeeAdmin, isSuper } from "../utils/roles";
 import "../styles/login.css";
 function Login() {
   const [formData, setFormData] = useState({
@@ -25,8 +26,12 @@ function Login() {
       await login(formData.email, formData.password);
 
       // Redirect based on user role
-      if (userRole === "ADMIN") {
-        navigate("/admin");
+      if (canSeeAdmin(userRole)) {
+        if (isSuper(userRole)) {
+          navigate("/super-admin");
+        } else {
+          navigate("/admin");
+        }
       } else {
         navigate("/");
       }
