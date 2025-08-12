@@ -1,38 +1,46 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 
+// Configure axios to use credentials
+axios.defaults.withCredentials = true;
+
+// Add response interceptor for automatic token refresh
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      try {
+        await axios.post('http://localhost:8080/auth/refresh');
+        return axios(originalRequest);
+      } catch (refreshError) {
+        // Refresh failed, redirect to login
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-
-  const [userRole, setUserRole] = useState(() => {
-    const savedRole = localStorage.getItem("userRole");
-    return savedRole ? savedRole : null;
-  });
-
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (user && token) {
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("userRole", user.role);
-      localStorage.setItem("token", token);
-
-      // Set Axios default Authorization header
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (user && isAuthenticated) {
+      setUserRole(user.role);
     } else {
-      localStorage.removeItem("user");
-      localStorage.removeItem("userRole");
-      localStorage.removeItem("token");
-
-      // Remove Axios default Authorization header
-      delete axios.defaults.headers.common["Authorization"];
+      setUserRole(null);
     }
-  }, [user, token]);
+  }, [user, isAuthenticated]);
 
   const login = async (email, password) => {
     try {
@@ -42,11 +50,10 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.status === 200) {
-        const { token, user } = response.data;
-        if (token && user) {
+        const { user } = response.data;
+        if (user) {
           setUser(user);
-          setUserRole(user.role);
-          setToken(token);
+          setIsAuthenticated(true);
         } else {
           throw new Error("Login failed: Invalid response data.");
         }
@@ -62,19 +69,15 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setUserRole(null);
-    setToken(null);
-
-    // Remove items from localStorage
-    localStorage.removeItem("user");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("token");
-
-    // Remove default authorization header from axios
-    delete axios.defaults.headers.common["Authorization"];
+    setIsAuthenticated(false);
+    
+    // Clear cookies by setting expired cookies
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/auth/refresh;";
   };
 
   return (
-    <AuthContext.Provider value={{ user, userRole, token, login, logout }}>
+    <AuthContext.Provider value={{ user, userRole, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
