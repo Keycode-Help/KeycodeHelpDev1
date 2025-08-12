@@ -48,8 +48,8 @@ $backendJob = Start-Job -ScriptBlock {
     Set-Location "kch-backend"
     Write-Host "Installing Maven dependencies (skipping tests)..." -ForegroundColor Blue
     mvn install -DskipTests
-    Write-Host "Starting Spring Boot application..." -ForegroundColor Blue
-    mvn spring-boot:run
+    Write-Host "Starting Spring Boot application with dev profile..." -ForegroundColor Blue
+    mvn spring-boot:run -Dspring-boot.run.profiles=dev
 }
 
 Write-Host "Starting Frontend (React)..." -ForegroundColor Yellow
