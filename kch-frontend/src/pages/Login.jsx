@@ -24,7 +24,17 @@ function Login() {
       }
     } catch (error) {
       console.error("Login failed", error);
-      alert("Login failed. "+error.response.data);
+      
+      let errorMessage = "Login failed. ";
+      if (error.response?.data) {
+        errorMessage += error.response.data;
+      } else if (error.message) {
+        errorMessage += error.message;
+      } else {
+        errorMessage += "Unknown error occurred";
+      }
+      
+      alert(errorMessage);
     }
   };
 
