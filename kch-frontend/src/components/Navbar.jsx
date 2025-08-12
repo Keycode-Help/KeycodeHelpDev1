@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { canSeeAdmin, isSuper, isBaseUser } from "../utils/roles";
 import "../styles/navbar.css";
 
 function Navbar() {
@@ -25,7 +26,7 @@ function Navbar() {
           </>
         )}
 
-        {userRole === "BASEUSER" && (
+        {isBaseUser(userRole) && (
           <>
             <li>
               <Link to="/">Home</Link>
@@ -50,7 +51,7 @@ function Navbar() {
           </>
         )}
 
-        {userRole === "ADMIN" && (
+        {canSeeAdmin(userRole) && !isSuper(userRole) && (
           <>
             <li>
               <Link to="/">Home</Link>
@@ -67,7 +68,7 @@ function Navbar() {
           </>
         )}
 
-        {userRole === "SUPER_ADMIN" && (
+        {isSuper(userRole) && (
           <>
             <li>
               <Link to="/">Home</Link>
