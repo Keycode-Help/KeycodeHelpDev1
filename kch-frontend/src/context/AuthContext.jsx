@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import api from "./services/request";
+import api from "../services/request";
 
 // Configure axios to use credentials
 api.defaults.withCredentials = true;

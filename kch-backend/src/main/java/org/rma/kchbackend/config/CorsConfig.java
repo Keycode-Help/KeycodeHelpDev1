@@ -1,18 +1,21 @@
 package org.rma.kchbackend.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import java.util.List;
 
 @Configuration
 public class CorsConfig {
 
     @Bean
+    @Primary
     @Profile("dev")
     public CorsConfigurationSource devCors() {
         CorsConfiguration c = new CorsConfiguration();
