@@ -35,7 +35,7 @@ function Navbar() {
               <Link to="/vehicle-keycode-request">Request Keycode</Link>
             </li>
             <li>
-              <Link to="/membership">Membership</Link>
+              <Link to="/subscriptions">Subscriptions</Link>
             </li>
             <li>
               <Link to="/user-dash">User Dashboard</Link>

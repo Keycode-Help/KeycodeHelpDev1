@@ -11,11 +11,10 @@ import Cart from "./pages/Cart";
 import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
-import SubscriptionPage from "./pages/SubscriptionPage";
+import SubscriptionManager from "./pages/SubscriptionManager";
 import UserHistoryPage from "./pages/UserHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
 import UserDash from "./pages/UserDash";
-import MembershipPage from "./pages/Membership"; // Non-linked decorated Subscription page
 import UserProfile from "./pages/UserProfile";
 import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
@@ -37,13 +36,11 @@ function App() {
               path="/vehicle-keycode-request"
               element={<VehicleKeycodeRequest />}
             />
-            <Route path="/subscription" element={<SubscriptionPage />} />
+            <Route path="/subscriptions" element={<SubscriptionManager />} />
             <Route path="/profile" element={<UpdateUserProfile />} />
-
 
             {/* <Route path="/profile" element={<UserProfile />} /> */}
             <Route path="/user-dash" element={<UserDash />} />
-            <Route path="/membership" element={<MembershipPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/super-admin" element={<SuperAdminDashboard />} />
             <Route
@@ -51,6 +48,11 @@ function App() {
               element={<RegisteredUsersPage />} // Add the route for the new page
             />
             <Route path="/admin/user-history" element={<UserHistoryPage />} />
+            
+            {/* Legacy route redirects */}
+            <Route path="/subscription" element={<SubscriptionManager />} />
+            <Route path="/membership" element={<SubscriptionManager />} />
+            
             <Route path="*" element={<LandingPage />} />
           </Routes>
         </Router>
