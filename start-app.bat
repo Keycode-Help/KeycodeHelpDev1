@@ -7,7 +7,7 @@ echo.
 echo Starting Backend (Spring Boot)...
 echo.
 cd kch-backend
-start "Backend - Spring Boot" cmd /k "echo Installing dependencies (skipping tests)... && mvn install -DskipTests && echo Starting Spring Boot application... && mvn spring-boot:run"
+start "Backend - Spring Boot" cmd /k "echo Installing dependencies (skipping tests)... && mvn install -DskipTests && echo Starting Spring Boot application with dev profile... && mvn spring-boot:run -Dspring-boot.run.profiles=dev"
 
 echo.
 echo Starting Frontend (React)...
