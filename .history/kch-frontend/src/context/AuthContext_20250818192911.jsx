@@ -1,15 +1,6 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { createContext, useState, useContext, useEffect, useCallback } from "react";
 import api from "../services/request";
-import {
-  MessageChannelErrorHandler,
-  safeAsync,
-} from "../utils/messageChannelHandler";
+import { MessageChannelErrorHandler, safeAsync } from "../utils/messageChannelHandler";
 
 // Configure axios to use credentials
 api.defaults.withCredentials = true;
@@ -19,23 +10,23 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
+    
     const status = error.response?.status;
-    const isRefreshCall = originalRequest?.url?.includes("/auth/refresh");
+    const isRefreshCall = originalRequest?.url?.includes('/auth/refresh');
     if (status === 401 && !originalRequest._retry && !isRefreshCall) {
       originalRequest._retry = true;
-
+      
       try {
-        await api.post("/auth/refresh");
+        await api.post('/auth/refresh');
         return api(originalRequest);
       } catch (refreshError) {
         // Refresh failed, redirect to login
-        console.error("Token refresh failed:", refreshError);
-        window.location.href = "/login";
+        console.error('Token refresh failed:', refreshError);
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
-
+    
     return Promise.reject(error);
   }
 );
@@ -51,11 +42,9 @@ export const AuthProvider = ({ children }) => {
 
   // Helper function to get current token from cookies
   const getCurrentToken = useCallback(() => {
-    const cookies = document.cookie.split(";");
-    const tokenCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("access_token=")
-    );
-    return tokenCookie ? tokenCookie.split("=")[1] : null;
+    const cookies = document.cookie.split(';');
+    const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('access_token='));
+    return tokenCookie ? tokenCookie.split('=')[1] : null;
   }, []);
 
   // Logout function - defined before useEffect to avoid circular dependency
@@ -63,12 +52,10 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setUserRole(null);
     setIsAuthenticated(false);
-
+    
     // Clear cookies by setting expired cookies
-    document.cookie =
-      "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie =
-      "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/auth/refresh;";
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/auth/refresh;";
   }, []);
 
   // Initialize authentication state on app load
@@ -79,7 +66,7 @@ export const AuthProvider = ({ children }) => {
         const token = getCurrentToken();
         if (token) {
           // Try to get current user data
-          const response = await api.get("/auth/me");
+          const response = await api.get('/auth/me');
           if (response.status === 200 && response.data.user) {
             setUser(response.data.user);
             setIsAuthenticated(true);
@@ -89,7 +76,7 @@ export const AuthProvider = ({ children }) => {
           }
         }
       } catch (error) {
-        console.error("Auth initialization failed:", error);
+        console.error('Auth initialization failed:', error);
         // Clear any invalid auth state
         logout();
       } finally {
@@ -108,52 +95,47 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user?.role, userRole]);
 
-  const login = useCallback(
-    async (email, password) => {
-      if (isLoading) return; // Prevent multiple simultaneous login attempts
+  const login = useCallback(async (email, password) => {
+    if (isLoading) return; // Prevent multiple simultaneous login attempts
+    
+    setIsLoading(true);
+    try {
+      const response = await safeAsync(
+        () => api.post("/auth/login", { email, password }),
+        null,
+        'login operation'
+      );
 
-      setIsLoading(true);
-      try {
-        const response = await safeAsync(
-          () => api.post("/auth/login", { email, password }),
-          null,
-          "login operation"
-        );
-
-        if (response && response.status === 200) {
-          const { user } = response.data;
-          if (user) {
-            setUser(user);
-            setIsAuthenticated(true);
-          } else {
-            throw new Error("Login failed: Invalid response data.");
-          }
+      if (response && response.status === 200) {
+        const { user } = response.data;
+        if (user) {
+          setUser(user);
+          setIsAuthenticated(true);
         } else {
-          throw new Error("Login failed");
+          throw new Error("Login failed: Invalid response data.");
         }
-      } catch (error) {
-        MessageChannelErrorHandler.handleAsyncError(error, "login operation");
-        throw error;
-      } finally {
-        setIsLoading(false);
+      } else {
+        throw new Error("Login failed");
       }
-    },
-    [isLoading]
-  );
+    } catch (error) {
+      MessageChannelErrorHandler.handleAsyncError(error, 'login operation');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        userRole,
-        isAuthenticated,
-        isLoading,
-        isInitialized,
-        login,
-        logout,
-        getCurrentToken,
-      }}
-    >
+    <AuthContext.Provider value={{ 
+      user, 
+      userRole, 
+      isAuthenticated, 
+      isLoading,
+      isInitialized,
+      login, 
+      logout,
+      getCurrentToken
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -162,7 +144,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
