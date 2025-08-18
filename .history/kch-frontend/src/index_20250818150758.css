@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css?family=Manrope:700|Manrope:400");
+@import "./styles/global-theme.css";
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  font-weight: 500;
+}
+
+body {
+  margin: 0;
+  /* Remove global flex centering to allow pages to control layout */
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--fontFamily);
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: var(--radiusBase);
+  border: 1px solid transparent;
+  padding: var(--spacing3) var(--spacing5);
+  font-size: var(--fontSizeBase);
+  font-weight: 500;
+  font-family: var(--fontFamily);
+  background-color: var(--surface);
+  cursor: pointer;
+  transition: all var(--transitionBase);
+}
+
+/* Global navbar spacing fix for all pages */
+body {
+  padding-top: 80px; /* Account for fixed navbar height */
+}
+
+/* Ensure all main content containers have proper top spacing */
+.container-login,
+.container-register,
+.container-cart,
+.container-checkout,
+.container-vehicle-request,
+.container-admin,
+.container-user-dash,
+.container-membership,
+.container-profile,
+.container-update-profile,
+.container-user-history,
+.container-registered-users {
+  padding-top: 20px; /* Additional spacing for content */
+}
