@@ -3,41 +3,99 @@ import { useAuth } from "../context/AuthContext";
 import { MembershipCard } from "../components/SubscriptionPage/MembershipCard";
 import { FAQSection } from "../components/SubscriptionPage/FAQSection";
 import { FeaturesList } from "../components/SubscriptionPage/FeaturesList";
-import { PricingSection } from "../components/SubscriptionPage/PricingSection";
 
 export default function SubscriptionManager() {
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [currentPlan, setCurrentPlan] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   // Mock data - in real app, this would come from API
-  const availablePlans = [
-    {
-      id: 1,
-      title: "Basic",
-      price: 9.99,
-      period: "month",
-      description: "Essential keycode services for individual users",
-      features: ["5 keycode requests/month", "Basic VIN lookup", "Email support"],
-      perks: ["Standard response time", "Basic documentation"]
-    },
+           const availablePlans = [
+           {
+             id: 1,
+             title: "Basic",
+             price: 9.99,
+             period: "month",
+             discount: "15%",
+             description: "Essential keycode services for individual locksmiths",
+             features: [
+               { text: "15% off 1 keycode order per month" },
+               { text: "Limited vehicle access (Ford, Nissan, Chevy only)" },
+               { text: "Basic customer support (24-48h)" },
+               { text: "Basic search functionality" },
+               { text: "Standard processing time (3-24 hours)" }
+             ],
+             perks: [
+               { text: "Monthly usage reports" },
+               { text: "Basic training resources" },
+               { text: "Email support" }
+             ]
+           },
     {
       id: 2,
       title: "Professional",
       price: 24.99,
       period: "month",
-      description: "Advanced features for professionals and small businesses",
-      features: ["25 keycode requests/month", "Advanced VIN lookup", "Priority support", "Bulk processing"],
-      perks: ["Faster response time", "Detailed reports", "API access"]
+      discount: "20%",
+      description: "Advanced features for professional locksmiths and small businesses",
+      features: [
+        { text: "20% off all keycode purchases" },
+        { text: "Premium keycode database access" },
+        { text: "Priority customer support (4-8h)" },
+        { text: "Advanced search and filtering" },
+                       { text: "Bulk keycode ordering (up to 20 codes)" },
+        { text: "Extended vehicle coverage" },
+                       { text: "Priority processing (30min - 1 hour)" }
+      ],
+      perks: [
+        { text: "Real-time keycode availability" },
+        { text: "Advanced search by make/model/year" },
+        { text: "Phone & chat support" },
+        { text: "Priority keycode processing" },
+        { text: "Extended vehicle database coverage" }
+      ]
     },
     {
       id: 3,
       title: "Enterprise",
       price: 99.99,
       period: "month",
-      description: "Full-featured solution for large organizations",
-      features: ["Unlimited keycode requests", "Premium VIN lookup", "24/7 support", "Custom integrations"],
-      perks: ["Fastest response time", "Dedicated account manager", "Custom solutions"]
+      discount: "25%",
+      description: "Full-featured solution for large locksmith organizations",
+      features: [
+        { text: "25% off all keycode purchases" },
+        { text: "Complete keycode database access" },
+        { text: "24/7 premium customer support" },
+        { text: "Advanced search and filtering" },
+        { text: "Unlimited bulk ordering" },
+        { text: "All vehicle makes & models" },
+               { text: "Instant processing (15-30 minutes)" },
+        { text: "Multi-location management" }
+      ],
+      perks: [
+        { text: "Dedicated locksmith support team" },
+        { text: "Advanced keycode analytics & reporting" },
+        { text: "Priority emergency keycode requests" },
+        { text: "Custom keycode training programs" },
+        { text: "Volume keycode pricing discounts" },
+        { text: "Exclusive vehicle database access" }
+      ]
+    }
+  ];
+
+  // FAQ data
+  const faqData = [
+    {
+      question: "How does the keycode service work?",
+      answer: "Our keycode service provides secure access to vehicle keycodes through VIN lookup and verification processes."
+    },
+    {
+      question: "What is included in each plan?",
+      answer: "Each plan includes different levels of keycode requests, support options, and additional features as outlined above."
+    },
+    {
+      question: "Can I change my plan?",
+      answer: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately."
     }
   ];
 
@@ -87,7 +145,7 @@ export default function SubscriptionManager() {
           ))}
         </div>
 
-        <FAQSection />
+        <FAQSection faqData={faqData} />
       </div>
     );
   }
@@ -166,7 +224,7 @@ export default function SubscriptionManager() {
         </div>
       )}
 
-      <FAQSection />
+      <FAQSection faqData={faqData} />
     </div>
   );
 }
