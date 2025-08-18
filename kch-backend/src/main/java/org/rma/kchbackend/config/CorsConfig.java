@@ -16,16 +16,22 @@ public class CorsConfig {
 
     @Bean
     @Primary
-    @Profile("dev")
-    public CorsConfigurationSource devCors() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration c = new CorsConfiguration();
         c.setAllowedOriginPatterns(List.of("http://localhost:*"));
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         c.setAllowedHeaders(List.of("*"));
         c.setAllowCredentials(true);
+        c.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
         UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
         s.registerCorsConfiguration("/**", c);
         return s;
+    }
+
+    @Bean
+    @Profile("dev")
+    public CorsConfigurationSource devCors() {
+        return corsConfigurationSource();
     }
 
     @Bean

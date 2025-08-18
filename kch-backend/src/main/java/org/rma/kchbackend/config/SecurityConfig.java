@@ -34,9 +34,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/auth/**", "/register", "/send-email", "/makes/**").permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "SUPER_ADMIN")
-                        .requestMatchers("/super-admin/**").hasAuthority("SUPER_ADMIN")
-                        .requestMatchers("/user/**", "/api/v1/keycodes/**").hasAnyAuthority("BASEUSER", "ADMIN", "SUPER_ADMIN")
+                        .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
+                        .requestMatchers("/super-admin/**").hasAuthority("ROLE_SUPER_ADMIN")
+                        .requestMatchers("/user/**", "/api/v1/keycodes/**", "/vehicle/**", "/api/payments/**").hasAnyAuthority("ROLE_BASEUSER", "ROLE_ADMIN", "ROLE_SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

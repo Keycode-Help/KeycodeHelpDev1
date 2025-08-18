@@ -41,7 +41,7 @@ function Navbar() {
               <Link to="/user-dash">User Dashboard</Link>
             </li>
             <li>
-              <Link to="/profile">
+              <Link to="/user-profile">
                 Profile
               </Link>
             </li>
