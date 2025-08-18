@@ -4,12 +4,7 @@ import org.rma.kchbackend.model.UserDocument;
 import org.rma.kchbackend.model.UserLicense;
 import org.rma.kchbackend.repository.UserDocumentRepository;
 import org.rma.kchbackend.repository.UserLicenseRepository;
-import org.rma.kchbackend.service.KeycodeUserService;
-import org.rma.kchbackend.model.KeycodeUser;
-import org.rma.kchbackend.compliance.ComplianceRequirement;
-import org.rma.kchbackend.compliance.ComplianceService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
@@ -20,17 +15,10 @@ public class ComplianceDocumentController {
 
     private final UserDocumentRepository docRepo;
     private final UserLicenseRepository licenseRepo;
-    private final KeycodeUserService userService;
-    private final ComplianceService complianceService;
 
-    public ComplianceDocumentController(UserDocumentRepository docRepo,
-                                        UserLicenseRepository licenseRepo,
-                                        KeycodeUserService userService,
-                                        ComplianceService complianceService) {
+    public ComplianceDocumentController(UserDocumentRepository docRepo, UserLicenseRepository licenseRepo) {
         this.docRepo = docRepo;
         this.licenseRepo = licenseRepo;
-        this.userService = userService;
-        this.complianceService = complianceService;
     }
 
     public record LicensePayload(String state, String licenseNumber, java.time.LocalDate expiresOn) {}
@@ -60,22 +48,6 @@ public class ComplianceDocumentController {
         d.setVerified(false);
         docRepo.save(d);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/status")
-    public ResponseEntity<?> complianceStatus(Authentication authentication) {
-        String email = authentication.getName();
-        KeycodeUser user = userService.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        ComplianceRequirement cr = complianceService.evaluate(user.getId(), user.getState());
-        return ResponseEntity.ok(
-                java.util.Map.of(
-                        "required", cr.required(),
-                        "requiredDocs", cr.requiredDocs(),
-                        "message", cr.userMessage(),
-                        "jurisdiction", user.getState()
-                )
-        );
     }
 }
 
