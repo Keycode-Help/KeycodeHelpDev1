@@ -126,7 +126,7 @@ function UserDash() {
     }));
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 md:px-6 pb-16">
+    <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
       <header className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-white">
@@ -156,11 +156,7 @@ function UserDash() {
       <section className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard label="Pending" value={stats.pending} icon={Hourglass} />
         <StatCard label="In Progress" value={stats.inProgress} icon={Clock} />
-        <StatCard
-          label="Fulfilled"
-          value={stats.fulfilled}
-          icon={CheckCircle2}
-        />
+        <StatCard label="Fulfilled" value={stats.fulfilled} icon={CheckCircle2} />
       </section>
 
       {/* Tabs */}
@@ -191,10 +187,7 @@ function UserDash() {
               : filtered.fulfilled;
           if (!list.length) {
             return (
-              <EmptyState
-                title="Nothing here yet"
-                subtitle="New requests will appear in this tab."
-              />
+              <EmptyState title="Nothing here yet" subtitle="New requests will appear in this tab." />
             );
           }
           return (
