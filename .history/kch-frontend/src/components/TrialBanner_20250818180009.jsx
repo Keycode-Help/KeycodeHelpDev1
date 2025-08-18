@@ -36,7 +36,7 @@ export default function TrialBanner() {
               <Icon name="timer" size={16} />
               Limited Time
             </span>
-            <h3 className="text-xl font-bold">3-Day Premium Trial</h3>
+            <h3 className="text-xl font-bold">5-Day Premium Trial</h3>
           </div>
           <p className="text-white/80">
             Experience premium benefits with no commitment
