@@ -43,8 +43,8 @@ echo ""
 cd kch-backend
 echo "Installing Maven dependencies (skipping tests)..."
 mvn install -DskipTests
-echo "Starting Spring Boot application..."
-mvn spring-boot:run &
+echo "Starting Spring Boot application with dev profile..."
+mvn spring-boot:run -Dspring-boot.run.profiles=dev &
 BACKEND_PID=$!
 
 echo ""
