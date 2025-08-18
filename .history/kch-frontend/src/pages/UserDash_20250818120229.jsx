@@ -126,7 +126,7 @@ function UserDash() {
     }));
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 md:px-6 pb-16">
+    <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
       <header className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-white">
