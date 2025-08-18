@@ -22,22 +22,6 @@ public class KchBackendApplication {
             System.setProperty("MYSQL_PASSWORD", mysqlPassword);
         }
 
-        // Optional: Spring profile from .env (e.g., prod)
-        String springProfile = dotenv.get("SPRING_PROFILES_ACTIVE");
-        if (springProfile != null && System.getProperty("spring.profiles.active") == null) {
-            System.setProperty("spring.profiles.active", springProfile);
-        }
-
-        // Optional: Brevo SMTP credentials from .env
-        String brevoUser = dotenv.get("BREVO_USERNAME");
-        if (brevoUser != null) {
-            System.setProperty("BREVO_USERNAME", brevoUser);
-        }
-        String brevoKey = dotenv.get("BREVO_API_KEY");
-        if (brevoKey != null) {
-            System.setProperty("BREVO_API_KEY", brevoKey);
-        }
-
         SpringApplication.run(KchBackendApplication.class, args);
     }
 }
