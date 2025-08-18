@@ -28,7 +28,7 @@ const UpdateUserProfile = () => {
   const backIdRef = useRef(null);
   const insuranceRef = useRef(null);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const {logout} = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -169,20 +169,20 @@ const UpdateUserProfile = () => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async() => {
     //alert("Delete Profile clicked");
-    try {
+    try{
       await axios.put("http://localhost:8080/keycode-user/delete");
       alert("User Profile deleted successfully.");
       logout();
-      navigate("/login");
-    } catch (error) {
+      navigate("/login")      
+    }catch(error){
       console.error("Delete user profile failed:", error);
       alert(
         error.response?.data || "Delete user profile failed. Please try again."
       );
     }
-  };
+  }
   useEffect(() => {
     fetchUserProfile();
   }, []);
@@ -305,7 +305,10 @@ const UpdateUserProfile = () => {
       </div>
 
       {modalImage && (
-        <ModalContent modalImage={modalImage} closeModal={closeModal} />
+        <ModalContent 
+          modalImage={modalImage} 
+          closeModal={closeModal} 
+        />
       )}
     </div>
   );
