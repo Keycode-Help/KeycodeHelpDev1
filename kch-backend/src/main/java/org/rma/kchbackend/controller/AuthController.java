@@ -5,6 +5,8 @@ import org.rma.kchbackend.dto.RegisterRequest;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Role;
 import org.rma.kchbackend.service.KeycodeUserService;
+import org.rma.kchbackend.service.AdminRegistrationCodeService;
+import org.rma.kchbackend.service.CustomUserDetailsService;
 import org.rma.kchbackend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
 
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:51731", "http://localhost:51732", "http://localhost:51733", "http://localhost:51734"})
 @RestController
@@ -34,13 +40,17 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final AdminRegistrationCodeService adminRegistrationCodeService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Autowired
-    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService, CustomUserDetailsService userDetailsService) {
         this.keycodeUserService = keycodeUserService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.adminRegistrationCodeService = adminRegistrationCodeService;
+        this.userDetailsService = userDetailsService;
     }
 
 
@@ -134,9 +144,9 @@ public class AuthController {
             @RequestParam("company") String company,
             @RequestParam("adminCode") String adminCode) {
         try {
-            // Validate admin code (this should be configurable in production)
-            if (!"ADMIN2024".equals(adminCode)) {
-                return ResponseEntity.badRequest().body("Invalid admin registration code.");
+            // Validate admin registration code using the service
+            if (!adminRegistrationCodeService.validateAdminRegistrationCode(email, adminCode)) {
+                return ResponseEntity.badRequest().body("Invalid or expired admin registration code. Please request a new code.");
             }
 
             // Check if user already exists
@@ -200,14 +210,68 @@ public class AuthController {
         if (user.getRole() == Role.ADMIN && !user.isAdminApproved()) {
             return ResponseEntity.status(401).body("Admin account pending approval. Please contact super administrator.");
         }
-        String jwt = jwtUtil.generateToken(user);
+        // Convert KeycodeUser to UserDetails for JWT generation
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+        String accessJwt = jwtUtil.generateToken(userDetails);
+        String refreshJwt = jwtUtil.generateRefreshToken(userDetails);
 
-        // Include user information in the response, including role.
+        // Set cookies
+        ResponseCookie access = ResponseCookie.from("access_token", accessJwt)
+            .httpOnly(true).secure(false).path("/")
+            .sameSite("Lax").maxAge(Duration.ofHours(10)).build();
+
+        ResponseCookie refresh = ResponseCookie.from("refresh_token", refreshJwt)
+            .httpOnly(true).secure(false).path("/auth/refresh")
+            .sameSite("Lax").maxAge(Duration.ofDays(7)).build();
+
+        // Include user information in the response, but not the token
         Map<String, Object> response = new HashMap<>();
-        response.put("token", jwt);
+        response.put("status", "ok");
         response.put("user", user);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, access.toString())
+            .header(HttpHeaders.SET_COOKIE, refresh.toString())
+            .body(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@CookieValue("refresh_token") String refreshToken) {
+        try {
+            if (refreshToken == null || refreshToken.isEmpty()) {
+                return ResponseEntity.status(401).body("Refresh token not found");
+            }
+
+            // Validate refresh token and get user
+            if (!jwtUtil.validateToken(refreshToken)) {
+                return ResponseEntity.status(401).body("Invalid refresh token");
+            }
+
+            String userEmail = jwtUtil.getUsernameFromToken(refreshToken);
+            Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(userEmail);
+            
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(401).body("User not found");
+            }
+
+            KeycodeUser user = userOptional.get();
+            
+            // Generate new access token
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+            String newAccessToken = jwtUtil.generateToken(userDetails);
+            
+            // Set new access token cookie
+            ResponseCookie access = ResponseCookie.from("access_token", newAccessToken)
+                .httpOnly(true).secure(false).path("/")
+                .sameSite("Lax").maxAge(Duration.ofHours(10)).build();
+
+            return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, access.toString())
+                .body(Map.of("status", "ok", "message", "Token refreshed"));
+                
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Token refresh failed");
+        }
     }
 
 
@@ -253,6 +317,40 @@ public class AuthController {
 
             return ResponseEntity.status(200).body("User Details Updated Successfully");
         }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        try {
+            // Get the authenticated user from security context
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = authentication.getName();
+            
+            Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(userEmail);
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(401).body("User not found. Please log in again.");
+            }
+            
+            KeycodeUser user = userOptional.get();
+            
+            // Check if account is active
+            if (!user.isActive()) {
+                return ResponseEntity.status(401).body("Account is inactive.");
+            }
+            
+            // Check if admin account is approved
+            if (user.getRole() == Role.ADMIN && !user.isAdminApproved()) {
+                return ResponseEntity.status(401).body("Admin account pending approval.");
+            }
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", user);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
         }

@@ -1,52 +1,114 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import axios from "axios";
+import React, { createContext, useState, useContext, useEffect, useCallback } from "react";
+import api from "../services/request";
+import { MessageChannelErrorHandler, safeAsync } from "../utils/messageChannelHandler";
+
+// Configure axios to use credentials
+api.defaults.withCredentials = true;
+
+// Add response interceptor for automatic token refresh
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      try {
+        await api.post('/auth/refresh');
+        return api(originalRequest);
+      } catch (refreshError) {
+        // Refresh failed, redirect to login
+        console.error('Token refresh failed:', refreshError);
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  const [userRole, setUserRole] = useState(() => {
-    const savedRole = localStorage.getItem("userRole");
-    return savedRole ? savedRole : null;
-  });
+  // Helper function to get current token from cookies
+  const getCurrentToken = useCallback(() => {
+    const cookies = document.cookie.split(';');
+    const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('access_token='));
+    return tokenCookie ? tokenCookie.split('=')[1] : null;
+  }, []);
 
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  // Logout function - defined before useEffect to avoid circular dependency
+  const logout = useCallback(() => {
+    setUser(null);
+    setUserRole(null);
+    setIsAuthenticated(false);
+    
+    // Clear cookies by setting expired cookies
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/auth/refresh;";
+  }, []);
 
+  // Initialize authentication state on app load
   useEffect(() => {
-    if (user && token) {
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("userRole", user.role);
-      localStorage.setItem("token", token);
+    const initializeAuth = async () => {
+      try {
+        // Check if we have a token
+        const token = getCurrentToken();
+        if (token) {
+          // Try to get current user data
+          const response = await api.get('/auth/me');
+          if (response.status === 200 && response.data.user) {
+            setUser(response.data.user);
+            setIsAuthenticated(true);
+          } else {
+            // Token exists but user data is invalid, clear auth state
+            logout();
+          }
+        }
+      } catch (error) {
+        console.error('Auth initialization failed:', error);
+        // Clear any invalid auth state
+        logout();
+      } finally {
+        setIsInitialized(true);
+      }
+    };
 
-      // Set Axios default Authorization header
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      localStorage.removeItem("user");
-      localStorage.removeItem("userRole");
-      localStorage.removeItem("token");
+    initializeAuth();
+  }, [getCurrentToken, logout]);
 
-      // Remove Axios default Authorization header
-      delete axios.defaults.headers.common["Authorization"];
+  // Memoize the role setting logic to prevent unnecessary re-renders
+  useEffect(() => {
+    const newRole = user?.role || null;
+    if (newRole !== userRole) {
+      setUserRole(newRole);
     }
-  }, [user, token]);
+  }, [user?.role, userRole]);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
+    if (isLoading) return; // Prevent multiple simultaneous login attempts
+    
+    setIsLoading(true);
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", {
-        email,
-        password,
-      });
+      const response = await safeAsync(
+        () => api.post("/auth/login", { email, password }),
+        null,
+        'login operation'
+      );
 
-      if (response.status === 200) {
-        const { token, user } = response.data;
-        if (token && user) {
+      if (response && response.status === 200) {
+        const { user } = response.data;
+        if (user) {
           setUser(user);
-          setUserRole(user.role);
-          setToken(token);
+          setIsAuthenticated(true);
         } else {
           throw new Error("Login failed: Invalid response data.");
         }
@@ -54,30 +116,33 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Login failed");
       }
     } catch (error) {
-      console.error("Login failed", error);
+      MessageChannelErrorHandler.handleAsyncError(error, 'login operation');
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    setUserRole(null);
-    setToken(null);
-
-    // Remove items from localStorage
-    localStorage.removeItem("user");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("token");
-
-    // Remove default authorization header from axios
-    delete axios.defaults.headers.common["Authorization"];
-  };
+  }, [isLoading]);
 
   return (
-    <AuthContext.Provider value={{ user, userRole, token, login, logout }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      userRole, 
+      isAuthenticated, 
+      isLoading,
+      isInitialized,
+      login, 
+      logout,
+      getCurrentToken
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

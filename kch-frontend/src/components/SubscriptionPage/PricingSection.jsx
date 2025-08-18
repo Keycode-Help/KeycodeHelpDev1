@@ -1,11 +1,19 @@
 /* eslint-disable react/prop-types */
 export function PricingSection({ tier }) {
   const getPriceDisplay = (tier) => {
-    return tier.pricing[0].amount;
+    // Handle both old pricing array format and new direct properties
+    if (tier.pricing && tier.pricing.length > 0) {
+      return tier.pricing[0].amount;
+    }
+    return tier.price || 0;
   };
 
   const getPeriodDisplay = (tier) => {
-    return tier.pricing[0].period;
+    // Handle both old pricing array format and new direct properties
+    if (tier.pricing && tier.pricing.length > 0) {
+      return tier.pricing[0].period;
+    }
+    return tier.period || 'month';
   };
 
   return (
@@ -15,7 +23,7 @@ export function PricingSection({ tier }) {
         <span className="text-gray-400 ml-1">/{getPeriodDisplay(tier)}</span>
       </div>
 
-      {tier.id === "Ultimate" && (
+      {tier.id === "Ultimate" && tier.pricing && tier.pricing.length > 1 && (
         <p className="mt-1 text-sm text-gray-400">
           One-Time Setup Fee: ${tier.pricing[1].setupFee}
         </p>
