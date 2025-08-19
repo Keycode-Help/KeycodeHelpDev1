@@ -10,16 +10,14 @@ export function MembershipCard({ tier, onSubscribe }) {
       <div className="p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-white">{tier.title}</h2>
-          <span className="text-yellow-500 font-bold text-lg">
-            {tier.discount}
-          </span>
+          <span className="text-yellow-500 font-bold text-lg">{tier.discount}</span>
         </div>
-
+        
         <div className="mb-4">
           <span className="text-3xl font-bold text-white">${tier.price}</span>
           <span className="text-gray-400 text-lg">/{tier.period}</span>
         </div>
-
+        
         <p className="mt-4 text-base text-gray-400 mb-6">{tier.description}</p>
 
         <button
