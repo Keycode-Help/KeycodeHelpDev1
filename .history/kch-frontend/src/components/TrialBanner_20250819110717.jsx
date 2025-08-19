@@ -52,7 +52,10 @@ export default function TrialBanner() {
           </ul>
         </div>
         <div className="flex flex-col items-center gap-4">
-          <button onClick={startTrial} className="btn btn-lg btn-primary">
+          <button
+            onClick={startTrial}
+            className="btn btn-lg btn-primary"
+          >
             Start Premium Trial
             <Icon name="chevronRight" size={20} />
           </button>
