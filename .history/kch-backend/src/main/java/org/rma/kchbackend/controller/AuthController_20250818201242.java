@@ -300,34 +300,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Dev utility to upsert a SUPER_ADMIN user.
-     */
-    @PostMapping("/dev-upsert-admin")
-    public ResponseEntity<?> devUpsertAdmin(@RequestParam("email") String email,
-                                            @RequestParam("password") String password,
-                                            @RequestParam(value = "fname", required = false, defaultValue = "Admin") String fname,
-                                            @RequestParam(value = "lname", required = false, defaultValue = "User") String lname) {
-        try {
-            Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(email);
-            KeycodeUser user = userOptional.orElseGet(KeycodeUser::new);
-            user.setEmail(email);
-            user.setFname(fname);
-            user.setLname(lname);
-            user.setPassword(passwordEncoder.encode(password));
-            user.setRole(Role.SUPER_ADMIN);
-            user.setCompany("Dev");
-            user.setAdminApproved(true);
-            user.setActive(true);
-            user.setState("N/A");
-            user.setValidatedUser(true);
-            keycodeUserService.saveUser(user);
-            return ResponseEntity.ok(Map.of("status", "ok"));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to upsert admin");
-        }
-    }
-
 
     @PutMapping("/updateProfile")
     public ResponseEntity<String> updateUserProfile(@RequestParam("fname") String fname,
