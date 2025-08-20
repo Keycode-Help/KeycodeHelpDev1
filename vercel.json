@@ -22,27 +22,5 @@
     { "source": "/subscriptions", "destination": "/index.html" },
     { "source": "/pricing", "destination": "/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "routes": [
-    {
-      "src": "/admin-login",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/admin-register",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/admin",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/super-admin",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/reset-password",
-      "dest": "/index.html"
-    }
   ]
 }
