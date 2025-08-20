@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "name": "keycode-help-frontend",
-  "description": "KeyCode Help Frontend - Updated routing configuration v1.1",
   "builds": [
     {
       "src": "kch-frontend/package.json",
