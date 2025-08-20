@@ -39,4 +39,5 @@
       "dest": "/index.html"
     }
   ]
+  // Updated configuration for proper client-side routing
 }
