@@ -43,26 +43,13 @@ public class CorsConfig {
     @Bean
     @Profile("prod")
     public CorsConfigurationSource prodCors(
-        @Value("${app.cors.allowed-origins:}") List<String> origins) {
+        @Value("${app.cors.allowed-origins}") List<String> origins) {
         CorsConfiguration c = new CorsConfiguration();
-        
-        // Default production origins if none specified
-        List<String> defaultOrigins = List.of(
-            "https://*.vercel.app",
-            "https://*.keycode.help",
-            "https://keycode.help",
-            "https://www.keycode.help"
-        );
-        
-        // Use provided origins or defaults
-        List<String> finalOrigins = origins.isEmpty() ? defaultOrigins : origins;
-        
         // Include localhost origins when running locally under prod profile
         for (String local : List.of("http://localhost:5173", "http://localhost:5174")) {
-            if (!finalOrigins.contains(local)) finalOrigins.add(local);
+            if (!origins.contains(local)) origins.add(local);
         }
-        
-        c.setAllowedOrigins(finalOrigins);
+        c.setAllowedOrigins(origins);
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         c.setAllowedHeaders(List.of("*"));
         c.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
