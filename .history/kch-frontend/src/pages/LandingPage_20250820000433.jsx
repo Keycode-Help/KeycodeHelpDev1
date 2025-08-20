@@ -299,12 +299,8 @@ export default function LandingPage() {
                   Most Popular
                 </span>
               </div>
-              <div className="absolute top-4 left-4 text-white font-semibold">
-                Professional
-              </div>
-              <div className="absolute top-4 right-4 text-yellow-400 font-bold">
-                20%
-              </div>
+              <div className="absolute top-4 left-4 text-white font-semibold">Professional</div>
+              <div className="absolute top-4 right-4 text-yellow-400 font-bold">20%</div>
               <div className="text-3xl font-bold text-primary mb-4 mt-8">
                 {billingCycle === "monthly" ? "$24.99" : "$149"}
                 <span className="text-lg text-white/60">

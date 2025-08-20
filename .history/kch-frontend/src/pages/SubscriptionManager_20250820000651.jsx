@@ -37,7 +37,7 @@ export default function SubscriptionManager() {
     {
       id: 1,
       title: "Basic",
-      monthlyPrice: 9.99,
+      price: 9.99,
       period: "month",
       discount: "15%",
       description: "Essential keycode services for individual locksmiths",
@@ -57,8 +57,7 @@ export default function SubscriptionManager() {
     {
       id: 2,
       title: "Professional",
-      monthlyPrice: 24.99,
-      annualPrice: 149,
+      price: 24.99,
       period: "month",
       discount: "20%",
       description:
@@ -83,7 +82,7 @@ export default function SubscriptionManager() {
     {
       id: 3,
       title: "Enterprise",
-      monthlyPrice: 99.99,
+      price: 99.99,
       period: "month",
       discount: "25%",
       description: "Full-featured solution for large locksmith organizations",
@@ -243,42 +242,12 @@ export default function SubscriptionManager() {
               </p>
             </div>
 
-            {/* Billing Toggle */}
-            <div className="flex justify-center mb-8">
-              <div className="bg-gray-800 rounded-lg p-1 flex">
-                <button
-                  onClick={() => setBillingCycle("monthly")}
-                  className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                    billingCycle === "monthly"
-                      ? "bg-blue-600 text-white shadow-lg"
-                      : "text-gray-300 hover:text-white"
-                  }`}
-                >
-                  Monthly Billing
-                </button>
-                <button
-                  onClick={() => setBillingCycle("annual")}
-                  className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                    billingCycle === "annual"
-                      ? "bg-blue-600 text-white shadow-lg"
-                      : "text-gray-300 hover:text-white"
-                  }`}
-                >
-                  Annual Billing
-                  <span className="ml-2 text-xs bg-green-500 text-white px-2 py-1 rounded-full">
-                    Save 20%
-                  </span>
-                </button>
-              </div>
-            </div>
-
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               {availablePlans.map((plan) => (
                 <MembershipCard
                   key={plan.id}
                   tier={plan}
                   onSubscribe={() => handleSubscribe(plan)}
-                  billingCycle={billingCycle}
                 />
               ))}
             </div>
@@ -374,7 +343,6 @@ export default function SubscriptionManager() {
                   key={plan.id}
                   tier={plan}
                   onSubscribe={() => handleSubscribe(plan)}
-                  billingCycle={billingCycle}
                 />
               ))}
           </div>

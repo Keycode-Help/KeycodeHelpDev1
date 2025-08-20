@@ -306,7 +306,7 @@ export default function LandingPage() {
                 20%
               </div>
               <div className="text-3xl font-bold text-primary mb-4 mt-8">
-                {billingCycle === "monthly" ? "$24.99" : "$149"}
+                {billingCycle === "monthly" ? "$24.99" : "$249.99"}
                 <span className="text-lg text-white/60">
                   /{billingCycle === "monthly" ? "month" : "year"}
                 </span>

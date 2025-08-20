@@ -93,8 +93,7 @@ function Navbar() {
           <Link
             className="nav-link"
             to="/pricing"
-            onClick={() => setOpen(false)}
-          >
+            onClick={() => setOpen(false)}>
             Keycode Pricing
           </Link>
           <Link className="nav-link" to="/admin" onClick={() => setOpen(false)}>
@@ -134,7 +133,7 @@ function Navbar() {
             to="/pricing"
             onClick={() => setOpen(false)}
           >
-            Keycode Pricing
+            Pricing
           </Link>
           <Link
             className="nav-link"

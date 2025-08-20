@@ -37,7 +37,7 @@ export default function SubscriptionManager() {
     {
       id: 1,
       title: "Basic",
-      monthlyPrice: 9.99,
+      price: 9.99,
       period: "month",
       discount: "15%",
       description: "Essential keycode services for individual locksmiths",
@@ -57,8 +57,7 @@ export default function SubscriptionManager() {
     {
       id: 2,
       title: "Professional",
-      monthlyPrice: 24.99,
-      annualPrice: 149,
+      price: 24.99,
       period: "month",
       discount: "20%",
       description:
@@ -83,7 +82,7 @@ export default function SubscriptionManager() {
     {
       id: 3,
       title: "Enterprise",
-      monthlyPrice: 99.99,
+      price: 99.99,
       period: "month",
       discount: "25%",
       description: "Full-featured solution for large locksmith organizations",
@@ -278,7 +277,6 @@ export default function SubscriptionManager() {
                   key={plan.id}
                   tier={plan}
                   onSubscribe={() => handleSubscribe(plan)}
-                  billingCycle={billingCycle}
                 />
               ))}
             </div>
@@ -374,7 +372,6 @@ export default function SubscriptionManager() {
                   key={plan.id}
                   tier={plan}
                   onSubscribe={() => handleSubscribe(plan)}
-                  billingCycle={billingCycle}
                 />
               ))}
           </div>
