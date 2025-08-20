@@ -23,6 +23,7 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetMessage, setResetMessage] = useState("");
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -39,7 +40,7 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
       return;
     }
 
-    setIsResettingPassword(true);
+    setIsSendingEmail(true);
     setResetMessage("");
 
     try {
@@ -65,7 +66,7 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
     } catch (error) {
       setResetMessage("❌ Error sending reset email. Please try again.");
     } finally {
-      setIsResettingPassword(false);
+      setIsSendingEmail(false);
     }
   };
 
@@ -338,7 +339,7 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
 
           {isResettingPassword && (
             <div className="mt-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
-              <form onSubmit={handlePasswordReset} className="space-y-4">
+              <div className="space-y-4">
                 <div>
                   <label className="block text-sm text-gray-300 mb-2">
                     Email Address
@@ -353,11 +354,12 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
                   />
                 </div>
                 <button
-                  type="submit"
-                  disabled={isResettingPassword}
+                  type="button"
+                  onClick={handlePasswordReset}
+                  disabled={isSendingEmail}
                   className="w-full btn btn-sm btn-primary"
                 >
-                  {isResettingPassword ? "Sending..." : "Send Reset Email"}
+                  {isSendingEmail ? "Sending..." : "Send Reset Email"}
                 </button>
                 {resetMessage && (
                   <div
@@ -370,7 +372,7 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
                     {resetMessage}
                   </div>
                 )}
-              </form>
+              </div>
             </div>
           )}
         </div>
