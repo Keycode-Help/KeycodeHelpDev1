@@ -1,19 +1,7 @@
 // API Configuration
 const API_CONFIG = {
   // Base URL for all API calls
-  BASE_URL: (() => {
-    const envUrl = import.meta.env.VITE_BACKEND_URL;
-    if (envUrl) {
-      return envUrl;
-    }
-    
-    // Fallback logic based on environment
-    if (import.meta.env.MODE === 'production') {
-      return "https://keycode-help-backend.onrender.com";
-    }
-    
-    return "http://localhost:8080";
-  })(),
+  BASE_URL: import.meta.env.VITE_BACKEND_URL || "http://localhost:8080",
   
   // Debug logging
   debug: () => {
