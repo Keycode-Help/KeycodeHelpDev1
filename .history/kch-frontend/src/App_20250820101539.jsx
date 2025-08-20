@@ -42,7 +42,6 @@ function App() {
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/admin-register" element={<AdminRegister />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/cart" element={<Cart />} />
               <Route
                 path="/vehicle-keycode-request"
