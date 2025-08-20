@@ -95,7 +95,7 @@ function Navbar() {
             to="/pricing"
             onClick={() => setOpen(false)}
           >
-            Keycode Pricing
+            Pricing
           </Link>
           <Link className="nav-link" to="/admin" onClick={() => setOpen(false)}>
             Admin Dashboard
@@ -134,7 +134,7 @@ function Navbar() {
             to="/pricing"
             onClick={() => setOpen(false)}
           >
-            Keycode Pricing
+            Pricing
           </Link>
           <Link
             className="nav-link"

@@ -14,8 +14,6 @@ import "../styles/lp.css";
 export default function LandingPage() {
   const { token } = useAuth();
   const [trialEndsAt, setTrialEndsAt] = useState(null);
-  const [billingCycle, setBillingCycle] = useState("monthly");
-
   useEffect(() => {
     if (!token) return;
     api
@@ -178,7 +176,9 @@ export default function LandingPage() {
         {/* Subscription Pricing Section */}
         <section className="text-center space-y-8">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold">Choose Your Plan</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">
+              Choose Your Plan
+            </h2>
             <p className="text-xl text-white/80 max-w-2xl mx-auto">
               Start with a free trial, then choose the plan that fits your needs
             </p>
@@ -188,21 +188,21 @@ export default function LandingPage() {
           <div className="flex justify-center mb-8">
             <div className="bg-gray-800 rounded-lg p-1 flex">
               <button
-                onClick={() => setBillingCycle("monthly")}
+                onClick={() => setBillingCycle('monthly')}
                 className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                  billingCycle === "monthly"
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "text-gray-300 hover:text-white"
+                  billingCycle === 'monthly'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 Monthly Billing
               </button>
               <button
-                onClick={() => setBillingCycle("annual")}
+                onClick={() => setBillingCycle('annual')}
                 className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                  billingCycle === "annual"
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "text-gray-300 hover:text-white"
+                  billingCycle === 'annual'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 Annual Billing
@@ -212,22 +212,14 @@ export default function LandingPage() {
               </button>
             </div>
           </div>
-
+          
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* Trial Plan */}
             <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 relative">
-              <div className="absolute top-4 left-4 text-white font-semibold">
-                Trial
-              </div>
-              <div className="absolute top-4 right-4 text-yellow-400 font-bold">
-                FREE
-              </div>
-              <div className="text-3xl font-bold text-white mb-4 mt-8">
-                $0<span className="text-lg text-white/60">/3 days</span>
-              </div>
-              <p className="text-white/80 mb-6">
-                Try premium features free for 3 days – no commitment
-              </p>
+              <div className="absolute top-4 left-4 text-white font-semibold">Trial</div>
+              <div className="absolute top-4 right-4 text-yellow-400 font-bold">FREE</div>
+              <div className="text-3xl font-bold text-white mb-4 mt-8">$0<span className="text-lg text-white/60">/3 days</span></div>
+              <p className="text-white/80 mb-6">Try premium features free for 3 days – no commitment</p>
               <ul className="text-left space-y-2 mb-6 text-white/80">
                 <li>• Priority processing (30m - 1h)</li>
                 <li>• Premium keycode database access</li>
@@ -235,9 +227,7 @@ export default function LandingPage() {
                 <li>• Expanded vehicle coverage</li>
               </ul>
               <div className="text-left mb-4">
-                <h4 className="text-white font-semibold mb-2">
-                  Additional Perks:
-                </h4>
+                <h4 className="text-white font-semibold mb-2">Additional Perks:</h4>
                 <ul className="space-y-1 text-white/80 text-sm">
                   <li>• Advanced search & filtering</li>
                   <li>• Broader VIN support</li>
@@ -250,26 +240,15 @@ export default function LandingPage() {
 
             {/* Basic Plan */}
             <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 relative">
-              <div className="absolute top-4 left-4 text-white font-semibold">
-                Basic
-              </div>
-              <div className="absolute top-4 right-4 text-yellow-400 font-bold">
-                15%
-              </div>
+              <div className="absolute top-4 left-4 text-white font-semibold">Basic</div>
+              <div className="absolute top-4 right-4 text-yellow-400 font-bold">15%</div>
               <div className="text-3xl font-bold text-primary mb-4 mt-8">
-                {billingCycle === "monthly" ? "$9.99" : "$99.99"}
-                <span className="text-lg text-white/60">
-                  /{billingCycle === "monthly" ? "month" : "year"}
-                </span>
+                {billingCycle === 'monthly' ? '$9.99' : '$99.99'}<span className="text-lg text-white/60">/{billingCycle === 'monthly' ? 'month' : 'year'}</span>
               </div>
-              {billingCycle === "annual" && (
-                <div className="text-sm text-green-400 mb-2">
-                  + $49 setup fee
-                </div>
+              {billingCycle === 'annual' && (
+                <div className="text-sm text-green-400 mb-2">+ $49 setup fee</div>
               )}
-              <p className="text-white/80 mb-6">
-                Essential keycode services for individual locksmiths
-              </p>
+              <p className="text-white/80 mb-6">Essential keycode services for individual locksmiths</p>
               <ul className="text-left space-y-2 mb-6 text-white/80">
                 <li>• 15% off 1 keycode order per month</li>
                 <li>• Limited vehicle access (Ford, Nissan, Chevy only)</li>
@@ -278,9 +257,7 @@ export default function LandingPage() {
                 <li>• Standard processing time (3-24 hours)</li>
               </ul>
               <div className="text-left mb-4">
-                <h4 className="text-white font-semibold mb-2">
-                  Additional Perks:
-                </h4>
+                <h4 className="text-white font-semibold mb-2">Additional Perks:</h4>
                 <ul className="space-y-1 text-white/80 text-sm">
                   <li>• Monthly usage reports</li>
                   <li>• Basic training resources</li>
@@ -299,27 +276,15 @@ export default function LandingPage() {
                   Most Popular
                 </span>
               </div>
-              <div className="absolute top-4 left-4 text-white font-semibold">
-                Professional
-              </div>
-              <div className="absolute top-4 right-4 text-yellow-400 font-bold">
-                20%
-              </div>
+              <div className="absolute top-4 left-4 text-white font-semibold">Professional</div>
+              <div className="absolute top-4 right-4 text-yellow-400 font-bold">20%</div>
               <div className="text-3xl font-bold text-primary mb-4 mt-8">
-                {billingCycle === "monthly" ? "$24.99" : "$149"}
-                <span className="text-lg text-white/60">
-                  /{billingCycle === "monthly" ? "month" : "year"}
-                </span>
+                {billingCycle === 'monthly' ? '$24.99' : '$249.99'}<span className="text-lg text-white/60">/{billingCycle === 'monthly' ? 'month' : 'year'}</span>
               </div>
-              {billingCycle === "annual" && (
-                <div className="text-sm text-green-400 mb-2">
-                  + $49 setup fee
-                </div>
+              {billingCycle === 'annual' && (
+                <div className="text-sm text-green-400 mb-2">+ $49 setup fee</div>
               )}
-              <p className="text-white/80 mb-6">
-                Advanced features for professional locksmiths and small
-                businesses
-              </p>
+              <p className="text-white/80 mb-6">Advanced features for professional locksmiths and small businesses</p>
               <ul className="text-left space-y-2 mb-6 text-white/80">
                 <li>• 20% off all keycode purchases</li>
                 <li>• Premium keycode database access</li>
@@ -330,9 +295,7 @@ export default function LandingPage() {
                 <li>• Priority processing (30min - 1 hour)</li>
               </ul>
               <div className="text-left mb-4">
-                <h4 className="text-white font-semibold mb-2">
-                  Additional Perks:
-                </h4>
+                <h4 className="text-white font-semibold mb-2">Additional Perks:</h4>
                 <ul className="space-y-1 text-white/80 text-sm">
                   <li>• Real-time keycode availability</li>
                   <li>• Advanced search by make/model/year</li>

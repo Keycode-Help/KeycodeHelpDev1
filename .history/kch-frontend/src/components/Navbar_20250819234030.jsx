@@ -21,13 +21,6 @@ function Navbar() {
         <>
           <Link
             className="nav-link"
-            to="/pricing"
-            onClick={() => setOpen(false)}
-          >
-            Keycode Pricing
-          </Link>
-          <Link
-            className="nav-link"
             to="/register"
             onClick={() => setOpen(false)}
           >
@@ -44,12 +37,8 @@ function Navbar() {
           <Link className="nav-link" to="/" onClick={() => setOpen(false)}>
             Home
           </Link>
-          <Link
-            className="nav-link"
-            to="/pricing"
-            onClick={() => setOpen(false)}
-          >
-            Keycode Pricing
+          <Link className="nav-link" to="/pricing" onClick={() => setOpen(false)}>
+            Pricing
           </Link>
           <Link
             className="nav-link"
@@ -90,13 +79,6 @@ function Navbar() {
           <Link className="nav-link" to="/" onClick={() => setOpen(false)}>
             Home
           </Link>
-          <Link
-            className="nav-link"
-            to="/pricing"
-            onClick={() => setOpen(false)}
-          >
-            Keycode Pricing
-          </Link>
           <Link className="nav-link" to="/admin" onClick={() => setOpen(false)}>
             Admin Dashboard
           </Link>
@@ -128,13 +110,6 @@ function Navbar() {
         <>
           <Link className="nav-link" to="/" onClick={() => setOpen(false)}>
             Home
-          </Link>
-          <Link
-            className="nav-link"
-            to="/pricing"
-            onClick={() => setOpen(false)}
-          >
-            Keycode Pricing
           </Link>
           <Link
             className="nav-link"

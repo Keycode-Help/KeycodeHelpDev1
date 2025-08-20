@@ -5,19 +5,16 @@ import { FeaturesList } from "./FeaturesList";
 export function MembershipCard({ tier, onSubscribe, billingCycle }) {
   const getPrice = () => {
     if (tier.isTrial) return 0;
-    if (tier.title === "Basic") return tier.monthlyPrice;
     return billingCycle === "monthly" ? tier.monthlyPrice : tier.annualPrice;
   };
 
   const getPeriod = () => {
     if (tier.isTrial) return "3 days";
-    if (tier.title === "Basic") return "month";
     return billingCycle === "monthly" ? "month" : "year";
   };
 
   const getSetupFee = () => {
-    if (tier.isTrial || tier.title === "Basic" || billingCycle === "monthly")
-      return null;
+    if (tier.isTrial || billingCycle === "monthly") return null;
     return 49; // $49 setup fee for annual plans
   };
 

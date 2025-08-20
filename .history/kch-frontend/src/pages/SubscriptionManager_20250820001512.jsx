@@ -80,32 +80,6 @@ export default function SubscriptionManager() {
         { text: "Extended vehicle database coverage" },
       ],
     },
-    {
-      id: 3,
-      title: "Enterprise",
-      monthlyPrice: 99.99,
-      period: "month",
-      discount: "25%",
-      description: "Full-featured solution for large locksmith organizations",
-      features: [
-        { text: "25% off all keycode purchases" },
-        { text: "Complete keycode database access" },
-        { text: "24/7 premium customer support" },
-        { text: "Advanced search and filtering" },
-        { text: "Unlimited bulk ordering" },
-        { text: "All vehicle makes & models" },
-        { text: "Instant processing (15-30 minutes)" },
-        { text: "Multi-location management" },
-      ],
-      perks: [
-        { text: "Dedicated locksmith support team" },
-        { text: "Advanced keycode analytics & reporting" },
-        { text: "Priority emergency keycode requests" },
-        { text: "Custom keycode training programs" },
-        { text: "Volume keycode pricing discounts" },
-        { text: "Exclusive vehicle database access" },
-      ],
-    },
   ];
 
   // FAQ data

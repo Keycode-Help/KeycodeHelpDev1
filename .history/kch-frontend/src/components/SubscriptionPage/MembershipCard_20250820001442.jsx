@@ -16,8 +16,7 @@ export function MembershipCard({ tier, onSubscribe, billingCycle }) {
   };
 
   const getSetupFee = () => {
-    if (tier.isTrial || tier.title === "Basic" || billingCycle === "monthly")
-      return null;
+    if (tier.isTrial || tier.title === "Basic" || billingCycle === "monthly") return null;
     return 49; // $49 setup fee for annual plans
   };
 

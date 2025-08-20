@@ -14,8 +14,6 @@ import "../styles/lp.css";
 export default function LandingPage() {
   const { token } = useAuth();
   const [trialEndsAt, setTrialEndsAt] = useState(null);
-  const [billingCycle, setBillingCycle] = useState("monthly");
-
   useEffect(() => {
     if (!token) return;
     api
@@ -175,120 +173,33 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Subscription Pricing Section */}
+        {/* Pricing Section */}
         <section className="text-center space-y-8">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold">Choose Your Plan</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">
+              Simple, Transparent Pricing
+            </h2>
             <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              Start with a free trial, then choose the plan that fits your needs
+              Choose the plan that fits your needs. All plans include our
+              comprehensive vehicle database and expert support.
             </p>
           </div>
 
-          {/* Billing Toggle */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-gray-800 rounded-lg p-1 flex">
-              <button
-                onClick={() => setBillingCycle("monthly")}
-                className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                  billingCycle === "monthly"
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "text-gray-300 hover:text-white"
-                }`}
-              >
-                Monthly Billing
-              </button>
-              <button
-                onClick={() => setBillingCycle("annual")}
-                className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                  billingCycle === "annual"
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "text-gray-300 hover:text-white"
-                }`}
-              >
-                Annual Billing
-                <span className="ml-2 text-xs bg-green-500 text-white px-2 py-1 rounded-full">
-                  Save 20%
-                </span>
-              </button>
-            </div>
-          </div>
-
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Trial Plan */}
-            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 relative">
-              <div className="absolute top-4 left-4 text-white font-semibold">
-                Trial
-              </div>
-              <div className="absolute top-4 right-4 text-yellow-400 font-bold">
-                FREE
-              </div>
-              <div className="text-3xl font-bold text-white mb-4 mt-8">
-                $0<span className="text-lg text-white/60">/3 days</span>
-              </div>
-              <p className="text-white/80 mb-6">
-                Try premium features free for 3 days – no commitment
-              </p>
-              <ul className="text-left space-y-2 mb-6 text-white/80">
-                <li>• Priority processing (30m - 1h)</li>
-                <li>• Premium keycode database access</li>
-                <li>• Phone & live chat support</li>
-                <li>• Expanded vehicle coverage</li>
-              </ul>
-              <div className="text-left mb-4">
-                <h4 className="text-white font-semibold mb-2">
-                  Additional Perks:
-                </h4>
-                <ul className="space-y-1 text-white/80 text-sm">
-                  <li>• Advanced search & filtering</li>
-                  <li>• Broader VIN support</li>
-                </ul>
-              </div>
-              <Link to="/register" className="btn btn-md btn-primary w-full">
-                Get Started
-              </Link>
-            </div>
-
             {/* Basic Plan */}
-            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700 relative">
-              <div className="absolute top-4 left-4 text-white font-semibold">
-                Basic
+            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
+              <h3 className="text-xl font-semibold mb-2">Basic</h3>
+              <div className="text-3xl font-bold text-primary mb-4">
+                $29.99<span className="text-lg text-white/60">/month</span>
               </div>
-              <div className="absolute top-4 right-4 text-yellow-400 font-bold">
-                15%
-              </div>
-              <div className="text-3xl font-bold text-primary mb-4 mt-8">
-                {billingCycle === "monthly" ? "$9.99" : "$99.99"}
-                <span className="text-lg text-white/60">
-                  /{billingCycle === "monthly" ? "month" : "year"}
-                </span>
-              </div>
-              {billingCycle === "annual" && (
-                <div className="text-sm text-green-400 mb-2">
-                  + $49 setup fee
-                </div>
-              )}
-              <p className="text-white/80 mb-6">
-                Essential keycode services for individual locksmiths
-              </p>
               <ul className="text-left space-y-2 mb-6 text-white/80">
-                <li>• 15% off 1 keycode order per month</li>
-                <li>• Limited vehicle access (Ford, Nissan, Chevy only)</li>
-                <li>• Basic customer support (24-48h)</li>
-                <li>• Basic search functionality</li>
-                <li>• Standard processing time (3-24 hours)</li>
+                <li>• Up to 50 keycode requests</li>
+                <li>• Basic vehicle database access</li>
+                <li>• Email support</li>
+                <li>• Standard response time</li>
               </ul>
-              <div className="text-left mb-4">
-                <h4 className="text-white font-semibold mb-2">
-                  Additional Perks:
-                </h4>
-                <ul className="space-y-1 text-white/80 text-sm">
-                  <li>• Monthly usage reports</li>
-                  <li>• Basic training resources</li>
-                  <li>• Email support</li>
-                </ul>
-              </div>
-              <Link to="/register" className="btn btn-md btn-primary w-full">
-                Get Started
+              <Link to="/pricing" className="btn btn-md btn-outline w-full">
+                View Details
               </Link>
             </div>
 
@@ -299,58 +210,45 @@ export default function LandingPage() {
                   Most Popular
                 </span>
               </div>
-              <div className="absolute top-4 left-4 text-white font-semibold">
-                Professional
+              <h3 className="text-xl font-semibold mb-2">Professional</h3>
+              <div className="text-3xl font-bold text-primary mb-4">
+                $59.99<span className="text-lg text-white/60">/month</span>
               </div>
-              <div className="absolute top-4 right-4 text-yellow-400 font-bold">
-                20%
-              </div>
-              <div className="text-3xl font-bold text-primary mb-4 mt-8">
-                {billingCycle === "monthly" ? "$24.99" : "$149"}
-                <span className="text-lg text-white/60">
-                  /{billingCycle === "monthly" ? "month" : "year"}
-                </span>
-              </div>
-              {billingCycle === "annual" && (
-                <div className="text-sm text-green-400 mb-2">
-                  + $49 setup fee
-                </div>
-              )}
-              <p className="text-white/80 mb-6">
-                Advanced features for professional locksmiths and small
-                businesses
-              </p>
               <ul className="text-left space-y-2 mb-6 text-white/80">
-                <li>• 20% off all keycode purchases</li>
-                <li>• Premium keycode database access</li>
-                <li>• Priority customer support (4-8h)</li>
-                <li>• Advanced search and filtering</li>
-                <li>• Bulk keycode ordering (up to 20 codes)</li>
-                <li>• Extended vehicle coverage</li>
-                <li>• Priority processing (30min - 1 hour)</li>
+                <li>• Up to 200 keycode requests</li>
+                <li>• Full vehicle database access</li>
+                <li>• Priority email support</li>
+                <li>• Faster response time</li>
+                <li>• API access</li>
               </ul>
-              <div className="text-left mb-4">
-                <h4 className="text-white font-semibold mb-2">
-                  Additional Perks:
-                </h4>
-                <ul className="space-y-1 text-white/80 text-sm">
-                  <li>• Real-time keycode availability</li>
-                  <li>• Advanced search by make/model/year</li>
-                  <li>• Phone & chat support</li>
-                  <li>• Priority keycode processing</li>
-                  <li>• Extended vehicle database coverage</li>
-                </ul>
+              <Link to="/pricing" className="btn btn-md btn-primary w-full">
+                View Details
+              </Link>
+            </div>
+
+            {/* Enterprise Plan */}
+            <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
+              <h3 className="text-xl font-semibold mb-2">Enterprise</h3>
+              <div className="text-3xl font-bold text-primary mb-4">
+                $149.99<span className="text-lg text-white/60">/month</span>
               </div>
-              <Link to="/register" className="btn btn-md btn-primary w-full">
-                Get Started
+              <ul className="text-left space-y-2 mb-6 text-white/80">
+                <li>• Unlimited keycode requests</li>
+                <li>• Full vehicle database access</li>
+                <li>• Priority phone & email support</li>
+                <li>• Fastest response time</li>
+                <li>• Dedicated account manager</li>
+              </ul>
+              <Link to="/pricing" className="btn btn-md btn-outline w-full">
+                View Details
               </Link>
             </div>
           </div>
 
           <div className="pt-4">
-            <Link to="/membership" className="btn btn-lg btn-primary">
-              <Icon name="userCheck" size={20} />
-              View All Plans & Features
+            <Link to="/pricing" className="btn btn-lg btn-primary">
+              <Icon name="creditCard" size={20} />
+              View Full Pricing Details
             </Link>
           </div>
         </section>
@@ -381,22 +279,13 @@ export default function LandingPage() {
               &copy; 2025 KeyCode Help. All rights reserved.
             </div>
             <div className="flex gap-6 text-sm">
-              <Link
-                to="/pricing"
-                className="text-primary hover:text-success underline"
-              >
-                Keycode Pricing
+              <Link to="/pricing" className="text-primary hover:text-success underline">
+                View Pricing
               </Link>
-              <Link
-                to="/support"
-                className="text-white/60 hover:text-white underline"
-              >
+              <Link to="/support" className="text-white/60 hover:text-white underline">
                 Support
               </Link>
-              <Link
-                to="/requirements"
-                className="text-white/60 hover:text-white underline"
-              >
+              <Link to="/requirements" className="text-white/60 hover:text-white underline">
                 Requirements
               </Link>
             </div>
