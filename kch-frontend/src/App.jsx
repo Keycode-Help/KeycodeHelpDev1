@@ -29,6 +29,7 @@ function App() {
       <AuthProvider>
         <div>
           <Router
+            basename="/"
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
             <Navbar />
