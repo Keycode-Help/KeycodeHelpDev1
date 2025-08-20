@@ -58,3 +58,4 @@ kch-frontend/.env.staging*
 .history/**/*.env*
 .history/**/*.env.production*
 .history/**/*.env.development*
+.vercel
