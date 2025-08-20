@@ -27,7 +27,7 @@
       "dest": "/index.html"
     },
     {
-      "src": "/admin-register",
+      "src": "/admin-register", 
       "dest": "/index.html"
     },
     {
