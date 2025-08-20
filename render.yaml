@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: keycode-help-backend
+    runtime: java
+    rootDir: kch-backend
+    buildCommand: ./mvnw clean install -DskipTests
+    startCommand: ./mvnw spring-boot:run -Dspring.profiles.active=supabase
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: supabase
+      - key: JAVA_VERSION
+        value: "21"
+    autoDeploy: true
