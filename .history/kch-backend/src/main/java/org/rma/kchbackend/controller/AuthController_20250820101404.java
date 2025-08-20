@@ -7,7 +7,6 @@ import org.rma.kchbackend.model.Role;
 import org.rma.kchbackend.service.KeycodeUserService;
 import org.rma.kchbackend.service.AdminRegistrationCodeService;
 import org.rma.kchbackend.service.CustomUserDetailsService;
-import org.rma.kchbackend.service.PasswordResetService;
 import org.rma.kchbackend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,17 +42,15 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final AdminRegistrationCodeService adminRegistrationCodeService;
     private final CustomUserDetailsService userDetailsService;
-    private final PasswordResetService passwordResetService;
 
     @Autowired
-    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService, CustomUserDetailsService userDetailsService, PasswordResetService passwordResetService) {
+    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService, CustomUserDetailsService userDetailsService) {
         this.keycodeUserService = keycodeUserService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
         this.adminRegistrationCodeService = adminRegistrationCodeService;
         this.userDetailsService = userDetailsService;
-        this.passwordResetService = passwordResetService;
     }
 
 
@@ -555,7 +552,7 @@ public class AuthController {
 
             KeycodeUser user = userOptional.get();
             user.setPassword(passwordEncoder.encode(newPassword));
-            keycodeUserService.saveUser(user);
+            keycodeUserService.save(user);
 
             // Delete the used token
             passwordResetService.deleteResetToken(token);

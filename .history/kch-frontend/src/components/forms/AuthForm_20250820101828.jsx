@@ -44,14 +44,11 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
     setResetMessage("");
 
     try {
-      console.log(
-        "Sending password reset request for email:",
-        resetEmail.trim().toLowerCase()
-      );
-
+      console.log("Sending password reset request for email:", resetEmail.trim().toLowerCase());
+      
       const requestBody = { email: resetEmail.trim().toLowerCase() };
       console.log("Request body:", requestBody);
-
+      
       const response = await fetch(
         "http://localhost:8080/auth/reset-password",
         {

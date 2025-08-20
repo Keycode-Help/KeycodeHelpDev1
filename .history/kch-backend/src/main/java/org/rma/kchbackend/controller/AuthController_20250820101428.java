@@ -555,7 +555,7 @@ public class AuthController {
 
             KeycodeUser user = userOptional.get();
             user.setPassword(passwordEncoder.encode(newPassword));
-            keycodeUserService.saveUser(user);
+            keycodeUserService.save(user);
 
             // Delete the used token
             passwordResetService.deleteResetToken(token);
