@@ -43,8 +43,6 @@ export const Icons = {
   helpCircle: HelpCircle,
   eye: Eye,
   eyeOff: EyeOff,
-  search: Search,
-  check: Check,
 };
 
 export function Icon({ name, size = 24, className = "", ...props }) {
