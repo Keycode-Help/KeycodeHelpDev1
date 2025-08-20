@@ -18,6 +18,20 @@ public class KchBackendApplication {
         System.out.println("SPRING_PROFILES_ACTIVE: " + System.getenv("SPRING_PROFILES_ACTIVE"));
         System.out.println("BREVO_USERNAME: " + System.getenv("BREVO_USERNAME"));
         System.out.println("BREVO_API_KEY: " + (System.getenv("BREVO_API_KEY") != null ? "***SET***" : "NULL"));
+        
+        // Check if DATABASE_URL has jdbc: prefix
+        String dbUrl = System.getenv("DATABASE_URL");
+        if (dbUrl != null) {
+            if (dbUrl.startsWith("jdbc:")) {
+                System.out.println("✅ DATABASE_URL has jdbc: prefix");
+            } else {
+                System.out.println("❌ DATABASE_URL is missing jdbc: prefix");
+                System.out.println("   Current: " + dbUrl);
+                System.out.println("   Should be: jdbc:" + dbUrl);
+            }
+        } else {
+            System.out.println("❌ DATABASE_URL is NULL");
+        }
         System.out.println("==================================");
         
         SpringApplication.run(KchBackendApplication.class, args);
