@@ -54,7 +54,7 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
       console.log("Request body:", requestBody);
 
       const response = await fetch(
-        API_CONFIG.buildUrl(API_CONFIG.ENDPOINTS.AUTH.RESET_PASSWORD),
+        `${import.meta.env.VITE_BACKEND_URL}/auth/reset-password`,
         {
           method: "POST",
           headers: {

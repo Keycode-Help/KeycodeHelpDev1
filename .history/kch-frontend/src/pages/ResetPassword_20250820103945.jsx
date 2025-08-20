@@ -57,7 +57,7 @@ export default function ResetPassword() {
 
     try {
       const response = await fetch(
-        API_CONFIG.buildUrl(API_CONFIG.ENDPOINTS.AUTH.RESET_PASSWORD_CONFIRM),
+        `${import.meta.env.VITE_BACKEND_URL}/auth/reset-password/confirm`,
         {
           method: "POST",
           headers: {
