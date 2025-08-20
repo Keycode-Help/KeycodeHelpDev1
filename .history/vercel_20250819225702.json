@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "kch-frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "rewrites": [
+    { "source": "/admin-login", "destination": "/index.html" },
+    { "source": "/admin-register", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/super-admin", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/register", "destination": "/index.html" },
+    { "source": "/profile", "destination": "/index.html" },
+    { "source": "/user-dash", "destination": "/index.html" },
+    { "source": "/cart", "destination": "/index.html" },
+    { "source": "/vehicle-keycode-request", "destination": "/index.html" },
+    { "source": "/subscriptions", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "routes": [
+    {
+      "src": "/admin-login",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/admin-register",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/admin",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/super-admin",
+      "dest": "/index.html"
+    }
+  ]
+}
