@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -20,16 +19,14 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     
     @Modifying
     @Query("DELETE FROM PasswordResetToken p WHERE p.expiryDate < :now")
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     void deleteExpiredTokens(@Param("now") LocalDateTime now);
     
     @Modifying
     @Query("DELETE FROM PasswordResetToken p WHERE p.token = :token")
-    @Transactional
     void deleteByToken(@Param("token") String token);
     
     @Modifying
     @Query("DELETE FROM PasswordResetToken p WHERE p.email = :email")
-    @Transactional
     void deleteByEmail(@Param("email") String email);
 }
