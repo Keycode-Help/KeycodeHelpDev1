@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.EntityManagerFactory;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -70,37 +71,6 @@ public class KchBackendApplication {
         if (profile != null) {
             System.setProperty("spring.profiles.active", profile);
             System.out.println("✅ Set spring.profiles.active: " + profile);
-        }
-    }
-}
-
-@Component
-class DatabaseInitializer {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
-    
-    @PostConstruct
-    @Transactional
-    public void initializeDatabase() {
-        try {
-            System.out.println("🔧 Force initializing database tables...");
-            
-            // Force Hibernate to create tables by executing a simple query
-            entityManager.createNativeQuery("SELECT 1").getResultList();
-            System.out.println("✅ Database connection successful");
-            
-            // Force table creation by checking if they exist
-            try {
-                entityManager.createNativeQuery("SELECT COUNT(*) FROM keycode_user").getResultList();
-                System.out.println("✅ keycode_user table exists");
-            } catch (Exception e) {
-                System.out.println("❌ keycode_user table does not exist - Hibernate should create it");
-            }
-            
-        } catch (Exception e) {
-            System.err.println("❌ Database initialization failed: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
