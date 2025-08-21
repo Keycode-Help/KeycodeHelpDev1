@@ -495,47 +495,36 @@ public class AuthController {
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
         try {
-            System.out.println("🔧 Password reset request received for email: " + request.get("email"));
-            
             String email = request.get("email");
             if (email == null || email.trim().isEmpty()) {
-                System.out.println("❌ Email is missing from request");
                 return ResponseEntity.badRequest().body(Map.of("error", "Email is required"));
             }
 
             email = email.trim().toLowerCase();
-            System.out.println("🔍 Looking up user with email: " + email);
             Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(email);
             
             if (userOptional.isEmpty()) {
-                System.out.println("❌ User not found for email: " + email);
                 // Don't reveal if user exists or not for security
                 return ResponseEntity.ok().body(Map.of("message", "If an account with this email exists, a password reset link has been sent."));
             }
 
             KeycodeUser user = userOptional.get();
             if (!user.isActive()) {
-                System.out.println("❌ User is inactive for email: " + email);
                 return ResponseEntity.ok().body(Map.of("message", "If an account with this email exists, a password reset link has been sent."));
             }
 
-            System.out.println("✅ User found and active, sending password reset email");
-            
             // Send password reset email
             String resetUrl = System.getenv().getOrDefault("FRONTEND_URL", "https://www.keycode.help") + "/reset-password";
             System.out.println("🔗 Reset URL: " + resetUrl);
             boolean emailSent = passwordResetService.sendPasswordResetEmail(email, resetUrl);
             
             if (emailSent) {
-                System.out.println("✅ Password reset email sent successfully for: " + email);
                 return ResponseEntity.ok().body(Map.of("message", "Password reset email sent successfully"));
             } else {
-                System.out.println("❌ Failed to send password reset email for: " + email);
                 return ResponseEntity.status(500).body(Map.of("error", "Failed to send password reset email"));
             }
             
         } catch (Exception e) {
-            System.err.println("❌ Exception in password reset: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500).body(Map.of("error", "An error occurred while processing your request"));
         }
