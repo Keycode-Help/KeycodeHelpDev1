@@ -73,34 +73,3 @@ public class KchBackendApplication {
         }
     }
 }
-
-@Component
-class DatabaseInitializer {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
-    
-    @PostConstruct
-    @Transactional
-    public void initializeDatabase() {
-        try {
-            System.out.println("🔧 Force initializing database tables...");
-            
-            // Force Hibernate to create tables by executing a simple query
-            entityManager.createNativeQuery("SELECT 1").getResultList();
-            System.out.println("✅ Database connection successful");
-            
-            // Force table creation by checking if they exist
-            try {
-                entityManager.createNativeQuery("SELECT COUNT(*) FROM keycode_user").getResultList();
-                System.out.println("✅ keycode_user table exists");
-            } catch (Exception e) {
-                System.out.println("❌ keycode_user table does not exist - Hibernate should create it");
-            }
-            
-        } catch (Exception e) {
-            System.err.println("❌ Database initialization failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-}
