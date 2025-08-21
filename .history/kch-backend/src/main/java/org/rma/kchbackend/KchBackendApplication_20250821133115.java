@@ -73,45 +73,6 @@ public class KchBackendApplication {
             System.out.println("✅ Set spring.profiles.active: " + profile);
         }
         
-        // Set Brevo email configuration
-        String brevoUsername = dotenv.get("BREVO_USERNAME");
-        if (brevoUsername != null) {
-            System.setProperty("BREVO_USERNAME", brevoUsername);
-            System.out.println("✅ Set BREVO_USERNAME: " + brevoUsername);
-        }
-        
-        String brevoApiKey = dotenv.get("BREVO_API_KEY");
-        if (brevoApiKey != null) {
-            System.setProperty("BREVO_API_KEY", brevoApiKey);
-            System.out.println("✅ Set BREVO_API_KEY: ***SET***");
-        }
-        
-        // Set JWT configuration
-        String jwtSecret = dotenv.get("JWT_SECRET");
-        if (jwtSecret != null) {
-            System.setProperty("JWT_SECRET", jwtSecret);
-            System.out.println("✅ Set JWT_SECRET: ***SET***");
-        }
-        
-        String jwtExpiration = dotenv.get("JWT_EXPIRATION");
-        if (jwtExpiration != null) {
-            System.setProperty("JWT_EXPIRATION", jwtExpiration);
-            System.out.println("✅ Set JWT_EXPIRATION: " + jwtExpiration);
-        }
-        
-        // Set Stripe configuration
-        String stripeSecretKey = dotenv.get("STRIPE_SECRET_KEY");
-        if (stripeSecretKey != null) {
-            System.setProperty("STRIPE_SECRET_KEY", stripeSecretKey);
-            System.out.println("✅ Set STRIPE_SECRET_KEY: ***SET***");
-        }
-        
-        String stripeWebhookSecret = dotenv.get("STRIPE_WEBHOOK_SECRET");
-        if (stripeWebhookSecret != null) {
-            System.setProperty("STRIPE_WEBHOOK_SECRET", stripeWebhookSecret);
-            System.out.println("✅ Set STRIPE_WEBHOOK_SECRET: ***SET***");
-        }
-        
         // Set schema initialization properties
         System.setProperty("spring.sql.init.mode", "always");
         System.setProperty("spring.sql.init.schema-locations", "classpath:schema.sql");

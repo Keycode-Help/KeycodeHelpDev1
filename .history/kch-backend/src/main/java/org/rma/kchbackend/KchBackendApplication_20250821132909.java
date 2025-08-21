@@ -14,11 +14,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class KchBackendApplication {
 
     public static void main(String[] args) {
-        // Load .env file first
-        Dotenv dotenv = Dotenv.load();
-        
         // Force load environment variables
-        loadEnvironmentVariables(dotenv);
+        loadEnvironmentVariables();
         
         // Debug: Print environment variables for troubleshooting
         System.out.println("=== Environment Variables Debug ===");
@@ -47,69 +44,30 @@ public class KchBackendApplication {
         SpringApplication.run(KchBackendApplication.class, args);
     }
     
-    private static void loadEnvironmentVariables(Dotenv dotenv) {
+    private static void loadEnvironmentVariables() {
         // Force load environment variables by setting system properties
-        String dbUrl = dotenv.get("SPRING_DATASOURCE_URL");
+        String dbUrl = System.getenv("SPRING_DATASOURCE_URL");
         if (dbUrl != null) {
             System.setProperty("spring.datasource.url", dbUrl);
             System.out.println("✅ Set spring.datasource.url: " + dbUrl);
         }
         
-        String dbUsername = dotenv.get("SPRING_DATASOURCE_USERNAME");
+        String dbUsername = System.getenv("SPRING_DATASOURCE_USERNAME");
         if (dbUsername != null) {
             System.setProperty("spring.datasource.username", dbUsername);
             System.out.println("✅ Set spring.datasource.username: " + dbUsername);
         }
         
-        String dbPassword = dotenv.get("SPRING_DATASOURCE_PASSWORD");
+        String dbPassword = System.getenv("SPRING_DATASOURCE_PASSWORD");
         if (dbPassword != null) {
             System.setProperty("spring.datasource.password", dbPassword);
             System.out.println("✅ Set spring.datasource.password: ***SET***");
         }
         
-        String profile = dotenv.get("SPRING_PROFILES_ACTIVE");
+        String profile = System.getenv("SPRING_PROFILES_ACTIVE");
         if (profile != null) {
             System.setProperty("spring.profiles.active", profile);
             System.out.println("✅ Set spring.profiles.active: " + profile);
-        }
-        
-        // Set Brevo email configuration
-        String brevoUsername = dotenv.get("BREVO_USERNAME");
-        if (brevoUsername != null) {
-            System.setProperty("BREVO_USERNAME", brevoUsername);
-            System.out.println("✅ Set BREVO_USERNAME: " + brevoUsername);
-        }
-        
-        String brevoApiKey = dotenv.get("BREVO_API_KEY");
-        if (brevoApiKey != null) {
-            System.setProperty("BREVO_API_KEY", brevoApiKey);
-            System.out.println("✅ Set BREVO_API_KEY: ***SET***");
-        }
-        
-        // Set JWT configuration
-        String jwtSecret = dotenv.get("JWT_SECRET");
-        if (jwtSecret != null) {
-            System.setProperty("JWT_SECRET", jwtSecret);
-            System.out.println("✅ Set JWT_SECRET: ***SET***");
-        }
-        
-        String jwtExpiration = dotenv.get("JWT_EXPIRATION");
-        if (jwtExpiration != null) {
-            System.setProperty("JWT_EXPIRATION", jwtExpiration);
-            System.out.println("✅ Set JWT_EXPIRATION: " + jwtExpiration);
-        }
-        
-        // Set Stripe configuration
-        String stripeSecretKey = dotenv.get("STRIPE_SECRET_KEY");
-        if (stripeSecretKey != null) {
-            System.setProperty("STRIPE_SECRET_KEY", stripeSecretKey);
-            System.out.println("✅ Set STRIPE_SECRET_KEY: ***SET***");
-        }
-        
-        String stripeWebhookSecret = dotenv.get("STRIPE_WEBHOOK_SECRET");
-        if (stripeWebhookSecret != null) {
-            System.setProperty("STRIPE_WEBHOOK_SECRET", stripeWebhookSecret);
-            System.out.println("✅ Set STRIPE_WEBHOOK_SECRET: ***SET***");
         }
         
         // Set schema initialization properties
