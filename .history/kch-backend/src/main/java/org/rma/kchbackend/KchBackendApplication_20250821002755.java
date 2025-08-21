@@ -10,13 +10,9 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = "org.rma.kchbackend")
 @EnableScheduling
-@EntityScan("org.rma.kchbackend.model")
-@EnableJpaRepositories("org.rma.kchbackend.repository")
 public class KchBackendApplication {
 
     public static void main(String[] args) {
@@ -99,17 +95,7 @@ class DatabaseInitializer {
                 entityManager.createNativeQuery("SELECT COUNT(*) FROM keycode_user").getResultList();
                 System.out.println("✅ keycode_user table exists");
             } catch (Exception e) {
-                System.out.println("❌ keycode_user table does not exist - forcing Hibernate to create it");
-                
-                // Force Hibernate to create tables by accessing entity metadata
-                try {
-                    // This will trigger Hibernate to create the table
-                    entityManager.createQuery("SELECT k FROM KeycodeUser k").setMaxResults(1).getResultList();
-                    System.out.println("✅ Forced Hibernate to create keycode_user table");
-                } catch (Exception createException) {
-                    System.err.println("❌ Failed to force table creation: " + createException.getMessage());
-                    createException.printStackTrace();
-                }
+                System.out.println("❌ keycode_user table does not exist - Hibernate should create it");
             }
             
         } catch (Exception e) {
