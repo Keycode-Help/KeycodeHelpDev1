@@ -25,11 +25,11 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     
     @Modifying
     @Query("DELETE FROM PasswordResetToken p WHERE p.token = :token")
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     void deleteByToken(@Param("token") String token);
     
     @Modifying
     @Query("DELETE FROM PasswordResetToken p WHERE p.email = :email")
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     void deleteByEmail(@Param("email") String email);
 }
