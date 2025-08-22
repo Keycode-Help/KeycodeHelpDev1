@@ -47,6 +47,7 @@ public class VehicleKeycodeController {
     public ResponseEntity<?> requestKeycode(
             @RequestParam("make") String make,
             @RequestParam("model") String model,
+            @RequestParam("year") String year,
             @RequestParam("vin") String vin,
             @RequestParam("frontId") MultipartFile frontId,
             @RequestParam("backId") MultipartFile backId,
@@ -97,10 +98,18 @@ public class VehicleKeycodeController {
             // Create and save the vehicle
             Vehicle vehicle = new Vehicle();
 
-            //Added by Nithya - Get the vehicle make
+            // Get or create the vehicle make
             Make vehicleMake = makeService.getMakeDetails(make);
+            if (vehicleMake == null) {
+                // Create the make if it doesn't exist
+                vehicleMake = new Make();
+                vehicleMake.setName(make);
+                vehicleMake = makeService.saveMake(vehicleMake);
+            }
+            
             vehicle.setMake(vehicleMake);
             vehicle.setModel(model);
+            vehicle.setYear(Integer.parseInt(year));
             vehicle.setVin(vin);
             vehicle.setFrontId(frontId.getBytes());
             vehicle.setBackId(backId.getBytes());

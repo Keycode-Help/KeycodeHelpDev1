@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MakeRepository extends JpaRepository<Make, Long> {
-    Make findByManufacturerName(String manufacturerName);
+    Make findByName(String name);
 }
