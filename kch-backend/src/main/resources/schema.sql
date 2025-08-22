@@ -172,3 +172,6 @@ CREATE INDEX IF NOT EXISTS idx_subscription_user_id ON subscription(keycode_user
 CREATE INDEX IF NOT EXISTS idx_transaction_user_id ON transaction(keycode_user_id);
 CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_token ON password_reset_tokens(token);
 CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_email ON password_reset_tokens(email);
+
+-- Run migration script to update existing database structure
+\i migration.sql
