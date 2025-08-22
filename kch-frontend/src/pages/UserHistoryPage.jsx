@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../services/request";
 import { useAuth } from "../context/AuthContext";
 import "../styles/userHistoryPage.css"; // Import the CSS file
 
@@ -11,8 +11,8 @@ function UserHistoryPage() {
 
   const fetchHistory = () => {
     setIsLoading(true);
-    axios
-      .get(`http://localhost:8080/admin/user-history?email=${email}`, {
+    api
+      .get(`/admin/user-history?email=${email}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => setHistory(response.data))

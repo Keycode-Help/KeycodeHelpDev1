@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/updateProfile.css";
-import axios from "axios";
+import api from "../services/request";
 import StatesDropDown from "../components/StatesDropDown";
 import states from "../data/states";
 import { ModalContent } from "../components/ModalContent";
@@ -108,9 +108,9 @@ const UpdateUserProfile = () => {
         return;
       }
 
-      const response = await axios.get(
-        `http://localhost:8080/auth/getUserProfile/${userId}`
-      );
+              const response = await api.get(
+          `/auth/getUserProfile/${userId}`
+        );
       const userData = response.data;
 
       setFormData({
@@ -151,10 +151,10 @@ const UpdateUserProfile = () => {
       updateUserObject.append("backId", formData.backId);
       updateUserObject.append("insurance", formData.insurance);
 
-      await axios.put(
-        "http://localhost:8080/auth/updateProfile",
-        updateUserObject,
-        {
+              await api.put(
+          "/auth/updateProfile",
+          updateUserObject,
+          {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
@@ -172,7 +172,7 @@ const UpdateUserProfile = () => {
   const handleDelete = async () => {
     //alert("Delete Profile clicked");
     try {
-      await axios.put("http://localhost:8080/keycode-user/delete");
+              await api.put("/keycode-user/delete");
       alert("User Profile deleted successfully.");
       logout();
       navigate("/login");

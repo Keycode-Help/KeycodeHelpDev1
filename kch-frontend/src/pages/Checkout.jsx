@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
+import api from "../services/request";
 
 function Checkout() {
   const { token } = useAuth();
@@ -9,8 +9,8 @@ function Checkout() {
 
   useEffect(() => {
     // Fetch cart items directly from the backend
-    axios
-      .get("http://localhost:8080/cart/items", {
+    api
+      .get("/cart/items", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,9 +29,9 @@ function Checkout() {
   }, [token]);
 
   const handleCheckout = () => {
-    axios
-      .post(
-        "http://localhost:8080/cart/checkout",
+          api
+        .post(
+          "/cart/checkout",
         {},
         {
           headers: {

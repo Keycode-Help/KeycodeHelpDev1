@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../services/request";
 import "../styles/register.css";
 import StatesDropDown from "../components/StatesDropDown";
 import states from "../data/states";
@@ -74,8 +74,8 @@ function Register() {
     formDataObj.append("backId", formData.backId);
     formDataObj.append("insurance", formData.insurance);
 
-    axios
-      .post("http://localhost:8080/auth/register", formDataObj, {
+    api
+      .post("/auth/register", formDataObj, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {

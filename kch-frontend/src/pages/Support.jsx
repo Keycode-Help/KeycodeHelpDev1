@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../services/request";
 import { useAuth } from "../context/AuthContext";
 
 export default function Support() {
@@ -20,7 +20,7 @@ export default function Support() {
     setLoading(true);
     setStatus("");
     try {
-      await axios.post("http://localhost:8080/support/contact", form);
+      await api.post("/support/contact", form);
       setStatus("Thanks! Your message has been sent.");
       setForm({ ...form, subject: "", message: "" });
     } catch (err) {
