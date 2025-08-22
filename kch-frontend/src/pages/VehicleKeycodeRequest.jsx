@@ -259,7 +259,7 @@ function VehicleKeycodeRequest() {
                 </div>
               )}
 
-              {!isAuthenticated && (
+              {!user && (
                 <div className="member-benefit">
                   <p
                     style={{
