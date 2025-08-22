@@ -25,9 +25,11 @@ public class Make {
     @NotNull(message = "Manufacturer name cannot be empty")
     private String name;
 
-    // Price will be calculated from the frontend vehicle database
-    @Transient
-    private double keyCodePrice;
+    @NotNull(message = "Non-member price cannot be empty")
+    private double nonMemberPrice;
+
+    @NotNull(message = "Member price cannot be empty")
+    private double memberPrice;
 
     @OneToMany(mappedBy = "make", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

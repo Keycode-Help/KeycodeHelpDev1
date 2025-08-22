@@ -44,8 +44,13 @@ public class CartController {
 
                    double cartItemStandardPrice = 0.0;
                    if(cartItem.getVehicle() !=null){
-                       //If cart item is vehicle, standard price will be the keycode price associated with make
-                       cartItemStandardPrice = cartItem.getVehicle().getKeycodePrice();
+                       // If cart item is vehicle, standard price depends on membership status
+                       Subscription userSubscription = user.getSubscription();
+                       if(userSubscription != null && userSubscription.isActivated()){
+                           cartItemStandardPrice = cartItem.getVehicle().getMake().getMemberPrice();
+                       }else{
+                           cartItemStandardPrice = cartItem.getVehicle().getMake().getNonMemberPrice();
+                       }
                    }else if(cartItem.getSubscription() != null){
                        //If the cart item is a subscription, standard price will be the subscription tier price
                        String subscriptionTier = cartItem.getSubscription().getTier().name();

@@ -59,19 +59,14 @@ public class CartService {
             throw new IllegalArgumentException("Vehicle is already in the cart.");
         }
 
-        //Check whether user has a subscription associated
+        // Determine pricing based on membership status
         Subscription subscription = user.getSubscription();
-        if(subscription != null){
-            //If user has a BASE subscription discount the cart item price by $5
-            if(subscription.getTier().equals(SubscriptionTier.BASE)){
-                cartItemPrice = vehicle.getKeycodePrice() - 5;
-            }else if(subscription.getTier().equals(SubscriptionTier.PREMIUM)){
-                //If user has PREMIUM subscription, discount the cart item price by $10
-                cartItemPrice = vehicle.getKeycodePrice() - 10;
-            }
+        if(subscription != null && subscription.isActivated()){
+            // User has an active subscription - use member pricing
+            cartItemPrice = vehicle.getMake().getMemberPrice();
         }else{
-            //User does not have subscription - price remains the same
-            cartItemPrice = vehicle.getKeycodePrice();
+            // User has no subscription or inactive subscription - use non-member pricing
+            cartItemPrice = vehicle.getMake().getNonMemberPrice();
         }
         vehicle.setKeycodePrice(cartItemPrice);
         CartItem cartItem = new CartItem(vehicle);
@@ -126,21 +121,15 @@ public class CartService {
         cartItemRepository.save(cartItem);
         cart.addCartItem(cartItem);
 
-        //Check whether the cart already has vehicles, if yes update the prices according to Subscription
+        // Update vehicle prices based on new subscription status
         List<CartItem> cartItems = cart.getCartItems();
         for(CartItem selectedCartItem : cartItems){
             if(selectedCartItem.getVehicle() != null){
-                double selectedCartItemAmount = selectedCartItem.getVehicle().getKeycodePrice();
-                double cartItemAmountAfterDiscount = 0.0;
-                if(subscription.getTier().equals(SubscriptionTier.BASE)){
-                    cartItemAmountAfterDiscount = selectedCartItemAmount - 5;
-                }else if(subscription.getTier().equals(SubscriptionTier.PREMIUM)){
-                    cartItemAmountAfterDiscount = selectedCartItemAmount - 10;
-                }
-                selectedCartItem.getVehicle().getCartItem().setCartItemFinalPrice(cartItemAmountAfterDiscount);
-
                 Vehicle vehicle = selectedCartItem.getVehicle();
-                vehicle.setKeycodePrice(cartItemAmountAfterDiscount);
+                // Use member pricing since user now has an active subscription
+                double memberPrice = vehicle.getMake().getMemberPrice();
+                selectedCartItem.getVehicle().getCartItem().setCartItemFinalPrice(memberPrice);
+                vehicle.setKeycodePrice(memberPrice);
                 vehicleRepository.save(vehicle);
             }
         }
@@ -234,20 +223,19 @@ public class CartService {
     public void updateVehiclePrices(boolean isSubscriptionRemoved, KeycodeUser user){
         Cart cart = getOrCreateCart(user);
         List<CartItem> vehicles = cart.getCartItems();
-        //If Subscription is removed update the vehicle prices and then update cart total
-        //If only a keycode request is removed, update the cart total
+        // If subscription is removed, update vehicle prices to non-member pricing
         if(isSubscriptionRemoved){
             if(!vehicles.isEmpty()){
                 for(CartItem selectedCartItem : vehicles){
                     if(selectedCartItem.getVehicle() != null){
-                        //Set the cart item final price to the standard keycode price associated with make
-                        double selectedCartItemAmount = selectedCartItem.getVehicle().getKeycodePrice();
-                        selectedCartItem.getVehicle().getCartItem().setCartItemFinalPrice(selectedCartItemAmount);
+                        Vehicle vehicle = selectedCartItem.getVehicle();
+                        // Use non-member pricing since subscription was removed
+                        double nonMemberPrice = vehicle.getMake().getNonMemberPrice();
+                        selectedCartItem.getVehicle().getCartItem().setCartItemFinalPrice(nonMemberPrice);
                         cartItemRepository.save(selectedCartItem);
 
-                        //Set the keycode price of the vehicle
-                        Vehicle vehicle = selectedCartItem.getVehicle();
-                        vehicle.setKeycodePrice(selectedCartItemAmount);
+                        // Set the keycode price of the vehicle
+                        vehicle.setKeycodePrice(nonMemberPrice);
                     }
                 }
             }

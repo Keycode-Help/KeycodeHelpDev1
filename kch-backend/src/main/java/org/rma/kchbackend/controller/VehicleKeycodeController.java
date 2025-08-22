@@ -3,6 +3,7 @@ package org.rma.kchbackend.controller;
 import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.model.KeycodeUser;
+import org.rma.kchbackend.model.Subscription;
 import org.rma.kchbackend.service.MakeService;
 import org.rma.kchbackend.service.VehicleService;
 import org.rma.kchbackend.service.KeycodeUserService;
@@ -48,7 +49,6 @@ public class VehicleKeycodeController {
             @RequestParam("make") String make,
             @RequestParam("model") String model,
             @RequestParam("year") String year,
-            @RequestParam("price") String price,
             @RequestParam("vin") String vin,
             @RequestParam("frontId") MultipartFile frontId,
             @RequestParam("backId") MultipartFile backId,
@@ -111,7 +111,23 @@ public class VehicleKeycodeController {
             vehicle.setMake(vehicleMake);
             vehicle.setModel(model);
             vehicle.setYear(Integer.parseInt(year));
-            vehicle.setKeycodePrice(Double.parseDouble(price));
+            
+            // Determine the correct price based on membership status
+            double keycodePrice;
+            if (user != null) {
+                // Check if user has an active subscription
+                Subscription subscription = user.getSubscription();
+                if (subscription != null && subscription.isActivated()) {
+                    keycodePrice = vehicleMake.getMemberPrice();
+                } else {
+                    keycodePrice = vehicleMake.getNonMemberPrice();
+                }
+            } else {
+                // Non-authenticated user - use non-member pricing
+                keycodePrice = vehicleMake.getNonMemberPrice();
+            }
+            
+            vehicle.setKeycodePrice(keycodePrice);
             vehicle.setVin(vin);
             vehicle.setFrontId(frontId.getBytes());
             vehicle.setBackId(backId.getBytes());
