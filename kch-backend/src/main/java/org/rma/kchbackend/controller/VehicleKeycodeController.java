@@ -70,23 +70,29 @@ public class VehicleKeycodeController {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
             }
 
-            // Get the authenticated user
+            // Get the authenticated user (optional - for members)
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userEmail = authentication.getName();
-            KeycodeUser user = keycodeUserService.findByEmail(userEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            KeycodeUser user = null;
+            
+            if (authentication != null && !authentication.getName().equals("anonymousUser")) {
+                // User is authenticated
+                String userEmail = authentication.getName();
+                user = keycodeUserService.findByEmail(userEmail)
+                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-            // Compliance gate: require license + photo ID in licensed states
-            ComplianceRequirement cr = complianceService.evaluate(user.getId(), user.getState());
-            if (cr.required()) {
-                return ResponseEntity.unprocessableEntity().body(
-                        ErrorResponse.of(
-                                "DOCS_REQUIRED",
-                                cr.userMessage(),
-                                Map.of("missingDocs", cr.requiredDocs(), "jurisdiction", user.getState())
-                        )
-                );
+                // Compliance gate: require license + photo ID in licensed states
+                ComplianceRequirement cr = complianceService.evaluate(user.getId(), user.getState());
+                if (cr.required()) {
+                    return ResponseEntity.unprocessableEntity().body(
+                            ErrorResponse.of(
+                                    "DOCS_REQUIRED",
+                                    cr.userMessage(),
+                                    Map.of("missingDocs", cr.requiredDocs(), "jurisdiction", user.getState())
+                            )
+                    );
+                }
             }
+            // If user is not authenticated, they can still request keycodes (non-member pricing)
 
             // Create and save the vehicle
             Vehicle vehicle = new Vehicle();
@@ -99,12 +105,20 @@ public class VehicleKeycodeController {
             vehicle.setFrontId(frontId.getBytes());
             vehicle.setBackId(backId.getBytes());
             vehicle.setRegistration(registration.getBytes());
-            vehicle.setKeycodeUser(user);
-
-            Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
-            cartService.addVehicleToCart(user, savedVehicle);
-
-            return ResponseEntity.ok("Vehicle keycode request has been added to your cart.");
+            
+            if (user != null) {
+                // Authenticated user - add to cart
+                vehicle.setKeycodeUser(user);
+                Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
+                cartService.addVehicleToCart(user, savedVehicle);
+                return ResponseEntity.ok("Vehicle keycode request has been added to your cart.");
+            } else {
+                // Non-authenticated user - create anonymous request
+                vehicle.setKeycodeUser(null); // No user association
+                Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
+                // For non-members, we might want to create a session-based cart or redirect to payment
+                return ResponseEntity.ok("Vehicle keycode request created. Please proceed to checkout.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
