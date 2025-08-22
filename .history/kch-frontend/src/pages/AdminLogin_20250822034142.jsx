@@ -18,7 +18,7 @@ function AdminLogin() {
     if (user?.role) {
       const currentRole = user.role;
       console.log("User role detected:", currentRole, "User object:", user);
-
+      
       if (canSeeAdmin(currentRole) && !isSuper(currentRole)) {
         navigate("/admin");
       } else if (isSuper(currentRole)) {
