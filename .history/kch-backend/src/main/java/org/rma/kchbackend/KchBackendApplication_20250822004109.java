@@ -130,21 +130,4 @@ public class KchBackendApplication {
         System.out.println("✅ schema.sql location: classpath:schema.sql");
         System.out.println("✅ data.sql location: classpath:data.sql");
     }
-    
-    /**
-     * Helper method to get a value from either dotenv or system environment
-     * @param key The environment variable key
-     * @param dotenv The dotenv instance (can be null)
-     * @return The value from dotenv if available, otherwise from system environment
-     */
-    private static String getValue(String key, Dotenv dotenv) {
-        if (dotenv != null) {
-            String value = dotenv.get(key);
-            if (value != null) {
-                return value;
-            }
-        }
-        // Fall back to system environment variable
-        return System.getenv(key);
-    }
 }
