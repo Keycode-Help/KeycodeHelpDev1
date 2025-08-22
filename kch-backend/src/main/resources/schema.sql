@@ -89,6 +89,7 @@ CREATE TABLE vehicle (
     front_id BYTEA,
     back_id BYTEA,
     registration BYTEA,
+    status VARCHAR(255) DEFAULT 'PENDING',
     cart_item_id BIGINT REFERENCES cart_item(id) ON DELETE SET NULL,
     transaction_id BIGINT
 );
