@@ -56,66 +56,64 @@ public class KchBackendApplication {
     
     private static void loadEnvironmentVariables(Dotenv dotenv) {
         // Force load environment variables by setting system properties
-        // If dotenv is null (no .env file), use system environment variables instead
-        
-        String dbUrl = getValue("SPRING_DATASOURCE_URL", dotenv);
+        String dbUrl = dotenv.get("SPRING_DATASOURCE_URL");
         if (dbUrl != null) {
             System.setProperty("spring.datasource.url", dbUrl);
             System.out.println("✅ Set spring.datasource.url: " + dbUrl);
         }
         
-        String dbUsername = getValue("SPRING_DATASOURCE_USERNAME", dotenv);
+        String dbUsername = dotenv.get("SPRING_DATASOURCE_USERNAME");
         if (dbUsername != null) {
             System.setProperty("spring.datasource.username", dbUsername);
             System.out.println("✅ Set spring.datasource.username: " + dbUsername);
         }
         
-        String dbPassword = getValue("SPRING_DATASOURCE_PASSWORD", dotenv);
+        String dbPassword = dotenv.get("SPRING_DATASOURCE_PASSWORD");
         if (dbPassword != null) {
             System.setProperty("spring.datasource.password", dbPassword);
             System.out.println("✅ Set spring.datasource.password: ***SET***");
         }
         
-        String profile = getValue("SPRING_PROFILES_ACTIVE", dotenv);
+        String profile = dotenv.get("SPRING_PROFILES_ACTIVE");
         if (profile != null) {
             System.setProperty("spring.profiles.active", profile);
             System.out.println("✅ Set spring.profiles.active: " + profile);
         }
         
         // Set Brevo email configuration
-        String brevoUsername = getValue("BREVO_USERNAME", dotenv);
+        String brevoUsername = dotenv.get("BREVO_USERNAME");
         if (brevoUsername != null) {
             System.setProperty("BREVO_USERNAME", brevoUsername);
             System.out.println("✅ Set BREVO_USERNAME: " + brevoUsername);
         }
         
-        String brevoApiKey = getValue("BREVO_API_KEY", dotenv);
+        String brevoApiKey = dotenv.get("BREVO_API_KEY");
         if (brevoApiKey != null) {
             System.setProperty("BREVO_API_KEY", brevoApiKey);
             System.out.println("✅ Set BREVO_API_KEY: ***SET***");
         }
         
         // Set JWT configuration
-        String jwtSecret = getValue("JWT_SECRET", dotenv);
+        String jwtSecret = dotenv.get("JWT_SECRET");
         if (jwtSecret != null) {
             System.setProperty("JWT_SECRET", jwtSecret);
             System.out.println("✅ Set JWT_SECRET: ***SET***");
         }
         
-        String jwtExpiration = getValue("JWT_EXPIRATION", dotenv);
+        String jwtExpiration = dotenv.get("JWT_EXPIRATION");
         if (jwtExpiration != null) {
             System.setProperty("JWT_EXPIRATION", jwtExpiration);
             System.out.println("✅ Set JWT_EXPIRATION: " + jwtExpiration);
         }
         
         // Set Stripe configuration
-        String stripeSecretKey = getValue("STRIPE_SECRET_KEY", dotenv);
+        String stripeSecretKey = dotenv.get("STRIPE_SECRET_KEY");
         if (stripeSecretKey != null) {
             System.setProperty("STRIPE_SECRET_KEY", stripeSecretKey);
             System.out.println("✅ Set STRIPE_SECRET_KEY: ***SET***");
         }
         
-        String stripeWebhookSecret = getValue("STRIPE_WEBHOOK_SECRET", dotenv);
+        String stripeWebhookSecret = dotenv.get("STRIPE_WEBHOOK_SECRET");
         if (stripeWebhookSecret != null) {
             System.setProperty("STRIPE_WEBHOOK_SECRET", stripeWebhookSecret);
             System.out.println("✅ Set STRIPE_WEBHOOK_SECRET: ***SET***");
@@ -129,22 +127,5 @@ public class KchBackendApplication {
         System.out.println("✅ Set schema initialization properties");
         System.out.println("✅ schema.sql location: classpath:schema.sql");
         System.out.println("✅ data.sql location: classpath:data.sql");
-    }
-    
-    /**
-     * Helper method to get a value from either dotenv or system environment
-     * @param key The environment variable key
-     * @param dotenv The dotenv instance (can be null)
-     * @return The value from dotenv if available, otherwise from system environment
-     */
-    private static String getValue(String key, Dotenv dotenv) {
-        if (dotenv != null) {
-            String value = dotenv.get(key);
-            if (value != null) {
-                return value;
-            }
-        }
-        // Fall back to system environment variable
-        return System.getenv(key);
     }
 }
