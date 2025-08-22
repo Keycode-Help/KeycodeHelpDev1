@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
+import api from "../services/request";
 import { useNavigate } from "react-router-dom";
 import { blue } from "@mui/material/colors";
 
@@ -23,8 +23,8 @@ function SubscriptionPage() {
       tier: tier,
     };
 
-    axios
-      .post("http://localhost:8080/cart/addSubscription", subscription, {
+    api
+      .post("/cart/addSubscription", subscription, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
