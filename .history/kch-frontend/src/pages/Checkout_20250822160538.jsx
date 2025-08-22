@@ -29,9 +29,9 @@ function Checkout() {
   }, [token]);
 
   const handleCheckout = () => {
-    api
-      .post(
-        "/cart/checkout",
+          api
+        .post(
+          "/cart/checkout",
         {},
         {
           headers: {

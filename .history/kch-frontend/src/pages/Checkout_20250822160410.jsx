@@ -29,7 +29,7 @@ function Checkout() {
   }, [token]);
 
   const handleCheckout = () => {
-    api
+    axios
       .post(
         "/cart/checkout",
         {},

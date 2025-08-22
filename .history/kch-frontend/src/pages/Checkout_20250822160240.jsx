@@ -29,9 +29,9 @@ function Checkout() {
   }, [token]);
 
   const handleCheckout = () => {
-    api
+    axios
       .post(
-        "/cart/checkout",
+        "http://localhost:8080/cart/checkout",
         {},
         {
           headers: {
