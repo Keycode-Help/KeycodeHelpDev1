@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = "http://localhost:5173")
+// CORS is handled globally by CorsConfig.java
 public class AdminDashboardController {
 
     private final VehicleService vehicleService;

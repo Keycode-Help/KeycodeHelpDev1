@@ -32,18 +32,7 @@ import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 
-@CrossOrigin(origins = {
-    "http://localhost:5173", 
-    "http://localhost:5174", 
-    "http://localhost:51731", 
-    "http://localhost:51732", 
-    "http://localhost:51733", 
-    "http://localhost:51734",
-    "https://*.vercel.app",
-    "https://*.keycode.help",
-    "https://keycode.help",
-    "https://www.keycode.help"
-})
+// CORS is handled globally by CorsConfig.java
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
