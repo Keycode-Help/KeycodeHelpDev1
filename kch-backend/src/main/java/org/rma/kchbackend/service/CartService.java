@@ -64,14 +64,14 @@ public class CartService {
         if(subscription != null){
             //If user has a BASE subscription discount the cart item price by $5
             if(subscription.getTier().equals(SubscriptionTier.BASE)){
-                cartItemPrice = vehicle.getMake().getKeyCodePrice() - 5;
+                cartItemPrice = vehicle.getKeycodePrice() - 5;
             }else if(subscription.getTier().equals(SubscriptionTier.PREMIUM)){
                 //If user has PREMIUM subscription, discount the cart item price by $10
-                cartItemPrice = vehicle.getMake().getKeyCodePrice() - 10;
+                cartItemPrice = vehicle.getKeycodePrice() - 10;
             }
         }else{
             //User does not have subscription - price remains the same
-            cartItemPrice = vehicle.getMake().getKeyCodePrice();
+            cartItemPrice = vehicle.getKeycodePrice();
         }
         vehicle.setKeycodePrice(cartItemPrice);
         CartItem cartItem = new CartItem(vehicle);
@@ -130,7 +130,7 @@ public class CartService {
         List<CartItem> cartItems = cart.getCartItems();
         for(CartItem selectedCartItem : cartItems){
             if(selectedCartItem.getVehicle() != null){
-                double selectedCartItemAmount = selectedCartItem.getVehicle().getMake().getKeyCodePrice();
+                double selectedCartItemAmount = selectedCartItem.getVehicle().getKeycodePrice();
                 double cartItemAmountAfterDiscount = 0.0;
                 if(subscription.getTier().equals(SubscriptionTier.BASE)){
                     cartItemAmountAfterDiscount = selectedCartItemAmount - 5;
@@ -241,7 +241,7 @@ public class CartService {
                 for(CartItem selectedCartItem : vehicles){
                     if(selectedCartItem.getVehicle() != null){
                         //Set the cart item final price to the standard keycode price associated with make
-                        double selectedCartItemAmount = selectedCartItem.getVehicle().getMake().getKeyCodePrice();
+                        double selectedCartItemAmount = selectedCartItem.getVehicle().getKeycodePrice();
                         selectedCartItem.getVehicle().getCartItem().setCartItemFinalPrice(selectedCartItemAmount);
                         cartItemRepository.save(selectedCartItem);
 

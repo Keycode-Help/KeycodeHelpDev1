@@ -48,6 +48,7 @@ public class VehicleKeycodeController {
             @RequestParam("make") String make,
             @RequestParam("model") String model,
             @RequestParam("year") String year,
+            @RequestParam("price") String price,
             @RequestParam("vin") String vin,
             @RequestParam("frontId") MultipartFile frontId,
             @RequestParam("backId") MultipartFile backId,
@@ -110,6 +111,7 @@ public class VehicleKeycodeController {
             vehicle.setMake(vehicleMake);
             vehicle.setModel(model);
             vehicle.setYear(Integer.parseInt(year));
+            vehicle.setKeycodePrice(Double.parseDouble(price));
             vehicle.setVin(vin);
             vehicle.setFrontId(frontId.getBytes());
             vehicle.setBackId(backId.getBytes());
