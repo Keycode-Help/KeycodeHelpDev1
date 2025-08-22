@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/request";
 import { ModalContent } from "../components/ModalContent";
@@ -160,31 +160,6 @@ function AdminDashboard() {
       })
       .catch((error) => handleApiError(error, "Error Update Request Status."));
   };
-
-  // Show loading state if user is not authenticated
-  if (!user) {
-    return (
-      <div className="relative">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 py-8">
-          <div className="mb-6 rounded-3xl border border-neutral-800 bg-gradient-to-br from-[#0d0f1a] to-[#121524] p-6 shadow-2xl">
-            <div className="flex items-center justify-center">
-              <div className="text-center">
-                <div className="rounded-2xl bg-emerald-500/10 p-4 text-emerald-400 mb-4">
-                  <Layers className="h-8 w-8 mx-auto" />
-                </div>
-                <h1 className="text-2xl font-bold text-white mb-2">
-                  Admin Dashboard
-                </h1>
-                <p className="text-gray-300">
-                  Please log in to access the admin dashboard
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative">
