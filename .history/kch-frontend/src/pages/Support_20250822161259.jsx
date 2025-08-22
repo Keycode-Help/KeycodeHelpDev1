@@ -20,7 +20,7 @@ export default function Support() {
     setLoading(true);
     setStatus("");
     try {
-      await api.post("/support/contact", form);
+      await axios.post("http://localhost:8080/support/contact", form);
       setStatus("Thanks! Your message has been sent.");
       setForm({ ...form, subject: "", message: "" });
     } catch (err) {
@@ -34,11 +34,7 @@ export default function Support() {
     <div className="container" style={{ paddingTop: 80 }}>
       <h1>Contact Support</h1>
       <p className="text-dim">We usually reply within a few hours.</p>
-      <form
-        onSubmit={onSubmit}
-        className="grid gap-4"
-        style={{ maxWidth: 600 }}
-      >
+      <form onSubmit={onSubmit} className="grid gap-4" style={{ maxWidth: 600 }}>
         <input
           name="name"
           placeholder="Your Name"
@@ -81,3 +77,5 @@ export default function Support() {
     </div>
   );
 }
+
+

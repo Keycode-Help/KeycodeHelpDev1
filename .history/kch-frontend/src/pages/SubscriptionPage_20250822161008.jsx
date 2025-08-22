@@ -9,22 +9,22 @@ function SubscriptionPage() {
   const navigate = useNavigate();
 
   const containerStyle = {
-    width: "100%",
-    maxWidth: "1200px",
-    margin: "2rem auto",
-    padding: "2rem",
-    backgroundColor: "#161b22",
-    borderRadius: "12px",
-    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.4)",
+    width: '100%',
+    maxWidth: '1200px',
+    margin: '2rem auto',
+    padding: '2rem',
+    backgroundColor: '#161b22',
+    borderRadius: '12px',
+    boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.4)'
   };
-
+  
   const handleAddSubscription = (tier) => {
     const subscription = {
       tier: tier,
     };
 
-    api
-      .post("/cart/addSubscription", subscription, {
+    axios
+      .post("http://localhost:8080/cart/addSubscription", subscription, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ function SubscriptionPage() {
   return (
     <div className="wrapper-sub pt-20">
       <div style={containerStyle} className="subscription-page">
-        <h1 style={{ marginBottom: "1rem" }}>Select a Subscription</h1>
+        <h1 style={{marginBottom: '1rem'}}>Select a Subscription</h1>
         <div className="subscription-options">
           <div className="subscription-option">
             <h2>Base Subscription</h2>

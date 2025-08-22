@@ -12,7 +12,7 @@ function AdminRegister() {
     firstName: "",
     lastName: "",
     company: "",
-    phone: "",
+    phone: ""
   });
 
   const [codeRequested, setCodeRequested] = useState(false);
@@ -29,12 +29,12 @@ function AdminRegister() {
       ...formData,
       [name]: value,
     });
-
+    
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors({
         ...errors,
-        [name]: "",
+        [name]: ""
       });
     }
   };
@@ -45,7 +45,7 @@ function AdminRegister() {
       setErrors({
         email: !formData.email ? "Email is required" : "",
         firstName: !formData.firstName ? "First name is required" : "",
-        lastName: !formData.lastName ? "Last name is required" : "",
+        lastName: !formData.lastName ? "Last name is required" : ""
       });
       return;
     }
@@ -62,7 +62,7 @@ function AdminRegister() {
         body: JSON.stringify({
           email: formData.email,
           firstName: formData.firstName,
-          lastName: formData.lastName,
+          lastName: formData.lastName
         }),
       });
 
@@ -70,21 +70,15 @@ function AdminRegister() {
 
       if (response.ok) {
         setCodeRequested(true);
-        setCodeRequestMessage(
-          "✅ Registration code sent successfully! Check your email."
-        );
+        setCodeRequestMessage("✅ Registration code sent successfully! Check your email.");
         // Clear the admin code field so user can enter the new code
-        setFormData((prev) => ({ ...prev, adminCode: "" }));
+        setFormData(prev => ({ ...prev, adminCode: "" }));
       } else {
-        setCodeRequestMessage(
-          "❌ " + (result.error || "Failed to send registration code")
-        );
+        setCodeRequestMessage("❌ " + (result.error || "Failed to send registration code"));
       }
     } catch (error) {
       console.error("Error requesting registration code:", error);
-      setCodeRequestMessage(
-        "❌ Error requesting registration code. Please try again."
-      );
+      setCodeRequestMessage("❌ Error requesting registration code. Please try again.");
     } finally {
       setCodeRequestLoading(false);
     }
@@ -114,13 +108,12 @@ function AdminRegister() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    // Admin code validation
-    if (!formData.adminCode) {
-      newErrors.adminCode = "Admin registration code is required";
-    } else if (formData.adminCode.length < 6) {
-      newErrors.adminCode =
-        "Please enter the registration code sent to your email";
-    }
+               // Admin code validation
+           if (!formData.adminCode) {
+             newErrors.adminCode = "Admin registration code is required";
+           } else if (formData.adminCode.length < 6) {
+             newErrors.adminCode = "Please enter the registration code sent to your email";
+           }
 
     // Required fields
     if (!formData.firstName) newErrors.firstName = "First name is required";
@@ -134,7 +127,7 @@ function AdminRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (!validateForm()) {
       return;
     }
@@ -151,16 +144,14 @@ function AdminRegister() {
       formDataToSend.append("adminCode", formData.adminCode);
 
       // Send to backend admin registration endpoint
-      const response = await fetch("/auth/admin-register", {
+      const response = await fetch("http://localhost:8080/auth/admin-register", {
         method: "POST",
         body: formDataToSend,
       });
 
       if (response.ok) {
         const result = await response.text();
-        alert(
-          "Admin account created successfully! Pending super admin approval. You will be notified once approved."
-        );
+        alert("Admin account created successfully! Pending super admin approval. You will be notified once approved.");
         navigate("/admin-login");
       } else {
         const errorText = await response.text();
@@ -179,7 +170,7 @@ function AdminRegister() {
           <h1>Admin Registration</h1>
           <p>Create new administrative account</p>
         </div>
-
+        
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
@@ -193,11 +184,9 @@ function AdminRegister() {
                 placeholder="Enter first name"
                 className={errors.firstName ? "error" : ""}
               />
-              {errors.firstName && (
-                <span className="error-message">{errors.firstName}</span>
-              )}
+              {errors.firstName && <span className="error-message">{errors.firstName}</span>}
             </div>
-
+            
             <div className="form-group">
               <label htmlFor="lastName">Last Name *</label>
               <input
@@ -209,9 +198,7 @@ function AdminRegister() {
                 placeholder="Enter last name"
                 className={errors.lastName ? "error" : ""}
               />
-              {errors.lastName && (
-                <span className="error-message">{errors.lastName}</span>
-              )}
+              {errors.lastName && <span className="error-message">{errors.lastName}</span>}
             </div>
           </div>
 
@@ -226,71 +213,56 @@ function AdminRegister() {
               placeholder="admin@company.com"
               className={errors.email ? "error" : ""}
             />
-            {errors.email && (
-              <span className="error-message">{errors.email}</span>
-            )}
+            {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="company">Company/Organization *</label>
-            <input
-              id="company"
-              type="text"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              placeholder="Enter company name"
-              className={errors.company ? "error" : ""}
-            />
-            {errors.company && (
-              <span className="error-message">{errors.company}</span>
-            )}
-          </div>
+                           <div className="form-group">
+                   <label htmlFor="company">Company/Organization *</label>
+                   <input
+                     id="company"
+                     type="text"
+                     name="company"
+                     value={formData.company}
+                     onChange={handleChange}
+                     placeholder="Enter company name"
+                     className={errors.company ? "error" : ""}
+                   />
+                   {errors.company && <span className="error-message">{errors.company}</span>}
+                 </div>
 
-          {/* Registration Code Request Section */}
-          <div className="form-group">
-            <label htmlFor="adminCode">Admin Registration Code *</label>
-            <div className="code-request-section">
-              <input
-                id="adminCode"
-                type="text"
-                name="adminCode"
-                value={formData.adminCode}
-                onChange={handleChange}
-                placeholder="Enter registration code from email"
-                className={errors.adminCode ? "error" : ""}
-                disabled={!codeRequested}
-              />
-              <button
-                type="button"
-                onClick={requestRegistrationCode}
-                disabled={codeRequestLoading || codeRequested}
-                className="request-code-btn"
-              >
-                {codeRequestLoading
-                  ? "Sending..."
-                  : codeRequested
-                  ? "Code Sent"
-                  : "Request Code"}
-              </button>
-            </div>
-            {errors.adminCode && (
-              <span className="error-message">{errors.adminCode}</span>
-            )}
-            {codeRequestMessage && (
-              <div
-                className={`code-message ${
-                  codeRequestMessage.includes("✅") ? "success" : "error"
-                }`}
-              >
-                {codeRequestMessage}
-              </div>
-            )}
-            <small className="help-text">
-              Click "Request Code" to receive a registration code via email. The
-              code will expire in 24 hours.
-            </small>
-          </div>
+                 {/* Registration Code Request Section */}
+                 <div className="form-group">
+                   <label htmlFor="adminCode">Admin Registration Code *</label>
+                   <div className="code-request-section">
+                     <input
+                       id="adminCode"
+                       type="text"
+                       name="adminCode"
+                       value={formData.adminCode}
+                       onChange={handleChange}
+                       placeholder="Enter registration code from email"
+                       className={errors.adminCode ? "error" : ""}
+                       disabled={!codeRequested}
+                     />
+                     <button
+                       type="button"
+                       onClick={requestRegistrationCode}
+                       disabled={codeRequestLoading || codeRequested}
+                       className="request-code-btn"
+                     >
+                       {codeRequestLoading ? "Sending..." : codeRequested ? "Code Sent" : "Request Code"}
+                     </button>
+                   </div>
+                   {errors.adminCode && <span className="error-message">{errors.adminCode}</span>}
+                   {codeRequestMessage && (
+                     <div className={`code-message ${codeRequestMessage.includes("✅") ? "success" : "error"}`}>
+                       {codeRequestMessage}
+                     </div>
+                   )}
+                   <small className="help-text">
+                     Click "Request Code" to receive a registration code via email. The code will expire in 24 hours.
+                   </small>
+                 </div>
 
           <div className="form-group">
             <label htmlFor="phone">Phone Number *</label>
@@ -303,10 +275,10 @@ function AdminRegister() {
               placeholder="Enter phone number"
               className={errors.phone ? "error" : ""}
             />
-            {errors.phone && (
-              <span className="error-message">{errors.phone}</span>
-            )}
+            {errors.phone && <span className="error-message">{errors.phone}</span>}
           </div>
+
+          
 
           <div className="form-row">
             <div className="form-group">
@@ -320,11 +292,9 @@ function AdminRegister() {
                 placeholder="Create password"
                 className={errors.password ? "error" : ""}
               />
-              {errors.password && (
-                <span className="error-message">{errors.password}</span>
-              )}
+              {errors.password && <span className="error-message">{errors.password}</span>}
             </div>
-
+            
             <div className="form-group">
               <label htmlFor="confirmPassword">Confirm Password *</label>
               <input
@@ -336,24 +306,21 @@ function AdminRegister() {
                 placeholder="Confirm password"
                 className={errors.confirmPassword ? "error" : ""}
               />
-              {errors.confirmPassword && (
-                <span className="error-message">{errors.confirmPassword}</span>
-              )}
+              {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
             </div>
           </div>
-
+          
           <button type="submit" className="admin-register-btn">
             Create Admin Account
           </button>
         </form>
-
+        
         <div className="admin-register-footer">
           <p>
             <a href="/admin-login">← Back to Admin Login</a>
           </p>
           <p className="admin-notice">
-            Admin accounts have full system access. Only authorized personnel
-            should register.
+            Admin accounts have full system access. Only authorized personnel should register.
           </p>
         </div>
       </div>

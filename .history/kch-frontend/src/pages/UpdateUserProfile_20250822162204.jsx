@@ -108,7 +108,9 @@ const UpdateUserProfile = () => {
         return;
       }
 
-      const response = await api.get(`/auth/getUserProfile/${userId}`);
+      const response = await axios.get(
+        `/auth/getUserProfile/${userId}`
+      );
       const userData = response.data;
 
       setFormData({
@@ -149,9 +151,13 @@ const UpdateUserProfile = () => {
       updateUserObject.append("backId", formData.backId);
       updateUserObject.append("insurance", formData.insurance);
 
-      await api.put("/auth/updateProfile", updateUserObject, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axios.put(
+        "http://localhost:8080/auth/updateProfile",
+        updateUserObject,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       alert("User details updated successfully.");
       navigate("/");
@@ -166,7 +172,7 @@ const UpdateUserProfile = () => {
   const handleDelete = async () => {
     //alert("Delete Profile clicked");
     try {
-      await api.put("/keycode-user/delete");
+      await axios.put("http://localhost:8080/keycode-user/delete");
       alert("User Profile deleted successfully.");
       logout();
       navigate("/login");

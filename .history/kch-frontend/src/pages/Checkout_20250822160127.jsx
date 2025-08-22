@@ -9,8 +9,8 @@ function Checkout() {
 
   useEffect(() => {
     // Fetch cart items directly from the backend
-    api
-      .get("/cart/items", {
+    axios
+      .get("http://localhost:8080/cart/items", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,9 +29,9 @@ function Checkout() {
   }, [token]);
 
   const handleCheckout = () => {
-    api
+    axios
       .post(
-        "/cart/checkout",
+        "http://localhost:8080/cart/checkout",
         {},
         {
           headers: {
