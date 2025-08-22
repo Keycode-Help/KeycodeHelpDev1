@@ -45,12 +45,8 @@ export default function DocumentValidation() {
               <div className="rounded-2xl bg-emerald-500/10 p-4 text-emerald-400 mb-4">
                 <FileText className="h-8 w-8 mx-auto" />
               </div>
-              <h1 className="text-2xl font-bold text-white mb-2">
-                Document Validation
-              </h1>
-              <p className="text-gray-300">
-                Please log in to access document validation
-              </p>
+              <h1 className="text-2xl font-bold text-white mb-2">Document Validation</h1>
+              <p className="text-gray-300">Please log in to access document validation</p>
             </div>
           </div>
         </div>
