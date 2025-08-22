@@ -11,14 +11,14 @@ function AdminLogin() {
   });
 
   const navigate = useNavigate();
-  const { login, user } = useAuth();
+  const { login, user, userRole } = useAuth();
 
   // Watch for user changes and navigate accordingly
   useEffect(() => {
     if (user?.role) {
       const currentRole = user.role;
       console.log("User role detected:", currentRole, "User object:", user);
-
+      
       if (canSeeAdmin(currentRole) && !isSuper(currentRole)) {
         navigate("/admin");
       } else if (isSuper(currentRole)) {
@@ -43,7 +43,21 @@ function AdminLogin() {
     e.preventDefault();
     try {
       await login(formData.email, formData.password);
-      // The navigation will be handled by the useEffect above
+
+      // Check if the logged-in user is actually an admin
+      // Use user.role directly since userRole might not be updated yet
+      const currentRole = user?.role || userRole;
+      console.log("Current user role:", currentRole, "User object:", user);
+
+      if (canSeeAdmin(currentRole) && !isSuper(currentRole)) {
+        navigate("/admin");
+      } else if (isSuper(currentRole)) {
+        navigate("/super-admin");
+      } else {
+        // If not admin, show error and redirect back to admin login
+        alert("Access denied. Admin privileges required.");
+        navigate("/admin-login");
+      }
     } catch (error) {
       console.error("Admin login failed", error);
       alert("Admin login failed. " + (error.response?.data || error.message));
