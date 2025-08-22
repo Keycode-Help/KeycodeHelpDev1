@@ -11,12 +11,11 @@ function AdminLogin() {
   });
 
   const navigate = useNavigate();
-  const { login, user, isLoading, isAuthenticated, isInitialized } = useAuth();
+  const { login, user, isLoading, isInitialized } = useAuth();
 
   // Debug: Log auth context state
   console.log("AuthContext state:", {
     isLoading,
-    isAuthenticated,
     isInitialized,
     user,
   });
