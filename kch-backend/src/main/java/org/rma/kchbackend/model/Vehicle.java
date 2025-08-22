@@ -29,6 +29,8 @@ public class Vehicle {
     @NotBlank(message = "Model cannot be empty")
     private String model;
 
+    private Integer year;
+
     @Column(unique = true, nullable = false)
     @NotBlank(message = "VIN cannot be empty")
     private String vin;

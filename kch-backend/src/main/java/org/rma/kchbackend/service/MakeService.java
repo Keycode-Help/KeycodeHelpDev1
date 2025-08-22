@@ -22,6 +22,10 @@ public class MakeService {
     }
 
     public Make getMakeDetails(String manufacturerName){
-        return makeRepository.findByManufacturerName(manufacturerName);
+        return makeRepository.findByName(manufacturerName);
+    }
+    
+    public Make saveMake(Make make){
+        return makeRepository.save(make);
     }
 }
