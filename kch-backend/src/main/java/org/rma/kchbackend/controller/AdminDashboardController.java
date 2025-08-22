@@ -55,7 +55,7 @@ public class AdminDashboardController {
             Map<String, Object> vehicleData = new HashMap<>();
             vehicleData.put("id", vehicle.getId());
             Make make = vehicle.getMake();
-            vehicleData.put("make", make != null ? make.getManufacturerName() : null);
+            vehicleData.put("make", make != null ? make.getName() : null);
 
             vehicleData.put("model", vehicle.getModel());
             vehicleData.put("vin", vehicle.getVin());
@@ -87,7 +87,7 @@ public class AdminDashboardController {
             Map<String, Object> vehicleData = new HashMap<>();
             vehicleData.put("id", vehicle.getId());
             Make make = vehicle.getMake();
-            vehicleData.put("make", make != null ? make.getManufacturerName() : null);
+            vehicleData.put("make", make != null ? make.getName() : null);
 
             vehicleData.put("model", vehicle.getModel());
             vehicleData.put("vin", vehicle.getVin());

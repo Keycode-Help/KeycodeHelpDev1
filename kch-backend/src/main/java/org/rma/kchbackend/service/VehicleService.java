@@ -73,7 +73,7 @@ public class VehicleService {
             throw new SecurityException("You are not authorized to update this vehicle request.");
         }
 
-        Make vehicleMake = makeRepository.findByManufacturerName(make);
+        Make vehicleMake = makeRepository.findByName(make);
         vehicle.setMake(vehicleMake);
         vehicle.setModel(model);
         vehicle.setVin(vin);
