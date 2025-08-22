@@ -11,15 +11,7 @@ function AdminLogin() {
   });
 
   const navigate = useNavigate();
-  const { login, user, isLoading, isAuthenticated, isInitialized } = useAuth();
-
-  // Debug: Log auth context state
-  console.log("AuthContext state:", {
-    isLoading,
-    isAuthenticated,
-    isInitialized,
-    user,
-  });
+  const { login, user } = useAuth();
 
   // Watch for user changes and navigate accordingly
   useEffect(() => {

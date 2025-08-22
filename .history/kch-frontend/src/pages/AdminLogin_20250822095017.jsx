@@ -11,15 +11,7 @@ function AdminLogin() {
   });
 
   const navigate = useNavigate();
-  const { login, user, isLoading, isAuthenticated, isInitialized } = useAuth();
-
-  // Debug: Log auth context state
-  console.log("AuthContext state:", {
-    isLoading,
-    isAuthenticated,
-    isInitialized,
-    user,
-  });
+  const { login, user } = useAuth();
 
   // Watch for user changes and navigate accordingly
   useEffect(() => {
@@ -53,7 +45,7 @@ function AdminLogin() {
     console.log("Login function:", login);
     console.log("Form data email:", formData.email);
     console.log("Form data password:", formData.password);
-
+    
     try {
       console.log("Calling login function...");
       const result = await login(formData.email, formData.password);

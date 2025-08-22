@@ -30,7 +30,7 @@ function VehicleKeycodeRequest() {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { user } = useAuth(); // Keep user for optional member pricing display
+  const { token, isAuthenticated } = useAuth();
 
   // Vehicle database state
   const [availableMakes, setAvailableMakes] = useState([]);
@@ -141,9 +141,10 @@ function VehicleKeycodeRequest() {
     formDataObj.append("backId", formData.backId);
     formDataObj.append("registration", formData.registration);
 
-    api
-      .post("/vehicle/request-keycode", formDataObj, {
+    axios
+      .post("http://localhost:8080/vehicle/request-keycode", formDataObj, {
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       })
