@@ -30,7 +30,7 @@ function VehicleKeycodeRequest() {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { user } = useAuth(); // Keep user for optional member pricing display
+  const { token, isAuthenticated } = useAuth();
 
   // Vehicle database state
   const [availableMakes, setAvailableMakes] = useState([]);
