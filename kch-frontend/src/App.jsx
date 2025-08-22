@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import ErrorBoundary from "./utils/errorBoundary.jsx";
@@ -73,6 +74,7 @@ function App() {
 
               <Route path="*" element={<LandingPage />} />
             </Routes>
+            <Analytics />
           </Router>
         </div>
       </AuthProvider>
@@ -81,4 +83,3 @@ function App() {
 }
 
 export default App;
-// Force redeploy - Fri Aug 22 17:37:56 EDT 2025
