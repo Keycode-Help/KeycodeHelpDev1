@@ -23,8 +23,8 @@ public class CorsConfig {
             "http://localhost:3000",
             "http://localhost:5173",
             "http://localhost:5174",
-            "https://*.vercel.app",
-            "https://*.keycode.help",
+            "https://keycode-help-dev1.vercel.app",
+            "https://keycode-help-dev1-mrguru2024s-projects.vercel.app",
             "https://keycode.help",
             "https://www.keycode.help"
         ));
