@@ -241,13 +241,13 @@ public class AuthController {
 
         // Set cookies
         ResponseCookie access = ResponseCookie.from("access_token", accessJwt)
-            .httpOnly(true).secure(false).path("/")
-            .sameSite("Lax").maxAge(Duration.ofHours(10)).build();
+            .httpOnly(true).secure(true).path("/")
+            .sameSite("None").maxAge(Duration.ofHours(10)).build();
 
         // Use path=/ so browser sends cookie across navigations before refresh call
         ResponseCookie refresh = ResponseCookie.from("refresh_token", refreshJwt)
-            .httpOnly(true).secure(false).path("/")
-            .sameSite("Lax").maxAge(Duration.ofDays(7)).build();
+            .httpOnly(true).secure(true).path("/")
+            .sameSite("None").maxAge(Duration.ofDays(7)).build();
 
         // Include user information in the response, but not the token
         Map<String, Object> response = new HashMap<>();
@@ -287,8 +287,8 @@ public class AuthController {
             
             // Set new access token cookie
             ResponseCookie access = ResponseCookie.from("access_token", newAccessToken)
-                .httpOnly(true).secure(false).path("/")
-                .sameSite("Lax").maxAge(Duration.ofHours(10)).build();
+                .httpOnly(true).secure(true).path("/")
+                .sameSite("None").maxAge(Duration.ofHours(10)).build();
 
             return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, access.toString())
