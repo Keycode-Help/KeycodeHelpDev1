@@ -83,6 +83,7 @@ CREATE TABLE vehicle (
     vin VARCHAR(255),
     license_plate VARCHAR(255),
     color VARCHAR(255),
+    keycode VARCHAR(255),
     keycode_price DECIMAL(10,2),
     keycode_user_id BIGINT REFERENCES keycode_user(id) ON DELETE CASCADE,
     front_id BYTEA,
