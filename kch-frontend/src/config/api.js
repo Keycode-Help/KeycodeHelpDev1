@@ -9,7 +9,7 @@ const API_CONFIG = {
 
     // Fallback logic based on environment
     if (import.meta.env.MODE === "production") {
-      return "https://keycode-help-backend.onrender.com";
+      return "https://keycodehelpdev1-backend.onrender.com";
     }
 
     return "http://localhost:8080";
@@ -100,7 +100,7 @@ const API_CONFIG = {
         "⚠️ Warning: Using localhost in production! Environment variable may not be set."
       );
       // Force production URL as fallback
-      const productionUrl = "https://keycode-help-backend.onrender.com";
+      const productionUrl = "https://keycodehelpdev1-backend.onrender.com";
       console.log("🔄 Using production fallback URL:", productionUrl);
       return `${productionUrl}${endpoint}`;
     }
