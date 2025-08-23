@@ -184,7 +184,10 @@ function VehicleKeycodeRequest() {
           <div className="auth-required-message">
             <h2>Authentication Required</h2>
             <p>You must be logged in to request keycodes.</p>
-            <button onClick={() => navigate("/login")} className="login-btn">
+            <button 
+              onClick={() => navigate('/login')} 
+              className="login-btn"
+            >
               Go to Login
             </button>
           </div>
