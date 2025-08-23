@@ -34,12 +34,12 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/vehicle/request-keycode", "/vehicle/test-public").permitAll() // Allow unauthenticated keycode requests - FIRST
                         .requestMatchers("/", "/actuator/health", "/css/**", "/js/**", "/images/**", "/register", "/send-email", "/makes/**").permitAll()
                         .requestMatchers("/auth/login", "/auth/register", "/auth/admin-register", "/auth/refresh", "/auth/dev-set-password", "/auth/dev-upsert-admin", "/auth/dev-upsert-user", "/auth/reset-password", "/auth/reset-password/confirm").permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/chat/stream", "/chat/history", "/chat/send").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/super-admin/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers("/vehicle/request-keycode", "/vehicle/test-public").permitAll() // Allow unauthenticated keycode requests - updated
                         .requestMatchers("/user/**", "/keycode-user/**", "/api/v1/keycodes/**", "/api/payments/**").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/vehicle/**").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN") // Other vehicle endpoints require authentication
                         .anyRequest().authenticated()
