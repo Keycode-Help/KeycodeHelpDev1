@@ -124,11 +124,12 @@ public class KchBackendApplication {
         // Set schema initialization properties
         System.setProperty("spring.sql.init.mode", "always");
         System.setProperty("spring.sql.init.schema-locations", "classpath:schema.sql");
-        System.setProperty("spring.sql.init.data-locations", "classpath:data.sql");
+        // Temporarily disable data loading until schema is stable
+        // System.setProperty("spring.sql.init.data-locations", "classpath:data.sql");
         System.setProperty("spring.jpa.defer-datasource-initialization", "true");
         System.out.println("✅ Set schema initialization properties");
         System.out.println("✅ schema.sql location: classpath:schema.sql");
-        System.out.println("✅ data.sql location: classpath:data.sql");
+        System.out.println("⚠️  data.sql loading temporarily disabled");
     }
     
     /**
