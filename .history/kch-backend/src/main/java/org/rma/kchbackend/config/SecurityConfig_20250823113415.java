@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/vehicle/request-keycode").permitAll() // Allow unauthenticated keycode requests - FIRST
+                        .requestMatchers("/vehicle/request-keycode", "/vehicle/test-public").permitAll() // Allow unauthenticated keycode requests - FIRST
                         .requestMatchers("/", "/actuator/health", "/css/**", "/js/**", "/images/**", "/register", "/send-email", "/makes/**").permitAll()
                         .requestMatchers("/auth/login", "/auth/register", "/auth/admin-register", "/auth/refresh", "/auth/dev-set-password", "/auth/dev-upsert-admin", "/auth/dev-upsert-user", "/auth/reset-password", "/auth/reset-password/confirm").permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
