@@ -16,7 +16,7 @@ public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;dd ana
+    private Long id;
 
     //Commented by Nithya - Adding Many to One relationship between Vehicle and Make
     //@NotBlank(message = "Make cannot be empty")
