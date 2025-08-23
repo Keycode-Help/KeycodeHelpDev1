@@ -36,6 +36,7 @@ function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
+  const [orderDetails, setOrderDetails] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
