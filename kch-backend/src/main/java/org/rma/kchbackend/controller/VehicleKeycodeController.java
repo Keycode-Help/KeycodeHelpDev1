@@ -73,26 +73,30 @@ public class VehicleKeycodeController {
             }
 
             // Get the authenticated user (optional - for members)
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             KeycodeUser user = null;
-            
-            if (authentication != null && !authentication.getName().equals("anonymousUser")) {
-                // User is authenticated
-                String userEmail = authentication.getName();
-                user = keycodeUserService.findByEmail(userEmail)
-                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            try {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication != null && !authentication.getName().equals("anonymousUser")) {
+                    // User is authenticated
+                    String userEmail = authentication.getName();
+                    user = keycodeUserService.findByEmail(userEmail)
+                            .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-                // Compliance gate: require license + photo ID in licensed states
-                ComplianceRequirement cr = complianceService.evaluate(user.getId(), user.getState());
-                if (cr.required()) {
-                    return ResponseEntity.unprocessableEntity().body(
-                            ErrorResponse.of(
-                                    "DOCS_REQUIRED",
-                                    cr.userMessage(),
-                                    Map.of("missingDocs", cr.requiredDocs(), "jurisdiction", user.getState())
-                            )
-                    );
+                    // Compliance gate: require license + photo ID in licensed states
+                    ComplianceRequirement cr = complianceService.evaluate(user.getId(), user.getState());
+                    if (cr.required()) {
+                        return ResponseEntity.unprocessableEntity().body(
+                                ErrorResponse.of(
+                                        "DOCS_REQUIRED",
+                                        cr.userMessage(),
+                                        Map.of("missingDocs", cr.requiredDocs(), "jurisdiction", user.getState())
+                                )
+                        );
+                    }
                 }
+            } catch (Exception e) {
+                // If there's any security context issue, treat as unauthenticated user
+                user = null;
             }
             // If user is not authenticated, they can still request keycodes (non-member pricing)
 
