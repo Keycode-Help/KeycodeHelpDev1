@@ -50,7 +50,7 @@ function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
     try {
       // Create payment intent on your backend
       const {
-        data: { clientSecret },
+        data: { clientSecret, orderDescription, orderDetails },
       } = await api.post("/api/payments/create-payment-intent", {
         amount: Math.round(cartTotal * 100), // Convert to cents
         items: cartItems,
@@ -77,6 +77,38 @@ function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="checkout-form">
+      {/* Order Summary Section */}
+      <div className="order-summary-section">
+        <div className="section-header">
+          <ShoppingCart className="section-icon" />
+          <h3>Order Summary</h3>
+        </div>
+        
+        <div className="order-items">
+          {cartItems.map((item, index) => (
+            <div key={index} className="order-item">
+              <div className="item-info">
+                <span className="item-name">
+                  {item.subscriptionTier 
+                    ? `${item.subscriptionTier} Subscription`
+                    : `${item.make} ${item.model} Keycode`
+                  }
+                </span>
+                {item.vin && <span className="item-vin">VIN: {item.vin}</span>}
+              </div>
+              <span className="item-price">${item.finalPrice.toFixed(2)}</span>
+            </div>
+          ))}
+        </div>
+        
+        <div className="order-total">
+          <div className="total-row">
+            <span>Total:</span>
+            <span className="total-amount">${cartTotal.toFixed(2)}</span>
+          </div>
+        </div>
+      </div>
+
       <div className="payment-section">
         <div className="section-header">
           <CreditCard className="section-icon" />
@@ -385,20 +417,22 @@ function Cart() {
     try {
       // Process the successful payment on the backend
       await api.post("/api/payments/process-payment-success", {
-        paymentIntentId: paymentIntent.id
+        paymentIntentId: paymentIntent.id,
       });
-      
+
       setSuccessMessage("Payment successful! Your order has been placed.");
       setCartItems([]);
       setShowCheckout(false);
-      
+
       // Redirect to order confirmation or dashboard
       setTimeout(() => {
         window.location.href = "/dashboard"; // or wherever you want to redirect
       }, 2000);
     } catch (error) {
       console.error("Error processing payment success:", error);
-      setSuccessMessage("Payment successful but there was an issue processing your order. Please contact support.");
+      setSuccessMessage(
+        "Payment successful but there was an issue processing your order. Please contact support."
+      );
     }
   };
 

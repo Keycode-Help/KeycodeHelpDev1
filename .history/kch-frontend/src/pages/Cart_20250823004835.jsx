@@ -385,20 +385,22 @@ function Cart() {
     try {
       // Process the successful payment on the backend
       await api.post("/api/payments/process-payment-success", {
-        paymentIntentId: paymentIntent.id
+        paymentIntentId: paymentIntent.id,
       });
-      
+
       setSuccessMessage("Payment successful! Your order has been placed.");
       setCartItems([]);
       setShowCheckout(false);
-      
+
       // Redirect to order confirmation or dashboard
       setTimeout(() => {
         window.location.href = "/dashboard"; // or wherever you want to redirect
       }, 2000);
     } catch (error) {
       console.error("Error processing payment success:", error);
-      setSuccessMessage("Payment successful but there was an issue processing your order. Please contact support.");
+      setSuccessMessage(
+        "Payment successful but there was an issue processing your order. Please contact support."
+      );
     }
   };
 
