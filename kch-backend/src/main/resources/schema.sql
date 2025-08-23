@@ -1,13 +1,7 @@
--- Safe database schema updates for KeycodeHelp backend
+-- Minimal database schema for KeycodeHelp backend
 -- This file will be executed by Spring Boot on startup
 
--- Only add missing columns if they don't exist
--- This approach is safer and won't break existing deployments
-
--- Add missing columns to make table
-ALTER TABLE make ADD COLUMN IF NOT EXISTS non_member_price DECIMAL(10,2) DEFAULT 60.00;
-ALTER TABLE make ADD COLUMN IF NOT EXISTS member_price DECIMAL(10,2) DEFAULT 45.00;
-
--- Add missing columns to vehicle table
-ALTER TABLE vehicle ADD COLUMN IF NOT EXISTS keycode VARCHAR(255);
-ALTER TABLE vehicle ADD COLUMN IF NOT EXISTS status VARCHAR(255) DEFAULT 'PENDING';
+-- Create tables only if they don't exist
+CREATE TABLE IF NOT EXISTS make (id BIGSERIAL PRIMARY KEY, name VARCHAR(255) UNIQUE NOT NULL);
+CREATE TABLE IF NOT EXISTS keycode_user (id BIGSERIAL PRIMARY KEY, email VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, fname VARCHAR(255), lname VARCHAR(255), phone VARCHAR(255), state VARCHAR(255), role VARCHAR(50) DEFAULT 'USER', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS vehicle (id BIGSERIAL PRIMARY KEY, make_id BIGINT, model VARCHAR(255), year INTEGER, vin VARCHAR(255) UNIQUE NOT NULL, keycode_user_id BIGINT, status VARCHAR(255) DEFAULT 'PENDING', keycode VARCHAR(255), keycode_price DECIMAL(10,2), front_id BYTEA, back_id BYTEA, registration BYTEA);
