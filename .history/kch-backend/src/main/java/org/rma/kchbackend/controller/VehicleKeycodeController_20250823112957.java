@@ -44,6 +44,11 @@ public class VehicleKeycodeController {
         this.complianceService = complianceService;
     }
 
+    @GetMapping("/test-public")
+    public ResponseEntity<String> testPublic() {
+        return ResponseEntity.ok("Public endpoint works! No auth required.");
+    }
+
     @PostMapping("/request-keycode")
     public ResponseEntity<?> requestKeycode(
             @RequestParam("make") String make,
