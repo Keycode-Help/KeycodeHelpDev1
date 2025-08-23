@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/chat/stream", "/chat/history", "/chat/send").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/super-admin/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers("/vehicle/request-keycode").permitAll() // Allow unauthenticated keycode requests - updated
+                        .requestMatchers("/vehicle/request-keycode", "/vehicle/test-public").permitAll() // Allow unauthenticated keycode requests - updated
                         .requestMatchers("/user/**", "/keycode-user/**", "/api/v1/keycodes/**", "/api/payments/**").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/vehicle/**").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN") // Other vehicle endpoints require authentication
                         .anyRequest().authenticated()
