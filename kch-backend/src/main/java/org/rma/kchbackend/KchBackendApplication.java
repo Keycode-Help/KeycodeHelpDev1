@@ -121,13 +121,15 @@ public class KchBackendApplication {
             System.out.println("✅ Set STRIPE_WEBHOOK_SECRET: ***SET***");
         }
         
-        // Temporarily disable schema initialization to debug startup issues
-        System.setProperty("spring.sql.init.mode", "never");
-        // System.setProperty("spring.sql.init.schema-locations", "classpath:schema.sql");
+        // Re-enable schema initialization now that compilation errors are fixed
+        System.setProperty("spring.sql.init.mode", "always");
+        System.setProperty("spring.sql.init.schema-locations", "classpath:schema.sql");
+        // Temporarily disable data loading until schema is stable
         // System.setProperty("spring.sql.init.data-locations", "classpath:data.sql");
-        // System.setProperty("spring.jpa.defer-datasource-initialization", "true");
-        System.out.println("⚠️  Schema initialization temporarily disabled for debugging");
-        System.out.println("⚠️  Using existing database schema");
+        System.setProperty("spring.jpa.defer-datasource-initialization", "true");
+        System.out.println("✅ Schema initialization re-enabled");
+        System.out.println("✅ schema.sql location: classpath:schema.sql");
+        System.out.println("⚠️  data.sql loading temporarily disabled");
     }
     
     /**
