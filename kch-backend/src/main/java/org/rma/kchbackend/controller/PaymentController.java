@@ -92,16 +92,15 @@ public class PaymentController {
                 orderDescription.setLength(orderDescription.length() - 2);
             }
 
-            // Create payment intent parameters with order details
+                        // Create payment intent parameters with order details
             PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                     .setAmount(amount)
                     .setCurrency("usd")
                     .setDescription(orderDescription.toString())
-                    .setMetadata(createOrderMetadata(cart, cartItems))
                     .setAutomaticPaymentMethods(
                             PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
                                     .setEnabled(true)
-                                    .build()
+                            .build()
                     )
                     .build();
 
@@ -129,28 +128,7 @@ public class PaymentController {
         }
     }
 
-    private Map<String, String> createOrderMetadata(Cart cart, List<CartItem> cartItems) {
-        Map<String, String> metadata = new HashMap<>();
-        metadata.put("cart_id", cart.getId().toString());
-        metadata.put("user_id", cart.getKeycodeUser().getId().toString());
-        metadata.put("user_email", cart.getKeycodeUser().getEmail());
-        metadata.put("item_count", String.valueOf(cartItems.size()));
-        metadata.put("total_amount", String.format("%.2f", cart.getCartTotal()));
-        
-        // Add vehicle details
-        int vehicleCount = 0;
-        for (CartItem item : cartItems) {
-            if (item.getVehicle() != null) {
-                vehicleCount++;
-                metadata.put("vehicle_" + vehicleCount + "_make", item.getVehicle().getMake().getName());
-                metadata.put("vehicle_" + vehicleCount + "_model", item.getVehicle().getModel());
-                metadata.put("vehicle_" + vehicleCount + "_vin", item.getVehicle().getVin());
-                metadata.put("vehicle_" + vehicleCount + "_price", String.format("%.2f", item.getCartItemFinalPrice()));
-            }
-        }
-        
-        return metadata;
-    }
+
 
     private List<Map<String, Object>> buildOrderDetails(List<CartItem> cartItems) {
         return cartItems.stream().map(item -> {
@@ -229,7 +207,7 @@ public class PaymentController {
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Payment processed successfully and order placed");
-            response.put("confirmationNumber", cart.getConfirmationNumber());
+            response.put("confirmationNumber", "ORD-" + cart.getId() + "-" + System.currentTimeMillis());
             response.put("cartTotal", cart.getCartTotal());
 
             return ResponseEntity.ok(response);
