@@ -146,25 +146,7 @@ function VehicleKeycodeRequest() {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => {
-        // Store vehicle data for unauthenticated users
-        if (!user) {
-          const vehicleData = {
-            id: `temp-${Date.now()}`,
-            make: selectedMake,
-            model: selectedModel,
-            year: selectedYear,
-            vin: formData.vin,
-            standardPrice: selectedMakePrice,
-            finalPrice: selectedMakePrice,
-            isTemporary: true,
-            timestamp: Date.now(),
-          };
-          localStorage.setItem(
-            "tempVehicleRequest",
-            JSON.stringify(vehicleData)
-          );
-        }
+      .then(() => {
         navigate("/cart");
       })
       .catch((error) => {
