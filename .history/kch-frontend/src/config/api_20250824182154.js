@@ -98,8 +98,7 @@ const API_CONFIG = {
         "⚠️ Warning: Using localhost in production! Environment variable may not be set."
       );
       // Use environment variable or fallback to localhost
-      const fallbackUrl =
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
+      const fallbackUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
       console.log("🔄 Using fallback URL:", fallbackUrl);
       return `${fallbackUrl}${endpoint}`;
     }

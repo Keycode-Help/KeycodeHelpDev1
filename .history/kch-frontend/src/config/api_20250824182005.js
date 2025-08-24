@@ -97,11 +97,10 @@ const API_CONFIG = {
       console.warn(
         "⚠️ Warning: Using localhost in production! Environment variable may not be set."
       );
-      // Use environment variable or fallback to localhost
-      const fallbackUrl =
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
-      console.log("🔄 Using fallback URL:", fallbackUrl);
-      return `${fallbackUrl}${endpoint}`;
+      // Force production URL as fallback
+      const productionUrl = "https://keycodehelpdev1-backend.onrender.com";
+      console.log("🔄 Using production fallback URL:", productionUrl);
+      return `${productionUrl}${endpoint}`;
     }
 
     return `${API_CONFIG.BASE_URL}${endpoint}`;
