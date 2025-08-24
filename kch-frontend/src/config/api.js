@@ -51,7 +51,7 @@ const API_CONFIG = {
 
     // Vehicle endpoints
     VEHICLE: {
-      REQUEST_KEYCODE: "/vehicle/request-keycode",
+      REQUEST_KEYCODE: "/vehicle/request-keycode-public",
       USER_REQUESTS: "/vehicle/user-requests",
       UPDATE_REQUEST: "/vehicle/update-request",
       DELETE_REQUEST: "/vehicle/delete-request",

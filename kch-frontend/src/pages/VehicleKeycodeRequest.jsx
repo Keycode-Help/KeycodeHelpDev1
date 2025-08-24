@@ -141,7 +141,7 @@ function VehicleKeycodeRequest() {
     formDataObj.append("registration", formData.registration);
 
     api
-      .post("/vehicle/request-keycode", formDataObj, {
+      .post("/vehicle/request-keycode-public", formDataObj, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
