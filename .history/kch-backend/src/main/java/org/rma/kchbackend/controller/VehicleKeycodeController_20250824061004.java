@@ -4,13 +4,17 @@ import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Subscription;
+import org.rma.kchbackend.model.Cart;
+import org.rma.kchbackend.model.CartItem;
 import org.rma.kchbackend.service.MakeService;
 import org.rma.kchbackend.service.VehicleService;
 import org.rma.kchbackend.service.KeycodeUserService;
+import org.rma.kchbackend.service.CartService;
+import org.rma.kchbackend.service.CartItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.rma.kchbackend.compliance.ComplianceRequirement;
 import org.rma.kchbackend.compliance.ComplianceService;
 import org.rma.kchbackend.dto.ErrorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,14 +33,18 @@ public class VehicleKeycodeController {
 
     private final VehicleService vehicleService;
     private final KeycodeUserService keycodeUserService;
+    private final CartService cartService;
+    private final CartItemService cartItemService;
     private final MakeService makeService;
     private final ComplianceService complianceService;
 
     @Autowired
     public VehicleKeycodeController(VehicleService vehicleService, KeycodeUserService keycodeUserService,
-                                    MakeService makeService, ComplianceService complianceService) {
+                                    CartService cartService, CartItemService cartItemService, MakeService makeService, ComplianceService complianceService) {
         this.vehicleService = vehicleService;
         this.keycodeUserService = keycodeUserService;
+        this.cartService = cartService;
+        this.cartItemService = cartItemService;
         this.makeService = makeService;
         this.complianceService = complianceService;
     }
@@ -213,7 +221,7 @@ public class VehicleKeycodeController {
                 // Authenticated user - add to cart
                 vehicle.setKeycodeUser(user);
                 Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
-                // cartService.addVehicleToCart(user, savedVehicle); // Removed as per edit hint
+                cartService.addVehicleToCart(user, savedVehicle);
                 return ResponseEntity.ok("Vehicle keycode request has been added to your cart.");
             } else {
                 // Non-authenticated user - create anonymous request

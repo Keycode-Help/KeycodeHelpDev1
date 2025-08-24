@@ -158,12 +158,9 @@ function VehicleKeycodeRequest() {
             standardPrice: selectedMakePrice,
             finalPrice: selectedMakePrice,
             isTemporary: true,
-            timestamp: Date.now(),
+            timestamp: Date.now()
           };
-          localStorage.setItem(
-            "tempVehicleRequest",
-            JSON.stringify(vehicleData)
-          );
+          localStorage.setItem('tempVehicleRequest', JSON.stringify(vehicleData));
         }
         navigate("/cart");
       })

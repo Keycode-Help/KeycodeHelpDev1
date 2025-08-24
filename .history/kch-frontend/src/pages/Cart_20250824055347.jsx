@@ -278,22 +278,21 @@ function Cart() {
   // Check for temporary vehicle requests from unauthenticated users
   const checkTemporaryVehicleRequest = () => {
     if (isAuthenticated) return null;
-
-    const tempVehicle = localStorage.getItem("tempVehicleRequest");
+    
+    const tempVehicle = localStorage.getItem('tempVehicleRequest');
     if (tempVehicle) {
       try {
         const vehicleData = JSON.parse(tempVehicle);
         // Check if the request is still valid (within last 24 hours)
-        const isExpired =
-          Date.now() - vehicleData.timestamp > 24 * 60 * 60 * 1000;
+        const isExpired = Date.now() - vehicleData.timestamp > 24 * 60 * 60 * 1000;
         if (isExpired) {
-          localStorage.removeItem("tempVehicleRequest");
+          localStorage.removeItem('tempVehicleRequest');
           return null;
         }
         return vehicleData;
       } catch (error) {
-        console.error("Error parsing temporary vehicle data:", error);
-        localStorage.removeItem("tempVehicleRequest");
+        console.error('Error parsing temporary vehicle data:', error);
+        localStorage.removeItem('tempVehicleRequest');
         return null;
       }
     }
@@ -362,12 +361,12 @@ function Cart() {
   const handleRemove = async (itemId) => {
     try {
       // Check if this is a temporary vehicle request
-      const tempVehicle = localStorage.getItem("tempVehicleRequest");
+      const tempVehicle = localStorage.getItem('tempVehicleRequest');
       if (tempVehicle) {
         const vehicleData = JSON.parse(tempVehicle);
         if (vehicleData.id === itemId) {
           // Remove temporary vehicle request
-          localStorage.removeItem("tempVehicleRequest");
+          localStorage.removeItem('tempVehicleRequest');
           setCartItems([]);
           setSuccessMessage("Vehicle request removed successfully!");
           return;
@@ -388,7 +387,7 @@ function Cart() {
 
   // Clear temporary vehicle request (for unauthenticated users)
   const clearTemporaryVehicleRequest = () => {
-    localStorage.removeItem("tempVehicleRequest");
+    localStorage.removeItem('tempVehicleRequest');
     setCartItems([]);
     setSuccessMessage("Vehicle request cleared successfully!");
   };
@@ -439,22 +438,20 @@ function Cart() {
     try {
       // Process the successful payment on the backend
       await api.post("/api/payments/process-payment-success", {
-        paymentIntentId: paymentIntent.id,
+        paymentIntentId: paymentIntent.id
       });
-
+      
       setSuccessMessage("Payment successful! Your order has been placed.");
       setCartItems([]);
       setShowCheckout(false);
-
+      
       // Redirect to order confirmation or dashboard
       setTimeout(() => {
         window.location.href = "/dashboard"; // or wherever you want to redirect
       }, 2000);
     } catch (error) {
       console.error("Error processing payment success:", error);
-      setSuccessMessage(
-        "Payment successful but there was an issue processing your order. Please contact support."
-      );
+      setSuccessMessage("Payment successful but there was an issue processing your order. Please contact support.");
     }
   };
 
@@ -563,24 +560,21 @@ function Cart() {
                     />
                   ))}
                 </div>
-
+                
                 {/* Clear button for unauthenticated users with temporary vehicle requests */}
-                {!isAuthenticated &&
-                  cartItems.length > 0 &&
-                  cartItems[0]?.isTemporary && (
-                    <div className="temp-vehicle-actions">
-                      <p className="temp-vehicle-notice">
-                        ⚠️ This is a temporary vehicle request. You must
-                        complete checkout or log in to save it permanently.
-                      </p>
-                      <button
-                        onClick={clearTemporaryVehicleRequest}
-                        className="btn btn-secondary"
-                      >
-                        Clear Vehicle Request
-                      </button>
-                    </div>
-                  )}
+                {!isAuthenticated && cartItems.length > 0 && cartItems[0]?.isTemporary && (
+                  <div className="temp-vehicle-actions">
+                    <p className="temp-vehicle-notice">
+                      ⚠️ This is a temporary vehicle request. You must complete checkout or log in to save it permanently.
+                    </p>
+                    <button
+                      onClick={clearTemporaryVehicleRequest}
+                      className="btn btn-secondary"
+                    >
+                      Clear Vehicle Request
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Cart Summary */}

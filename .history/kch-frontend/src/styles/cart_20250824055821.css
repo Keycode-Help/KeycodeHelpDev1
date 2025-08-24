@@ -966,11 +966,7 @@
 .temp-vehicle-actions {
   margin-top: var(--spacing6);
   padding: var(--spacing4);
-  background: linear-gradient(
-    135deg,
-    var(--warningBg) 0%,
-    var(--warningBgLight) 100%
-  );
+  background: linear-gradient(135deg, var(--warningBg) 0%, var(--warningBgLight) 100%);
   border: 1px solid var(--warning);
   border-radius: var(--radiusLarge);
   text-align: center;

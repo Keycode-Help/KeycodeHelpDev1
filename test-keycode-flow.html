@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Keycode Request Flow</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 3px; }
+        button:hover { background: #0056b3; }
+        .result { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 3px; border-left: 4px solid #007bff; }
+        .success { border-left-color: #28a745; background: #d4edda; }
+        .error { border-left-color: #dc3545; background: #f8d7da; }
+        .warning { border-left-color: #ffc107; background: #fff3cd; }
+        .form-group { margin: 10px 0; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px; }
+        .simulated-form { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Test Keycode Request Flow</h1>
+    
+    <div class="test-section">
+        <h3>1. Simulate Keycode Request Form</h3>
+        <div class="simulated-form">
+            <div class="form-group">
+                <label>Make:</label>
+                <select id="make">
+                    <option value="">Select Make</option>
+                    <option value="Ford">Ford</option>
+                    <option value="Chevrolet">Chevrolet</option>
+                    <option value="Nissan">Nissan</option>
+                    <option value="Toyota">Toyota</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Model:</label>
+                <select id="model">
+                    <option value="">Select Model</option>
+                    <option value="Focus">Focus</option>
+                    <option value="Camaro">Camaro</option>
+                    <option value="Altima">Altima</option>
+                    <option value="Camry">Camry</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Year:</label>
+                <select id="year">
+                    <option value="">Select Year</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>VIN:</label>
+                <input type="text" id="vin" placeholder="Enter VIN number" value="1FADP3F20LA123456">
+            </div>
+            <div class="form-group">
+                <label>Price (Non-Member):</label>
+                <input type="number" id="price" value="99.99" step="0.01">
+            </div>
+            <button onclick="simulateKeycodeRequest()">Simulate Keycode Request</button>
+        </div>
+        <div id="simulate-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Check Stored Vehicle Data</h3>
+        <button onclick="checkStoredVehicle()">Check Stored Vehicle</button>
+        <div id="check-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Simulate Navigation to Cart</h3>
+        <button onclick="simulateCartNavigation()">Simulate Cart Navigation</button>
+        <div id="cart-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>4. Clear Stored Vehicle Data</h3>
+        <button onclick="clearStoredVehicle()">Clear Vehicle Data</button>
+        <div id="clear-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>5. Test Cart Display Logic</h3>
+        <button onclick="testCartDisplayLogic()">Test Cart Display Logic</button>
+        <div id="cart-display-result" class="result"></div>
+    </div>
+
+    <script>
+        function simulateKeycodeRequest() {
+            const make = document.getElementById('make').value;
+            const model = document.getElementById('model').value;
+            const year = document.getElementById('year').value;
+            const vin = document.getElementById('vin').value;
+            const price = parseFloat(document.getElementById('price').value);
+            
+            if (!make || !model || !year || !vin) {
+                document.getElementById('simulate-result').innerHTML = `
+                    <div class="error">❌ Please fill in all required fields</div>
+                `;
+                return;
+            }
+            
+            // Simulate the API call and response handling
+            try {
+                // Simulate successful API response
+                const vehicleData = {
+                    id: `temp-${Date.now()}`,
+                    make: make,
+                    model: model,
+                    year: year,
+                    vin: vin,
+                    standardPrice: price,
+                    finalPrice: price,
+                    isTemporary: true,
+                    timestamp: Date.now()
+                };
+                
+                // Store in localStorage (simulating the frontend behavior)
+                localStorage.setItem('tempVehicleRequest', JSON.stringify(vehicleData));
+                
+                document.getElementById('simulate-result').innerHTML = `
+                    <div class="success">✅ Keycode request simulated successfully!</div>
+                    <div><strong>Vehicle Data:</strong></div>
+                    <pre>${JSON.stringify(vehicleData, null, 2)}</pre>
+                    <div><strong>Next step:</strong> Navigate to cart to see the vehicle</div>
+                `;
+                
+            } catch (error) {
+                document.getElementById('simulate-result').innerHTML = `
+                    <div class="error">❌ Error simulating keycode request: ${error.message}</div>
+                `;
+            }
+        }
+        
+        function checkStoredVehicle() {
+            const tempVehicle = localStorage.getItem('tempVehicleRequest');
+            if (tempVehicle) {
+                try {
+                    const vehicleData = JSON.parse(tempVehicle);
+                    const isExpired = Date.now() - vehicleData.timestamp > 24 * 60 * 60 * 1000;
+                    
+                    document.getElementById('check-result').innerHTML = `
+                        <div class="success">✅ Vehicle data found in localStorage!</div>
+                        <div><strong>Expired:</strong> ${isExpired ? 'Yes' : 'No'}</div>
+                        <div><strong>Age:</strong> ${Math.round((Date.now() - vehicleData.timestamp) / 1000)} seconds</div>
+                        <div><strong>Data:</strong></div>
+                        <pre>${JSON.stringify(vehicleData, null, 2)}</pre>
+                    `;
+                } catch (error) {
+                    document.getElementById('check-result').innerHTML = `
+                        <div class="error">❌ Error parsing vehicle data: ${error.message}</div>
+                    `;
+                }
+            } else {
+                document.getElementById('check-result').innerHTML = `
+                    <div class="warning">⚠️ No vehicle data found in localStorage</div>
+                `;
+            }
+        }
+        
+        function simulateCartNavigation() {
+            const tempVehicle = localStorage.getItem('tempVehicleRequest');
+            if (!tempVehicle) {
+                document.getElementById('cart-result').innerHTML = `
+                    <div class="warning">⚠️ No vehicle data to display in cart</div>
+                `;
+                return;
+            }
+            
+            try {
+                const vehicleData = JSON.parse(tempVehicle);
+                const isExpired = Date.now() - vehicleData.timestamp > 24 * 60 * 60 * 1000;
+                
+                if (isExpired) {
+                    document.getElementById('cart-result').innerHTML = `
+                        <div class="warning">⚠️ Vehicle data has expired (older than 24 hours)</div>
+                        <div>This would be automatically removed in the real cart</div>
+                    `;
+                } else {
+                    document.getElementById('cart-result').innerHTML = `
+                        <div class="success">✅ Cart would display this vehicle:</div>
+                        <div class="simulated-form">
+                            <h4>Cart Item</h4>
+                            <div><strong>Type:</strong> Vehicle Keycode</div>
+                            <div><strong>Vehicle:</strong> ${vehicleData.make} ${vehicleData.model} ${vehicleData.year}</div>
+                            <div><strong>VIN:</strong> ${vehicleData.vin}</div>
+                            <div><strong>Price:</strong> $${vehicleData.finalPrice}</div>
+                            <div><strong>Status:</strong> Temporary Request</div>
+                            <div><strong>Note:</strong> ⚠️ This is a temporary vehicle request. You must complete checkout or log in to save it permanently.</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('cart-result').innerHTML = `
+                    <div class="error">❌ Error processing cart data: ${error.message}</div>
+                `;
+            }
+        }
+        
+        function clearStoredVehicle() {
+            localStorage.removeItem('tempVehicleRequest');
+            document.getElementById('clear-result').innerHTML = `
+                <div class="success">✅ Vehicle data cleared from localStorage</div>
+            `;
+        }
+        
+        function testCartDisplayLogic() {
+            const tempVehicle = localStorage.getItem('tempVehicleRequest');
+            
+            if (!tempVehicle) {
+                document.getElementById('cart-display-result').innerHTML = `
+                    <div class="warning">⚠️ No vehicle data in localStorage</div>
+                    <div>Cart would show: "Your cart is empty"</div>
+                `;
+                return;
+            }
+            
+            try {
+                const vehicleData = JSON.parse(tempVehicle);
+                const isExpired = Date.now() - vehicleData.timestamp > 24 * 60 * 60 * 1000;
+                
+                if (isExpired) {
+                    document.getElementById('cart-display-result').innerHTML = `
+                        <div class="warning">⚠️ Vehicle data expired</div>
+                        <div>Cart would show: "Your cart is empty" (expired data auto-removed)</div>
+                    `;
+                } else {
+                    // Simulate the cart display logic from Cart.jsx
+                    const cartItems = [vehicleData];
+                    const cartTotal = cartItems.reduce((sum, item) => sum + (item.finalPrice || 0), 0);
+                    
+                    document.getElementById('cart-display-result').innerHTML = `
+                        <div class="success">✅ Cart would display:</div>
+                        <div class="simulated-form">
+                            <h4>Cart Items (${cartItems.length})</h4>
+                            <div><strong>Vehicle:</strong> ${vehicleData.make} ${vehicleData.model}</div>
+                            <div><strong>VIN:</strong> ${vehicleData.vin}</div>
+                            <div><strong>Standard Price:</strong> $${vehicleData.standardPrice}</div>
+                            <div><strong>Final Price:</strong> $${vehicleData.finalPrice}</div>
+                            <hr>
+                            <div><strong>Subtotal:</strong> $${cartTotal.toFixed(2)}</div>
+                            <div><strong>Total:</strong> $${cartTotal.toFixed(2)}</div>
+                            <div><strong>Proceed to Checkout button:</strong> Enabled</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('cart-display-result').innerHTML = `
+                    <div class="error">❌ Error testing cart display logic: ${error.message}</div>
+                `;
+            }
+        }
+        
+        // Auto-check for stored vehicle on page load
+        window.onload = function() {
+            checkStoredVehicle();
+        };
+    </script>
+</body>
+</html>

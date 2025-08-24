@@ -7,10 +7,11 @@ import org.rma.kchbackend.model.Subscription;
 import org.rma.kchbackend.service.MakeService;
 import org.rma.kchbackend.service.VehicleService;
 import org.rma.kchbackend.service.KeycodeUserService;
+import org.rma.kchbackend.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.rma.kchbackend.compliance.ComplianceRequirement;
 import org.rma.kchbackend.compliance.ComplianceService;
 import org.rma.kchbackend.dto.ErrorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,14 +30,16 @@ public class VehicleKeycodeController {
 
     private final VehicleService vehicleService;
     private final KeycodeUserService keycodeUserService;
+    private final CartService cartService;
     private final MakeService makeService;
     private final ComplianceService complianceService;
 
     @Autowired
     public VehicleKeycodeController(VehicleService vehicleService, KeycodeUserService keycodeUserService,
-                                    MakeService makeService, ComplianceService complianceService) {
+                                    CartService cartService, MakeService makeService, ComplianceService complianceService) {
         this.vehicleService = vehicleService;
         this.keycodeUserService = keycodeUserService;
+        this.cartService = cartService;
         this.makeService = makeService;
         this.complianceService = complianceService;
     }
@@ -81,8 +84,6 @@ public class VehicleKeycodeController {
                 // Create the make if it doesn't exist
                 vehicleMake = new Make();
                 vehicleMake.setName(make);
-                vehicleMake.setNonMemberPrice(99.99); // Default non-member price
-                vehicleMake.setMemberPrice(79.99);    // Default member price
                 vehicleMake = makeService.saveMake(vehicleMake);
             }
             
@@ -102,14 +103,9 @@ public class VehicleKeycodeController {
             vehicle.setKeycodeUser(null); // No user association
             Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
             
-            // Return success response
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "Vehicle keycode request submitted successfully");
-            response.put("vehicleId", savedVehicle.getId());
-            response.put("price", keycodePrice);
-            
-            return ResponseEntity.ok(response);
+            // Create a temporary cart item for anonymous users
+            // This will be handled differently than authenticated user carts
+            return ResponseEntity.ok("Vehicle keycode request submitted successfully. Please log in to add to cart.");
             
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Failed to process keycode request: " + e.getMessage());
@@ -213,7 +209,7 @@ public class VehicleKeycodeController {
                 // Authenticated user - add to cart
                 vehicle.setKeycodeUser(user);
                 Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
-                // cartService.addVehicleToCart(user, savedVehicle); // Removed as per edit hint
+                cartService.addVehicleToCart(user, savedVehicle);
                 return ResponseEntity.ok("Vehicle keycode request has been added to your cart.");
             } else {
                 // Non-authenticated user - create anonymous request
