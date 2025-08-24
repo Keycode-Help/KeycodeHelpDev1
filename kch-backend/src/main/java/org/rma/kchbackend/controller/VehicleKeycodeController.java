@@ -4,10 +4,13 @@ import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Subscription;
+import org.rma.kchbackend.model.Cart;
+import org.rma.kchbackend.model.CartItem;
 import org.rma.kchbackend.service.MakeService;
 import org.rma.kchbackend.service.VehicleService;
 import org.rma.kchbackend.service.KeycodeUserService;
 import org.rma.kchbackend.service.CartService;
+import org.rma.kchbackend.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.rma.kchbackend.compliance.ComplianceRequirement;
 import org.rma.kchbackend.compliance.ComplianceService;
@@ -31,21 +34,23 @@ public class VehicleKeycodeController {
     private final VehicleService vehicleService;
     private final KeycodeUserService keycodeUserService;
     private final CartService cartService;
+    private final CartItemService cartItemService;
     private final MakeService makeService;
     private final ComplianceService complianceService;
 
     @Autowired
     public VehicleKeycodeController(VehicleService vehicleService, KeycodeUserService keycodeUserService,
-                                    CartService cartService, MakeService makeService, ComplianceService complianceService) {
+                                    CartService cartService, CartItemService cartItemService, MakeService makeService, ComplianceService complianceService) {
         this.vehicleService = vehicleService;
         this.keycodeUserService = keycodeUserService;
         this.cartService = cartService;
+        this.cartItemService = cartItemService;
         this.makeService = makeService;
         this.complianceService = complianceService;
     }
 
     @PostMapping("/request-keycode-public")
-    public ResponseEntity<String> requestKeycodePublic(
+    public ResponseEntity<?> requestKeycodePublic(
             @RequestParam("make") String make,
             @RequestParam("model") String model,
             @RequestParam("year") String year,
@@ -53,9 +58,70 @@ public class VehicleKeycodeController {
             @RequestParam("frontId") MultipartFile frontId,
             @RequestParam("backId") MultipartFile backId,
             @RequestParam("registration") MultipartFile registration) {
-        
-        // Simple test response for now
-        return ResponseEntity.ok("Public endpoint working! Make: " + make + ", Model: " + model + ", Year: " + year + ", VIN: " + vin);
+        try {
+            // Validate files
+            if (frontId.isEmpty() || backId.isEmpty() || registration.isEmpty()) {
+                return ResponseEntity.badRequest().body("All document files are required.");
+            }
+
+            // Validate file size (e.g., 5MB limit)
+            long maxFileSize = 5 * 1024 * 1024;
+            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || registration.getSize() > maxFileSize) {
+                return ResponseEntity.badRequest().body("File size must not exceed 5MB.");
+            }
+
+            // Validate file types
+            if (!frontId.getContentType().startsWith("image/") ||
+                    !backId.getContentType().startsWith("image/") ||
+                    !registration.getContentType().startsWith("image/")) {
+                return ResponseEntity.badRequest().body("Only image files are allowed.");
+            }
+
+            // For public endpoint, always treat as unauthenticated user
+            KeycodeUser user = null;
+
+            // Create and save the vehicle
+            Vehicle vehicle = new Vehicle();
+
+            // Get or create the vehicle make
+            Make vehicleMake = makeService.getMakeDetails(make);
+            if (vehicleMake == null) {
+                // Create the make if it doesn't exist
+                vehicleMake = new Make();
+                vehicleMake.setName(make);
+                vehicleMake.setNonMemberPrice(99.99); // Default non-member price
+                vehicleMake.setMemberPrice(79.99);    // Default member price
+                vehicleMake = makeService.saveMake(vehicleMake);
+            }
+            
+            vehicle.setMake(vehicleMake);
+            vehicle.setModel(model);
+            vehicle.setYear(Integer.parseInt(year));
+            
+            // Use non-member pricing for public endpoint
+            double keycodePrice = vehicleMake.getNonMemberPrice();
+            vehicle.setKeycodePrice(keycodePrice);
+            vehicle.setVin(vin);
+            vehicle.setFrontId(frontId.getBytes());
+            vehicle.setBackId(backId.getBytes());
+            vehicle.setRegistration(registration.getBytes());
+            
+            // For public endpoint, create anonymous request
+            vehicle.setKeycodeUser(null); // No user association
+            Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
+            
+            // Return success response
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Vehicle keycode request submitted successfully");
+            response.put("vehicleId", savedVehicle.getId());
+            response.put("price", keycodePrice);
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Failed to process keycode request: " + e.getMessage());
+        }
     }
 
     @PostMapping("/request-keycode")
