@@ -493,10 +493,8 @@ function Cart() {
       // For unauthenticated users, check for guest user info and fetch cart
       const guestInfo = checkGuestUserInfo();
       if (guestInfo) {
-        setGuestUserInfo(guestInfo);
         fetchCartItems(); // This will fetch from backend for guest user
       } else {
-        setGuestUserInfo(null);
         setCartItems([]);
         setCartTotal(0);
       }
@@ -504,43 +502,6 @@ function Cart() {
       setIsLoading(false);
     }
   }, [isAuthenticated, user]);
-
-  // Additional useEffect to handle guest user info changes
-  useEffect(() => {
-    if (!isAuthenticated && guestUserInfo) {
-      fetchCartItems();
-    }
-  }, [guestUserInfo]);
-
-  // Listen for changes to localStorage (when guestUserInfo is set from keycode request)
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === "guestUserInfo") {
-        if (e.newValue) {
-          try {
-            const newGuestInfo = JSON.parse(e.newValue);
-            setGuestUserInfo(newGuestInfo);
-          } catch (error) {
-            console.error("Error parsing new guest user info:", error);
-          }
-        } else {
-          setGuestUserInfo(null);
-        }
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    
-    // Also check for initial guest user info
-    const initialGuestInfo = checkGuestUserInfo();
-    if (initialGuestInfo && !isAuthenticated) {
-      setGuestUserInfo(initialGuestInfo);
-    }
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [isAuthenticated]);
 
   // Clear success message after 5 seconds
   useEffect(() => {

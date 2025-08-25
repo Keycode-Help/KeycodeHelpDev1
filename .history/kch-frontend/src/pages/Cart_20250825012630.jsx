@@ -512,36 +512,6 @@ function Cart() {
     }
   }, [guestUserInfo]);
 
-  // Listen for changes to localStorage (when guestUserInfo is set from keycode request)
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === "guestUserInfo") {
-        if (e.newValue) {
-          try {
-            const newGuestInfo = JSON.parse(e.newValue);
-            setGuestUserInfo(newGuestInfo);
-          } catch (error) {
-            console.error("Error parsing new guest user info:", error);
-          }
-        } else {
-          setGuestUserInfo(null);
-        }
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    
-    // Also check for initial guest user info
-    const initialGuestInfo = checkGuestUserInfo();
-    if (initialGuestInfo && !isAuthenticated) {
-      setGuestUserInfo(initialGuestInfo);
-    }
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [isAuthenticated]);
-
   // Clear success message after 5 seconds
   useEffect(() => {
     if (successMessage) {
