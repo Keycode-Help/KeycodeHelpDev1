@@ -795,18 +795,22 @@ function Cart() {
 
               {/* Debug Info */}
               <div className="debug-info">
-                <p>🔍 <strong>Debug Info:</strong></p>
-                <p>Stripe Loaded: {stripePromise ? '✅ Yes' : '❌ No'}</p>
+                <p>
+                  🔍 <strong>Debug Info:</strong>
+                </p>
+                <p>Stripe Loaded: {stripePromise ? "✅ Yes" : "❌ No"}</p>
                 <p>Cart Items: {cartItems.length}</p>
                 <p>Cart Total: ${cartTotal.toFixed(2)}</p>
               </div>
 
-              <CheckoutForm
-                cartTotal={cartTotal}
-                cartItems={cartItems}
-                onSuccess={handleCheckoutSuccess}
-                onError={handleCheckoutError}
-              />
+              <Elements stripe={stripePromise}>
+                <CheckoutForm
+                  cartTotal={cartTotal}
+                  cartItems={cartItems}
+                  onSuccess={handleCheckoutSuccess}
+                  onError={handleCheckoutError}
+                />
+              </Elements>
             </div>
           </div>
         )}
