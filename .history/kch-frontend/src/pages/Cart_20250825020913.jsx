@@ -830,21 +830,13 @@ function Cart() {
           <div className="checkout-modal">
             <div className="modal-content">
               <div className="modal-header">
-                <h2>🔒 Complete Your Purchase via Stripe</h2>
+                <h2>Complete Your Purchase</h2>
                 <button
                   onClick={() => setShowCheckout(false)}
                   className="close-button"
                 >
                   ×
                 </button>
-              </div>
-
-              {/* Debug Info */}
-              <div className="debug-info">
-                <p>🔍 <strong>Debug Info:</strong></p>
-                <p>Stripe Loaded: {stripePromise ? '✅ Yes' : '❌ No'}</p>
-                <p>Cart Items: {cartItems.length}</p>
-                <p>Cart Total: ${cartTotal.toFixed(2)}</p>
               </div>
 
               <Elements stripe={stripePromise}>
