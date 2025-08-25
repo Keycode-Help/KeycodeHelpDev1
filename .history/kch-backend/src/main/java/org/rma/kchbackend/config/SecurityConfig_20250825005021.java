@@ -36,13 +36,14 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         // Public endpoints - must come FIRST
                         .requestMatchers("/vehicle/test-public", "/vehicle/test-form", "/vehicle/request-keycode-public").permitAll()
-                        .requestMatchers("/", "/actuator/health", "/css/**", "/js/**", "/images/**", "/register", "/send-email", "/makes/**", "/compliance/status", "/compliance/status/public", "/cart/items/public").permitAll()
+                        .requestMatchers("/", "/actuator/health", "/css/**", "/js/**", "/images/**", "/register", "/send-email", "/makes/**", "/compliance/status", "/compliance/status/public").permitAll()
                         .requestMatchers("/auth/login", "/auth/register", "/auth/admin-register", "/auth/refresh", "/auth/dev-set-password", "/auth/dev-upsert-admin", "/auth/dev-upsert-user", "/auth/reset-password", "/auth/reset-password/confirm").permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/chat/stream", "/chat/history", "/chat/send").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/super-admin/**").hasRole("SUPER_ADMIN")
                         .requestMatchers("/user/**", "/keycode-user/**", "/api/v1/keycodes/**", "/api/payments/**").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/cart/**", "/api/payments/**").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN", "GUEST") // Allow guest users to access cart and payments
+                        .requestMatchers("/cart/items/public").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN", "GUEST") // Allow guest users to fetch their cart items
                         .requestMatchers("/vehicle/**").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN") // Other vehicle endpoints require authentication
                         .anyRequest().authenticated()
                 )
