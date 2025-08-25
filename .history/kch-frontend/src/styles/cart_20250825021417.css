@@ -1004,25 +1004,6 @@
   animation: spin 1s linear infinite;
 }
 
-/* Debug Info */
-.debug-info {
-  background: var(--surfaceLight);
-  border: 1px solid var(--border);
-  border-radius: var(--radiusBase);
-  padding: var(--spacing4);
-  margin-bottom: var(--spacing4);
-  font-size: var(--fontSizeSmall);
-}
-
-.debug-info p {
-  margin: var(--spacing1) 0;
-  color: var(--textDim);
-}
-
-.debug-info strong {
-  color: var(--text);
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
   .cart-content {
