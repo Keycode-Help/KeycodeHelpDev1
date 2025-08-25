@@ -138,7 +138,7 @@ public class PaymentController {
             Stripe.apiKey = stripeSecretKey;
 
             // Extract request data
-            Long amount = Long.valueOf(Math.round(((Number) request.get("amount")).doubleValue()));
+            Long amount = Long.valueOf(request.get("amount").toString());
             List<Map<String, Object>> items = (List<Map<String, Object>>) request.get("items");
             String successUrl = (String) request.get("success_url");
             String cancelUrl = (String) request.get("cancel_url");
@@ -164,8 +164,8 @@ public class PaymentController {
                                                         .build()
                                         )
                                         .setUnitAmount(item.get("finalPrice") != null ? 
-                                                Long.valueOf(Math.round(((Number) item.get("finalPrice")).doubleValue() * 100)) : 
-                                                Long.valueOf(Math.round(((Number) item.get("standardPrice")).doubleValue() * 100)))
+                                                Math.round(((Number) item.get("finalPrice")).doubleValue() * 100) : 
+                                                Math.round(((Number) item.get("standardPrice")).doubleValue() * 100))
                                         .build()
                         )
                         .setQuantity(1L)

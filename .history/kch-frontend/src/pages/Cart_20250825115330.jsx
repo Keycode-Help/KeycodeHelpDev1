@@ -781,7 +781,13 @@ function Cart() {
                 </button>
               </div>
 
-
+              {/* Debug Info */}
+              <div className="debug-info">
+                <p>🔍 <strong>Debug Info:</strong></p>
+                <p>Stripe Loaded: {stripePromise ? '✅ Yes' : '❌ No'}</p>
+                <p>Cart Items: {cartItems.length}</p>
+                <p>Cart Total: ${cartTotal.toFixed(2)}</p>
+              </div>
 
               <CheckoutForm
                 cartTotal={cartTotal}
