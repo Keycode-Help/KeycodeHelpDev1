@@ -334,15 +334,7 @@ function Cart() {
     let totalPrice = 0;
     if (cartItems.length > 0) {
       totalPrice = cartItems.reduce((sum, item) => {
-        // Handle both temporary vehicle data and regular cart items
-        let itemPrice = 0;
-        if (item.finalPrice !== undefined) {
-          itemPrice = item.finalPrice;
-        } else if (item.standardPrice !== undefined) {
-          itemPrice = item.standardPrice;
-        } else if (item.price !== undefined) {
-          itemPrice = item.price;
-        }
+        const itemPrice = item.finalPrice || 0;
         return sum + itemPrice;
       }, 0);
     }
