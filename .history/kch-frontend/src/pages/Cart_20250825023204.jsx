@@ -42,7 +42,7 @@ function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
     try {
       console.log("🚀 Creating Stripe checkout session for amount:", cartTotal);
       console.log("📦 Cart items:", cartItems);
-
+      
       // Create Stripe checkout session on your backend
       const response = await api.post("/api/payments/create-checkout-session", {
         amount: Math.round(cartTotal * 100), // Convert to cents
@@ -52,13 +52,14 @@ function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
       });
 
       console.log("✅ Stripe checkout session created, redirecting...");
-
+      
       // Redirect to Stripe's hosted checkout page
       if (response.data.url) {
         window.location.href = response.data.url;
       } else {
         throw new Error("No checkout URL received from backend");
       }
+      
     } catch (error) {
       console.error("❌ Stripe checkout error:", error);
       setError("Failed to create checkout session. Please try again.");
@@ -76,13 +77,9 @@ function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
           {cartItems.map((item, index) => (
             <div key={index} className="order-item">
               <span className="item-name">
-                {item.make && item.model
-                  ? `${item.make} ${item.model}`
-                  : "Vehicle Keycode"}
+                {item.make && item.model ? `${item.make} ${item.model}` : 'Vehicle Keycode'}
               </span>
-              <span className="item-price">
-                ${item.finalPrice || item.standardPrice || item.price}
-              </span>
+              <span className="item-price">${item.finalPrice || item.standardPrice || item.price}</span>
             </div>
           ))}
         </div>
@@ -97,10 +94,9 @@ function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
           <CreditCard className="section-icon" />
           <h3>💳 Secure Payment via Stripe</h3>
         </div>
-
+        
         <p className="checkout-description">
-          Click the button below to complete your payment securely on Stripe's
-          hosted checkout page.
+          Click the button below to complete your payment securely on Stripe's hosted checkout page.
         </p>
 
         {error && (
@@ -287,8 +283,7 @@ function Cart() {
       try {
         const guestData = JSON.parse(guestInfo);
         // Check if the guest info is still valid (within last 24 hours)
-        const isExpired =
-          Date.now() - guestData.timestamp > 24 * 60 * 60 * 1000;
+        const isExpired = Date.now() - guestData.timestamp > 24 * 60 * 60 * 1000;
         if (isExpired) {
           localStorage.removeItem("guestUserInfo");
           return null;
@@ -309,14 +304,9 @@ function Cart() {
       const guestInfo = checkGuestUserInfo();
       if (guestInfo) {
         try {
-          console.log(
-            "Fetching cart items for guest user:",
-            guestInfo.guestUserId
-          );
+          console.log("Fetching cart items for guest user:", guestInfo.guestUserId);
           // Fetch cart items for guest user from backend
-          const response = await api.get(
-            `/cart/items/public?guestUserId=${guestInfo.guestUserId}`
-          );
+          const response = await api.get(`/cart/items/public?guestUserId=${guestInfo.guestUserId}`);
           console.log("Guest cart response:", response.data);
           if (Array.isArray(response.data)) {
             setCartItems(response.data);
@@ -540,7 +530,7 @@ function Cart() {
     };
 
     window.addEventListener("storage", handleStorageChange);
-
+    
     // Also check for initial guest user info
     const initialGuestInfo = checkGuestUserInfo();
     if (initialGuestInfo && !isAuthenticated) {
@@ -801,12 +791,14 @@ function Cart() {
                 <p>Cart Total: ${cartTotal.toFixed(2)}</p>
               </div>
 
-              <CheckoutForm
-                cartTotal={cartTotal}
-                cartItems={cartItems}
-                onSuccess={handleCheckoutSuccess}
-                onError={handleCheckoutError}
-              />
+              <Elements stripe={stripePromise}>
+                <CheckoutForm
+                  cartTotal={cartTotal}
+                  cartItems={cartItems}
+                  onSuccess={handleCheckoutSuccess}
+                  onError={handleCheckoutError}
+                />
+              </Elements>
             </div>
           </div>
         )}
