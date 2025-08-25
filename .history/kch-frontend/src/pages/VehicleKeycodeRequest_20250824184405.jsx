@@ -145,7 +145,7 @@ function VehicleKeycodeRequest() {
         isTemporary: true,
         timestamp: Date.now(),
       };
-
+      
       localStorage.setItem("tempVehicleRequest", JSON.stringify(vehicleData));
       console.log("✅ Vehicle data stored in localStorage:", vehicleData);
       navigate("/cart");
@@ -173,11 +173,8 @@ function VehicleKeycodeRequest() {
         navigate("/cart");
       })
       .catch((error) => {
-        console.error(
-          "❌ API call failed, falling back to localStorage:",
-          error
-        );
-
+        console.error("❌ API call failed, falling back to localStorage:", error);
+        
         // Fallback: Store in localStorage and continue
         const vehicleData = {
           id: `temp-${Date.now()}`,
@@ -189,19 +186,14 @@ function VehicleKeycodeRequest() {
           finalPrice: selectedMakePrice,
           isTemporary: true,
           timestamp: Date.now(),
-          note: "Backend unavailable - stored locally",
+          note: "Backend unavailable - stored locally"
         };
-
+        
         localStorage.setItem("tempVehicleRequest", JSON.stringify(vehicleData));
-        console.log(
-          "✅ Fallback: Vehicle data stored in localStorage:",
-          vehicleData
-        );
-
+        console.log("✅ Fallback: Vehicle data stored in localStorage:", vehicleData);
+        
         // Show user-friendly message
-        alert(
-          "Backend service is temporarily unavailable. Your request has been saved locally and you can proceed to checkout."
-        );
+        alert("Backend service is temporarily unavailable. Your request has been saved locally and you can proceed to checkout.");
         navigate("/cart");
       });
   };

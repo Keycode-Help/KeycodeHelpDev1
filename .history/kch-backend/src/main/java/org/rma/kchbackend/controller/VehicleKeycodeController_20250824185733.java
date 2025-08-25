@@ -44,64 +44,32 @@ public class VehicleKeycodeController {
         this.complianceService = complianceService;
     }
 
-    @GetMapping("/test-public")
-    public ResponseEntity<String> testPublic() {
-        return ResponseEntity.ok("Public endpoint is working!");
-    }
-
-    @PostMapping("/test-form")
-    public ResponseEntity<Map<String, Object>> testForm(
-            @RequestParam("make") String make,
-            @RequestParam("model") String model) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("make", make);
-        response.put("model", model);
-        response.put("message", "Form data received successfully");
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping("/request-keycode-public")
     public ResponseEntity<?> requestKeycodePublic(
             @RequestParam("make") String make,
             @RequestParam("model") String model,
             @RequestParam("year") String year,
             @RequestParam("vin") String vin,
-            @RequestParam(value = "frontId", required = false) MultipartFile frontId,
-            @RequestParam(value = "backId", required = false) MultipartFile backId,
-            @RequestParam(value = "registration", required = false) MultipartFile registration) {
+            @RequestParam("frontId") MultipartFile frontId,
+            @RequestParam("backId") MultipartFile backId,
+            @RequestParam("registration") MultipartFile registration) {
         try {
-            // For testing purposes, make files optional
-            if (frontId != null && !frontId.isEmpty()) {
-                // Validate file size (e.g., 5MB limit)
-                long maxFileSize = 5 * 1024 * 1024;
-                if (frontId.getSize() > maxFileSize) {
-                    return ResponseEntity.badRequest().body("Front ID file size must not exceed 5MB.");
-                }
-                // Validate file type
-                if (!frontId.getContentType().startsWith("image/")) {
-                    return ResponseEntity.badRequest().body("Front ID must be an image file.");
-                }
+            // Validate files
+            if (frontId.isEmpty() || backId.isEmpty() || registration.isEmpty()) {
+                return ResponseEntity.badRequest().body("All document files are required.");
             }
-            
-            if (backId != null && !backId.isEmpty()) {
-                long maxFileSize = 5 * 1024 * 1024;
-                if (backId.getSize() > maxFileSize) {
-                    return ResponseEntity.badRequest().body("Back ID file size must not exceed 5MB.");
-                }
-                if (!backId.getContentType().startsWith("image/")) {
-                    return ResponseEntity.badRequest().body("Back ID must be an image file.");
-                }
+
+            // Validate file size (e.g., 5MB limit)
+            long maxFileSize = 5 * 1024 * 1024;
+            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || registration.getSize() > maxFileSize) {
+                return ResponseEntity.badRequest().body("File size must not exceed 5MB.");
             }
-            
-            if (registration != null && !registration.isEmpty()) {
-                long maxFileSize = 5 * 1024 * 1024;
-                if (registration.getSize() > maxFileSize) {
-                    return ResponseEntity.badRequest().body("Registration file size must not exceed 5MB.");
-                }
-                if (!registration.getContentType().startsWith("image/")) {
-                    return ResponseEntity.badRequest().body("Registration must be an image file.");
-                }
+
+            // Validate file types
+            if (!frontId.getContentType().startsWith("image/") ||
+                    !backId.getContentType().startsWith("image/") ||
+                    !registration.getContentType().startsWith("image/")) {
+                return ResponseEntity.badRequest().body("Only image files are allowed.");
             }
 
             // For public endpoint, always treat as unauthenticated user
@@ -129,18 +97,9 @@ public class VehicleKeycodeController {
             double keycodePrice = vehicleMake.getNonMemberPrice();
             vehicle.setKeycodePrice(keycodePrice);
             vehicle.setVin(vin);
-            
-            // Set file data if provided
-            if (frontId != null && !frontId.isEmpty()) {
-                vehicle.setFrontId(frontId.getBytes());
-            }
-            if (backId != null && !backId.isEmpty()) {
-                vehicle.setBackId(backId.getBytes());
-            }
-            if (registration != null && !registration.isEmpty()) {
-                vehicle.setRegistration(registration.getBytes());
-            }
-            
+            vehicle.setFrontId(frontId.getBytes());
+            vehicle.setBackId(backId.getBytes());
+            vehicle.setRegistration(registration.getBytes());
             vehicle.setKeycodeUser(null); // No user for public endpoint
             
             Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);

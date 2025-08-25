@@ -19,10 +19,7 @@ export default function ComplianceBanner({ className = "" }) {
       .get("/compliance/status")
       .then((res) => setStatus(res.data))
       .catch((e) => {
-        console.log(
-          "⚠️ Compliance status unavailable (backend down):",
-          e.message
-        );
+        console.log("⚠️ Compliance status unavailable (backend down):", e.message);
         // Set a default status when backend is unavailable
         setStatus({
           required: false,
