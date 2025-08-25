@@ -140,49 +140,42 @@ public class PaymentController {
             // Initialize Stripe with secret key
             Stripe.apiKey = stripeSecretKey;
 
-            // Extract request data with optimized type handling
+            // Extract request data
             Long amount = Long.valueOf(Math.round(((Number) request.get("amount")).doubleValue()));
             List<Map<String, Object>> items = (List<Map<String, Object>>) request.get("items");
             String successUrl = (String) request.get("success_url");
             String cancelUrl = (String) request.get("cancel_url");
 
-            // Optimize line items creation with pre-allocated capacity
-            List<SessionCreateParams.LineItem> lineItems = new ArrayList<>(items.size());
+            // Build line items for Stripe checkout
+            List<SessionCreateParams.LineItem> lineItems = new ArrayList<>();
             
-            // Process items in parallel for better performance
-            CompletableFuture<Void>[] itemFutures = new CompletableFuture[items.size()];
-            
-            for (int i = 0; i < items.size(); i++) {
-                final int index = i;
-                final Map<String, Object> item = items.get(index);
+            for (Map<String, Object> item : items) {
+                String itemName = "";
+                if (item.get("make") != null && item.get("model") != null) {
+                    itemName = item.get("make") + " " + item.get("model") + " Keycode";
+                } else {
+                    itemName = "Vehicle Keycode";
+                }
                 
-                itemFutures[i] = CompletableFuture.runAsync(() -> {
-                    String itemName = buildItemName(item);
-                    Long unitAmount = calculateUnitAmount(item);
-                    
-                    SessionCreateParams.LineItem lineItem = SessionCreateParams.LineItem.builder()
-                            .setPriceData(
-                                    SessionCreateParams.LineItem.PriceData.builder()
-                                            .setCurrency("usd")
-                                            .setProductData(
-                                                    SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                            .setName(itemName)
-                                                            .build()
-                                            )
-                                            .setUnitAmount(unitAmount)
-                                            .build()
-                            )
-                            .setQuantity(1L)
-                            .build();
-                    
-                    synchronized (lineItems) {
-                        lineItems.add(lineItem);
-                    }
-                });
+                SessionCreateParams.LineItem lineItem = SessionCreateParams.LineItem.builder()
+                        .setPriceData(
+                                SessionCreateParams.LineItem.PriceData.builder()
+                                        .setCurrency("usd")
+                                        .setProductData(
+                                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                        .setName(itemName)
+                                                        .build()
+                                        )
+                                        .setUnitAmount(item.get("finalPrice") != null ? 
+                                                Long.valueOf(Math.round(((Number) item.get("finalPrice")).doubleValue() * 100)) : 
+                                                Long.valueOf(Math.round(((Number) item.get("standardPrice")).doubleValue() * 100)))
+                                        .build()
+                        )
+                        .setQuantity(1L)
+                        .build();
+                
+                lineItems.add(lineItem);
             }
-            
-            // Wait for all items to be processed
-            CompletableFuture.allOf(itemFutures).join();
 
             // Create checkout session parameters
             SessionCreateParams params = SessionCreateParams.builder()
@@ -196,28 +189,21 @@ public class PaymentController {
             // Create the checkout session
             Session session = Session.create(params);
 
-            // Build response with optimized data structure
-            Map<String, Object> response = new HashMap<>(8); // Pre-allocate capacity
+            // Return the checkout URL
+            Map<String, Object> response = new HashMap<>();
             response.put("url", session.getUrl());
             response.put("sessionId", session.getId());
             response.put("amount", amount);
             response.put("itemCount", items.size());
-            response.put("timestamp", System.currentTimeMillis());
 
-            // Add cache control headers for better performance
-            return ResponseEntity.ok()
-                    .cacheControl(CacheControl.maxAge(30, TimeUnit.SECONDS))
-                    .body(response);
-                    
+            return ResponseEntity.ok(response);
         } catch (StripeException e) {
-            Map<String, Object> errorResponse = new HashMap<>(2);
+            Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());
-            errorResponse.put("timestamp", System.currentTimeMillis());
             return ResponseEntity.badRequest().body(errorResponse);
         } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>(2);
+            Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "Failed to create checkout session: " + e.getMessage());
-            errorResponse.put("timestamp", System.currentTimeMillis());
             return ResponseEntity.internalServerError().body(errorResponse);
         }
     }
@@ -283,20 +269,6 @@ public class PaymentController {
             
             return itemDetails;
         }).toList();
-    }
-
-    // Optimized helper methods
-    private String buildItemName(Map<String, Object> item) {
-        if (item.get("make") != null && item.get("model") != null) {
-            return item.get("make") + " " + item.get("model") + " Keycode";
-        }
-        return "Vehicle Keycode";
-    }
-
-    private Long calculateUnitAmount(Map<String, Object> item) {
-        Number price = (Number) (item.get("finalPrice") != null ? 
-                item.get("finalPrice") : item.get("standardPrice"));
-        return Long.valueOf(Math.round(price.doubleValue() * 100));
     }
 
     @PostMapping("/confirm-payment")

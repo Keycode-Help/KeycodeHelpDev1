@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import {
-  CheckCircle,
-  ArrowRight,
-  Home,
-  Receipt,
-  Download,
-  Mail,
-  Clock,
-  Shield,
-} from "lucide-react";
+import { CheckCircle, ArrowRight, Home, Receipt, Download, Mail, Clock, Shield } from "lucide-react";
 import "../styles/paymentSuccess.css";
 
 function PaymentSuccess() {
@@ -23,7 +14,7 @@ function PaymentSuccess() {
     if (sessionId) {
       // In a real app, you would verify the session with your backend
       console.log("Payment successful! Session ID:", sessionId);
-
+      
       // For now, we'll show a success message
       // In production, you'd call your backend to verify the payment
       setOrderDetails({
@@ -33,9 +24,9 @@ function PaymentSuccess() {
         items: [
           {
             name: "Vehicle Keycode",
-            description: "Keycode request processed successfully",
-          },
-        ],
+            description: "Keycode request processed successfully"
+          }
+        ]
       });
     }
     setIsLoading(false);
@@ -79,8 +70,7 @@ function PaymentSuccess() {
             <span className="title-emoji">🎉</span>
           </h1>
           <p className="success-message">
-            Your keycode request has been processed and payment completed
-            successfully.
+            Your keycode request has been processed and payment completed successfully.
           </p>
           <div className="success-badge">
             <Shield size={16} />
@@ -95,14 +85,12 @@ function PaymentSuccess() {
               <Receipt size={24} />
               <h2>Order Confirmation</h2>
             </div>
-
+            
             <div className="order-summary">
               <div className="summary-grid">
                 <div className="summary-item">
                   <span className="summary-label">Session ID</span>
-                  <span className="summary-value session-id">
-                    {orderDetails.sessionId}
-                  </span>
+                  <span className="summary-value session-id">{orderDetails.sessionId}</span>
                 </div>
                 <div className="summary-item">
                   <span className="summary-label">Status</span>
@@ -113,9 +101,7 @@ function PaymentSuccess() {
                 </div>
                 <div className="summary-item">
                   <span className="summary-label">Amount Paid</span>
-                  <span className="summary-value amount">
-                    ${orderDetails.amount}
-                  </span>
+                  <span className="summary-value amount">${orderDetails.amount}</span>
                 </div>
               </div>
             </div>
@@ -147,7 +133,7 @@ function PaymentSuccess() {
             <Clock size={24} />
             <h2>What Happens Next?</h2>
           </div>
-
+          
           <div className="steps-timeline">
             <div className="step-item">
               <div className="step-marker">
@@ -160,13 +146,11 @@ function PaymentSuccess() {
                 </div>
                 <div className="step-text">
                   <h4>Payment Confirmed</h4>
-                  <p>
-                    Your payment has been processed and confirmed by Stripe.
-                  </p>
+                  <p>Your payment has been processed and confirmed by Stripe.</p>
                 </div>
               </div>
             </div>
-
+            
             <div className="step-item">
               <div className="step-marker">
                 <div className="step-number">2</div>
@@ -178,14 +162,11 @@ function PaymentSuccess() {
                 </div>
                 <div className="step-text">
                   <h4>Keycode Processing</h4>
-                  <p>
-                    Our team will process your keycode request within 24-48
-                    hours.
-                  </p>
+                  <p>Our team will process your keycode request within 24-48 hours.</p>
                 </div>
               </div>
             </div>
-
+            
             <div className="step-item">
               <div className="step-marker">
                 <div className="step-number">3</div>
@@ -196,9 +177,7 @@ function PaymentSuccess() {
                 </div>
                 <div className="step-text">
                   <h4>Email Notification</h4>
-                  <p>
-                    You'll receive an email with your keycode and instructions.
-                  </p>
+                  <p>You'll receive an email with your keycode and instructions.</p>
                 </div>
               </div>
             </div>
