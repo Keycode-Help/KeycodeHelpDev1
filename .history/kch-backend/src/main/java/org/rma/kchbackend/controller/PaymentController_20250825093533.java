@@ -181,6 +181,7 @@ public class PaymentController {
                     .setCancelUrl(cancelUrl)
                     .addAllLineItem(lineItems)
                     .setCustomerEmail(getCustomerEmail(request))
+                    .setMetadata(buildCheckoutMetadata(items))
                     .build();
 
             // Create the checkout session

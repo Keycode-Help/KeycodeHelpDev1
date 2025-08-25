@@ -47,8 +47,6 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/payment-success" element={<PaymentSuccess />} />
-              <Route path="/payment-cancel" element={<PaymentCancel />} />
               <Route
                 path="/vehicle-keycode-request"
                 element={<VehicleKeycodeRequest />}
