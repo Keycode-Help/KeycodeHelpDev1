@@ -487,10 +487,11 @@ function Cart() {
       fetchCartItems();
       getUserSubscription();
     } else {
-      // For unauthenticated users, check for guest user info and fetch cart
-      const guestInfo = checkGuestUserInfo();
-      if (guestInfo) {
-        fetchCartItems(); // This will fetch from backend for guest user
+      // For unauthenticated users, check for temporary vehicle requests
+      const tempVehicle = checkTemporaryVehicleRequest();
+      if (tempVehicle) {
+        setCartItems([tempVehicle]);
+        setCartTotal(tempVehicle.price || 0);
       } else {
         setCartItems([]);
         setCartTotal(0);
