@@ -138,7 +138,7 @@ public class PaymentController {
             Stripe.apiKey = stripeSecretKey;
 
             // Extract request data
-            Long amount = Long.valueOf(Math.round(((Number) request.get("amount")).doubleValue()));
+            Long amount = Long.valueOf(request.get("amount").toString());
             List<Map<String, Object>> items = (List<Map<String, Object>>) request.get("items");
             String successUrl = (String) request.get("success_url");
             String cancelUrl = (String) request.get("cancel_url");
