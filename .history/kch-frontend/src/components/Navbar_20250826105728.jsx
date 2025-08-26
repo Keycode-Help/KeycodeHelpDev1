@@ -98,7 +98,11 @@ function Navbar() {
           >
             Keycode Pricing
           </Link>
-          <Link className="nav-link" to="/admin" onClick={() => setOpen(false)}>
+          <Link
+            className="nav-link"
+            to="/admin"
+            onClick={() => setOpen(false)}
+          >
             Admin Dashboard
           </Link>
           <Link
@@ -186,7 +190,7 @@ function Navbar() {
     <>
       {/* Mobile Navigation - Always visible on mobile */}
       <MobileNav />
-
+      
       {/* Desktop Navigation - Hidden on mobile, visible on desktop */}
       <nav className="desktop-navbar">
         <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 flex items-center justify-between">
