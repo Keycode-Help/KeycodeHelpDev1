@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://keycodehelp.com/sitemap.xml
+
+# Disallow admin and sensitive areas
+Disallow: /admin/
+Disallow: /super-admin/
+Disallow: /user-dash/
+Disallow: /profile/
+Disallow: /subscriptions/
+Disallow: /cart/
+Disallow: /payment-*
+
+# Allow important pages
+Allow: /
+Allow: /about
+Allow: /pricing
+Allow: /support
+Allow: /requirements
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /tos
+Allow: /refund-policy
+Allow: /membership-cancellation
+Allow: /vehicle-keycode-request
+
+# Crawl delay (optional)
+Crawl-delay: 1
