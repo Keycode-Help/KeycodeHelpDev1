@@ -477,11 +477,7 @@
 .step-number {
   width: 40px;
   height: 40px;
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primaryLight) 100%
-  );
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primaryLight) 100%);
   color: var(--background);
   border-radius: 50%;
   display: flex;
@@ -580,11 +576,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primaryLight) 100%
-  );
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primaryLight) 100%);
   color: var(--primaryFg);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
