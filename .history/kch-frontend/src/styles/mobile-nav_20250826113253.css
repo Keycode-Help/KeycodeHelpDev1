@@ -421,7 +421,9 @@
     height: 28px !important;
   }
 
-
+  .logo-k {
+    font-size: 16px !important;
+  }
 }
 
 /* Mobile Navigation Accessibility */
