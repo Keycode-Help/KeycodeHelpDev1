@@ -136,25 +136,6 @@
   line-height: 1.6;
 }
 
-/* Guest Notice Styling */
-.guest-notice {
-  background: linear-gradient(
-    135deg,
-    var(--warningBg) 0%,
-    var(--surfaceLight) 100%
-  );
-  border: 1px solid var(--warning);
-  border-radius: var(--radiusLarge);
-  padding: var(--spacing4);
-  margin-bottom: var(--spacing6);
-  text-align: center;
-}
-
-.guest-notice p {
-  margin: 0;
-  font-weight: 500;
-}
-
 .form-select {
   width: 100%;
   padding: var(--spacing3);

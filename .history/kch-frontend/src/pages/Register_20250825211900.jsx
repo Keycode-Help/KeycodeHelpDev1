@@ -105,22 +105,6 @@ function Register() {
     <div className="container-register">
       <div className="form-section">
         <h1 className="form-h1">Sign Up For An Account</h1>
-        <div className="business-notice">
-          <h3 style={{ color: "#f59e0b", marginBottom: "10px" }}>
-            🔐 Business Verification Required
-          </h3>
-          <p
-            style={{
-              color: "#6b7280",
-              fontSize: "0.9rem",
-              marginBottom: "15px",
-            }}
-          >
-            This account is for business professionals only. You must provide
-            business documentation and active Certificate of Insurance (COI) for
-            verification.
-          </p>
-        </div>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -202,50 +186,17 @@ function Register() {
             {errors.backId && <p className="error-message">{errors.backId}</p>}
           </label>
           <label>
-            Upload Business Documentation:
+            Upload Documentation (e.g., registration or insurance):
             <input
               type="file"
-              name="businessDocument"
+              name="insurance"
               onChange={handleFileChange}
               accept="image/*"
               required
             />
-            <small
-              style={{
-                color: "#6b7280",
-                fontSize: "0.8rem",
-                display: "block",
-                marginTop: "5px",
-              }}
-            >
-              Acceptable documents: Business License, Business Card with full
-              details, or Secretary of State document
-            </small>
-            {errors.businessDocument && (
-              <p className="error-message">{errors.businessDocument}</p>
+            {errors.insurance && (
+              <p className="error-message">{errors.insurance}</p>
             )}
-          </label>
-
-          <label>
-            Upload Certificate of Insurance (COI):
-            <input
-              type="file"
-              name="coi"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-            />
-            <small
-              style={{
-                color: "#6b7280",
-                fontSize: "0.8rem",
-                display: "block",
-                marginTop: "5px",
-              }}
-            >
-              Active Certificate of Insurance required for business verification
-            </small>
-            {errors.coi && <p className="error-message">{errors.coi}</p>}
           </label>
           <button type="submit" className="book-btn">
             Register

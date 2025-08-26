@@ -372,6 +372,37 @@ export default function LandingPage() {
           </Link>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-navy mt-16">
+        <div className="w-full px-4 md:px-8 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-white/60">
+              &copy; 2025 KeyCode Help. All rights reserved.
+            </div>
+            <div className="flex gap-6 text-sm">
+              <Link
+                to="/pricing"
+                className="text-primary hover:text-success underline"
+              >
+                Keycode Pricing
+              </Link>
+              <Link
+                to="/support"
+                className="text-white/60 hover:text-white underline"
+              >
+                Support
+              </Link>
+              <Link
+                to="/requirements"
+                className="text-white/60 hover:text-white underline"
+              >
+                Requirements
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

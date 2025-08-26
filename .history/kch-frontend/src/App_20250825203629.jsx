@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
 import ErrorBoundary from "./utils/errorBoundary.jsx";
 
@@ -28,7 +27,6 @@ import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
 import Support from "./pages/Support";
 import PricelistPage from "./pages/PricelistPage";
-import AboutUs from "./pages/AboutUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import TOS from "./pages/TOS";
@@ -82,21 +80,16 @@ function App() {
               <Route path="/support" element={<Support />} />
               <Route path="/requirements" element={<Requirements />} />
               <Route path="/pricing" element={<PricelistPage />} />
-              <Route path="/about" element={<AboutUs />} />
 
               {/* Legal & Policy Pages */}
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/tos" element={<TOS />} />
               <Route path="/refund-policy" element={<RefundPolicy />} />
-              <Route
-                path="/membership-cancellation"
-                element={<MembershipCancellation />}
-              />
+              <Route path="/membership-cancellation" element={<MembershipCancellation />} />
 
               <Route path="*" element={<LandingPage />} />
             </Routes>
-            <Footer />
             <Analytics />
           </Router>
         </div>
