@@ -62,6 +62,7 @@ function App() {
               future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             >
               <TrialExpirationHandler />
+              <DebugNav />
               <Navbar />
               <Routes>
                 <Route path="/" element={<LandingPage />} />
