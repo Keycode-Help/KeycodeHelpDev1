@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead";
 import RegionBanner from "../components/RegionBanner";
@@ -9,7 +9,6 @@ import SignUpSteps from "../components/SignUpSteps";
 import TrialBanner from "../components/TrialBanner";
 import { Icon } from "../components/IconProvider";
 import "../styles/lp.css";
-import "../styles/landing-page-mobile.css";
 
 export default function LandingPage() {
   const { token } = useAuth();

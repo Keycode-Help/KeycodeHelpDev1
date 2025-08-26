@@ -40,11 +40,6 @@ import RefundPolicy from "./pages/RefundPolicy";
 import MembershipCancellation from "./pages/MembershipCancellation";
 
 function App() {
-  // Initialize mobile responsiveness
-  useEffect(() => {
-    initMobileResponsiveness();
-  }, []);
-
   // App component with enhanced routing for production deployment
   return (
     <ErrorBoundary>
