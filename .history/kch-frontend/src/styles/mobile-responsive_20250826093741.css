@@ -276,97 +276,41 @@ body {
 }
 
 /* Mobile spacing utilities */
-.mobile-p-1 {
-  padding: 0.25rem;
-}
-.mobile-p-2 {
-  padding: 0.5rem;
-}
-.mobile-p-3 {
-  padding: 0.75rem;
-}
-.mobile-p-4 {
-  padding: 1rem;
-}
-.mobile-p-5 {
-  padding: 1.25rem;
-}
-.mobile-p-6 {
-  padding: 1.5rem;
-}
+.mobile-p-1 { padding: 0.25rem; }
+.mobile-p-2 { padding: 0.5rem; }
+.mobile-p-3 { padding: 0.75rem; }
+.mobile-p-4 { padding: 1rem; }
+.mobile-p-5 { padding: 1.25rem; }
+.mobile-p-6 { padding: 1.5rem; }
 
-.mobile-m-1 {
-  margin: 0.25rem;
-}
-.mobile-m-2 {
-  margin: 0.5rem;
-}
-.mobile-m-3 {
-  margin: 0.75rem;
-}
-.mobile-m-4 {
-  margin: 1rem;
-}
-.mobile-m-5 {
-  margin: 1.25rem;
-}
-.mobile-m-6 {
-  margin: 1.5rem;
-}
+.mobile-m-1 { margin: 0.25rem; }
+.mobile-m-2 { margin: 0.5rem; }
+.mobile-m-3 { margin: 0.75rem; }
+.mobile-m-4 { margin: 1rem; }
+.mobile-m-5 { margin: 1.25rem; }
+.mobile-m-6 { margin: 1.5rem; }
 
 /* Mobile text sizing */
-.mobile-text-xs {
-  font-size: 0.75rem;
-}
-.mobile-text-sm {
-  font-size: 0.875rem;
-}
-.mobile-text-base {
-  font-size: 1rem;
-}
-.mobile-text-lg {
-  font-size: 1.125rem;
-}
-.mobile-text-xl {
-  font-size: 1.25rem;
-}
-.mobile-text-2xl {
-  font-size: 1.5rem;
-}
+.mobile-text-xs { font-size: 0.75rem; }
+.mobile-text-sm { font-size: 0.875rem; }
+.mobile-text-base { font-size: 1rem; }
+.mobile-text-lg { font-size: 1.125rem; }
+.mobile-text-xl { font-size: 1.25rem; }
+.mobile-text-2xl { font-size: 1.5rem; }
 
 /* Mobile flexbox utilities */
-.mobile-flex {
-  display: flex;
-}
-.mobile-flex-col {
-  flex-direction: column;
-}
-.mobile-flex-row {
-  flex-direction: row;
-}
-.mobile-items-center {
-  align-items: center;
-}
-.mobile-justify-center {
-  justify-content: center;
-}
-.mobile-justify-between {
-  justify-content: space-between;
-}
+.mobile-flex { display: flex; }
+.mobile-flex-col { flex-direction: column; }
+.mobile-flex-row { flex-direction: row; }
+.mobile-items-center { align-items: center; }
+.mobile-justify-center { justify-content: center; }
+.mobile-justify-between { justify-content: space-between; }
 
 /* Mobile-specific component adjustments */
-.mobile-hidden {
-  display: none;
-}
-.mobile-block {
-  display: block;
-}
-.mobile-inline {
-  display: inline;
-}
-.mobile-inline-block {
-  display: inline-block;
-}
+.mobile-hidden { display: none; }
+.mobile-block { display: block; }
+.mobile-inline { display: inline; }
+.mobile-inline-block { display: inline-block; }
 
 /* Mobile footer improvements */
 .footer {
@@ -521,30 +465,19 @@ body {
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 .loading-skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--surface) 25%,
-    var(--surfaceLight) 50%,
-    var(--surface) 75%
-  );
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surfaceLight) 50%, var(--surface) 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
   border-radius: 0.25rem;
 }
 
 @keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Mobile image optimizations */
@@ -591,12 +524,12 @@ body {
   .modal {
     display: none !important;
   }
-
+  
   body {
     background: white !important;
     color: black !important;
   }
-
+  
   .card {
     border: 1px solid #ccc !important;
     box-shadow: none !important;
@@ -611,35 +544,35 @@ body {
     align-items: center;
     gap: 2rem;
   }
-
+  
   .navbar-toggler {
     display: none;
   }
-
+  
   .hero-title {
     font-size: 2.5rem;
   }
-
+  
   .hero-subtitle {
     font-size: 1.25rem;
   }
-
+  
   .grid-cols-2 {
     grid-template-columns: repeat(2, 1fr);
   }
-
+  
   .grid-cols-3 {
     grid-template-columns: repeat(2, 1fr);
   }
-
+  
   .grid-cols-4 {
     grid-template-columns: repeat(2, 1fr);
   }
-
+  
   .footer {
     text-align: left;
   }
-
+  
   .footer-links {
     flex-direction: row;
     gap: 1rem;
@@ -651,19 +584,19 @@ body {
   .hero-title {
     font-size: 3rem;
   }
-
+  
   .hero-subtitle {
     font-size: 1.5rem;
   }
-
+  
   .grid-cols-3 {
     grid-template-columns: repeat(3, 1fr);
   }
-
+  
   .grid-cols-4 {
     grid-template-columns: repeat(4, 1fr);
   }
-
+  
   .modal-content {
     max-width: 600px;
   }
@@ -674,7 +607,7 @@ body {
   .hero-title {
     font-size: 3.5rem;
   }
-
+  
   .hero-subtitle {
     font-size: 1.75rem;
   }
@@ -694,11 +627,11 @@ body {
     min-height: 100vh;
     padding: 1rem;
   }
-
+  
   .hero-title {
     font-size: 1.75rem;
   }
-
+  
   .hero-subtitle {
     font-size: 1rem;
   }
@@ -722,11 +655,11 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
+  
   .loading-spinner {
     animation: none;
   }
-
+  
   .loading-skeleton {
     animation: none;
   }
@@ -737,7 +670,7 @@ body {
   .btn {
     border: 2px solid currentColor;
   }
-
+  
   .form-input,
   .form-textarea,
   .form-select {
@@ -760,7 +693,7 @@ body {
   .btn:hover {
     transform: none;
   }
-
+  
   .card:hover {
     transform: none;
   }
@@ -780,7 +713,7 @@ body {
 /* Z Fold and Ultra-Wide Mobile Specific Styles */
 @media (max-width: 400px) and (min-height: 800px) {
   /* Ultra-wide mobile screens like Z Fold closed */
-
+  
   /* Ensure mobile navigation is always visible */
   .mobile-nav {
     display: block !important;
@@ -790,7 +723,7 @@ body {
     right: 0;
     z-index: 1000;
   }
-
+  
   /* Make hamburger menu more prominent */
   .mobile-nav-toggler {
     position: relative;
@@ -800,14 +733,14 @@ body {
     padding: 0.75rem;
     margin-right: 0.5rem;
   }
-
+  
   .mobile-nav-toggler .hamburger-line {
     width: 20px;
     height: 3px;
     background: white;
     margin: 3px 0;
   }
-
+  
   /* Ensure footer is visible and properly spaced */
   .footer {
     position: relative;
@@ -819,34 +752,34 @@ body {
     background: var(--surface);
     border-top: 1px solid var(--border);
   }
-
+  
   /* Adjust main content to account for ultra-wide layout */
   main {
     padding-bottom: 4rem !important;
   }
-
+  
   /* Ensure content doesn't get cut off */
   .container {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
   }
-
+  
   /* Adjust hero section for ultra-wide */
   .hero-section {
     padding: 1.5rem 0.75rem;
     min-height: 50vh;
   }
-
+  
   .hero-title {
     font-size: 1.75rem !important;
     line-height: 1.1 !important;
   }
-
+  
   .hero-subtitle {
     font-size: 1rem !important;
     line-height: 1.4 !important;
   }
-
+  
   /* Stack buttons vertically on ultra-wide */
   .hero-buttons,
   .cta-buttons {
@@ -854,7 +787,7 @@ body {
     gap: 0.75rem !important;
     align-items: center !important;
   }
-
+  
   .hero-buttons .btn,
   .cta-buttons .btn {
     width: 100% !important;
@@ -865,34 +798,34 @@ body {
 /* Z Fold Open (Tablet Mode) */
 @media (min-width: 600px) and (max-width: 900px) and (min-height: 600px) {
   /* Z Fold open - tablet mode */
-
+  
   .mobile-nav {
     display: none !important;
   }
-
+  
   .navbar {
     display: block !important;
   }
-
+  
   /* Adjust layout for tablet mode */
   .hero-section {
     padding: 2rem 1.5rem;
     min-height: 70vh;
   }
-
+  
   .hero-title {
     font-size: 2.25rem !important;
   }
-
+  
   .hero-subtitle {
     font-size: 1.125rem !important;
   }
-
+  
   /* Two-column layout for tablet */
   .grid-cols-2 {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-
+  
   .grid-cols-3 {
     grid-template-columns: repeat(2, 1fr) !important;
   }
@@ -901,25 +834,25 @@ body {
 /* Ultra-wide mobile landscape */
 @media (max-height: 400px) and (orientation: landscape) {
   /* Very wide, short screens */
-
+  
   .mobile-nav {
     display: block !important;
   }
-
+  
   .mobile-nav-header {
     padding: 0.5rem;
     min-height: 48px;
   }
-
+  
   .mobile-nav-brand {
     font-size: 1rem;
   }
-
+  
   .mobile-nav-logo {
     width: 24px;
     height: 24px;
   }
-
+  
   /* Adjust content for landscape ultra-wide */
   .hero-section {
     min-height: 100vh;
@@ -928,33 +861,33 @@ body {
     align-items: center;
     gap: 1rem;
   }
-
+  
   .hero-title {
     font-size: 1.5rem !important;
   }
-
+  
   .hero-subtitle {
     font-size: 0.875rem !important;
   }
-
+  
   /* Footer adjustments for landscape */
   .footer {
     padding: 1rem;
     margin-top: 1rem;
   }
-
+  
   .footer-section {
     margin-bottom: 1rem;
   }
-
+  
   .footer-section h3 {
     font-size: 1rem;
   }
-
+  
   .footer-links {
     gap: 0.25rem;
   }
-
+  
   .footer-links a {
     font-size: 0.875rem;
     padding: 0.25rem 0;
@@ -963,6 +896,14 @@ body {
 
 /* Ensure mobile navigation is always accessible on small screens */
 @media (max-width: 480px) {
+  .mobile-nav {
+    display: block !important;
+  }
+  
+  .navbar {
+    display: none !important;
+  }
+  
   /* Force footer visibility */
   .footer {
     position: relative !important;
@@ -970,12 +911,12 @@ body {
     margin-top: 2rem !important;
     padding: 1.5rem 1rem !important;
   }
-
+  
   /* Ensure main content has proper bottom spacing */
   main {
     padding-bottom: 2rem !important;
   }
-
+  
   /* Adjust container padding for very small screens */
   .container {
     padding-left: 0.5rem;

@@ -24,7 +24,7 @@
     right: 0 !important;
     z-index: 1000 !important;
   }
-
+  
   .navbar {
     display: none !important;
   }
@@ -289,33 +289,25 @@
   animation: slideInFromTop 0.3s ease forwards;
 }
 
-.mobile-nav-section:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.mobile-nav-section:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.mobile-nav-section:nth-child(3) {
-  animation-delay: 0.3s;
-}
-.mobile-nav-section:nth-child(4) {
-  animation-delay: 0.4s;
-}
+.mobile-nav-section:nth-child(1) { animation-delay: 0.1s; }
+.mobile-nav-section:nth-child(2) { animation-delay: 0.2s; }
+.mobile-nav-section:nth-child(3) { animation-delay: 0.3s; }
+.mobile-nav-section:nth-child(4) { animation-delay: 0.4s; }
 
 /* Mobile Navigation Responsive */
 @media (max-width: 480px) {
   .mobile-nav-content {
     padding: 4rem 1rem 1.5rem;
   }
-
+  
   .mobile-nav-header {
     padding: 0.75rem;
   }
-
+  
   .mobile-nav-brand {
     font-size: 1.125rem;
   }
-
+  
   .mobile-nav-logo {
     width: 28px;
     height: 28px;
@@ -339,7 +331,7 @@
   .mobile-nav-link:hover {
     transform: none;
   }
-
+  
   .mobile-nav-link:active {
     transform: scale(0.98);
   }
@@ -377,12 +369,12 @@
     right: 0 !important;
     z-index: 1000 !important;
   }
-
+  
   .mobile-nav-header {
     padding: 0.75rem !important;
     min-height: 56px !important;
   }
-
+  
   .mobile-nav-toggler {
     position: relative !important;
     z-index: 1001 !important;
@@ -390,18 +382,18 @@
     border-radius: 0.5rem !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
-
+  
   .mobile-nav-toggler .hamburger-line {
     width: 20px !important;
     height: 3px !important;
     background: white !important;
     margin: 3px 0 !important;
   }
-
+  
   .mobile-nav-brand {
     font-size: 1.125rem !important;
   }
-
+  
   .mobile-nav-logo,
   .mobile-nav-logo-placeholder {
     width: 28px !important;
@@ -416,7 +408,7 @@
   .hamburger-line {
     transition: none;
   }
-
+  
   .mobile-nav-section {
     animation: none;
   }
@@ -427,7 +419,7 @@
   .mobile-nav-link {
     border-width: 2px;
   }
-
+  
   .mobile-nav-toggler {
     border: 2px solid white;
     border-radius: 0.25rem;

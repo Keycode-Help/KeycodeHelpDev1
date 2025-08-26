@@ -71,7 +71,7 @@ const MobileNav = () => {
       {/* Mobile Header */}
       <div className="mobile-nav-header">
         <Link to="/" className="mobile-nav-brand" onClick={() => setIsOpen(false)}>
-          <div className="mobile-nav-logo-placeholder">KCH</div>
+          <img src="/logo.png" alt="KeycodeHelp" className="mobile-nav-logo" />
           <span className="mobile-nav-title">KeycodeHelp</span>
         </Link>
         

@@ -9,11 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ErrorBoundary from "./utils/errorBoundary.jsx";
 import "./styles/mobile-responsive.css";
 import { initMobileResponsiveness } from "./utils/mobileResponsivenessTest";
-import {
-  initZFoldOptimizations,
-  addZFoldCSSVariables,
-} from "./utils/zFoldDetection";
-import DebugNav from "./components/DebugNav";
+import { initZFoldOptimizations, addZFoldCSSVariables } from "./utils/zFoldDetection";
 
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
@@ -63,7 +59,6 @@ function App() {
               future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             >
               <TrialExpirationHandler />
-              <DebugNav />
               <Navbar />
               <Routes>
                 <Route path="/" element={<LandingPage />} />
