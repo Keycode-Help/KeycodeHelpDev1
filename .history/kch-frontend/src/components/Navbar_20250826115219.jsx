@@ -16,10 +16,16 @@ function Navbar() {
     <>
       {!userRole && (
         <>
-          <Link className="nav-link" to="/pricing">
+          <Link
+            className="nav-link"
+            to="/pricing"
+          >
             Keycode Pricing
           </Link>
-          <Link className="nav-link" to="/register">
+          <Link
+            className="nav-link"
+            to="/register"
+          >
             Sign Up
           </Link>
           <Link className="nav-link" to="/login">
@@ -33,19 +39,34 @@ function Navbar() {
           <Link className="nav-link" to="/">
             Home
           </Link>
-          <Link className="nav-link" to="/pricing">
+          <Link
+            className="nav-link"
+            to="/pricing"
+          >
             Keycode Pricing
           </Link>
-          <Link className="nav-link" to="/vehicle-keycode-request">
+          <Link
+            className="nav-link"
+            to="/vehicle-keycode-request"
+          >
             Request Keycode
           </Link>
-          <Link className="nav-link" to="/subscriptions">
+          <Link
+            className="nav-link"
+            to="/subscriptions"
+          >
             Subscriptions
           </Link>
-          <Link className="nav-link" to="/user-dash">
+          <Link
+            className="nav-link"
+            to="/user-dash"
+          >
             User Dashboard
           </Link>
-          <Link className="nav-link" to="/user-profile">
+          <Link
+            className="nav-link"
+            to="/user-profile"
+          >
             Profile
           </Link>
           <Link className="nav-link" to="/cart">
@@ -59,19 +80,31 @@ function Navbar() {
           <Link className="nav-link" to="/">
             Home
           </Link>
-          <Link className="nav-link" to="/pricing">
+          <Link
+            className="nav-link"
+            to="/pricing"
+          >
             Keycode Pricing
           </Link>
           <Link className="nav-link" to="/admin">
             Admin Dashboard
           </Link>
-          <Link className="nav-link" to="/admin/registered-users">
+          <Link
+            className="nav-link"
+            to="/admin/registered-users"
+          >
             Registered Users
           </Link>
-          <Link className="nav-link" to="/admin/document-validation">
+          <Link
+            className="nav-link"
+            to="/admin/document-validation"
+          >
             Document Validation
           </Link>
-          <Link className="nav-link" to="/admin/user-history">
+          <Link
+            className="nav-link"
+            to="/admin/user-history"
+          >
             User History
           </Link>
         </>
@@ -82,22 +115,37 @@ function Navbar() {
           <Link className="nav-link" to="/">
             Home
           </Link>
-          <Link className="nav-link" to="/pricing">
+          <Link
+            className="nav-link"
+            to="/pricing"
+          >
             Keycode Pricing
           </Link>
-          <Link className="nav-link" to="/super-admin">
+          <Link
+            className="nav-link"
+            to="/super-admin"
+          >
             Super Admin Dashboard
           </Link>
           <Link className="nav-link" to="/admin">
             Admin Dashboard
           </Link>
-          <Link className="nav-link" to="/admin/registered-users">
+          <Link
+            className="nav-link"
+            to="/admin/registered-users"
+          >
             Registered Users
           </Link>
-          <Link className="nav-link" to="/admin/document-validation">
+          <Link
+            className="nav-link"
+            to="/admin/document-validation"
+          >
             Document Validation
           </Link>
-          <Link className="nav-link" to="/admin/user-history">
+          <Link
+            className="nav-link"
+            to="/admin/user-history"
+          >
             User History
           </Link>
         </>
