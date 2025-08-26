@@ -963,6 +963,14 @@ body {
 
 /* Ensure mobile navigation is always accessible on small screens */
 @media (max-width: 480px) {
+  .mobile-nav {
+    display: block !important;
+  }
+
+  .navbar {
+    display: none !important;
+  }
+
   /* Force footer visibility */
   .footer {
     position: relative !important;

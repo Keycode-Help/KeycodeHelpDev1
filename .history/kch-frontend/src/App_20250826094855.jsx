@@ -13,7 +13,6 @@ import {
   initZFoldOptimizations,
   addZFoldCSSVariables,
 } from "./utils/zFoldDetection";
-import DebugNav from "./components/DebugNav";
 
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
@@ -63,7 +62,6 @@ function App() {
               future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             >
               <TrialExpirationHandler />
-              <DebugNav />
               <Navbar />
               <Routes>
                 <Route path="/" element={<LandingPage />} />
