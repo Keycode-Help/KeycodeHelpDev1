@@ -28,7 +28,6 @@ import UpdateUserProfile from "./pages/UpdateUserProfile";
 import LandingPage from "./pages/LandingPage";
 import Support from "./pages/Support";
 import PricelistPage from "./pages/PricelistPage";
-import AboutUs from "./pages/AboutUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import TOS from "./pages/TOS";
@@ -82,7 +81,6 @@ function App() {
               <Route path="/support" element={<Support />} />
               <Route path="/requirements" element={<Requirements />} />
               <Route path="/pricing" element={<PricelistPage />} />
-              <Route path="/about" element={<AboutUs />} />
 
               {/* Legal & Policy Pages */}
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />

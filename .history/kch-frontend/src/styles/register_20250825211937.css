@@ -32,16 +32,11 @@
 
 .form-section {
   text-align: center;
-  background: linear-gradient(
-    135deg,
-    var(--surface) 0%,
-    var(--surfaceLight) 100%
-  );
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surfaceLight) 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius2XLarge);
   padding: var(--spacing8);
   box-shadow: 0 20px 40px var(--shadow);
-  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: var(--text);
   width: 90%;
@@ -144,7 +139,7 @@
 }
 
 .form-section button::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;

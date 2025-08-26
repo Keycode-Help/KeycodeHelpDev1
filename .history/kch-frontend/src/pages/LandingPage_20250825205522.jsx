@@ -372,6 +372,8 @@ export default function LandingPage() {
           </Link>
         </div>
       </main>
+
+
     </div>
   );
 }

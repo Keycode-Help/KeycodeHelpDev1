@@ -82,7 +82,6 @@ function App() {
               <Route path="/support" element={<Support />} />
               <Route path="/requirements" element={<Requirements />} />
               <Route path="/pricing" element={<PricelistPage />} />
-              <Route path="/about" element={<AboutUs />} />
 
               {/* Legal & Policy Pages */}
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />

@@ -109,16 +109,8 @@ function Register() {
           <h3 style={{ color: "#f59e0b", marginBottom: "10px" }}>
             🔐 Business Verification Required
           </h3>
-          <p
-            style={{
-              color: "#6b7280",
-              fontSize: "0.9rem",
-              marginBottom: "15px",
-            }}
-          >
-            This account is for business professionals only. You must provide
-            business documentation and active Certificate of Insurance (COI) for
-            verification.
+          <p style={{ color: "#6b7280", fontSize: "0.9rem", marginBottom: "15px" }}>
+            This account is for business professionals only. You must provide business documentation and active Certificate of Insurance (COI) for verification.
           </p>
         </div>
         <form onSubmit={handleSubmit}>
@@ -210,16 +202,8 @@ function Register() {
               accept="image/*"
               required
             />
-            <small
-              style={{
-                color: "#6b7280",
-                fontSize: "0.8rem",
-                display: "block",
-                marginTop: "5px",
-              }}
-            >
-              Acceptable documents: Business License, Business Card with full
-              details, or Secretary of State document
+            <small style={{ color: "#6b7280", fontSize: "0.8rem", display: "block", marginTop: "5px" }}>
+              Acceptable documents: Business License, Business Card with full details, or Secretary of State document
             </small>
             {errors.businessDocument && (
               <p className="error-message">{errors.businessDocument}</p>
@@ -235,17 +219,12 @@ function Register() {
               accept="image/*"
               required
             />
-            <small
-              style={{
-                color: "#6b7280",
-                fontSize: "0.8rem",
-                display: "block",
-                marginTop: "5px",
-              }}
-            >
+            <small style={{ color: "#6b7280", fontSize: "0.8rem", display: "block", marginTop: "5px" }}>
               Active Certificate of Insurance required for business verification
             </small>
-            {errors.coi && <p className="error-message">{errors.coi}</p>}
+            {errors.coi && (
+              <p className="error-message">{errors.coi}</p>
+            )}
           </label>
           <button type="submit" className="book-btn">
             Register

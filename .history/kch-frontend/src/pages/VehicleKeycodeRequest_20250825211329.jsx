@@ -136,9 +136,7 @@ function VehicleKeycodeRequest() {
     // Additional validation for guest users - license photos required
     if (!user) {
       if (!formData.licenseFront || !formData.licenseBack) {
-        alert(
-          "As a guest user, you must provide both front and back photos of your driver's license for identity verification."
-        );
+        alert("As a guest user, you must provide both front and back photos of your driver's license for identity verification.");
         return;
       }
     }
@@ -152,7 +150,7 @@ function VehicleKeycodeRequest() {
     formDataObj.append("frontId", formData.frontId);
     formDataObj.append("backId", formData.backId);
     formDataObj.append("registration", formData.registration);
-
+    
     // Add license photos for guest users
     if (!user) {
       formDataObj.append("licenseFront", formData.licenseFront);
@@ -167,24 +165,21 @@ function VehicleKeycodeRequest() {
       })
       .then((response) => {
         console.log("✅ API response:", response.data);
-
+        
         // Store guest user info for cart access
         if (response.data.guestUserId) {
-          localStorage.setItem(
-            "guestUserInfo",
-            JSON.stringify({
-              guestUserId: response.data.guestUserId,
-              cartId: response.data.cartId,
-              timestamp: Date.now(),
-            })
-          );
+          localStorage.setItem("guestUserInfo", JSON.stringify({
+            guestUserId: response.data.guestUserId,
+            cartId: response.data.cartId,
+            timestamp: Date.now()
+          }));
         }
-
+        
         navigate("/cart");
       })
       .catch((error) => {
         console.error("❌ API call failed:", error);
-
+        
         // Fallback: Store minimal data locally (only for development)
         if (import.meta.env.DEV) {
           const vehicleData = {
@@ -200,14 +195,8 @@ function VehicleKeycodeRequest() {
             note: "Backend unavailable - stored locally (DEV ONLY)",
           };
 
-          localStorage.setItem(
-            "tempVehicleRequest",
-            JSON.stringify(vehicleData)
-          );
-          console.log(
-            "✅ Fallback: Vehicle data stored in localStorage (DEV ONLY):",
-            vehicleData
-          );
+          localStorage.setItem("tempVehicleRequest", JSON.stringify(vehicleData));
+          console.log("✅ Fallback: Vehicle data stored in localStorage (DEV ONLY):", vehicleData);
         }
 
         // Show user-friendly message
@@ -241,21 +230,6 @@ function VehicleKeycodeRequest() {
       <div className="keycode-request-container">
         <h1>Request a Keycode for Your Vehicle</h1>
         <ComplianceBanner className="mt-3 mb-4" />
-        {!user && (
-          <div className="guest-notice">
-            <p
-              style={{
-                color: "#f59e0b",
-                fontSize: "0.9rem",
-                textAlign: "center",
-                marginBottom: "20px",
-              }}
-            >
-              ⚠️ <strong>Guest Users:</strong> Driver's license photos required
-              for identity verification
-            </p>
-          </div>
-        )}
         <form onSubmit={handleSubmit} className="keycode-form">
           <div className="form-group">
             <label htmlFor="make">Vehicle Make</label>
@@ -417,23 +391,15 @@ function VehicleKeycodeRequest() {
                 <h4 style={{ color: "#f59e0b", marginBottom: "10px" }}>
                   🔐 Identity Verification Required
                 </h4>
-                <p
-                  style={{
-                    color: "#6b7280",
-                    fontSize: "0.9rem",
-                    marginBottom: "15px",
-                  }}
-                >
-                  As a guest user, you must provide your driver's license photos
-                  for identity verification. This helps ensure security and
-                  compliance with our service requirements.
+                <p style={{ color: "#6b7280", fontSize: "0.9rem", marginBottom: "15px" }}>
+                  As a guest user, you must provide your driver's license photos for identity verification.
+                  This helps ensure security and compliance with our service requirements.
                 </p>
               </div>
 
               <div className="form-group">
                 <label htmlFor="licenseFront">
-                  Driver's License - Front Side{" "}
-                  <span style={{ color: "#ef4444" }}>*</span>
+                  Driver's License - Front Side <span style={{ color: "#ef4444" }}>*</span>
                 </label>
                 <input
                   type="file"
@@ -451,8 +417,7 @@ function VehicleKeycodeRequest() {
 
               <div className="form-group">
                 <label htmlFor="licenseBack">
-                  Driver's License - Back Side{" "}
-                  <span style={{ color: "#ef4444" }}>*</span>
+                  Driver's License - Back Side <span style={{ color: "#ef4444" }}>*</span>
                 </label>
                 <input
                   type="file"
