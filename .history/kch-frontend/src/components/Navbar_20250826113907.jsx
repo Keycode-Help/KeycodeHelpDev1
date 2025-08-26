@@ -1,15 +1,19 @@
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { canSeeAdmin, isSuper, isBaseUser } from "../utils/roles";
+import { Menu, X } from "lucide-react";
 import MobileNav from "./MobileNav";
 
 function Navbar() {
   const { userRole, logout } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const onClickLogout = () => {
     logout();
     navigate("/");
+    setOpen(false);
   };
 
   const NavLinks = () => (
@@ -186,7 +190,12 @@ function Navbar() {
       {/* Desktop Navigation - Hidden on mobile, visible on desktop */}
       <nav className="desktop-navbar">
         <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="text-white font-semibold tracking-wide">
+          <Link to="/" className="text-white font-semibold tracking-wide flex items-center">
+            <img 
+              src="/assets/images/logos/Headerlogo.png" 
+              alt="KEYCODE HELP" 
+              className="w-8 h-8 mr-3"
+            />
             Keycode Help
           </Link>
 

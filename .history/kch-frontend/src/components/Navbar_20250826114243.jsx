@@ -1,15 +1,19 @@
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { canSeeAdmin, isSuper, isBaseUser } from "../utils/roles";
+import { Menu, X } from "lucide-react";
 import MobileNav from "./MobileNav";
 
 function Navbar() {
   const { userRole, logout } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const onClickLogout = () => {
     logout();
     navigate("/");
+    setOpen(false);
   };
 
   const NavLinks = () => (
@@ -19,18 +23,16 @@ function Navbar() {
           <Link
             className="nav-link"
             to="/pricing"
-            onClick={() => setOpen(false)}
           >
             Keycode Pricing
           </Link>
           <Link
             className="nav-link"
             to="/register"
-            onClick={() => setOpen(false)}
           >
             Sign Up
           </Link>
-          <Link className="nav-link" to="/login" onClick={() => setOpen(false)}>
+          <Link className="nav-link" to="/login">
             Login
           </Link>
         </>
@@ -38,45 +40,40 @@ function Navbar() {
 
       {isBaseUser(userRole) && (
         <>
-          <Link className="nav-link" to="/" onClick={() => setOpen(false)}>
+          <Link className="nav-link" to="/">
             Home
           </Link>
           <Link
             className="nav-link"
             to="/pricing"
-            onClick={() => setOpen(false)}
           >
             Keycode Pricing
           </Link>
           <Link
             className="nav-link"
             to="/vehicle-keycode-request"
-            onClick={() => setOpen(false)}
           >
             Request Keycode
           </Link>
           <Link
             className="nav-link"
             to="/subscriptions"
-            onClick={() => setOpen(false)}
           >
             Subscriptions
           </Link>
           <Link
             className="nav-link"
             to="/user-dash"
-            onClick={() => setOpen(false)}
           >
             User Dashboard
           </Link>
           <Link
             className="nav-link"
             to="/user-profile"
-            onClick={() => setOpen(false)}
           >
             Profile
           </Link>
-          <Link className="nav-link" to="/cart" onClick={() => setOpen(false)}>
+          <Link className="nav-link" to="/cart">
             Cart
           </Link>
         </>
@@ -84,37 +81,33 @@ function Navbar() {
 
       {canSeeAdmin(userRole) && !isSuper(userRole) && (
         <>
-          <Link className="nav-link" to="/" onClick={() => setOpen(false)}>
+          <Link className="nav-link" to="/">
             Home
           </Link>
           <Link
             className="nav-link"
             to="/pricing"
-            onClick={() => setOpen(false)}
           >
             Keycode Pricing
           </Link>
-          <Link className="nav-link" to="/admin" onClick={() => setOpen(false)}>
+          <Link className="nav-link" to="/admin">
             Admin Dashboard
           </Link>
           <Link
             className="nav-link"
             to="/admin/registered-users"
-            onClick={() => setOpen(false)}
           >
             Registered Users
           </Link>
           <Link
             className="nav-link"
             to="/admin/document-validation"
-            onClick={() => setOpen(false)}
           >
             Document Validation
           </Link>
           <Link
             className="nav-link"
             to="/admin/user-history"
-            onClick={() => setOpen(false)}
           >
             User History
           </Link>
@@ -123,44 +116,39 @@ function Navbar() {
 
       {isSuper(userRole) && (
         <>
-          <Link className="nav-link" to="/" onClick={() => setOpen(false)}>
+          <Link className="nav-link" to="/">
             Home
           </Link>
           <Link
             className="nav-link"
             to="/pricing"
-            onClick={() => setOpen(false)}
           >
             Keycode Pricing
           </Link>
           <Link
             className="nav-link"
             to="/super-admin"
-            onClick={() => setOpen(false)}
           >
             Super Admin Dashboard
           </Link>
-          <Link className="nav-link" to="/admin" onClick={() => setOpen(false)}>
+          <Link className="nav-link" to="/admin">
             Admin Dashboard
           </Link>
           <Link
             className="nav-link"
             to="/admin/registered-users"
-            onClick={() => setOpen(false)}
           >
             Registered Users
           </Link>
           <Link
             className="nav-link"
             to="/admin/document-validation"
-            onClick={() => setOpen(false)}
           >
             Document Validation
           </Link>
           <Link
             className="nav-link"
             to="/admin/user-history"
-            onClick={() => setOpen(false)}
           >
             User History
           </Link>

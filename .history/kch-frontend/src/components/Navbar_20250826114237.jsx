@@ -1,15 +1,19 @@
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { canSeeAdmin, isSuper, isBaseUser } from "../utils/roles";
+import { Menu, X } from "lucide-react";
 import MobileNav from "./MobileNav";
 
 function Navbar() {
   const { userRole, logout } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const onClickLogout = () => {
     logout();
     navigate("/");
+    setOpen(false);
   };
 
   const NavLinks = () => (
