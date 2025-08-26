@@ -54,8 +54,18 @@ const MobileNav = () => {
   };
 
   const toggleMenu = () => {
+    console.log('Toggle menu clicked, current state:', isOpen);
     setIsOpen(!isOpen);
+    console.log('New state will be:', !isOpen);
   };
+
+  // Debug logging
+  useEffect(() => {
+    console.log('MobileNav state changed - isOpen:', isOpen);
+    console.log('MobileNav element:', document.querySelector('.mobile-nav'));
+    console.log('Overlay element:', document.querySelector('.mobile-nav-overlay'));
+    console.log('Content element:', document.querySelector('.mobile-nav-content'));
+  }, [isOpen]);
 
   // Guest user navigation items (always visible)
   const guestNavItems = [
@@ -156,142 +166,126 @@ const MobileNav = () => {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay - Simplified for testing */}
-      {isOpen && (
-        <div
-          className="mobile-nav-overlay show"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.98)",
-            zIndex: 9998,
-            display: "block",
-            opacity: 1,
-            visibility: "visible",
-          }}
-        >
-          <div className="mobile-nav-content">
-            {/* Main Navigation */}
-            <div className="mobile-nav-section">
-              <h3 className="mobile-nav-section-title">Main Menu</h3>
-              <div className="mobile-nav-links">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={`mobile-nav-link ${
-                        location.pathname === item.path ? "active" : ""
-                      }`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <Icon className="mobile-nav-icon" size={20} />
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+      {/* Mobile Menu Overlay */}
+      <div className={`mobile-nav-overlay ${isOpen ? "show" : ""}`}>
+        <div className="mobile-nav-content">
+          {/* Main Navigation */}
+          <div className="mobile-nav-section">
+            <h3 className="mobile-nav-section-title">Main Menu</h3>
+            <div className="mobile-nav-links">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`mobile-nav-link ${
+                      location.pathname === item.path ? "active" : ""
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Icon className="mobile-nav-icon" size={20} />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
             </div>
-
-            {/* User Navigation */}
-            <div className="mobile-nav-section">
-              <h3 className="mobile-nav-section-title">
-                {user ? "Account" : "Authentication"}
-              </h3>
-              <div className="mobile-nav-links">
-                {!user ? (
-                  // Guest user authentication links
-                  <>
-                    <Link
-                      to="/login"
-                      className="mobile-nav-link"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <User className="mobile-nav-icon" size={20} />
-                      <span>Login</span>
-                    </Link>
-                    <Link
-                      to="/register"
-                      className="mobile-nav-link"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <User className="mobile-nav-icon" size={20} />
-                      <span>Register</span>
-                    </Link>
-                  </>
-                ) : (
-                  // Logged in user account actions
-                  <>
-                    <Link
-                      to="/profile"
-                      className="mobile-nav-link"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <User className="mobile-nav-icon" size={20} />
-                      <span>Profile</span>
-                    </Link>
-                    <button
-                      className="mobile-nav-link mobile-nav-logout"
-                      onClick={handleLogout}
-                    >
-                      <LogOut className="mobile-nav-icon" size={20} />
-                      <span>Logout</span>
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Legal Links */}
-            <div className="mobile-nav-section">
-              <h3 className="mobile-nav-section-title">Legal</h3>
-              <div className="mobile-nav-links">
-                <Link
-                  to="/privacy-policy"
-                  className="mobile-nav-link"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span>Privacy Policy</span>
-                </Link>
-                <Link
-                  to="/terms-of-service"
-                  className="mobile-nav-link"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span>Terms of Service</span>
-                </Link>
-                <Link
-                  to="/refund-policy"
-                  className="mobile-nav-link"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span>Refund Policy</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* User Info (if logged in) */}
-            {user && (
-              <div className="mobile-nav-user-info">
-                <div className="mobile-nav-user-avatar">
-                  <User size={24} />
-                </div>
-                <div className="mobile-nav-user-details">
-                  <div className="mobile-nav-user-name">
-                    {user.fname} {user.lname}
-                  </div>
-                  <div className="mobile-nav-user-email">{user.email}</div>
-                  <div className="mobile-nav-user-role">{user.role}</div>
-                </div>
-              </div>
-            )}
           </div>
+
+          {/* User Navigation */}
+          <div className="mobile-nav-section">
+            <h3 className="mobile-nav-section-title">
+              {user ? "Account" : "Authentication"}
+            </h3>
+            <div className="mobile-nav-links">
+              {!user ? (
+                // Guest user authentication links
+                <>
+                  <Link
+                    to="/login"
+                    className="mobile-nav-link"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <User className="mobile-nav-icon" size={20} />
+                    <span>Login</span>
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="mobile-nav-link"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <User className="mobile-nav-icon" size={20} />
+                    <span>Register</span>
+                  </Link>
+                </>
+              ) : (
+                // Logged in user account actions
+                <>
+                  <Link
+                    to="/profile"
+                    className="mobile-nav-link"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <User className="mobile-nav-icon" size={20} />
+                    <span>Profile</span>
+                  </Link>
+                  <button
+                    className="mobile-nav-link mobile-nav-logout"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="mobile-nav-icon" size={20} />
+                    <span>Logout</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Legal Links */}
+          <div className="mobile-nav-section">
+            <h3 className="mobile-nav-section-title">Legal</h3>
+            <div className="mobile-nav-links">
+              <Link
+                to="/privacy-policy"
+                className="mobile-nav-link"
+                onClick={() => setIsOpen(false)}
+              >
+                <span>Privacy Policy</span>
+              </Link>
+              <Link
+                to="/terms-of-service"
+                className="mobile-nav-link"
+                onClick={() => setIsOpen(false)}
+              >
+                <span>Terms of Service</span>
+              </Link>
+              <Link
+                to="/refund-policy"
+                className="mobile-nav-link"
+                onClick={() => setIsOpen(false)}
+              >
+                <span>Refund Policy</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* User Info (if logged in) */}
+          {user && (
+            <div className="mobile-nav-user-info">
+              <div className="mobile-nav-user-avatar">
+                <User size={24} />
+              </div>
+              <div className="mobile-nav-user-details">
+                <div className="mobile-nav-user-name">
+                  {user.fname} {user.lname}
+                </div>
+                <div className="mobile-nav-user-email">{user.email}</div>
+                <div className="mobile-nav-user-role">{user.role}</div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
 };

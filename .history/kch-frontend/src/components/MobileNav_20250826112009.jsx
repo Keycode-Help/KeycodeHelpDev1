@@ -54,8 +54,24 @@ const MobileNav = () => {
   };
 
   const toggleMenu = () => {
+    console.log("Toggle menu clicked, current state:", isOpen);
     setIsOpen(!isOpen);
+    console.log("New state will be:", !isOpen);
   };
+
+  // Debug logging
+  useEffect(() => {
+    console.log("MobileNav state changed - isOpen:", isOpen);
+    console.log("MobileNav element:", document.querySelector(".mobile-nav"));
+    console.log(
+      "Overlay element:",
+      document.querySelector(".mobile-nav-overlay")
+    );
+    console.log(
+      "Content element:",
+      document.querySelector(".mobile-nav-content")
+    );
+  }, [isOpen]);
 
   // Guest user navigation items (always visible)
   const guestNavItems = [

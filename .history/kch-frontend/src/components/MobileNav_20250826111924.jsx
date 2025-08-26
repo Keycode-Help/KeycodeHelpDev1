@@ -54,8 +54,18 @@ const MobileNav = () => {
   };
 
   const toggleMenu = () => {
+    console.log('Toggle menu clicked, current state:', isOpen);
     setIsOpen(!isOpen);
+    console.log('New state will be:', !isOpen);
   };
+
+  // Debug logging
+  useEffect(() => {
+    console.log('MobileNav state changed - isOpen:', isOpen);
+    console.log('MobileNav element:', document.querySelector('.mobile-nav'));
+    console.log('Overlay element:', document.querySelector('.mobile-nav-overlay'));
+    console.log('Content element:', document.querySelector('.mobile-nav-content'));
+  }, [isOpen]);
 
   // Guest user navigation items (always visible)
   const guestNavItems = [
@@ -158,21 +168,18 @@ const MobileNav = () => {
 
       {/* Mobile Menu Overlay - Simplified for testing */}
       {isOpen && (
-        <div
-          className="mobile-nav-overlay show"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.98)",
-            zIndex: 9998,
-            display: "block",
-            opacity: 1,
-            visibility: "visible",
-          }}
-        >
+        <div className="mobile-nav-overlay show" style={{ 
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          bottom: 0, 
+          background: 'rgba(0, 0, 0, 0.98)', 
+          zIndex: 9998,
+          display: 'block',
+          opacity: 1,
+          visibility: 'visible'
+        }}>
           <div className="mobile-nav-content">
             {/* Main Navigation */}
             <div className="mobile-nav-section">

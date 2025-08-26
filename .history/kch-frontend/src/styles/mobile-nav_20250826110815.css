@@ -183,7 +183,7 @@
 }
 
 .mobile-nav-section-title {
-  color: var(--primary);
+  color: #0b41e4; /* Fallback for var(--primary) */
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -215,7 +215,7 @@
 .mobile-nav-link.active {
   background: rgba(11, 65, 228, 0.1);
   border-color: rgba(11, 65, 228, 0.3);
-  color: var(--primaryLight);
+  color: #4f9eff; /* Fallback for var(--primaryLight) */
   transform: translateX(4px);
 }
 
@@ -469,37 +469,5 @@
   .mobile-nav-toggler {
     border: 2px solid white;
     border-radius: 0.25rem;
-  }
-}
-
-/* Force mobile nav visibility on small screens */
-@media (max-width: 767px) {
-  .mobile-nav {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 9999 !important;
-  }
-  
-  .mobile-nav-overlay.show {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    z-index: 9998 !important;
-  }
-  
-  .mobile-nav-content {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
   }
 }
