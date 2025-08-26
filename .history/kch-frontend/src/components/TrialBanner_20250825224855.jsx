@@ -59,22 +59,9 @@ export default function TrialBanner() {
           </ul>
         </div>
         <div className="flex flex-col items-center gap-4">
-          <button 
-            onClick={handleStartTrial} 
-            className="btn btn-lg btn-primary"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Icon name="loader" size={20} className="animate-spin" />
-                Starting Trial...
-              </>
-            ) : (
-              <>
-                Start Premium Trial
-                <Icon name="chevronRight" size={20} />
-              </>
-            )}
+          <button onClick={startTrial} className="btn btn-lg btn-primary">
+            Start Premium Trial
+            <Icon name="chevronRight" size={20} />
           </button>
           <Link
             to="/trial-details"

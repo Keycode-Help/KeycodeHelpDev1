@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
@@ -8,7 +8,6 @@ import TrialExpirationHandler from "./components/TrialExpirationHandler";
 import { AuthProvider } from "./context/AuthContext";
 import ErrorBoundary from "./utils/errorBoundary.jsx";
 import "./styles/mobile-responsive.css";
-import { initMobileResponsiveness } from "./utils/mobileResponsivenessTest";
 
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
@@ -40,11 +39,6 @@ import RefundPolicy from "./pages/RefundPolicy";
 import MembershipCancellation from "./pages/MembershipCancellation";
 
 function App() {
-  // Initialize mobile responsiveness
-  useEffect(() => {
-    initMobileResponsiveness();
-  }, []);
-
   // App component with enhanced routing for production deployment
   return (
     <ErrorBoundary>

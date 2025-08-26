@@ -24,7 +24,6 @@ public class CartController {
     private final CartService cartService;
     private final KeycodeUserService keycodeUserService;
     private final EmailService emailService;
-    private final TrialService trialService;
 
     @Autowired
     public CartController(CartService cartService, KeycodeUserService keycodeUserService, EmailService emailService, TrialService trialService) {
@@ -138,22 +137,15 @@ public class CartController {
         try {
             // Attach subscription to user before adding to cart
             subscription.setKeycodeUser(user);
-            
-            // If trial flag present, use TrialService to handle trial logic
+            // If trial flag present, enable 3-day trial window and activate for immediate access
             if (subscription.isTrial()) {
-                try {
-                    // Start trial using the service
-                    Subscription trialSubscription = trialService.startTrial(user, subscription.getTier());
-                    cartService.addSubscriptionToCart(user, trialSubscription);
-                    return ResponseEntity.ok("Trial started successfully. 3-day premium access activated.");
-                } catch (IllegalStateException e) {
-                    return ResponseEntity.badRequest().body("Trial error: " + e.getMessage());
+                if (subscription.getTrialEndsAt() == null) {
+                    subscription.setTrialEndsAt(java.time.OffsetDateTime.now().plusDays(3));
                 }
-            } else {
-                // Regular subscription
-                cartService.addSubscriptionToCart(user, subscription);
-                return ResponseEntity.ok("Subscription added to cart successfully.");
+                subscription.setActivated(true);
             }
+            cartService.addSubscriptionToCart(user, subscription);
+            return ResponseEntity.ok("Subscription added to cart successfully.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

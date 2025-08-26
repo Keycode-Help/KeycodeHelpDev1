@@ -39,7 +39,7 @@ function UserDash() {
 
     // Use trial status hook for premium access
     setIsPremium(hasPremiumAccess());
-  }, [hasPremiumAccess]);
+  }, []);
 
   const handleInputChange = (e, requestId) => {
     const { name, value } = e.target;

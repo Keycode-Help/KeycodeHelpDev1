@@ -13,7 +13,6 @@ import OrderTracker from "../components/OrderTracker";
 
 function UserDash() {
   const { user } = useAuth();
-  const { hasPremiumAccess } = useTrialStatus();
   const [requests, setRequests] = useState({
     pendingRequests: [],
     inProgressRequests: [],
@@ -37,9 +36,17 @@ function UserDash() {
       )
       .finally(() => setLoading(false));
 
-    // Use trial status hook for premium access
-    setIsPremium(hasPremiumAccess());
-  }, [hasPremiumAccess]);
+    // Fetch subscription to determine premium/trial access for chat
+    api
+      .get("/keycode-user/subscription")
+      .then((res) => {
+        const s = res?.data || {};
+        const activated = !!s.activated;
+        const onTrial = !!s.trial && (!!s.trialEndsAt ? new Date(s.trialEndsAt) > new Date() : true);
+        setIsPremium(activated || onTrial);
+      })
+      .catch(() => setIsPremium(false));
+  }, []);
 
   const handleInputChange = (e, requestId) => {
     const { name, value } = e.target;

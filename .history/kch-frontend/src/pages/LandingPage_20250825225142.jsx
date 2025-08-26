@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead";
 import RegionBanner from "../components/RegionBanner";
@@ -9,12 +9,23 @@ import SignUpSteps from "../components/SignUpSteps";
 import TrialBanner from "../components/TrialBanner";
 import { Icon } from "../components/IconProvider";
 import "../styles/lp.css";
-import "../styles/landing-page-mobile.css";
 
 export default function LandingPage() {
   const { token } = useAuth();
-  const { shouldShowTrialBanner } = useTrialStatus();
+  const [trialEndsAt, setTrialEndsAt] = useState(null);
   const [billingCycle, setBillingCycle] = useState("monthly");
+
+  useEffect(() => {
+    if (!token) return;
+    api
+      .get("/keycode-user/subscription")
+      .then((res) => {
+        if (res.data?.trial && res.data?.trialEndsAt) {
+          setTrialEndsAt(res.data.trialEndsAt);
+        }
+      })
+      .catch(() => {});
+  }, [token]);
 
   return (
     <>
@@ -27,7 +38,7 @@ export default function LandingPage() {
       />
       <div className="bg-dark text-white min-h-screen">
         <RegionBanner />
-        <TrialNotice />
+        <TrialNotice endsAt={trialEndsAt} />
 
         {/* Logo Section */}
         <div className="flex justify-center py-8">
@@ -105,8 +116,8 @@ export default function LandingPage() {
             </div>
           </section>
 
-          {/* Add Trial Banner after the Hero Section - only show if user should see it */}
-          {shouldShowTrialBanner() && <TrialBanner />}
+          {/* Add Trial Banner after the Hero Section */}
+          <TrialBanner />
 
           {/* Services Grid */}
           <section className="grid md:grid-cols-3 gap-8">
