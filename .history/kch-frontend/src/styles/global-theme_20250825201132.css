@@ -143,11 +143,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.05)
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   border-radius: inherit;
   opacity: 0;
   transition: opacity var(--transitionBase);
@@ -159,22 +155,14 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primaryLight) 100%
-  );
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primaryLight) 100%);
   color: var(--primaryFg);
   box-shadow: 0 6px 20px rgba(11, 65, 228, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(
-    135deg,
-    var(--primaryLight) 0%,
-    var(--primary) 100%
-  );
+  background: linear-gradient(135deg, var(--primaryLight) 0%, var(--primary) 100%);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(11, 65, 228, 0.6);
 }
@@ -185,22 +173,14 @@ body {
 }
 
 .btn-secondary {
-  background: linear-gradient(
-    135deg,
-    var(--secondary) 0%,
-    var(--secondaryLight) 100%
-  );
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondaryLight) 100%);
   color: var(--secondaryFg);
   box-shadow: 0 6px 20px rgba(33, 51, 65, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(
-    135deg,
-    var(--secondaryLight) 0%,
-    var(--secondary) 100%
-  );
+  background: linear-gradient(135deg, var(--secondaryLight) 0%, var(--secondary) 100%);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(33, 51, 65, 0.6);
 }
@@ -211,22 +191,14 @@ body {
 }
 
 .btn-accent {
-  background: linear-gradient(
-    135deg,
-    var(--accent) 0%,
-    var(--accentLight) 100%
-  );
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accentLight) 100%);
   color: var(--accentFg);
   box-shadow: 0 6px 20px rgba(255, 206, 32, 0.4);
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .btn-accent:hover {
-  background: linear-gradient(
-    135deg,
-    var(--accentLight) 0%,
-    var(--accent) 100%
-  );
+  background: linear-gradient(135deg, var(--accentLight) 0%, var(--accent) 100%);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(255, 206, 32, 0.6);
 }
@@ -237,22 +209,14 @@ body {
 }
 
 .btn-success {
-  background: linear-gradient(
-    135deg,
-    var(--success) 0%,
-    var(--successLight) 100%
-  );
+  background: linear-gradient(135deg, var(--success) 0%, var(--successLight) 100%);
   color: var(--background);
   box-shadow: 0 6px 20px rgba(74, 230, 108, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-success:hover {
-  background: linear-gradient(
-    135deg,
-    var(--successLight) 0%,
-    var(--success) 100%
-  );
+  background: linear-gradient(135deg, var(--successLight) 0%, var(--success) 100%);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(74, 230, 108, 0.6);
 }
@@ -263,22 +227,14 @@ body {
 }
 
 .btn-warning {
-  background: linear-gradient(
-    135deg,
-    var(--warning) 0%,
-    var(--warningLight) 100%
-  );
+  background: linear-gradient(135deg, var(--warning) 0%, var(--warningLight) 100%);
   color: var(--background);
   box-shadow: 0 6px 20px rgba(255, 167, 38, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-warning:hover {
-  background: linear-gradient(
-    135deg,
-    var(--warningLight) 0%,
-    var(--warning) 100%
-  );
+  background: linear-gradient(135deg, var(--warningLight) 0%, var(--warning) 100%);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(255, 167, 38, 0.6);
 }

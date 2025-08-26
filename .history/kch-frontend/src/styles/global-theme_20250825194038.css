@@ -1,68 +1,68 @@
 /* Global Theme Variables - Unified Color System */
 :root {
   /* Brand Colors - Primary Palette */
-  --primary: #0b41e4; /* Primary Blue */
-  --primaryLight: #3d6bff; /* Lighter Blue */
-  --primaryDark: #0729a3; /* Darker Blue */
+  --primary: #0b41e4;           /* Primary Blue */
+  --primaryLight: #3d6bff;       /* Lighter Blue */
+  --primaryDark: #0729a3;        /* Darker Blue */
   --primaryBg: rgba(11, 65, 228, 0.1);
   --primaryHi: rgba(11, 65, 228, 0.25);
   --primaryFg: #ffffff;
 
   /* Secondary Colors */
-  --secondary: #213341; /* Dark Slate */
-  --secondaryLight: #3a4f5f; /* Lighter Slate */
-  --secondaryDark: #1a2a35; /* Darker Slate */
+  --secondary: #213341;          /* Dark Slate */
+  --secondaryLight: #3a4f5f;     /* Lighter Slate */
+  --secondaryDark: #1a2a35;      /* Darker Slate */
   --secondaryBg: rgba(33, 51, 65, 0.1);
   --secondaryHi: rgba(33, 51, 65, 0.25);
   --secondaryFg: #e5e7eb;
 
   /* Accent Colors */
-  --accent: #ffce20; /* CTA Yellow */
-  --accentLight: #ffd84d; /* Lighter Yellow */
-  --accentDark: #e6b800; /* Darker Yellow */
+  --accent: #ffce20;             /* CTA Yellow */
+  --accentLight: #ffd84d;        /* Lighter Yellow */
+  --accentDark: #e6b800;         /* Darker Yellow */
   --accentBg: rgba(255, 206, 32, 0.1);
   --accentHi: rgba(255, 206, 32, 0.25);
   --accentFg: #000000;
 
   /* Status Colors */
-  --success: #4ae66c; /* Success Green */
-  --successLight: #6bff8a; /* Lighter Green */
-  --successDark: #3bc55a; /* Darker Green */
+  --success: #4ae66c;            /* Success Green */
+  --successLight: #6bff8a;       /* Lighter Green */
+  --successDark: #3bc55a;        /* Darker Green */
   --successBg: rgba(74, 230, 108, 0.1);
   --successHi: rgba(74, 230, 108, 0.25);
 
-  --warning: #ffa726; /* Warning Orange */
-  --warningLight: #ffb74d; /* Lighter Orange */
-  --warningDark: #f57c00; /* Darker Orange */
+  --warning: #ffa726;            /* Warning Orange */
+  --warningLight: #ffb74d;       /* Lighter Orange */
+  --warningDark: #f57c00;        /* Darker Orange */
   --warningBg: rgba(255, 167, 38, 0.1);
   --warningHi: rgba(255, 167, 38, 0.25);
 
-  --error: #f44336; /* Error Red */
-  --errorLight: #ef5350; /* Lighter Red */
-  --errorDark: #d32f2f; /* Darker Red */
+  --error: #f44336;              /* Error Red */
+  --errorLight: #ef5350;         /* Lighter Red */
+  --errorDark: #d32f2f;          /* Darker Red */
   --errorBg: rgba(244, 67, 54, 0.1);
   --errorHi: rgba(244, 67, 54, 0.25);
 
-  --info: #2196f3; /* Info Blue */
-  --infoLight: #42a5f5; /* Lighter Info Blue */
-  --infoDark: #1976d2; /* Darker Info Blue */
+  --info: #2196f3;               /* Info Blue */
+  --infoLight: #42a5f5;          /* Lighter Info Blue */
+  --infoDark: #1976d2;           /* Darker Info Blue */
   --infoBg: rgba(33, 150, 243, 0.1);
   --infoHi: rgba(33, 150, 243, 0.25);
 
   /* Neutral Colors */
-  --text: #ffffff; /* Primary Text */
-  --textDim: rgba(255, 255, 255, 0.7); /* Dimmed Text */
+  --text: #ffffff;               /* Primary Text */
+  --textDim: rgba(255, 255, 255, 0.7);  /* Dimmed Text */
   --textMuted: rgba(255, 255, 255, 0.5); /* Muted Text */
-
-  --background: #000000; /* Main Background */
-  --surface: #0a0a0a; /* Surface Background */
-  --surfaceLight: #1a1a1a; /* Light Surface */
-  --surfaceDark: #050505; /* Dark Surface */
-
-  --border: rgba(255, 255, 255, 0.1); /* Border Color */
+  
+  --background: #000000;         /* Main Background */
+  --surface: #0a0a0a;            /* Surface Background */
+  --surfaceLight: #1a1a1a;       /* Light Surface */
+  --surfaceDark: #050505;        /* Dark Surface */
+  
+  --border: rgba(255, 255, 255, 0.1);    /* Border Color */
   --borderLight: rgba(255, 255, 255, 0.05); /* Light Border */
-  --borderDark: rgba(255, 255, 255, 0.2); /* Dark Border */
-
+  --borderDark: rgba(255, 255, 255, 0.2);   /* Dark Border */
+  
   --shadow: rgba(0, 0, 0, 0.3); /* Shadow Color */
   --shadowLight: rgba(0, 0, 0, 0.1); /* Light Shadow */
   --shadowDark: rgba(0, 0, 0, 0.5); /* Dark Shadow */
@@ -133,7 +133,6 @@ body {
   text-decoration: none;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn::before {
@@ -143,167 +142,88 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.05)
-  );
-  border-radius: inherit;
+  background: var(--primaryHi);
+  border-radius: 50%;
+  filter: blur(20px);
   opacity: 0;
   transition: opacity var(--transitionBase);
-  z-index: 1;
+  z-index: -1;
 }
 
 .btn:hover::before {
-  opacity: 1;
+  opacity: 0.6;
 }
 
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primaryLight) 100%
-  );
+  background-color: var(--primary);
   color: var(--primaryFg);
-  box-shadow: 0 6px 20px rgba(11, 65, 228, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(11, 65, 228, 0.3);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(
-    135deg,
-    var(--primaryLight) 0%,
-    var(--primary) 100%
-  );
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(11, 65, 228, 0.6);
-}
-
-.btn-primary:active {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(11, 65, 228, 0.4);
+  background-color: var(--primaryLight);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(11, 65, 228, 0.4);
 }
 
 .btn-secondary {
-  background: linear-gradient(
-    135deg,
-    var(--secondary) 0%,
-    var(--secondaryLight) 100%
-  );
+  background-color: var(--secondary);
   color: var(--secondaryFg);
-  box-shadow: 0 6px 20px rgba(33, 51, 65, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(33, 51, 65, 0.3);
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(
-    135deg,
-    var(--secondaryLight) 0%,
-    var(--secondary) 100%
-  );
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(33, 51, 65, 0.6);
-}
-
-.btn-secondary:active {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(33, 51, 65, 0.4);
+  background-color: var(--secondaryLight);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(33, 51, 65, 0.4);
 }
 
 .btn-accent {
-  background: linear-gradient(
-    135deg,
-    var(--accent) 0%,
-    var(--accentLight) 100%
-  );
+  background-color: var(--accent);
   color: var(--accentFg);
-  box-shadow: 0 6px 20px rgba(255, 206, 32, 0.4);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(255, 206, 32, 0.3);
 }
 
 .btn-accent:hover {
-  background: linear-gradient(
-    135deg,
-    var(--accentLight) 0%,
-    var(--accent) 100%
-  );
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(255, 206, 32, 0.6);
-}
-
-.btn-accent:active {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(255, 206, 32, 0.4);
+  background-color: var(--accentLight);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 206, 32, 0.4);
 }
 
 .btn-success {
-  background: linear-gradient(
-    135deg,
-    var(--success) 0%,
-    var(--successLight) 100%
-  );
+  background-color: var(--success);
   color: var(--background);
-  box-shadow: 0 6px 20px rgba(74, 230, 108, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(74, 230, 108, 0.3);
 }
 
 .btn-success:hover {
-  background: linear-gradient(
-    135deg,
-    var(--successLight) 0%,
-    var(--success) 100%
-  );
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(74, 230, 108, 0.6);
-}
-
-.btn-success:active {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(74, 230, 108, 0.4);
+  background-color: var(--successLight);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(74, 230, 108, 0.4);
 }
 
 .btn-warning {
-  background: linear-gradient(
-    135deg,
-    var(--warning) 0%,
-    var(--warningLight) 100%
-  );
+  background-color: var(--warning);
   color: var(--background);
-  box-shadow: 0 6px 20px rgba(255, 167, 38, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(255, 167, 38, 0.3);
 }
 
 .btn-warning:hover {
-  background: linear-gradient(
-    135deg,
-    var(--warningLight) 0%,
-    var(--warning) 100%
-  );
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(255, 167, 38, 0.6);
-}
-
-.btn-warning:active {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(255, 167, 38, 0.4);
+  background-color: var(--warningLight);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 167, 38, 0.4);
 }
 
 .btn-error {
-  background: linear-gradient(135deg, var(--error) 0%, var(--errorLight) 100%);
+  background-color: var(--error);
   color: var(--text);
-  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
 }
 
 .btn-error:hover {
-  background: linear-gradient(135deg, var(--errorLight) 0%, var(--error) 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(244, 67, 54, 0.6);
-}
-
-.btn-error:active {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+  background-color: var(--errorLight);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4);
 }
 
 /* Common Form Styles */
@@ -339,7 +259,6 @@ body {
   border-radius: var(--radiusXLarge);
   padding: var(--spacing8);
   box-shadow: 0 10px 30px var(--shadow);
-  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: all var(--transitionBase);
 }
@@ -375,11 +294,7 @@ body {
 .section-title {
   font-size: var(--fontSize4XLarge);
   font-weight: 700;
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primaryLight) 100%
-  );
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primaryLight) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -565,7 +480,6 @@ body {
 .glass {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
@@ -627,11 +541,7 @@ body {
 }
 
 .gradient-primary {
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primaryLight) 100%
-  );
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primaryLight) 100%);
 }
 
 .gradient-secondary {

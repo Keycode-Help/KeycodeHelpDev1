@@ -95,11 +95,7 @@ body {
 
 /* Variants - Using unified color system */
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--accent) 0%,
-    var(--accentLight) 100%
-  );
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accentLight) 100%);
   color: var(--accentFg);
   box-shadow: 0 6px 20px rgba(255, 206, 32, 0.4);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -107,11 +103,7 @@ body {
 }
 
 .btn-primary:hover {
-  background: linear-gradient(
-    135deg,
-    var(--accentLight) 0%,
-    var(--accent) 100%
-  );
+  background: linear-gradient(135deg, var(--accentLight) 0%, var(--accent) 100%);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(255, 206, 32, 0.6);
 }
