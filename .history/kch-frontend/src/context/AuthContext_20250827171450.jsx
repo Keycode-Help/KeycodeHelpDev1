@@ -135,18 +135,17 @@ export const AuthProvider = ({ children }) => {
 
       setIsLoading(true);
       try {
-        // Send as URL-encoded form data for @RequestParam
-        const formData = new URLSearchParams();
-        formData.append("email", email);
-        formData.append("password", password);
+        // Create FormData to send as form parameters instead of JSON
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
 
         const response = await safeAsync(
-          () =>
-            api.post("/auth/login", formData, {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-            }),
+          () => api.post("/auth/login", formData, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          }),
           null,
           "login operation"
         );
