@@ -256,12 +256,10 @@ public class AuthController {
             .httpOnly(true).secure(true).path("/")
             .sameSite("None").maxAge(Duration.ofDays(7)).build();
 
-        // Include user information and JWT token in the response
+        // Include user information in the response, but not the token
         Map<String, Object> response = new HashMap<>();
         response.put("status", "ok");
         response.put("user", user);
-        response.put("accessToken", accessJwt);
-        response.put("refreshToken", refreshJwt);
 
         System.out.println("✅ Login successful! Returning response with cookies");
         return ResponseEntity.ok()
