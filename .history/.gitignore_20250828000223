@@ -63,5 +63,3 @@ kch-frontend/.env.staging*
 .history/**/*.env.development*
 .vercel
 vercel.env
-.gitignore
-render.env

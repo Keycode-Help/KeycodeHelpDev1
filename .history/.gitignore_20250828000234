@@ -64,4 +64,3 @@ kch-frontend/.env.staging*
 .vercel
 vercel.env
 .gitignore
-render.env
