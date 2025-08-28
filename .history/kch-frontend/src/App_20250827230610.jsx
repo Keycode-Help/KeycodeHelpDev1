@@ -99,7 +99,10 @@ function App() {
                   path="/admin/user-history"
                   element={<UserHistoryPage />}
                 />
-                <Route path="/keycodes" element={<KeycodePortals />} />
+                <Route
+                  path="/keycodes"
+                  element={<KeycodePortals />}
+                />
 
                 {/* Legacy route redirects */}
                 <Route path="/subscription" element={<SubscriptionManager />} />

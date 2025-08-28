@@ -99,7 +99,6 @@ const MobileNav = () => {
     { path: "/super-admin", label: "Super Admin Dashboard", icon: Settings },
     { path: "/admin", label: "Admin Dashboard", icon: Settings },
     { path: "/admin/registered-users", label: "Registered Users", icon: User },
-    { path: "/keycodes", label: "Keycode Portals", icon: Key },
     {
       path: "/admin/document-validation",
       label: "Document Validation",
@@ -140,9 +139,9 @@ const MobileNav = () => {
           className="mobile-nav-brand"
           onClick={() => setIsOpen(false)}
         >
-          <img
-            src="/assets/images/logos/Headerlogo.png"
-            alt="KEYCODE HELP"
+          <img 
+            src="/assets/images/logos/Headerlogo.png" 
+            alt="KEYCODE HELP" 
             className="mobile-nav-logo"
           />
           <span className="mobile-nav-title">KEYCODE HELP</span>
