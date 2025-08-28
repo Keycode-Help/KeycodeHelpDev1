@@ -103,9 +103,6 @@ function Navbar() {
           <Link className="nav-link" to="/admin/user-history">
             User History
           </Link>
-          <Link className="nav-link" to="/keycodes">
-            Keycode Portals
-          </Link>
         </>
       )}
 

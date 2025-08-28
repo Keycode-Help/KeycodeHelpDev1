@@ -99,7 +99,6 @@ const MobileNav = () => {
     { path: "/super-admin", label: "Super Admin Dashboard", icon: Settings },
     { path: "/admin", label: "Admin Dashboard", icon: Settings },
     { path: "/admin/registered-users", label: "Registered Users", icon: User },
-    { path: "/keycodes", label: "Keycode Portals", icon: Key },
     {
       path: "/admin/document-validation",
       label: "Document Validation",
