@@ -30,17 +30,10 @@ const KeycodePortals = () => {
 
     // Check if user has admin or super_admin role
     const userRoleLower = user?.role?.toLowerCase();
-    const allowedRoles = ["admin", "super_admin"];
-
-    console.log(
-      "Checking role:",
-      user?.role,
-      "userRoleLower:",
-      userRoleLower,
-      "allowedRoles:",
-      allowedRoles
-    );
-
+    const allowedRoles = ['admin', 'super_admin'];
+    
+    console.log('Checking role:', user?.role, 'userRoleLower:', userRoleLower, 'allowedRoles:', allowedRoles);
+    
     if (user && user.role && !allowedRoles.includes(userRoleLower)) {
       console.log(
         "User role not authorized:",
