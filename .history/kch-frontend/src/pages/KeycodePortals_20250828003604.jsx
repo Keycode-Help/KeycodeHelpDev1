@@ -1,63 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import KeycodeGrid from "../components/KeycodeGrid";
-import "../styles/keycode-portals.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import KeycodeGrid from '../components/KeycodeGrid';
+import '../styles/keycode-portals.css';
 
 const KeycodePortals = () => {
-  const { user, userRole, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [portalsData, setPortalsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log(
-      "KeycodePortals useEffect - isAuthenticated:",
-      isAuthenticated,
-      "user:",
-      user,
-      "userRole:",
-      userRole
-    );
-
+    console.log('KeycodePortals useEffect - isAuthenticated:', isAuthenticated, 'user:', user);
+    
     // Check authentication and role
     if (!isAuthenticated) {
-      console.log("User not authenticated, redirecting to login");
-      navigate("/login");
+      console.log('User not authenticated, redirecting to login');
+      navigate('/login');
       return;
     }
 
     // Check if user has admin or super_admin role
-    if (user && user.role && !["admin", "super_admin"].includes(user.role)) {
-      console.log(
-        "User role not authorized:",
-        user.role,
-        "redirecting to home"
-      );
-      navigate("/");
+    if (user && user.role && !['admin', 'super_admin'].includes(user.role)) {
+      console.log('User role not authorized:', user.role, 'redirecting to home');
+      navigate('/');
       return;
     }
 
-    if (user && user.role && ["admin", "super_admin"].includes(user.role)) {
-      console.log("User authorized, loading portals data");
+    if (user && user.role && ['admin', 'super_admin'].includes(user.role)) {
+      console.log('User authorized, loading portals data');
       // Load portals data
       loadPortalsData();
     }
-  }, [isAuthenticated, user, userRole, navigate]);
+  }, [isAuthenticated, user, navigate]);
 
   const loadPortalsData = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/src/config/keycode-portals.json");
+      const response = await fetch('/src/config/keycode-portals.json');
       if (!response.ok) {
-        throw new Error("Failed to load portals configuration");
+        throw new Error('Failed to load portals configuration');
       }
       const data = await response.json();
       setPortalsData(data);
     } catch (err) {
-      console.error("Error loading portals data:", err);
-      setError("Failed to load keycode portals configuration");
+      console.error('Error loading portals data:', err);
+      setError('Failed to load keycode portals configuration');
     } finally {
       setLoading(false);
     }
@@ -79,9 +68,7 @@ const KeycodePortals = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-600 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Configuration Error
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Configuration Error</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={loadPortalsData}
@@ -99,12 +86,8 @@ const KeycodePortals = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-600 text-6xl mb-4">❌</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            No Data Available
-          </h2>
-          <p className="text-gray-600">
-            Keycode portals configuration could not be loaded.
-          </p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">No Data Available</h2>
+          <p className="text-gray-600">Keycode portals configuration could not be loaded.</p>
         </div>
       </div>
     );
@@ -112,37 +95,19 @@ const KeycodePortals = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Debug Section - Remove this after testing */}
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4">
-        <strong>Debug Info:</strong>
-        <br />
-        isAuthenticated: {String(isAuthenticated)}
-        <br />
-        user: {JSON.stringify(user)}
-        <br />
-        userRole: {userRole}
-        <br />
-        user.role: {user?.role}
-      </div>
-
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Keycode Portals
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900">Keycode Portals</h1>
               <p className="mt-2 text-gray-600">
-                VSP ID:{" "}
-                <span className="font-mono font-semibold text-blue-600">
-                  {portalsData.meta.vsp_id}
-                </span>
+                VSP ID: <span className="font-mono font-semibold text-blue-600">{portalsData.meta.vsp_id}</span>
               </p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                {user?.role === "super_admin" ? "Super Admin" : "Admin"}
+                {user?.role === 'super_admin' ? 'Super Admin' : 'Admin'}
               </div>
             </div>
           </div>
@@ -154,16 +119,8 @@ const KeycodePortals = () => {
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-yellow-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
+              <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
             </div>
             <div className="ml-3">
@@ -172,9 +129,8 @@ const KeycodePortals = () => {
               </h3>
               <div className="mt-2 text-sm text-yellow-700">
                 <p>
-                  To access these OEM keycode portals, you <strong>MUST</strong>{" "}
-                  download the Authy app for two-factor authentication. Many
-                  portals require 2FA for security compliance.
+                  To access these OEM keycode portals, you <strong>MUST</strong> download the Authy app for 
+                  two-factor authentication. Many portals require 2FA for security compliance.
                 </p>
                 <div className="mt-3 flex space-x-4">
                   <a

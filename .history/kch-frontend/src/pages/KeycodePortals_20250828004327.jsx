@@ -16,9 +16,7 @@ const KeycodePortals = () => {
       "KeycodePortals useEffect - isAuthenticated:",
       isAuthenticated,
       "user:",
-      user,
-      "userRole:",
-      userRole
+      user
     );
 
     // Check authentication and role
@@ -112,19 +110,6 @@ const KeycodePortals = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Debug Section - Remove this after testing */}
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4">
-        <strong>Debug Info:</strong>
-        <br />
-        isAuthenticated: {String(isAuthenticated)}
-        <br />
-        user: {JSON.stringify(user)}
-        <br />
-        userRole: {userRole}
-        <br />
-        user.role: {user?.role}
-      </div>
-
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
