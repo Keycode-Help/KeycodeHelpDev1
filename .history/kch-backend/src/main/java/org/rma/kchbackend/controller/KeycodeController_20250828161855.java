@@ -51,8 +51,6 @@ public class KeycodeController {
                 return ResponseEntity.status(400).body(Map.of("error", "Missing OEM parameter"));
             }
 
-            logger.info("🔍 DEBUG: Credentials request - User: " + email + ", OEM: " + oem);
-
             // Get user details and validate role
             Map<String, Object> userDetails = keycodeService.getUserDetails(email);
             if (userDetails == null) {
@@ -65,8 +63,6 @@ public class KeycodeController {
                 logger.warning("Unauthorized role access attempt to /api/keycodes/creds by user: " + email + " with role: " + userRole);
                 return ResponseEntity.status(403).body(Map.of("error", "Forbidden"));
             }
-
-            logger.info("✅ DEBUG: User authorized - Role: " + userRole + ", requesting credentials for OEM: " + oem);
 
             // Validate origin (basic CORS check)
             String allowedOrigin = System.getenv("FRONTEND_URL");
@@ -90,8 +86,6 @@ public class KeycodeController {
                 logger.warning("Missing credentials for OEM: " + oem + " requested by user: " + email);
                 return ResponseEntity.status(409).body(Map.of("error", "Missing credentials. Update environment variables for this OEM."));
             }
-
-            logger.info("✅ DEBUG: Credentials retrieved successfully for OEM: " + oem);
 
             // Log access metadata (without secrets)
             logger.info(String.format("Keycode credentials accessed - User: %s, Role: %s, OEM: %s, IP: %s", 
