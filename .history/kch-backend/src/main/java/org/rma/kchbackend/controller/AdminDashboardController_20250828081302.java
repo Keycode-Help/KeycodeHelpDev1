@@ -86,41 +86,11 @@ public class AdminDashboardController {
 
         return ResponseEntity.ok(vehicleDetails);
     }
-    
-    /**
-     * Helper method to get the current user's role from authentication
-     */
-    private String getCurrentUserRole(Authentication authentication) {
-        try {
-            if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.UserDetails) {
-                org.springframework.security.core.userdetails.UserDetails userDetails = 
-                    (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal();
-                return userDetails.getAuthorities().stream()
-                    .map(authority -> authority.getAuthority())
-                    .filter(authority -> authority.startsWith("ROLE_"))
-                    .map(authority -> authority.substring(5)) // Remove "ROLE_" prefix
-                    .findFirst()
-                    .orElse(null);
-            }
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
 
 
     @GetMapping("/in-progress-requests")
-    public ResponseEntity<List<Map<String, Object>>> getInProgressRequests(Authentication authentication) {
-        // Check if user is authenticated and has admin role
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body(null);
-        }
-        
-        String userRole = getCurrentUserRole(authentication);
-        if (userRole == null || (!userRole.equalsIgnoreCase("admin") && !userRole.equalsIgnoreCase("super_admin"))) {
-            return ResponseEntity.status(403).body(null);
-        }
+    public ResponseEntity<List<Map<String, Object>>> getInProgressRequests() {
         List<Vehicle> vehicles = vehicleService.getInProgressVehicles();
         List<Map<String, Object>> vehicleDetails = vehicles.stream().map(vehicle -> {
             Map<String, Object> vehicleData = new HashMap<>();

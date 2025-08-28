@@ -1,54 +1,45 @@
 package org.rma.kchbackend.service;
 
-import org.rma.kchbackend.model.AdminRegistrationCode;
-import org.rma.kchbackend.repository.AdminRegistrationCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AdminRegistrationCodeService {
 
     private final JavaMailSender mailSender;
-    private final AdminRegistrationCodeRepository adminRegistrationCodeRepository;
+    private final Map<String, RegistrationCodeInfo> activeCodes = new HashMap<>();
     
+    // In production, this should be stored in a database
     private static final int CODE_LENGTH = 8;
     private static final int CODE_EXPIRY_HOURS = 24;
 
     @Autowired
-    public AdminRegistrationCodeService(JavaMailSender mailSender, AdminRegistrationCodeRepository adminRegistrationCodeRepository) {
+    public AdminRegistrationCodeService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-        this.adminRegistrationCodeRepository = adminRegistrationCodeRepository;
     }
 
     /**
      * Generate a new admin registration code for a specific email
      */
-    public String generateAdminRegistrationCode(String email, String applicantName) {
+    public String generateAdminRegistrationCode(String email) {
         // Generate a secure random code
         String code = generateSecureCode();
         
-        // Check if code already exists (very unlikely but handle it)
-        while (adminRegistrationCodeRepository.findActiveCodeByEmailAndCode(email, code, LocalDateTime.now()).isPresent()) {
-            code = generateSecureCode();
-        }
+        // Store the code with expiry information
+        RegistrationCodeInfo codeInfo = new RegistrationCodeInfo(
+            code,
+            LocalDateTime.now().plusHours(CODE_EXPIRY_HOURS),
+            email
+        );
         
-        // Create and save the registration code
-        AdminRegistrationCode codeEntity = new AdminRegistrationCode();
-        codeEntity.setCode(code);
-        codeEntity.setEmail(email);
-        codeEntity.setApplicantName(applicantName);
-        codeEntity.setExpiryTime(LocalDateTime.now().plusHours(CODE_EXPIRY_HOURS));
-        codeEntity.setIsUsed(false);
-        
-        adminRegistrationCodeRepository.save(codeEntity);
+        activeCodes.put(email, codeInfo);
         
         return code;
     }
@@ -57,29 +48,26 @@ public class AdminRegistrationCodeService {
      * Validate an admin registration code
      */
     public boolean validateAdminRegistrationCode(String email, String code) {
-        try {
-            Optional<AdminRegistrationCode> codeEntity = adminRegistrationCodeRepository
-                .findActiveCodeByEmailAndCode(email, code, LocalDateTime.now());
-            
-            if (codeEntity.isEmpty()) {
-                return false;
-            }
-            
-            AdminRegistrationCode foundCode = codeEntity.get();
-            
-            // Mark the code as used
-            foundCode.setIsUsed(true);
-            foundCode.setUsedAt(LocalDateTime.now());
-            foundCode.setUsedByEmail(email);
-            
-            adminRegistrationCodeRepository.save(foundCode);
-            
-            return true;
-            
-        } catch (Exception e) {
-            System.err.println("Error validating admin registration code: " + e.getMessage());
+        RegistrationCodeInfo codeInfo = activeCodes.get(email);
+        
+        if (codeInfo == null) {
             return false;
         }
+        
+        // Check if code has expired
+        if (LocalDateTime.now().isAfter(codeInfo.getExpiryTime())) {
+            activeCodes.remove(email);
+            return false;
+        }
+        
+        // Check if code matches
+        if (codeInfo.getCode().equals(code)) {
+            // Remove the code after successful validation
+            activeCodes.remove(email);
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -88,7 +76,7 @@ public class AdminRegistrationCodeService {
     public void sendAdminRegistrationCode(String applicantEmail, String applicantName) {
         try {
             // Generate the registration code
-            String code = generateAdminRegistrationCode(applicantEmail, applicantName);
+            String code = generateAdminRegistrationCode(applicantEmail);
             
             // For local development, just log the code instead of sending emails
             if (isLocalDevelopment()) {
@@ -168,7 +156,8 @@ public class AdminRegistrationCodeService {
         } catch (Exception e) {
             System.err.println("❌ Failed to send notification email to super admin");
             System.err.println("Error: " + e.getMessage());
-            // Don't throw here as the main registration code was sent successfully
+            // Don't throw here - we don't want to fail the whole process if super admin notification fails
+            System.err.println("Continuing with applicant email only...");
         }
     }
 
@@ -191,46 +180,39 @@ public class AdminRegistrationCodeService {
      * Check if running in local development mode
      */
     private boolean isLocalDevelopment() {
-        // Force production mode - always send emails
-        return false;
-        
-        // Original logic (commented out for production):
-        // String profile = System.getProperty("spring.profiles.active");
-        // String env = System.getenv("SPRING_PROFILES_ACTIVE");
-        // return "local".equals(profile) || "local".equals(env) || 
-        //        "dev".equals(profile) || "dev".equals(env) ||
-        //        System.getProperty("user.home").contains("apple"); // Detect local development
+        String profile = System.getProperty("spring.profiles.active");
+        String env = System.getenv("SPRING_PROFILES_ACTIVE");
+        return "local".equals(profile) || "local".equals(env) || 
+               "dev".equals(profile) || "dev".equals(env) ||
+               System.getProperty("user.home").contains("apple"); // Detect local development
     }
 
     /**
-     * Clean up expired codes (runs every hour)
+     * Clean up expired codes (should be called periodically)
      */
-    @Scheduled(fixedRate = 3600000) // 1 hour in milliseconds
     public void cleanupExpiredCodes() {
-        try {
-            LocalDateTime now = LocalDateTime.now();
-            List<AdminRegistrationCode> expiredCodes = adminRegistrationCodeRepository.findExpiredCodes(now);
-            
-            if (!expiredCodes.isEmpty()) {
-                adminRegistrationCodeRepository.deleteAll(expiredCodes);
-                System.out.println("🧹 Cleaned up " + expiredCodes.size() + " expired admin registration codes");
-            }
-        } catch (Exception e) {
-            System.err.println("Error cleaning up expired codes: " + e.getMessage());
+        LocalDateTime now = LocalDateTime.now();
+        activeCodes.entrySet().removeIf(entry -> 
+            now.isAfter(entry.getValue().getExpiryTime())
+        );
+    }
+
+    /**
+     * Inner class to store code information
+     */
+    private static class RegistrationCodeInfo {
+        private final String code;
+        private final LocalDateTime expiryTime;
+        private final String email;
+
+        public RegistrationCodeInfo(String code, LocalDateTime expiryTime, String email) {
+            this.code = code;
+            this.expiryTime = expiryTime;
+            this.email = email;
         }
-    }
 
-    /**
-     * Get active codes for an email (for debugging/admin purposes)
-     */
-    public List<AdminRegistrationCode> getActiveCodesForEmail(String email) {
-        return adminRegistrationCodeRepository.findActiveCodesByEmail(email, LocalDateTime.now());
-    }
-
-    /**
-     * Get all unused codes (for debugging/admin purposes)
-     */
-    public List<AdminRegistrationCode> getAllUnusedCodes() {
-        return adminRegistrationCodeRepository.findUnusedCodes();
+        public String getCode() { return code; }
+        public LocalDateTime getExpiryTime() { return expiryTime; }
+        public String getEmail() { return email; }
     }
 }

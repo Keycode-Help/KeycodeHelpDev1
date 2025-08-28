@@ -100,9 +100,7 @@ function AdminRegister() {
 
   const validateAdminCode = async () => {
     if (!formData.adminCode || !formData.email) {
-      setCodeValidationMessage(
-        "❌ Please enter both email and registration code"
-      );
+      setCodeValidationMessage("❌ Please enter both email and registration code");
       return;
     }
 
@@ -127,14 +125,10 @@ function AdminRegister() {
         if (result.valid) {
           setCodeValidationMessage("✅ Registration code is valid!");
         } else {
-          setCodeValidationMessage(
-            "❌ " + (result.message || "Invalid registration code")
-          );
+          setCodeValidationMessage("❌ " + (result.message || "Invalid registration code"));
         }
       } else {
-        setCodeValidationMessage(
-          "❌ Error validating code: " + (result.error || "Unknown error")
-        );
+        setCodeValidationMessage("❌ Error validating code: " + (result.error || "Unknown error"));
       }
     } catch (error) {
       console.error("Error validating admin code:", error);
@@ -237,8 +231,7 @@ function AdminRegister() {
       <div className="admin-register-form">
         <h2>Admin Registration</h2>
         <p className="form-description">
-          Register as an admin user. You'll need a registration code from a
-          super admin.
+          Register as an admin user. You'll need a registration code from a super admin.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -368,8 +361,7 @@ function AdminRegister() {
             )}
             <small className="help-text">
               Click "Request Code" to receive a registration code via email. The
-              code will expire in 24 hours. Use "Validate Code" to verify your
-              code before submitting.
+              code will expire in 24 hours. Use "Validate Code" to verify your code before submitting.
             </small>
           </div>
 
@@ -430,7 +422,8 @@ function AdminRegister() {
 
         <div className="login-link">
           <p>
-            Already have an account? <a href="/admin-login">Login here</a>
+            Already have an account?{" "}
+            <a href="/admin-login">Login here</a>
           </p>
         </div>
       </div>

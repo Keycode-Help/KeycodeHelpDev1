@@ -122,7 +122,7 @@ public class KeycodeController {
             }
 
             String userRole = (String) userDetails.get("role");
-            if (userRole == null || (!userRole.equalsIgnoreCase("admin") && !userRole.equalsIgnoreCase("super_admin"))) {
+            if (userRole == null || (!userRole.equals("admin") && !userRole.equals("super_admin"))) {
                 return ResponseEntity.status(403).body(Map.of("error", "Forbidden"));
             }
 

@@ -111,16 +111,7 @@ public class AdminDashboardController {
 
 
     @GetMapping("/in-progress-requests")
-    public ResponseEntity<List<Map<String, Object>>> getInProgressRequests(Authentication authentication) {
-        // Check if user is authenticated and has admin role
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body(null);
-        }
-        
-        String userRole = getCurrentUserRole(authentication);
-        if (userRole == null || (!userRole.equalsIgnoreCase("admin") && !userRole.equalsIgnoreCase("super_admin"))) {
-            return ResponseEntity.status(403).body(null);
-        }
+    public ResponseEntity<List<Map<String, Object>>> getInProgressRequests() {
         List<Vehicle> vehicles = vehicleService.getInProgressVehicles();
         List<Map<String, Object>> vehicleDetails = vehicles.stream().map(vehicle -> {
             Map<String, Object> vehicleData = new HashMap<>();
