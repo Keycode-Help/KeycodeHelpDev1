@@ -42,8 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        
-        System.out.println("JWT Filter - Processing protected endpoint: " + requestURI);
 
         String username = null;
         String jwt = null;
