@@ -42,8 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        
-        System.out.println("JWT Filter - Processing protected endpoint: " + requestURI);
 
         String username = null;
         String jwt = null;
@@ -117,13 +115,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private boolean isPublicEndpoint(String requestURI, String requestMethod) {
         // Public endpoints that don't require JWT
-        if (requestURI.equals("/") ||  // Only the root path, not all paths starting with /
-            requestURI.startsWith("/auth/login") || 
+        if (requestURI.startsWith("/auth/login") || 
             requestURI.startsWith("/auth/register") || 
             requestURI.startsWith("/auth/admin-register") ||
             requestURI.startsWith("/auth/refresh") ||
             requestURI.startsWith("/auth/reset-password") ||
             requestURI.startsWith("/actuator/health") ||
+            requestURI.startsWith("/") ||
             requestURI.startsWith("/css/") ||
             requestURI.startsWith("/js/") ||
             requestURI.startsWith("/images/") ||
