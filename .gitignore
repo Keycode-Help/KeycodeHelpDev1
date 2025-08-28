@@ -25,6 +25,9 @@ replay_pid*
 node_modules/
 .DS_Store
 
+# Documentation directory (keep local only)
+docs/
+
 # Environment files with sensitive data
 .env
 .env.local
