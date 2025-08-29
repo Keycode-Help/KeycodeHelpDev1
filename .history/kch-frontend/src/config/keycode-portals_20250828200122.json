@@ -1,0 +1,336 @@
+{
+  "meta": {
+    "vsp_id": "4E1B0D2W"
+  },
+  "manufacturers": [
+    {
+      "id": "acura",
+      "name": "Acura",
+      "portal_url": "https://estore.honda.com/service-express/subscription-details.asp?sku=LCK001",
+      "notes": "Acura Service Express Portal - Use Copy Creds button for login details",
+      "auth": {
+        "username_env": "KCH_ACURA_USER",
+        "password_env": "KCH_ACURA_PASS"
+      }
+    },
+    {
+      "id": "audi",
+      "name": "Audi",
+      "portal_url": "https://erwin.audiusa.com/erwin/showKeycodeInstructions.do",
+      "notes": "ERWIN Portal",
+      "auth": {
+        "username_env": "KCH_AUDI_USER",
+        "password_env": "KCH_AUDI_PASS"
+      }
+    },
+    {
+      "id": "bentley",
+      "name": "Bentley",
+      "portal_url": "https://erwin.audiusa.com/erwin/showKeycodeInstructions.do",
+      "notes": "ERWIN Portal",
+      "auth": {
+        "username_env": "KCH_BENTLEY_USER",
+        "password_env": "KCH_BENTLEY_PASS"
+      }
+    },
+    {
+      "id": "bmw",
+      "name": "BMW",
+      "portal_url": "https://kcsp.bmwna.com/ckl/portal/poLogin.faces",
+      "notes": "BMW Keycode Portal",
+      "auth": {
+        "username_env": "KCH_BMW_USER",
+        "password_env": "KCH_BMW_PASS"
+      }
+    },
+    {
+      "id": "fca",
+      "name": "FCA",
+      "portal_url": "https://www.moparkeycode.com/",
+      "notes": "FCA Mopar Keycode Portal - Use Copy Creds button for login details",
+      "auth": {
+        "username_env": "KCH_FCA_USER",
+        "password_env": "KCH_FCA_PASS"
+      }
+    },
+    {
+      "id": "ford",
+      "name": "Ford",
+      "portal_url": "https://www.motorcraftservice.com/keycode/keycodelookup",
+      "notes": "Ford Motorcraft Keycode Portal - Use Copy Creds button for login details",
+      "auth": {
+        "username_env": "KCH_FORD_USER",
+        "password_env": "KCH_FORD_PASS"
+      }
+    },
+    {
+      "id": "gm",
+      "name": "GM",
+      "portal_url": "https://www.acdelcotds.com/keycodes",
+      "notes": "GM ACDelco TDS Keycode Portal - Use Copy Creds button for login details",
+      "auth": {
+        "username_env": "KCH_GM_USER",
+        "password_env": "KCH_GM_PASS"
+      }
+    },
+    {
+      "id": "genesis",
+      "name": "Genesis",
+      "portal_url": "https://www.genesistechinfo.com",
+      "notes": "Genesis Tech Info Portal - Use Copy Creds button for login details",
+      "auth": {
+        "username_env": "KCH_GENESIS_USER",
+        "password_env": "KCH_GENESIS_PASS"
+      }
+    },
+    {
+      "id": "honda",
+      "name": "Honda",
+      "portal_url": "https://estore.honda.com/service-express/subscription-details.asp?sku=LCK001",
+      "notes": "Same as Acura",
+      "auth": {
+        "username_env": "KCH_HONDA_USER",
+        "password_env": "KCH_HONDA_PASS"
+      }
+    },
+    {
+      "id": "hyundai",
+      "name": "Hyundai",
+      "portal_url": "https://www.hyundaitechinfo.com",
+      "notes": "User: Mrguru, PW: Destiny2025",
+      "auth": {
+        "username_env": "KCH_HYUNDAI_USER",
+        "password_env": "KCH_HYUNDAI_PASS"
+      }
+    },
+    {
+      "id": "infiniti",
+      "name": "Infiniti",
+      "portal_url": "http://www.infiniti-techinfo.com/lsdemo/dept.aspx",
+      "notes": "User: Metrepairs, PW: Keycodehelp@2028",
+      "auth": {
+        "username_env": "KCH_INFINITI_USER",
+        "password_env": "KCH_INFINITI_PASS"
+      }
+    },
+    {
+      "id": "isuzu",
+      "name": "Isuzu",
+      "portal_url": "http://isuzusource.com/v2/store.php?category=8",
+      "notes": "Isuzu Source",
+      "auth": {
+        "username_env": "KCH_ISUZU_USER",
+        "password_env": "KCH_ISUZU_PASS"
+      }
+    },
+    {
+      "id": "jaguar",
+      "name": "Jaguar",
+      "portal_url": "http://topix.jaguar.jlrext.com/topix/content/document/view?id=490672",
+      "notes": "Jaguar TOPIX",
+      "auth": {
+        "username_env": "KCH_JAGUAR_USER",
+        "password_env": "KCH_JAGUAR_PASS"
+      }
+    },
+    {
+      "id": "kia",
+      "name": "KIA",
+      "portal_url": "https://kiatechinfo.snapon.com/default.aspx",
+      "notes": "Same as Hyundai",
+      "auth": {
+        "username_env": "KCH_KIA_USER",
+        "password_env": "KCH_KIA_PASS"
+      }
+    },
+    {
+      "id": "land_rover",
+      "name": "Land Rover",
+      "portal_url": "http://topix.jaguar.jlrext.com/topix/content/document/view?id=490672",
+      "notes": "Land Rover TOPIX",
+      "auth": {
+        "username_env": "KCH_LAND_ROVER_USER",
+        "password_env": "KCH_LAND_ROVER_PASS"
+      }
+    },
+    {
+      "id": "lexus",
+      "name": "Lexus",
+      "portal_url": "https://techinfo.toyota.com/techInfoPortal/appmanager/t3/ti?_nfpb=true&_pageLabel=P800145021544253371383",
+      "notes": "User: mrguru@metrepairs.com, PW: Keycodehelp@2028",
+      "auth": {
+        "username_env": "KCH_LEXUS_USER",
+        "password_env": "KCH_LEXUS_PASS"
+      }
+    },
+    {
+      "id": "mazda",
+      "name": "Mazda",
+      "portal_url": "https://mazda.locksmithsdrm.com/MazdaSDRM/",
+      "notes": "SDRM Portal",
+      "sdrm": true,
+      "auth": {
+        "username_env": "KCH_MAZDA_USER",
+        "password_env": "KCH_MAZDA_PASS"
+      }
+    },
+    {
+      "id": "mclaren",
+      "name": "McLaren",
+      "portal_url": "https://mclarencars.techinfoportal.com/McLarenEPA",
+      "notes": "Provide your VSP ID during registration so that you will have access to Security information. Follow site directions to access Vehicle Security Information",
+      "auth": {
+        "username_env": "KCH_MCLAREN_USER",
+        "password_env": "KCH_MCLAREN_PASS"
+      }
+    },
+    {
+      "id": "mercedes_benz",
+      "name": "Mercedes Benz",
+      "portal_url": "https://sdrm.nastfsecurityregistry.org/",
+      "notes": "Keys are coming soon/This is a link to SDRM where Theft Relevant parts orders can be completed using the TRP D1 form. Order will be sent directly to the dealer of your choice.",
+      "sdrm": true,
+      "comingSoon": true,
+      "auth": {
+        "username_env": "KCH_MERCEDES_BENZ_USER",
+        "password_env": "KCH_MERCEDES_BENZ_PASS"
+      }
+    },
+    {
+      "id": "mini",
+      "name": "Mini",
+      "portal_url": "",
+      "notes": "Need updated information for Mini",
+      "comingSoon": true,
+      "auth": {
+        "username_env": "KCH_MINI_USER",
+        "password_env": "KCH_MINI_PASS"
+      }
+    },
+    {
+      "id": "mitsubishi",
+      "name": "Mitsubishi",
+      "portal_url": "",
+      "notes": "Portal information needed",
+      "comingSoon": true,
+      "auth": {
+        "username_env": "KCH_MITSUBISHI_USER",
+        "password_env": "KCH_MITSUBISHI_PASS"
+      }
+    },
+    {
+      "id": "nissan",
+      "name": "Nissan",
+      "portal_url": "https://www.nissan-techinfo.com/lsdemo/dept.aspx",
+      "notes": "User: Mrguru2025, PW: Keycodehelp@2028",
+      "auth": {
+        "username_env": "KCH_NISSAN_USER",
+        "password_env": "KCH_NISSAN_PASS"
+      }
+    },
+    {
+      "id": "polestar",
+      "name": "Polestar",
+      "portal_url": "https://www.polestartechhub.com/categories/keycodes",
+      "notes": "Polestar Tech Hub",
+      "auth": {
+        "username_env": "KCH_POLESTAR_USER",
+        "password_env": "KCH_POLESTAR_PASS"
+      }
+    },
+    {
+      "id": "porsche",
+      "name": "Porsche",
+      "portal_url": "https://techinfo2.porsche.com/PassThru/user/ShowInfo.action?url=../user/pxnaccount.html&menulevel=0",
+      "notes": "Porsche Tech Info",
+      "auth": {
+        "username_env": "KCH_PORSCHE_USER",
+        "password_env": "KCH_PORSCHE_PASS"
+      }
+    },
+    {
+      "id": "saab",
+      "name": "Saab",
+      "portal_url": "https://tis.saabparts.com/products/saab-keycodes",
+      "notes": "Saab TIS Portal",
+      "auth": {
+        "username_env": "KCH_SAAB_USER",
+        "password_env": "KCH_SAAB_PASS"
+      }
+    },
+    {
+      "id": "smart",
+      "name": "Smart",
+      "portal_url": "",
+      "notes": "Unaware of any program at this time",
+      "comingSoon": true,
+      "auth": {
+        "username_env": "KCH_SMART_USER",
+        "password_env": "KCH_SMART_PASS"
+      }
+    },
+    {
+      "id": "sprinter",
+      "name": "Sprinter",
+      "portal_url": "https://sdrm.nastfsecurityregistry.org/",
+      "notes": "Keys are coming soon/This is a link to SDRM where Theft Relevant parts orders can be completed using the TRP D1 form. Order will be sent directly to the dealer of your choice.",
+      "sdrm": true,
+      "comingSoon": true,
+      "auth": {
+        "username_env": "KCH_SPRINTER_USER",
+        "password_env": "KCH_SPRINTER_PASS"
+      }
+    },
+    {
+      "id": "subaru",
+      "name": "Subaru",
+      "portal_url": "https://subaru.locksmithsdrm.com/SubaruSDRM",
+      "notes": "SDRM Portal",
+      "sdrm": true,
+      "auth": {
+        "username_env": "KCH_SUBARU_USER",
+        "password_env": "KCH_SUBARU_PASS"
+      }
+    },
+    {
+      "id": "suzuki",
+      "name": "Suzuki",
+      "portal_url": "https://www.genuinesuzukimanuals.com/?rtn=2",
+      "notes": "Suzuki Manuals",
+      "auth": {
+        "username_env": "KCH_SUZUKI_USER",
+        "password_env": "KCH_SUZUKI_PASS"
+      }
+    },
+    {
+      "id": "toyota",
+      "name": "Toyota",
+      "portal_url": "https://techinfo.toyota.com/techInfoPortal/appmanager/t3/ti?_nfpb=true&_pageLabel=P800145021544253371383",
+      "notes": "User: mrguru@metrepairs.com, PW: Keycodehelp@2028",
+      "auth": {
+        "username_env": "KCH_TOYOTA_USER",
+        "password_env": "KCH_TOYOTA_PASS"
+      }
+    },
+    {
+      "id": "volkswagen",
+      "name": "Volkswagen",
+      "portal_url": "https://erwin.vw.com/erwin/showKeycodeInstructions.do",
+      "notes": "ERWIN Portal",
+      "auth": {
+        "username_env": "KCH_VOLKSWAGEN_USER",
+        "password_env": "KCH_VOLKSWAGEN_PASS"
+      }
+    },
+    {
+      "id": "volvo",
+      "name": "Volvo",
+      "portal_url": "https://www.volvotechinfo.com/index.cfm?event=keycodes.info",
+      "notes": "User: mytech@metrepairs.com, PW: Destiny@2025",
+      "auth": {
+        "username_env": "KCH_VOLVO_USER",
+        "password_env": "KCH_VOLVO_PASS"
+      }
+    }
+  ]
+}

@@ -7,7 +7,7 @@
       "id": "acura",
       "name": "Acura",
       "portal_url": "https://estore.honda.com/service-express/subscription-details.asp?sku=LCK001",
-      "notes": "User: Mrguru, PW: Destiny@2026",
+      "notes": "Acura Service Express Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_ACURA_USER",
         "password_env": "KCH_ACURA_PASS"
@@ -37,7 +37,7 @@
       "id": "bmw",
       "name": "BMW",
       "portal_url": "https://kcsp.bmwna.com/ckl/portal/poLogin.faces",
-      "notes": "BMW Keycode Portal",
+      "notes": "BMW Keycode Portal - Secondary source options available for keycode data retrieval. May require super admin access.",
       "auth": {
         "username_env": "KCH_BMW_USER",
         "password_env": "KCH_BMW_PASS"
@@ -47,7 +47,7 @@
       "id": "fca",
       "name": "FCA",
       "portal_url": "https://www.moparkeycode.com/",
-      "notes": "User: mytech@metrepairs.com, PW: Destiny@2025",
+      "notes": "FCA Mopar Keycode Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_FCA_USER",
         "password_env": "KCH_FCA_PASS"
@@ -57,7 +57,7 @@
       "id": "ford",
       "name": "Ford",
       "portal_url": "https://www.motorcraftservice.com/keycode/keycodelookup",
-      "notes": "User: mytech@metrepairs.com, PW: Destiny@2025",
+      "notes": "Ford Motorcraft Keycode Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_FORD_USER",
         "password_env": "KCH_FORD_PASS"
@@ -67,7 +67,7 @@
       "id": "gm",
       "name": "GM",
       "portal_url": "https://www.acdelcotds.com/keycodes",
-      "notes": "User: MrGuru2024, PW: Keycodehelp@2028",
+      "notes": "GM ACDelco TDS Keycode Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_GM_USER",
         "password_env": "KCH_GM_PASS"
@@ -77,7 +77,7 @@
       "id": "genesis",
       "name": "Genesis",
       "portal_url": "https://www.genesistechinfo.com",
-      "notes": "User: Mrguru, PW: Destiny2025",
+      "notes": "Genesis Tech Info Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_GENESIS_USER",
         "password_env": "KCH_GENESIS_PASS"
@@ -97,7 +97,7 @@
       "id": "hyundai",
       "name": "Hyundai",
       "portal_url": "https://www.hyundaitechinfo.com",
-      "notes": "User: Mrguru, PW: Destiny2025",
+      "notes": "Hyundai Tech Info Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_HYUNDAI_USER",
         "password_env": "KCH_HYUNDAI_PASS"
@@ -107,7 +107,7 @@
       "id": "infiniti",
       "name": "Infiniti",
       "portal_url": "http://www.infiniti-techinfo.com/lsdemo/dept.aspx",
-      "notes": "User: Metrepairs, PW: Keycodehelp@2028",
+      "notes": "Infiniti Tech Info Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_INFINITI_USER",
         "password_env": "KCH_INFINITI_PASS"
@@ -157,7 +157,7 @@
       "id": "lexus",
       "name": "Lexus",
       "portal_url": "https://techinfo.toyota.com/techInfoPortal/appmanager/t3/ti?_nfpb=true&_pageLabel=P800145021544253371383",
-      "notes": "User: mrguru@metrepairs.com, PW: Keycodehelp@2028",
+      "notes": "Lexus Tech Info Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_LEXUS_USER",
         "password_env": "KCH_LEXUS_PASS"
@@ -222,7 +222,7 @@
       "id": "nissan",
       "name": "Nissan",
       "portal_url": "https://www.nissan-techinfo.com/lsdemo/dept.aspx",
-      "notes": "User: Mrguru2025, PW: Keycodehelp@2028",
+      "notes": "Nissan Tech Info Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_NISSAN_USER",
         "password_env": "KCH_NISSAN_PASS"
@@ -306,7 +306,7 @@
       "id": "toyota",
       "name": "Toyota",
       "portal_url": "https://techinfo.toyota.com/techInfoPortal/appmanager/t3/ti?_nfpb=true&_pageLabel=P800145021544253371383",
-      "notes": "User: mrguru@metrepairs.com, PW: Keycodehelp@2028",
+      "notes": "Toyota Tech Info Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_TOYOTA_USER",
         "password_env": "KCH_TOYOTA_PASS"
@@ -326,7 +326,7 @@
       "id": "volvo",
       "name": "Volvo",
       "portal_url": "https://www.volvotechinfo.com/index.cfm?event=keycodes.info",
-      "notes": "User: mytech@metrepairs.com, PW: Destiny@2025",
+      "notes": "Volvo Tech Info Portal - Use Copy Creds button for login details",
       "auth": {
         "username_env": "KCH_VOLVO_USER",
         "password_env": "KCH_VOLVO_PASS"
