@@ -574,59 +574,40 @@ public class AuthController {
     }
 
     /**
-     * Simple test endpoint to debug authentication
-     */
-    @GetMapping("/test")
-    public ResponseEntity<?> testEndpoint() {
-        try {
-            System.out.println("🔍 /auth/test endpoint called");
-            
-            // Get the current authenticated user from SecurityContext
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("🔍 Authentication object: " + (authentication != null ? authentication.getClass().getSimpleName() : "NULL"));
-            
-            if (authentication != null) {
-                System.out.println("🔍 Authentication name: " + authentication.getName());
-                System.out.println("🔍 Authentication is authenticated: " + authentication.isAuthenticated());
-                System.out.println("🔍 Authentication authorities: " + authentication.getAuthorities());
-            }
-            
-            return ResponseEntity.ok(Map.of(
-                "message", "Test endpoint working",
-                "authentication", authentication != null ? authentication.getName() : "null",
-                "isAuthenticated", authentication != null ? authentication.isAuthenticated() : false
-            ));
-        } catch (Exception e) {
-            System.out.println("❌ Error in /auth/test: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
-        }
-    }
-
-    /**
      * Get current user information from JWT token
      */
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
         try {
+            System.out.println("🔍 /auth/me endpoint called");
+            
             // Get the current authenticated user from SecurityContext
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("🔍 Authentication object: " + (authentication != null ? authentication.getClass().getSimpleName() : "NULL"));
+            
             if (authentication == null || !authentication.isAuthenticated()) {
+                System.out.println("❌ Authentication is null or not authenticated");
                 return ResponseEntity.status(401).body("Not authenticated");
             }
 
             String email = authentication.getName();
+            System.out.println("🔍 Authentication name (email): " + email);
+            
             if (email == null || email.equals("anonymousUser")) {
+                System.out.println("❌ Email is null or anonymousUser");
                 return ResponseEntity.status(401).body("Not authenticated");
             }
 
             // Get user details from database
+            System.out.println("🔍 Looking up user in database for email: " + email);
             Optional<KeycodeUser> userOpt = keycodeUserService.findByEmail(email);
             if (userOpt.isEmpty()) {
+                System.out.println("❌ User not found in database for email: " + email);
                 return ResponseEntity.status(404).body("User not found");
             }
 
             KeycodeUser user = userOpt.get();
+            System.out.println("✅ User found in database: " + user.getEmail() + " (ID: " + user.getId() + ")");
             
             // Return user data (excluding sensitive information)
             Map<String, Object> userData = new HashMap<>();
@@ -642,6 +623,7 @@ public class AuthController {
                 "isValidatedUser", user.isValidatedUser()
             ));
 
+            System.out.println("✅ /auth/me returning user data successfully");
             return ResponseEntity.ok(userData);
         } catch (Exception e) {
             System.out.println("❌ Error in /auth/me: " + e.getMessage());
