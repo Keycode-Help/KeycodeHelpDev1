@@ -604,6 +604,36 @@ public class AuthController {
     }
 
     /**
+     * Simple test endpoint to debug authentication
+     */
+    @GetMapping("/test")
+    public ResponseEntity<?> testEndpoint() {
+        try {
+            System.out.println("🔍 /auth/test endpoint called");
+            
+            // Get the current authenticated user from SecurityContext
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("🔍 Authentication object: " + (authentication != null ? authentication.getClass().getSimpleName() : "NULL"));
+            
+            if (authentication != null) {
+                System.out.println("🔍 Authentication name: " + authentication.getName());
+                System.out.println("🔍 Authentication is authenticated: " + authentication.isAuthenticated());
+                System.out.println("🔍 Authentication authorities: " + authentication.getAuthorities());
+            }
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "Test endpoint working",
+                "authentication", authentication != null ? authentication.getName() : "null",
+                "isAuthenticated", authentication != null ? authentication.isAuthenticated() : false
+            ));
+        } catch (Exception e) {
+            System.out.println("❌ Error in /auth/test: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        }
+    }
+
+    /**
      * Get current user information from JWT token
      */
     @GetMapping("/me")

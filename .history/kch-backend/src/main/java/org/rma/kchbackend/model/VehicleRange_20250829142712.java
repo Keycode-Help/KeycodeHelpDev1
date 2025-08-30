@@ -3,7 +3,6 @@ package org.rma.kchbackend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
@@ -30,7 +29,7 @@ public class VehicleRange {
     private LocalDateTime createdAt;
     
     @OneToMany(mappedBy = "vehicleRange", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Entry> entries;
+    private java.util.List<Entry> entries;
     
     @PrePersist
     protected void onCreate() {
