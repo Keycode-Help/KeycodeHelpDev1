@@ -129,6 +129,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             requestURI.startsWith("/auth/admin-register") ||
             requestURI.startsWith("/auth/refresh") ||
             requestURI.startsWith("/auth/reset-password") ||
+            requestURI.startsWith("/auth/test") ||  // Allow test endpoints for debugging
             requestURI.startsWith("/auth/dev-") ||  // Allow dev endpoints
             requestURI.startsWith("/auth/setup-super-admin") ||
             requestURI.startsWith("/actuator/health") ||
