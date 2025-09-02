@@ -15,6 +15,7 @@ html {
 body {
   min-width: 320px; /* Minimum mobile width */
   overflow-x: hidden; /* Prevent horizontal scroll */
+  padding-top: 80px; /* Account for fixed navbar height */
 }
 
 /* Mobile-first container system */
@@ -915,7 +916,7 @@ body {
     font-size: 1rem;
   }
 
-    .mobile-nav-logo {
+  .mobile-nav-logo {
     width: 24px;
     height: 24px;
   }

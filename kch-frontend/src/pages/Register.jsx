@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/request";
-import "../styles/register.css";
 import StatesDropDown from "../components/StatesDropDown";
 import states from "../data/states";
+import { Icon } from "../components/IconProvider";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -102,158 +102,269 @@ function Register() {
   };
 
   return (
-    <div className="container-register">
-      <div className="form-section">
-        <h1 className="form-h1">Sign Up For An Account</h1>
-        <div className="business-notice">
-          <h3 style={{ color: "#f59e0b", marginBottom: "10px" }}>
-            🔐 Business Verification Required
-          </h3>
-          <p
-            style={{
-              color: "#6b7280",
-              fontSize: "0.9rem",
-              marginBottom: "15px",
-            }}
-          >
-            This account is for business professionals only. You must provide
-            business documentation and active Certificate of Insurance (COI) for
-            verification.
-          </p>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="fname"
-            value={formData.fname}
-            onChange={handleChange}
-            placeholder="First Name"
-            required
-          />
-          <input
-            type="text"
-            name="lname"
-            value={formData.lname}
-            onChange={handleChange}
-            placeholder="Last Name"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address"
-            required
-          />
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Phone Number"
-          />
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-          />
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Confirm Password"
-            required
-          />
-          <label>
-            State:
-            <StatesDropDown
-              selectedState={selectedState}
-              options={states}
-              onChange={(e) => setSelectedState(e.target.value)}
-            />
-          </label>
-          <label>
-            Upload Front ID:
-            <input
-              type="file"
-              name="frontId"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-            />
-            {errors.frontId && (
-              <p className="error-message">{errors.frontId}</p>
-            )}
-          </label>
-          <label>
-            Upload Back ID:
-            <input
-              type="file"
-              name="backId"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-            />
-            {errors.backId && <p className="error-message">{errors.backId}</p>}
-          </label>
-          <label>
-            Upload Business Documentation:
-            <input
-              type="file"
-              name="businessDocument"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-            />
-            <small
-              style={{
-                color: "#6b7280",
-                fontSize: "0.8rem",
-                display: "block",
-                marginTop: "5px",
-              }}
-            >
-              Acceptable documents: Business License, Business Card with full
-              details, or Secretary of State document
-            </small>
-            {errors.businessDocument && (
-              <p className="error-message">{errors.businessDocument}</p>
-            )}
-          </label>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
 
-          <label>
-            Upload Certificate of Insurance (COI):
-            <input
-              type="file"
-              name="coi"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-            />
-            <small
-              style={{
-                color: "#6b7280",
-                fontSize: "0.8rem",
-                display: "block",
-                marginTop: "5px",
-              }}
+      <div className="relative z-10 w-full max-w-2xl">
+        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500/20 to-yellow-500/20 border border-blue-500/30 rounded-xl flex items-center justify-center">
+              <Icon name="userPlus" size={32} className="text-blue-400" />
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent mb-2">
+              Create Your Account
+            </h1>
+            <p className="text-gray-300">Join our professional network</p>
+          </div>
+
+          {/* Business Notice */}
+          <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl p-6 mb-8">
+            <div className="flex items-start gap-3">
+              <Icon
+                name="shield"
+                size={24}
+                className="text-yellow-400 flex-shrink-0 mt-1"
+              />
+              <div>
+                <h3 className="text-yellow-400 font-semibold mb-2">
+                  Business Verification Required
+                </h3>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  This account is for business professionals only. You must
+                  provide business documentation and active Certificate of
+                  Insurance (COI) for verification.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Personal Information */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  First Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="fname"
+                  value={formData.fname}
+                  onChange={handleChange}
+                  placeholder="Enter your first name"
+                  required
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Last Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="lname"
+                  value={formData.lname}
+                  onChange={handleChange}
+                  placeholder="Enter your last name"
+                  required
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-white mb-3">
+                Email Address <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email address"
+                required
+                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-white mb-3">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Enter your phone number"
+                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Password <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Create a password"
+                  required
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Confirm Password <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                  required
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-white mb-3">
+                State <span className="text-red-400">*</span>
+              </label>
+              <StatesDropDown
+                selectedState={selectedState}
+                options={states}
+                onChange={(e) => setSelectedState(e.target.value)}
+              />
+            </div>
+
+            {/* File Uploads */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-white border-b border-slate-700 pb-2">
+                Required Documents
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">
+                    Front ID <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    name="frontId"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    required
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  />
+                  {errors.frontId && (
+                    <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                      <Icon name="alertCircle" size={16} />
+                      {errors.frontId}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">
+                    Back ID <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    name="backId"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    required
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  />
+                  {errors.backId && (
+                    <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                      <Icon name="alertCircle" size={16} />
+                      {errors.backId}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Business Documentation <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="file"
+                  name="businessDocument"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  required
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+                <p className="text-xs text-gray-400 mt-2">
+                  Acceptable documents: Business License, Business Card with
+                  full details, or Secretary of State document
+                </p>
+                {errors.businessDocument && (
+                  <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                    <Icon name="alertCircle" size={16} />
+                    {errors.businessDocument}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Certificate of Insurance (COI){" "}
+                  <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="file"
+                  name="coi"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  required
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+                <p className="text-xs text-gray-400 mt-2">
+                  Active Certificate of Insurance required for business
+                  verification
+                </p>
+                {errors.coi && (
+                  <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                    <Icon name="alertCircle" size={16} />
+                    {errors.coi}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-500 to-yellow-500 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center justify-center gap-2"
             >
-              Active Certificate of Insurance required for business verification
-            </small>
-            {errors.coi && <p className="error-message">{errors.coi}</p>}
-          </label>
-          <button type="submit" className="book-btn">
-            Register
-          </button>
-        </form>
-        <p>
-          Already a member? <a href="/login">Sign in</a>
-        </p>
+              <Icon name="userPlus" size={18} />
+              Create Account
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-300">
+              Already a member?{" "}
+              <a
+                href="/login"
+                className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+              >
+                Sign in
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/request";
 import { useAuth } from "../context/AuthContext";
-import "../styles/vehicleKeycodeRequest.css";
 import MakeDropDown from "../components/MakeDropDown";
 import ComplianceBanner from "../components/ComplianceBanner";
 import ModelDropDown from "../components/ModelDropDown";
 import YearDropDown from "../components/YearDropDown";
+import { Icon } from "../components/IconProvider";
 import {
   getVehicleMakes,
   getVehicleModels,
@@ -237,243 +237,340 @@ function VehicleKeycodeRequest() {
   };
 
   return (
-    <div className="wrapper-vr">
-      <div className="keycode-request-container">
-        <h1>Request a Keycode for Your Vehicle</h1>
-        <ComplianceBanner className="mt-3 mb-4" />
-        {!user && (
-          <div className="guest-notice">
-            <p
-              style={{
-                color: "#f59e0b",
-                fontSize: "0.9rem",
-                textAlign: "center",
-                marginBottom: "20px",
-              }}
-            >
-              ⚠️ <strong>Guest Users:</strong> Driver's license photos required
-              for identity verification
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+      <div className="relative z-10 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500/20 to-yellow-500/20 border border-blue-500/30 rounded-xl flex items-center justify-center">
+              <Icon name="key" size={32} className="text-blue-400" />
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent mb-2">
+              Request a Keycode
+            </h1>
+            <p className="text-gray-300">
+              Get your vehicle keycode quickly and securely
             </p>
           </div>
-        )}
-        <form onSubmit={handleSubmit} className="keycode-form">
-          <div className="form-group">
-            <label htmlFor="make">Vehicle Make</label>
-            <MakeDropDown
-              selectedMake={selectedMake}
-              options={availableMakes}
-              onChange={(e) => {
-                setSelectedMake(e.target.value);
-                setMakePrice(e.target.value);
-              }}
-            />
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="model">Vehicle Model</label>
-            <ModelDropDown
-              selectedModel={selectedModel}
-              options={availableModels}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              disabled={!selectedMake}
-            />
-          </div>
+          <ComplianceBanner className="mb-6" />
 
-          <div className="form-group">
-            <label htmlFor="year">Vehicle Year</label>
-            <YearDropDown
-              selectedYear={selectedYear}
-              options={availableYears}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              disabled={!selectedModel}
-            />
-          </div>
-
-          {selectedMake && (
-            <div className="pricing-info">
-              <h3 style={{ color: "#00ff85", marginBottom: "15px" }}>
-                Keycode Pricing
-              </h3>
-
-              <div className="price-row">
-                <span className="price-label">Non-Member Price:</span>
-                <span className="price-value">
-                  ${selectedMakePrice.toFixed(2)}
-                </span>
+          {!user && (
+            <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-3">
+                <Icon
+                  name="alertTriangle"
+                  size={20}
+                  className="text-yellow-400 flex-shrink-0"
+                />
+                <p className="text-yellow-400 text-sm">
+                  <strong>Guest Users:</strong> Driver's license photos required
+                  for identity verification
+                </p>
               </div>
-
-              <div className="price-row">
-                <span className="price-label">Member Price:</span>
-                <span className="price-value member-price">
-                  {selectedMemberPrice > 0
-                    ? `$${selectedMemberPrice.toFixed(2)}`
-                    : "Ask for pricing"}
-                </span>
-              </div>
-
-              <div className="price-row">
-                <span className="price-label">Category:</span>
-                <span className="price-value">{selectedCategory}</span>
-              </div>
-
-              {requiresPinCode && (
-                <div className="pin-notice">
-                  <span style={{ color: "#f59e0b", fontWeight: "bold" }}>
-                    ⚠️ PIN Code Required
-                  </span>
-                  <p
-                    style={{
-                      color: "#f59e0b",
-                      fontSize: "0.9rem",
-                      margin: "5px 0",
-                    }}
-                  >
-                    This vehicle requires both keycode and PIN code
-                  </p>
-                </div>
-              )}
-
-              {!user && (
-                <div className="member-benefit">
-                  <p
-                    style={{
-                      color: "#10b981",
-                      fontSize: "0.9rem",
-                      margin: "10px 0",
-                    }}
-                  >
-                    💡{" "}
-                    <strong>Become a member to save on keycode pricing!</strong>
-                  </p>
-                </div>
-              )}
             </div>
           )}
 
-          <div className="form-group">
-            <label htmlFor="vin">Vehicle VIN</label>
-            <input
-              type="text"
-              id="vin"
-              name="vin"
-              value={formData.vin}
-              onChange={handleChange}
-              placeholder="Enter Vehicle VIN"
-              required
-              className="form-control"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="frontId">Upload Front ID:</label>
-            <input
-              type="file"
-              id="frontId"
-              name="frontId"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-              className="form-control"
-            />
-            {errors.frontId && (
-              <p className="error-message">{errors.frontId}</p>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="backId">Upload Back ID:</label>
-            <input
-              type="file"
-              id="backId"
-              name="backId"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-              className="form-control"
-            />
-            {errors.backId && <p className="error-message">{errors.backId}</p>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="registration">Upload Registration:</label>
-            <input
-              type="file"
-              id="registration"
-              name="registration"
-              onChange={handleFileChange}
-              accept="image/*"
-              required
-              className="form-control"
-            />
-            {errors.registration && (
-              <p className="error-message">{errors.registration}</p>
-            )}
-          </div>
-
-          {/* License Photo Requirements for Guest Users */}
-          {!user && (
-            <>
-              <div className="license-notice">
-                <h4 style={{ color: "#f59e0b", marginBottom: "10px" }}>
-                  🔐 Identity Verification Required
-                </h4>
-                <p
-                  style={{
-                    color: "#6b7280",
-                    fontSize: "0.9rem",
-                    marginBottom: "15px",
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Vehicle Selection */}
+            <div className="grid md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Vehicle Make <span className="text-red-400">*</span>
+                </label>
+                <MakeDropDown
+                  selectedMake={selectedMake}
+                  options={availableMakes}
+                  onChange={(e) => {
+                    setSelectedMake(e.target.value);
+                    setMakePrice(e.target.value);
                   }}
-                >
-                  As a guest user, you must provide your driver's license photos
-                  for identity verification. This helps ensure security and
-                  compliance with our service requirements.
-                </p>
+                />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="licenseFront">
-                  Driver's License - Front Side{" "}
-                  <span style={{ color: "#ef4444" }}>*</span>
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Vehicle Model <span className="text-red-400">*</span>
+                </label>
+                <ModelDropDown
+                  selectedModel={selectedModel}
+                  options={availableModels}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                  disabled={!selectedMake}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Vehicle Year <span className="text-red-400">*</span>
+                </label>
+                <YearDropDown
+                  selectedYear={selectedYear}
+                  options={availableYears}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  disabled={!selectedModel}
+                />
+              </div>
+            </div>
+
+            {selectedMake && (
+              <div className="bg-gradient-to-r from-blue-500/10 to-yellow-500/10 border border-blue-500/30 rounded-xl p-6">
+                <h3 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
+                  <Icon name="dollarSign" size={20} />
+                  Keycode Pricing
+                </h3>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-slate-800/50 border border-slate-600 rounded-xl p-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-300 font-medium">
+                        Non-Member Price:
+                      </span>
+                      <span className="text-2xl font-bold text-white">
+                        ${selectedMakePrice.toFixed(2)}
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-sm mt-1">
+                      Standard pricing
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-xl p-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-green-300 font-medium">
+                        Member Price:
+                      </span>
+                      <span className="text-2xl font-bold text-green-400">
+                        {selectedMemberPrice > 0
+                          ? `$${selectedMemberPrice.toFixed(2)}`
+                          : "Ask for pricing"}
+                      </span>
+                    </div>
+                    <p className="text-green-400 text-sm mt-1">
+                      Includes PIN code
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 bg-slate-800/50 border border-slate-600 rounded-xl p-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300 font-medium">Category:</span>
+                    <span className="text-blue-400 font-semibold">
+                      {selectedCategory}
+                    </span>
+                  </div>
+                </div>
+
+                {requiresPinCode && (
+                  <div className="mt-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Icon
+                        name="alertTriangle"
+                        size={20}
+                        className="text-yellow-400"
+                      />
+                      <span className="text-yellow-400 font-semibold">
+                        PIN Code Required
+                      </span>
+                    </div>
+                    <p className="text-yellow-400 text-sm">
+                      This vehicle requires both keycode and PIN code
+                    </p>
+                  </div>
+                )}
+
+                {!user && (
+                  <div className="mt-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-xl p-4">
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        name="lightbulb"
+                        size={20}
+                        className="text-green-400"
+                      />
+                      <p className="text-green-400 text-sm">
+                        <strong>
+                          Become a member to save on keycode pricing!
+                        </strong>
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* VIN Input */}
+            <div>
+              <label className="block text-sm font-semibold text-white mb-3">
+                Vehicle VIN <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="text"
+                id="vin"
+                name="vin"
+                value={formData.vin}
+                onChange={handleChange}
+                placeholder="Enter Vehicle VIN"
+                required
+                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            {/* Document Uploads */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-white border-b border-slate-700 pb-2">
+                Required Documents
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">
+                    Front ID <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    id="frontId"
+                    name="frontId"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    required
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  />
+                  {errors.frontId && (
+                    <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                      <Icon name="alertCircle" size={16} />
+                      {errors.frontId}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">
+                    Back ID <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    id="backId"
+                    name="backId"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    required
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  />
+                  {errors.backId && (
+                    <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                      <Icon name="alertCircle" size={16} />
+                      {errors.backId}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Vehicle Registration <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="file"
-                  id="licenseFront"
-                  name="licenseFront"
+                  id="registration"
+                  name="registration"
                   onChange={handleFileChange}
                   accept="image/*"
                   required
-                  className="form-control"
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
-                {errors.licenseFront && (
-                  <p className="error-message">{errors.licenseFront}</p>
+                {errors.registration && (
+                  <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                    <Icon name="alertCircle" size={16} />
+                    {errors.registration}
+                  </p>
                 )}
               </div>
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="licenseBack">
-                  Driver's License - Back Side{" "}
-                  <span style={{ color: "#ef4444" }}>*</span>
-                </label>
-                <input
-                  type="file"
-                  id="licenseBack"
-                  name="licenseBack"
-                  onChange={handleFileChange}
-                  accept="image/*"
-                  required
-                  className="form-control"
-                />
-                {errors.licenseBack && (
-                  <p className="error-message">{errors.licenseBack}</p>
-                )}
-              </div>
-            </>
-          )}
+            {/* License Photo Requirements for Guest Users */}
+            {!user && (
+              <>
+                <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl p-6">
+                  <div className="flex items-start gap-3">
+                    <Icon
+                      name="shield"
+                      size={24}
+                      className="text-yellow-400 flex-shrink-0 mt-1"
+                    />
+                    <div>
+                      <h4 className="text-yellow-400 font-semibold mb-2">
+                        Identity Verification Required
+                      </h4>
+                      <p className="text-gray-300 text-sm leading-relaxed">
+                        As a guest user, you must provide your driver's license
+                        photos for identity verification. This helps ensure
+                        security and compliance with our service requirements.
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-          <button type="submit" className="submit-button">
-            Add to Cart
-          </button>
-        </form>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-white mb-3">
+                      Driver's License - Front Side{" "}
+                      <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="file"
+                      id="licenseFront"
+                      name="licenseFront"
+                      onChange={handleFileChange}
+                      accept="image/*"
+                      required
+                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    />
+                    {errors.licenseFront && (
+                      <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                        <Icon name="alertCircle" size={16} />
+                        {errors.licenseFront}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-white mb-3">
+                      Driver's License - Back Side{" "}
+                      <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="file"
+                      id="licenseBack"
+                      name="licenseBack"
+                      onChange={handleFileChange}
+                      accept="image/*"
+                      required
+                      className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    />
+                    {errors.licenseBack && (
+                      <p className="text-sm text-red-400 mt-2 flex items-center gap-2">
+                        <Icon name="alertCircle" size={16} />
+                        {errors.licenseBack}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-500 to-yellow-500 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <Icon name="shoppingCart" size={18} />
+              Add to Cart
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

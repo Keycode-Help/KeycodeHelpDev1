@@ -73,7 +73,7 @@ const SEOHead = ({
           contactPoint: {
             "@type": "ContactPoint",
             contactType: "customer service",
-            email: "support@keycodehelp.com",
+            email: "support@keycode.help",
           },
           serviceType: "Vehicle Keycode Lookup Services",
           areaServed: "Worldwide",

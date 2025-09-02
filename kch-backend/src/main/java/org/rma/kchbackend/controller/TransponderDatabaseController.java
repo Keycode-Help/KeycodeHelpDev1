@@ -105,10 +105,13 @@ public class TransponderDatabaseController {
     @GetMapping("/makes")
     public ResponseEntity<List<Make>> getAllMakes() {
         try {
+            logger.info("🔍 GET /api/kch/makes called");
             List<Make> makes = transponderDatabaseService.getAllMakes();
+            logger.info("✅ Found " + makes.size() + " makes");
             return ResponseEntity.ok(makes);
         } catch (Exception e) {
             logger.severe("❌ Error getting makes: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -140,10 +143,13 @@ public class TransponderDatabaseController {
     @GetMapping("/system-types")
     public ResponseEntity<List<SystemType>> getAllSystemTypes() {
         try {
+            logger.info("🔍 GET /api/kch/system-types called");
             List<SystemType> systemTypes = transponderDatabaseService.getAllSystemTypes();
+            logger.info("✅ Found " + systemTypes.size() + " system types");
             return ResponseEntity.ok(systemTypes);
         } catch (Exception e) {
             logger.severe("❌ Error getting system types: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }

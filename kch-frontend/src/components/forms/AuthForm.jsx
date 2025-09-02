@@ -335,14 +335,18 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
       {renderFields()}
 
       <div className="pt-4">
-        <button type="submit" className="w-full btn btn-lg btn-primary">
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-blue-500 to-yellow-500 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <Icon name="logIn" size={18} />
           {getSubmitButtonText()}
         </button>
       </div>
 
       {/* Password Reset Section for Login Modes */}
       {(mode === "login" || mode === "admin-login") && (
-        <div className="pt-6 border-t border-gray-700">
+        <div className="pt-6 border-t border-slate-700">
           <button
             type="button"
             onClick={() => setIsResettingPassword(!isResettingPassword)}
@@ -352,10 +356,10 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
           </button>
 
           {isResettingPassword && (
-            <div className="mt-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+            <div className="mt-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-white mb-2">
                     Email Address
                   </label>
                   <input
@@ -363,7 +367,7 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     required
                   />
                 </div>
@@ -371,18 +375,36 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
                   type="button"
                   onClick={handlePasswordReset}
                   disabled={isSendingEmail}
-                  className="w-full btn btn-sm btn-primary"
+                  className="w-full bg-gradient-to-r from-blue-500 to-yellow-500 text-white font-semibold py-2 px-4 rounded-xl hover:from-blue-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {isSendingEmail ? "Sending..." : "Send Reset Email"}
+                  {isSendingEmail ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="mail" size={16} />
+                      Send Reset Email
+                    </>
+                  )}
                 </button>
                 {resetMessage && (
                   <div
-                    className={`text-sm ${
+                    className={`text-sm flex items-center gap-2 ${
                       resetMessage.includes("✅")
                         ? "text-green-400"
                         : "text-red-400"
                     }`}
                   >
+                    <Icon
+                      name={
+                        resetMessage.includes("✅")
+                          ? "checkCircle"
+                          : "alertCircle"
+                      }
+                      size={16}
+                    />
                     {resetMessage}
                   </div>
                 )}

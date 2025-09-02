@@ -81,7 +81,7 @@ function AdminLogin() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="admin@keycodehelp.com"
+              placeholder="admin@keycode.help"
               required
               autoComplete="username"
             />
