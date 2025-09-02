@@ -37,7 +37,7 @@ public class SecurityConfig {
                         // Public endpoints - must come FIRST
                         .requestMatchers("/vehicle/test-public", "/vehicle/test-form", "/vehicle/request-keycode-public").permitAll()
                         .requestMatchers("/", "/actuator/health", "/css/**", "/js/**", "/images/**", "/register", "/send-email", "/makes/**", "/compliance/status", "/compliance/status/public", "/cart/items/public", "/api/payments/create-checkout-session", "/api/kch/**").permitAll()
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/admin-register", "/auth/refresh", "/auth/dev-set-password", "/auth/dev-upsert-admin", "/auth/dev-upsert-user", "/auth/reset-password", "/auth/reset-password/confirm", "/auth/setup-super-admin").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/admin-register", "/auth/refresh", "/auth/test", "/auth/test-auth", "/auth/dev-set-password", "/auth/dev-upsert-admin", "/auth/dev-upsert-user", "/auth/reset-password", "/auth/reset-password/confirm", "/auth/setup-super-admin").permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/chat/stream", "/chat/history", "/chat/send").hasAnyRole("BASEUSER", "ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/super-admin/**").hasRole("SUPER_ADMIN")
