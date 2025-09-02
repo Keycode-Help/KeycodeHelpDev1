@@ -148,13 +148,6 @@ export const AuthProvider = ({ children }) => {
               );
               // Keep localStorage state, this is likely a backend configuration issue
               // The user can still use the app with cached auth state
-
-              // Show a subtle notification to the user (optional)
-              if (import.meta.env.DEV) {
-                console.warn(
-                  "⚠️ Auth verification temporarily unavailable - using cached auth state"
-                );
-              }
             } else if (
               error.code === "ERR_NETWORK" ||
               error.message.includes("CORS")
