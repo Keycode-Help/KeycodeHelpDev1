@@ -87,9 +87,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             try {
                 username = jwtUtil.extractUsername(jwt);
-                System.out.println("JWT Filter - Extracted username: " + username);
+
             } catch (Exception e) {
-                System.out.println("JWT Filter - Error extracting username: " + e.getMessage());
+
             }
         }
 
@@ -101,12 +101,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    System.out.println("JWT Filter - Authentication successful for user: " + username);
+
                 } else {
-                    System.out.println("JWT Filter - Token validation failed for user: " + username);
+
                 }
             } catch (Exception e) {
-                System.out.println("JWT Filter - Error during authentication: " + e.getMessage());
+
             }
         }
         chain.doFilter(request, response);

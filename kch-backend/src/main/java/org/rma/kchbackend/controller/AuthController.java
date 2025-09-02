@@ -216,13 +216,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam("email") String email, 
                                    @RequestParam("password") String password) {
-        // 🔍 DEBUG LOGGING - Check if method is called
-        System.out.println("=== LOGIN ENDPOINT CALLED ===");
-        System.out.println("🔍 Login Request Debug:");
-        System.out.println("  Email: " + email);
-        System.out.println("  Password: " + (password != null ? "***SET***" : "NULL"));
-        
-        System.out.println("✅ Validation passed, proceeding with authentication...");
+        // Validate input parameters
+        if (email == null || password == null) {
+            return ResponseEntity.status(400).body("Email and password are required");
+        }
 
         // Normalize email input (trim + lowercase) to avoid case/space mismatches
         try {
@@ -234,43 +231,30 @@ public class AuthController {
             }
         } catch (Exception ignored) {}
 
-        System.out.println("🔍 Attempting authentication for: " + email);
-        System.out.println("🔍 Raw password received: " + (password != null ? "***SET***" : "NULL"));
-        System.out.println("🔍 Password length: " + (password != null ? password.length() : "NULL"));
+
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-            System.out.println("✅ Authentication successful!");
         } catch (Exception e) {
-            System.out.println("❌ Authentication failed: " + e.getMessage());
-            System.out.println("❌ Exception type: " + e.getClass().getSimpleName());
-            e.printStackTrace();
             return ResponseEntity.status(401).body("Invalid email or password.");
         }
 
-        System.out.println("🔍 Looking up user in database...");
         Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(email);
         if (userOptional.isEmpty()) {
-            System.out.println("❌ User not found in database");
             return ResponseEntity.status(401).body("Invalid email or password.");
         }
         
         KeycodeUser user = userOptional.get();
-        System.out.println("✅ User found: " + user.getEmail() + " (Role: " + user.getRole() + ")");
         
         // Check if account is active
         if (!user.isActive()) {
-            System.out.println("❌ Account is inactive");
             return ResponseEntity.status(401).body("Account is inactive.");
         }
         
         // Check if admin account is approved
         if (user.getRole() == Role.ADMIN && !user.isAdminApproved()) {
-            System.out.println("❌ Admin account not approved");
             return ResponseEntity.status(401).body("Admin account pending approval. Please contact super administrator.");
         }
-
-        System.out.println("🔍 Generating JWT tokens...");
         // Convert KeycodeUser to UserDetails for JWT generation
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
         String accessJwt = jwtUtil.generateToken(userDetails);
@@ -644,8 +628,8 @@ public class AuthController {
 
             return ResponseEntity.ok(userData);
         } catch (Exception e) {
-            System.out.println("❌ Error in /auth/me: " + e.getMessage());
-            e.printStackTrace();
+            // Log error for debugging but don't expose internal details
+            System.err.println("Error in /auth/me endpoint: " + e.getMessage());
             return ResponseEntity.status(500).body("Internal server error");
         }
     }
