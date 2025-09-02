@@ -46,7 +46,6 @@ export const Icons = {
   eyeOff: EyeOff,
   search: Search,
   check: Check,
-  loader: Loader2,
 };
 
 export function Icon({ name, size = 24, className = "", ...props }) {

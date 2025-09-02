@@ -109,14 +109,14 @@ export const AuthProvider = ({ children }) => {
             // Add timeout to prevent hanging requests
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
+            
             const response = await api.get("/auth/me", {
               signal: controller.signal,
-              timeout: 5000,
+              timeout: 5000
             });
-
+            
             clearTimeout(timeoutId);
-
+            
             if (response.status === 200 && response.data.user) {
               const userData = response.data.user;
               setUser(userData);
@@ -132,10 +132,8 @@ export const AuthProvider = ({ children }) => {
             console.error("Backend auth check failed:", error);
 
             // Handle different types of errors
-            if (error.name === "AbortError" || error.code === "ECONNABORTED") {
-              console.warn(
-                "Backend auth request timed out - keeping local auth state"
-              );
+            if (error.name === 'AbortError' || error.code === 'ECONNABORTED') {
+              console.warn("Backend auth request timed out - keeping local auth state");
               // Keep localStorage state, backend might be slow
             } else if (error.response?.status === 500) {
               console.warn(
@@ -163,18 +161,14 @@ export const AuthProvider = ({ children }) => {
           try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-            await api.post(
-              "/auth/refresh",
-              {},
-              {
-                signal: controller.signal,
-                timeout: 5000,
-              }
-            );
-
+            
+            await api.post("/auth/refresh", {}, {
+              signal: controller.signal,
+              timeout: 5000
+            });
+            
             clearTimeout(timeoutId);
-
+            
             // If refresh succeeds, we'll get new cookies
             const newToken = getCurrentToken();
             if (newToken) {
@@ -183,7 +177,7 @@ export const AuthProvider = ({ children }) => {
             }
           } catch (refreshError) {
             console.error("Token refresh failed:", refreshError);
-            if (refreshError.name !== "AbortError") {
+            if (refreshError.name !== 'AbortError') {
               logout();
             }
           }
