@@ -9,7 +9,6 @@ The backend is failing with **502 Bad Gateway** because the required database en
 Go to your Render dashboard → Backend Service → Environment tab and add these variables:
 
 ### **Database Configuration (REQUIRED)**
-
 ```
 DATABASE_URL=postgresql://postgres:[YOUR_DB_PASSWORD]@[YOUR_SUPABASE_HOST]:5432/postgres
 SPRING_DATASOURCE_URL=${DATABASE_URL}
@@ -20,38 +19,32 @@ DATABASE_PASSWORD=[YOUR_DB_PASSWORD]
 ```
 
 ### **JWT Configuration (REQUIRED)**
-
 ```
 JWT_SECRET=[YOUR_SECURE_JWT_SECRET_AT_LEAST_32_CHARACTERS_LONG]
 ```
 
 ### **Spring Profile**
-
 ```
 SPRING_PROFILES_ACTIVE=supabase
 ```
 
 ### **CORS Configuration**
-
 ```
 APP_CORS_ALLOWED_ORIGINS=https://keycode.help,https://app.keycode.help,https://keycode-help-dev1.vercel.app
 ```
 
 ### **App Configuration**
-
 ```
 FRONTEND_URL=https://www.keycode.help
 KCH_VSP_ID=4E1B0D2W
 ```
 
 ### **Super Admin Setup (for initial setup only)**
-
 ```
 SUPER_ADMIN_SETUP_KEY=[YOUR_SECURE_SETUP_KEY]
 ```
 
 ### **Email Configuration (Brevo/Sendinblue)**
-
 ```
 MAIL_HOST=smtp-relay.brevo.com
 MAIL_PORT=587
@@ -60,7 +53,6 @@ BREVO_API_KEY=[YOUR_BREVO_API_KEY]
 ```
 
 ### **Stripe Configuration**
-
 ```
 STRIPE_SECRET_KEY=[YOUR_STRIPE_SECRET_KEY]
 STRIPE_PUBLISHABLE_KEY=[YOUR_STRIPE_PUBLISHABLE_KEY]
@@ -68,7 +60,6 @@ STRIPE_WEBHOOK_SECRET=[YOUR_STRIPE_WEBHOOK_SECRET]
 ```
 
 ### **Vehicle Manufacturer Credentials**
-
 ```
 # Acura
 KCH_ACURA_USER=Mrguru
@@ -165,6 +156,5 @@ This error means the database connection is not configured. Adding the environme
 ## 📞 Need Help?
 
 If you need help getting your Supabase database credentials, check:
-
 - `docs/SUPABASE_QUICK_SETUP.md`
 - `docs/SUPABASE_SETUP_INSTRUCTIONS.md`
