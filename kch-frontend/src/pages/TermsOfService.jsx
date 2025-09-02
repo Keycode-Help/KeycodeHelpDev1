@@ -1,349 +1,447 @@
-import React from "react";
 import {
   FileText,
-  AlertTriangle,
   CheckCircle,
-  XCircle,
-  Clock,
-  DollarSign,
+  AlertTriangle,
   Shield,
   Users,
   Mail,
-  Phone,
   Globe,
+  DollarSign,
 } from "lucide-react";
-import "../styles/policyPages.css";
 
 const TermsOfService = () => {
   return (
-    <div className="policy-page-wrapper">
-      <div className="policy-page-container">
-        <div className="policy-header">
-          <div className="policy-header-icon">
-            <FileText className="policy-icon" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-8 font-sans relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+      <div className="relative z-10 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-8 shadow-2xl mb-8">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-blue-500/20 to-yellow-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center">
+              <FileText className="w-10 h-10 text-blue-400" />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent mb-4">
+              Terms of Usage
+            </h1>
+            <p className="text-gray-300 text-lg">
+              Last updated: {new Date().toLocaleDateString()}
+            </p>
           </div>
-          <h1>Terms of Usage</h1>
-          <p className="policy-subtitle">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
-        </div>
 
-        <div className="policy-content">
-          <section className="policy-section">
-            <h2>1. Acceptance of Terms</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <CheckCircle className="policy-card-icon" />
-                <h3>Agreement to Terms</h3>
-              </div>
-              <p>
-                By accessing and using KeycodeHelp services, you agree to be
-                bound by these Terms of Usage. If you do not agree to these
-                terms, please do not use our services.
-              </p>
-              <p>
-                These terms apply to all users of the service, including without
-                limitation users who are browsers, vendors, customers,
-                merchants, and/or contributors of content.
-              </p>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>2. Description of Service</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <Shield className="policy-card-icon" />
-                <h3>What We Provide</h3>
-              </div>
-              <p>
-                KeycodeHelp provides vehicle keycode lookup and information
-                services, including:
-              </p>
-              <ul>
-                <li>Vehicle keycode retrieval and lookup</li>
-                <li>Vehicle information and specifications</li>
-                <li>Membership-based access to premium features</li>
-                <li>Customer support and assistance</li>
-                <li>Payment processing for services</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>3. User Accounts and Registration</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <Users className="policy-card-icon" />
-                <h3>Account Requirements</h3>
-              </div>
-              <ul>
-                <li>You must be at least 18 years old to create an account</li>
-                <li>Provide accurate, current, and complete information</li>
-                <li>Maintain the security of your account credentials</li>
-                <li>Notify us immediately of any unauthorized use</li>
-                <li>
-                  You are responsible for all activities under your account
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>4. Acceptable Use Policy</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <CheckCircle className="policy-card-icon" />
-                <h3>Permitted Uses</h3>
-              </div>
-              <ul>
-                <li>Use services for legitimate vehicle information needs</li>
-                <li>Comply with all applicable laws and regulations</li>
-                <li>Respect intellectual property rights</li>
-                <li>Maintain appropriate security measures</li>
-              </ul>
-
-              <div className="policy-card-header">
-                <XCircle className="policy-card-icon" />
-                <h3>Prohibited Uses</h3>
-              </div>
-              <ul>
-                <li>Attempting to gain unauthorized access to our systems</li>
-                <li>Using services for illegal or fraudulent purposes</li>
-                <li>Interfering with service availability or performance</li>
-                <li>Sharing account credentials with unauthorized users</li>
-                <li>
-                  Reverse engineering or attempting to copy our technology
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>5. Payment Terms</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <DollarSign className="policy-card-icon" />
-                <h3>Payment and Billing</h3>
-              </div>
-              <ul>
-                <li>All fees are due immediately upon service purchase</li>
-                <li>Payments are processed securely through Stripe</li>
-                <li>Prices are subject to change with 30 days notice</li>
-                <li>Failed payments may result in service suspension</li>
-                <li>Taxes may apply based on your location</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>6. Refund Policy</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <AlertTriangle className="policy-card-icon" />
-                <h3>No Refunds for User Errors</h3>
-              </div>
-              <p>
-                <strong>Important:</strong> KeycodeHelp does not provide refunds
-                for:
-              </p>
-              <ul>
-                <li>Mistakes in vehicle information input</li>
-                <li>Incorrect data submissions</li>
-                <li>User errors in form completion</li>
-                <li>Duplicate submissions</li>
-                <li>Changes of mind after purchase</li>
-              </ul>
-
-              <div className="policy-card-header">
-                <CheckCircle className="policy-card-icon" />
-                <h3>Refunds Only Available For:</h3>
-              </div>
-              <ul>
-                <li>
-                  <strong>No Keycode Available:</strong> If we cannot provide a
-                  keycode for your vehicle
-                </li>
-                <li>
-                  <strong>Service Failure:</strong> If our service is completely
-                  unavailable
-                </li>
-                <li>
-                  <strong>Technical Issues:</strong> If our system fails to
-                  process your request
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>7. Membership Cancellation Policy</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <Clock className="policy-card-icon" />
-                <h3>Early Cancellation Terms</h3>
-              </div>
-              <ul>
-                <li>
-                  <strong>Monthly Memberships:</strong> Cancel anytime, no
-                  refund for partial months
-                </li>
-                <li>
-                  <strong>Annual Memberships:</strong> Cancel anytime, prorated
-                  refund for unused months
-                </li>
-                <li>
-                  <strong>Processing Time:</strong> Cancellations take effect at
-                  the end of current billing period
-                </li>
-                <li>
-                  <strong>Access:</strong> Service access continues until the
-                  end of paid period
-                </li>
-                <li>
-                  <strong>Reactivation:</strong> Can reactivate anytime with
-                  current pricing
-                </li>
-              </ul>
-              <p>
-                To cancel your membership, contact our support team or use the
-                cancellation option in your account settings.
-              </p>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>8. Intellectual Property</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <Shield className="policy-card-icon" />
-                <h3>Ownership Rights</h3>
-              </div>
-              <ul>
-                <li>All content and technology remain our property</li>
-                <li>
-                  Vehicle data is provided under license from third parties
-                </li>
-                <li>You may not copy, modify, or distribute our content</li>
-                <li>User-generated content remains your property</li>
-                <li>We may use feedback to improve our services</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>9. Disclaimers and Limitations</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <AlertTriangle className="policy-card-icon" />
-                <h3>Service Limitations</h3>
-              </div>
-              <ul>
-                <li>Services are provided "as is" without warranties</li>
-                <li>We do not guarantee 100% accuracy of vehicle data</li>
-                <li>Service availability may vary based on demand</li>
-                <li>
-                  We are not responsible for third-party vehicle data accuracy
-                </li>
-                <li>Maximum liability limited to amount paid for services</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>10. Privacy and Data Protection</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <Shield className="policy-card-icon" />
-                <h3>Data Handling</h3>
-              </div>
-              <p>
-                Your privacy is important to us. Please review our Privacy
-                Policy to understand how we collect, use, and protect your
-                personal information.
-              </p>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>11. Termination</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <XCircle className="policy-card-icon" />
-                <h3>Account Termination</h3>
-              </div>
-              <ul>
-                <li>We may terminate accounts for Terms of Usage violations</li>
-                <li>You may terminate your account at any time</li>
-                <li>Termination results in immediate loss of service access</li>
-                <li>Some data may be retained for legal compliance</li>
-                <li>Refunds follow our standard refund policy</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>12. Governing Law and Disputes</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <FileText className="policy-card-icon" />
-                <h3>Legal Framework</h3>
-              </div>
-              <ul>
-                <li>
-                  These terms are governed by the laws of [Your State/Country]
-                </li>
-                <li>Disputes will be resolved through binding arbitration</li>
-                <li>Class action lawsuits are not permitted</li>
-                <li>Small claims court actions are allowed</li>
-                <li>Changes to dispute resolution require written notice</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>13. Changes to Terms</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <Clock className="policy-card-icon" />
-                <h3>Terms Updates</h3>
-              </div>
-              <p>
-                We reserve the right to modify these terms at any time. Material
-                changes will be communicated through email or prominent website
-                notice. Continued use after changes constitutes acceptance of
-                updated terms.
-              </p>
-            </div>
-          </section>
-
-          <section className="policy-section">
-            <h2>14. Contact Information</h2>
-            <div className="policy-card">
-              <div className="policy-card-header">
-                <Users className="policy-card-icon" />
-                <h3>Questions About Terms</h3>
-              </div>
-              <p>
-                If you have questions about these Terms of Usage, please contact
-                us:
-              </p>
-              <div className="contact-info">
-                <div className="contact-item">
-                  <Mail className="contact-icon" />
-                  <span>Email: legal@keycodehelp.com</span>
+          <div className="space-y-8">
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                1. Acceptance of Terms
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Agreement to Terms
+                  </h3>
                 </div>
-                <div className="contact-item">
-                  <Phone className="contact-icon" />
-                  <span>Phone: +1 (555) 123-4567</span>
-                </div>
-                <div className="contact-item">
-                  <Globe className="contact-icon" />
-                  <span>Website: https://keycodehelp.com</span>
+                <div className="space-y-3 text-gray-300">
+                  <p>
+                    By accessing and using KeycodeHelp services, you agree to be
+                    bound by these Terms of Usage. If you do not agree to these
+                    terms, please do not use our services.
+                  </p>
+                  <p>
+                    These terms apply to all users of the service, including
+                    without limitation users who are browsers, vendors,
+                    customers, merchants, and/or contributors of content.
+                  </p>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                2. Description of Service
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-xl flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    What We Provide
+                  </h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  KeycodeHelp provides vehicle keycode lookup and information
+                  services, including:
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Vehicle keycode retrieval and lookup</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Vehicle information and specifications</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Membership-based access to premium features</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Customer support and assistance</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Payment processing for services</span>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                3. User Accounts and Registration
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl flex items-center justify-center">
+                    <Users className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Account Requirements
+                  </h3>
+                </div>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>
+                      You must be at least 18 years old to create an account
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>
+                      Provide accurate, current, and complete information
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>
+                      Maintain the security of your account credentials
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Notify us immediately of any unauthorized use</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>
+                      You are responsible for all activities under your account
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                4. Acceptable Use Policy
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Permitted Uses
+                  </h3>
+                </div>
+                <ul className="space-y-2 text-gray-300 mb-4">
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>
+                      Use services for legitimate vehicle information needs
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>
+                      Access information for personal or business purposes
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Contact support for legitimate assistance</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full mt-2 flex-shrink-0"></span>
+                    <span>Cancel membership according to our policies</span>
+                  </li>
+                </ul>
+                <div className="bg-gradient-to-r from-red-500/10 to-pink-500/10 border border-red-500/20 rounded-xl p-4">
+                  <h4 className="text-lg font-semibold text-red-400 mb-3">
+                    ❌ Prohibited Actions
+                  </h4>
+                  <ul className="space-y-2 text-gray-300">
+                    <li className="flex items-start gap-2">
+                      <span className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                      <span>Share account access with unauthorized users</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                      <span>
+                        Use services for illegal or fraudulent purposes
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                      <span>
+                        Attempt to hack, disrupt, or compromise our systems
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                      <span>
+                        Submit false or misleading vehicle information
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                      <span>
+                        Resell, redistribute, or commercialize our data
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                5. Payment Terms
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-xl flex items-center justify-center">
+                    <DollarSign className="w-5 h-5 text-yellow-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Billing and Payments
+                  </h3>
+                </div>
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl p-4">
+                    <h4 className="text-lg font-semibold text-yellow-400 mb-2">
+                      💰 Payment Methods
+                    </h4>
+                    <ul className="space-y-2 text-gray-300">
+                      <li className="flex items-start gap-2">
+                        <span className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></span>
+                        <span>
+                          Credit and debit cards processed through Stripe
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></span>
+                        <span>
+                          Monthly and annual subscription plans available
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></span>
+                        <span>
+                          Automatic recurring billing for active subscriptions
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-r from-red-500/10 to-pink-500/10 border border-red-500/20 rounded-xl p-4">
+                    <h4 className="text-lg font-semibold text-red-400 mb-2">
+                      ⚠️ Important Refund Policy
+                    </h4>
+                    <p className="text-gray-300">
+                      <strong>No refunds for user errors:</strong> We do not
+                      provide refunds for incorrect vehicle information,
+                      duplicate submissions, or change of mind. Refunds are only
+                      available for service failures or technical issues on our
+                      end.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                6. Privacy and Data Protection
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-xl flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Data Security
+                  </h3>
+                </div>
+                <div className="space-y-3 text-gray-300">
+                  <p>
+                    <strong>Data Protection:</strong> We implement
+                    industry-standard security measures to protect your personal
+                    information and vehicle data.
+                  </p>
+                  <p>
+                    <strong>No Data Sharing:</strong> We do not sell, trade, or
+                    rent your personal information to third parties, except as
+                    required by law.
+                  </p>
+                  <p>
+                    <strong>Data Retention:</strong> We retain your data only as
+                    long as necessary to provide our services and comply with
+                    legal obligations.
+                  </p>
+                  <p>
+                    <strong>Your Rights:</strong> You have the right to access,
+                    correct, or delete your personal data. Contact us for
+                    assistance.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                7. Service Availability
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Service Reliability
+                  </h3>
+                </div>
+                <div className="space-y-3 text-gray-300">
+                  <p>
+                    <strong>Service Availability:</strong> We strive to maintain
+                    99.9% uptime but cannot guarantee uninterrupted service.
+                  </p>
+                  <p>
+                    <strong>Maintenance:</strong> Scheduled maintenance may
+                    temporarily affect service availability. We will provide
+                    advance notice when possible.
+                  </p>
+                  <p>
+                    <strong>Technical Issues:</strong> We are not liable for
+                    service interruptions caused by factors beyond our control.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                8. Limitation of Liability
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-red-500/20 to-pink-500/20 border border-red-500/30 rounded-xl flex items-center justify-center">
+                    <AlertTriangle className="w-5 h-5 text-red-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Liability Limits
+                  </h3>
+                </div>
+                <div className="space-y-3 text-gray-300">
+                  <p>
+                    <strong>Service "As Is":</strong> Our services are provided
+                    "as is" without warranties of any kind, either express or
+                    implied.
+                  </p>
+                  <p>
+                    <strong>Maximum Liability:</strong> Our total liability to
+                    you for any claims shall not exceed the amount you paid for
+                    our services in the 12 months preceding the claim.
+                  </p>
+                  <p>
+                    <strong>Excluded Damages:</strong> We are not liable for
+                    indirect, incidental, special, consequential, or punitive
+                    damages.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                9. Contact Information
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Get in Touch
+                  </h3>
+                </div>
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center gap-3 text-gray-300">
+                    <Mail className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                    <span>Email: legal@keycode.help</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-gray-300">
+                    <Globe className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                    <span>Website: https://keycodehelp.com</span>
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-4">
+                  <p className="text-gray-300">
+                    <strong>Response Time:</strong> We aim to respond to all
+                    legal inquiries within 48 hours during business days.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-700 pb-2">
+                10. Changes to Terms
+              </h2>
+              <div className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Policy Updates
+                  </h3>
+                </div>
+                <div className="space-y-3 text-gray-300">
+                  <p>
+                    KeycodeHelp reserves the right to modify these Terms of
+                    Usage at any time. Changes will be communicated through
+                    email notifications and website updates.
+                  </p>
+                  <p>
+                    <strong>Continued Use:</strong> Your continued use of our
+                    services after changes become effective constitutes
+                    acceptance of the updated terms.
+                  </p>
+                  <p>
+                    <strong>Last Updated:</strong>{" "}
+                    {new Date().toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
       </div>
     </div>
