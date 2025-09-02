@@ -107,12 +107,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             } catch (Exception e) {
                 System.out.println("JWT Filter - Error during authentication: " + e.getMessage());
-                e.printStackTrace();
             }
-        } else if (jwt != null && username == null) {
-            System.out.println("JWT Filter - JWT token found but could not extract username");
-        } else if (jwt == null) {
-            System.out.println("JWT Filter - No JWT token found in request");
         }
         chain.doFilter(request, response);
     }
