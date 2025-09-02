@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "../context/AuthContext";
-import api from "../services/request";
+import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/request';
 
 export const useTrialStatus = () => {
   const { user, isAuthenticated } = useAuth();
@@ -10,7 +10,7 @@ export const useTrialStatus = () => {
     remainingDays: 0,
     trialEndsAt: null,
     hasPremiumAccess: false,
-    accessType: "none",
+    accessType: 'none'
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -24,7 +24,7 @@ export const useTrialStatus = () => {
         remainingDays: 0,
         trialEndsAt: null,
         hasPremiumAccess: false,
-        accessType: "none",
+        accessType: 'none'
       });
       return;
     }
@@ -34,51 +34,42 @@ export const useTrialStatus = () => {
 
     try {
       if (import.meta.env.DEV) {
-        console.log("Fetching trial status for user:", user);
-        console.log("User role:", user?.role);
+        console.log('Fetching trial status for user:', user);
+        console.log('User role:', user?.role);
       }
-
-      const response = await api.get("/trial/status");
+      
+      const response = await api.get('/trial/status');
       if (response.status === 200) {
         setTrialStatus(response.data);
       }
     } catch (err) {
-      console.error("Error fetching trial status:", err);
+      console.error('Error fetching trial status:', err);
       if (import.meta.env.DEV) {
-        console.log("Trial status error details:", {
+        console.log('Trial status error details:', {
           status: err.response?.status,
           statusText: err.response?.statusText,
           data: err.response?.data,
-          user: user,
+          user: user
         });
       }
-      setError("Failed to fetch trial status");
-
+      setError('Failed to fetch trial status');
+      
       // Fallback: check subscription from user data
       if (user.subscription) {
         const subscription = user.subscription;
         const hasTrial = subscription.trial && subscription.trialEndsAt;
-        const isActive =
-          hasTrial && new Date(subscription.trialEndsAt) > new Date();
-        const remainingDays =
-          hasTrial && isActive
-            ? Math.ceil(
-                (new Date(subscription.trialEndsAt) - new Date()) /
-                  (1000 * 60 * 60 * 24)
-              )
-            : 0;
-
+        const isActive = hasTrial && new Date(subscription.trialEndsAt) > new Date();
+        const remainingDays = hasTrial && isActive 
+          ? Math.ceil((new Date(subscription.trialEndsAt) - new Date()) / (1000 * 60 * 60 * 24))
+          : 0;
+        
         setTrialStatus({
           hasTrial,
           isActive,
           remainingDays,
           trialEndsAt: subscription.trialEndsAt,
           hasPremiumAccess: isActive || subscription.activated,
-          accessType: isActive
-            ? "trial"
-            : subscription.activated
-            ? "paid"
-            : "none",
+          accessType: isActive ? 'trial' : (subscription.activated ? 'paid' : 'none')
         });
       }
     } finally {
@@ -87,36 +78,33 @@ export const useTrialStatus = () => {
   }, [isAuthenticated, user]);
 
   // Start a trial
-  const startTrial = useCallback(
-    async (tier = "BASIC") => {
-      if (!isAuthenticated || !user) {
-        throw new Error("User must be authenticated to start a trial");
+  const startTrial = useCallback(async (tier = 'BASIC') => {
+    if (!isAuthenticated || !user) {
+      throw new Error('User must be authenticated to start a trial');
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.post('/trial/start', null, {
+        params: { tier }
+      });
+      
+      if (response.status === 200) {
+        // Refresh trial status
+        await fetchTrialStatus();
+        return response.data;
       }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await api.post("/trial/start", null, {
-          params: { tier },
-        });
-
-        if (response.status === 200) {
-          // Refresh trial status
-          await fetchTrialStatus();
-          return response.data;
-        }
-      } catch (err) {
-        console.error("Error starting trial:", err);
-        const errorMessage = err.response?.data || "Failed to start trial";
-        setError(errorMessage);
-        throw new Error(errorMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [isAuthenticated, user, fetchTrialStatus]
-  );
+    } catch (err) {
+      console.error('Error starting trial:', err);
+      const errorMessage = err.response?.data || 'Failed to start trial';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthenticated, user, fetchTrialStatus]);
 
   // Check if trial has expired
   const isTrialExpired = useCallback(() => {
@@ -129,12 +117,10 @@ export const useTrialStatus = () => {
   // Check if user should see trial banner
   const shouldShowTrialBanner = useCallback(() => {
     // Show banner if user is authenticated, has no trial, and no premium access
-    return (
-      isAuthenticated &&
-      user &&
-      !trialStatus.hasTrial &&
-      !trialStatus.hasPremiumAccess
-    );
+    return isAuthenticated && 
+           user && 
+           !trialStatus.hasTrial && 
+           !trialStatus.hasPremiumAccess;
   }, [isAuthenticated, user, trialStatus]);
 
   // Check if user should see trial notice
@@ -164,7 +150,7 @@ export const useTrialStatus = () => {
       const interval = setInterval(() => {
         const now = new Date();
         const trialEnd = new Date(trialStatus.trialEndsAt);
-
+        
         if (now > trialEnd) {
           // Trial expired, refresh status
           fetchTrialStatus();
@@ -173,12 +159,7 @@ export const useTrialStatus = () => {
 
       return () => clearInterval(interval);
     }
-  }, [
-    trialStatus.hasTrial,
-    trialStatus.isActive,
-    trialStatus.trialEndsAt,
-    fetchTrialStatus,
-  ]);
+  }, [trialStatus.hasTrial, trialStatus.isActive, trialStatus.trialEndsAt, fetchTrialStatus]);
 
   return {
     trialStatus,
@@ -189,6 +170,6 @@ export const useTrialStatus = () => {
     shouldShowTrialBanner,
     shouldShowTrialNotice,
     hasPremiumAccess,
-    refreshTrialStatus,
+    refreshTrialStatus
   };
 };

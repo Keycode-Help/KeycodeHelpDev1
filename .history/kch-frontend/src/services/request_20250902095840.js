@@ -28,7 +28,7 @@ instance.interceptors.request.use((config) => {
     url.includes("/auth/login") ||
     url.includes("/auth/register") ||
     url.includes("/auth/admin-register");
-
+  
   if (!skipAuthHeader) {
     // Try cookie first, then localStorage
     const token = getCookie("access_token") || getTokenFromStorage();
@@ -47,8 +47,7 @@ instance.interceptors.response.use(
     const status = error.response?.status;
     const url = originalRequest?.url || "";
     const isRefreshCall = url.includes("/auth/refresh");
-    const isAuthCall =
-      url.includes("/auth/login") || url.includes("/auth/register");
+    const isAuthCall = url.includes("/auth/login") || url.includes("/auth/register");
     const hasRefreshCookie = !!getCookie("refresh_token");
 
     if (
@@ -69,10 +68,8 @@ instance.interceptors.response.use(
         localStorage.removeItem("auth_user");
         localStorage.removeItem("auth_token");
         // Clear cookies
-        document.cookie =
-          "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie =
-          "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }
