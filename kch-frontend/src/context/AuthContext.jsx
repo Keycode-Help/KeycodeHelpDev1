@@ -90,84 +90,63 @@ export const AuthProvider = ({ children }) => {
             setUser(userData);
             setIsAuthenticated(true);
             console.log("✅ Auth restored from localStorage");
+            
+            // Only verify with backend if we're online and not in development
+            if (navigator.onLine && !import.meta.env.DEV) {
+              // Verify auth in background (non-blocking)
+              api.get("/auth/me").then(response => {
+                if (response.status === 200 && response.data.user) {
+                  const userData = response.data.user;
+                  setUser(userData);
+                  storeAuthState(userData, storedToken);
+                  console.log("✅ Auth verified with backend");
+                }
+              }).catch(error => {
+                // Only clear auth on 401, ignore other errors
+                if (error.response?.status === 401) {
+                  console.log("❌ Token expired, clearing state");
+                  logout();
+                } else if (error.response?.status === 500) {
+                  console.warn("Backend server error - keeping local auth state");
+                }
+              });
+            }
           } catch (e) {
             console.error("Failed to parse stored user data:", e);
             clearStoredAuthState();
           }
-        }
-
-        // Then verify with backend (more secure)
-        const token = getCurrentToken();
-        if (token) {
-          if (import.meta.env.DEV) {
-            console.log(
-              "🔑 Token found for /auth/me request:",
-              token.substring(0, 20) + "..."
-            );
-          }
-          try {
-            const response = await api.get("/auth/me");
-            if (response.status === 200 && response.data.user) {
-              const userData = response.data.user;
-              setUser(userData);
-              setIsAuthenticated(true);
-              // Update stored data
-              storeAuthState(userData, token);
-              console.log("✅ Auth verified with backend");
-            } else {
-              console.log("❌ Backend auth failed, clearing state");
-              logout();
+        } else {
+          // No stored auth, check with backend if we have a token
+          const token = getCurrentToken();
+          if (token && navigator.onLine) {
+            try {
+              const response = await api.get("/auth/me");
+              if (response.status === 200 && response.data.user) {
+                const userData = response.data.user;
+                setUser(userData);
+                setIsAuthenticated(true);
+                storeAuthState(userData, token);
+                console.log("✅ Auth verified with backend");
+              }
+            } catch (error) {
+              if (error.response?.status === 401) {
+                console.log("❌ Invalid token, clearing state");
+                logout();
+              }
             }
-          } catch (error) {
-            console.error("Backend auth check failed:", error);
-
-            // Handle different types of errors
-            if (error.response?.status === 500) {
-              console.warn(
-                "Backend server error (500) - keeping local auth state"
-              );
-              // Keep localStorage state for now, backend might be temporarily down
-            } else if (
-              error.code === "ERR_NETWORK" ||
-              error.message.includes("CORS")
-            ) {
-              console.warn(
-                "CORS error detected - backend may not be configured for this domain"
-              );
-              // Keep localStorage state for now, but show warning
-            } else if (error.response?.status === 401) {
-              console.log("❌ Backend auth failed, clearing state");
-              logout();
-            }
-            // Don't logout immediately for server errors, keep localStorage state for now
-            // The interceptor will handle 401s
-          }
-        } else if (storedUser && storedToken) {
-          // We have stored data but no cookie - try to refresh
-          console.log("🔄 No cookie but stored data - attempting refresh");
-          try {
-            await api.post("/auth/refresh");
-            // If refresh succeeds, we'll get new cookies
-            const newToken = getCurrentToken();
-            if (newToken) {
-              storeAuthState(JSON.parse(storedUser), newToken);
-              console.log("✅ Token refreshed successfully");
-            }
-          } catch (refreshError) {
-            console.error("Token refresh failed:", refreshError);
-            logout();
           }
         }
       } catch (error) {
-        console.error("Auth initialization failed:", error);
-        // Don't logout on initialization errors, keep stored state
+        console.error("Auth initialization error:", error);
       } finally {
         setIsInitialized(true);
       }
     };
 
     initializeAuth();
-  }, [getCurrentToken, storeAuthState, clearStoredAuthState]);
+  }, [clearStoredAuthState, getCurrentToken, logout, storeAuthState]);
+
+
 
   // Memoize the role setting logic to prevent unnecessary re-renders
   useEffect(() => {
