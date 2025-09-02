@@ -114,12 +114,10 @@ export const AuthProvider = ({ children }) => {
             }
           } catch (error) {
             console.error("Backend auth check failed:", error);
-
+            
             // Handle different types of errors
             if (error.response?.status === 500) {
-              console.warn(
-                "Backend server error (500) - keeping local auth state"
-              );
+              console.warn("Backend server error (500) - keeping local auth state");
               // Keep localStorage state for now, backend might be temporarily down
             } else if (
               error.code === "ERR_NETWORK" ||

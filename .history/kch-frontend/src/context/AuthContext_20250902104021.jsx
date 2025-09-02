@@ -114,14 +114,8 @@ export const AuthProvider = ({ children }) => {
             }
           } catch (error) {
             console.error("Backend auth check failed:", error);
-
-            // Handle different types of errors
-            if (error.response?.status === 500) {
-              console.warn(
-                "Backend server error (500) - keeping local auth state"
-              );
-              // Keep localStorage state for now, backend might be temporarily down
-            } else if (
+            // Check if it's a CORS error
+            if (
               error.code === "ERR_NETWORK" ||
               error.message.includes("CORS")
             ) {
@@ -129,11 +123,8 @@ export const AuthProvider = ({ children }) => {
                 "CORS error detected - backend may not be configured for this domain"
               );
               // Keep localStorage state for now, but show warning
-            } else if (error.response?.status === 401) {
-              console.log("❌ Backend auth failed, clearing state");
-              logout();
             }
-            // Don't logout immediately for server errors, keep localStorage state for now
+            // Don't logout immediately, keep localStorage state for now
             // The interceptor will handle 401s
           }
         } else if (storedUser && storedToken) {
