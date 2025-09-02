@@ -44,12 +44,6 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("auth_token");
   }, []);
 
-  // Helper function to clear stored auth state
-  const clearStoredAuthState = useCallback(() => {
-    localStorage.removeItem("auth_user");
-    localStorage.removeItem("auth_token");
-  }, []);
-
   // Helper function to store auth state in localStorage
   const storeAuthState = useCallback((userData, token) => {
     if (userData) {
@@ -60,7 +54,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Logout function - defined after dependencies to avoid circular dependency
+  // Helper function to clear stored auth state
+  const clearStoredAuthState = useCallback(() => {
+    localStorage.removeItem("auth_user");
+    localStorage.removeItem("auth_token");
+  }, []);
+
+  // Logout function - defined before useEffect to avoid circular dependency
   const logout = useCallback(() => {
     setUser(null);
     setUserRole(null);
