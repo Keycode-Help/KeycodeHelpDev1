@@ -35,13 +35,13 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Helper function to get current token from cookies or localStorage
+  // Helper function to get current token from cookies
   const getCurrentToken = useCallback(() => {
-    // Try cookie first, then localStorage
-    const tokenFromCookie = getCookie("access_token");
-    if (tokenFromCookie) return tokenFromCookie;
-
-    return localStorage.getItem("auth_token");
+    const cookies = document.cookie.split(";");
+    const tokenCookie = cookies.find((cookie) =>
+      cookie.trim().startsWith("access_token=")
+    );
+    return tokenCookie ? tokenCookie.split("=")[1] : null;
   }, []);
 
   // Helper function to store auth state in localStorage
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setUserRole(null);
     setIsAuthenticated(false);
-
+    
     // Clear stored auth state
     clearStoredAuthState();
 
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         // First try to restore from localStorage (faster)
         const storedUser = localStorage.getItem("auth_user");
         const storedToken = localStorage.getItem("auth_token");
-
+        
         if (storedUser && storedToken) {
           try {
             const userData = JSON.parse(storedUser);

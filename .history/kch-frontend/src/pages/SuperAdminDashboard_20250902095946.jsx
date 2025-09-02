@@ -41,13 +41,13 @@ function SuperAdminDashboard() {
   const fetchAdminData = async () => {
     try {
       setLoading(true);
-
+      
       if (import.meta.env.DEV) {
         console.log("Fetching admin data for user:", user);
         console.log("User role:", user?.role);
         console.log("User email:", user?.email);
       }
-
+      
       const [pendingRes, approvedRes] = await Promise.all([
         api.get("/admin-approval/pending", {
           params: { superAdminEmail: user.email },
@@ -66,12 +66,10 @@ function SuperAdminDashboard() {
           status: error.response?.status,
           statusText: error.response?.statusText,
           data: error.response?.data,
-          user: user,
+          user: user
         });
       }
-      setError(
-        `Failed to fetch admin data: ${error.response?.status} ${error.response?.statusText}`
-      );
+      setError(`Failed to fetch admin data: ${error.response?.status} ${error.response?.statusText}`);
     } finally {
       setLoading(false);
     }

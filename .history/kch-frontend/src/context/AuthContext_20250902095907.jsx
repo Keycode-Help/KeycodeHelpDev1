@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     // Try cookie first, then localStorage
     const tokenFromCookie = getCookie("access_token");
     if (tokenFromCookie) return tokenFromCookie;
-
+    
     return localStorage.getItem("auth_token");
   }, []);
 
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setUserRole(null);
     setIsAuthenticated(false);
-
+    
     // Clear stored auth state
     clearStoredAuthState();
 
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         // First try to restore from localStorage (faster)
         const storedUser = localStorage.getItem("auth_user");
         const storedToken = localStorage.getItem("auth_token");
-
+        
         if (storedUser && storedToken) {
           try {
             const userData = JSON.parse(storedUser);
