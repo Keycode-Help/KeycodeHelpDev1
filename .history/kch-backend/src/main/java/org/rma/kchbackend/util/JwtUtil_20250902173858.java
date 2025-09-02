@@ -51,35 +51,20 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        try {
-            return extractClaim(token, Claims::getSubject);
-        } catch (Exception e) {
-            System.out.println("❌ Error extracting username from token: " + e.getMessage());
-            throw e;
-        }
+        return extractClaim(token, Claims::getSubject);
     }
 
     public <T> T extractClaim(String token, ClaimsResolver<T> claimsResolver) {
-        try {
-            final Claims claims = extractAllClaims(token);
-            return claimsResolver.resolve(claims);
-        } catch (Exception e) {
-            System.out.println("❌ Error extracting claim from token: " + e.getMessage());
-            throw e;
-        }
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.resolve(claims);
     }
 
     private Claims extractAllClaims(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            System.out.println("❌ Error parsing JWT token: " + e.getMessage());
-            throw e;
-        }
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public boolean isTokenExpired(String token) {
