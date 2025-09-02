@@ -15,10 +15,7 @@ function getCookie(name) {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-// Helper to get token from localStorage (fallback)
-function getTokenFromStorage() {
-  return localStorage.getItem("auth_token");
-}
+
 
 // Attach Authorization header from access_token cookie or localStorage
 instance.interceptors.request.use((config) => {
@@ -30,19 +27,11 @@ instance.interceptors.request.use((config) => {
     url.includes("/auth/admin-register");
 
   if (!skipAuthHeader) {
-    // Try cookie first, then localStorage
-    const token = getCookie("access_token") || getTokenFromStorage();
+    // Use httpOnly cookie for security
+    const token = getCookie("access_token");
     if (token && !config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${token}`;
-      if (import.meta.env.DEV) {
-        console.log(
-          "🔑 Adding Authorization header:",
-          `Bearer ${token.substring(0, 20)}...`
-        );
       }
-    } else if (import.meta.env.DEV) {
-      console.log("❌ No token found for request to:", url);
-    }
   }
   return config;
 });
@@ -73,9 +62,7 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (refreshError) {
         // Refresh failed, clear auth state and redirect to login
-        console.error("Token refresh failed:", refreshError);
         localStorage.removeItem("auth_user");
-        localStorage.removeItem("auth_token");
         // Clear cookies
         document.cookie =
           "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -20,37 +20,39 @@ import {
   addZFoldCSSVariables,
 } from "./utils/zFoldDetection";
 
-import Login from "./pages/Login";
-import AdminLogin from "./pages/AdminLogin";
-import AdminRegister from "./pages/AdminRegister";
-import Register from "./pages/Register";
-import ResetPassword from "./pages/ResetPassword";
-import Cart from "./pages/Cart";
-import VehicleKeycodeRequest from "./pages/VehicleKeycodeRequest";
-import PaymentSuccess from "./pages/PaymentSuccess";
-import PaymentCancel from "./pages/PaymentCancel";
-import AdminDashboard from "./pages/AdminDashboard";
-import SuperAdminDashboard from "./pages/SuperAdminDashboard";
-import SubscriptionManager from "./pages/SubscriptionManager";
-import UserHistoryPage from "./pages/UserHistoryPage";
-import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
-import DocumentValidation from "./pages/DocumentValidation";
-import Requirements from "./pages/Requirements";
-import UserDash from "./pages/UserDash";
-import UserDashboard from "./pages/UserDashboard";
-import UserProfile from "./pages/UserProfile";
-import UpdateUserProfile from "./pages/UpdateUserProfile";
-import LandingPage from "./pages/LandingPage";
-import Support from "./pages/Support";
-import PricelistPage from "./pages/PricelistPage";
-import AboutUs from "./pages/AboutUs";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import TOS from "./pages/TOS";
-import RefundPolicy from "./pages/RefundPolicy";
-import MembershipCancellation from "./pages/MembershipCancellation";
-import KeycodePortals from "./pages/KeycodePortals";
-import KchDatabase from "./pages/KchDatabase";
+// Lazy load pages for better performance
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const Login = lazy(() => import("./pages/Login"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminRegister = lazy(() => import("./pages/AdminRegister"));
+const Register = lazy(() => import("./pages/Register"));
+const Cart = lazy(() => import("./pages/Cart"));
+const VehicleKeycodeRequest = lazy(() => import("./pages/VehicleKeycodeRequest"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const SuperAdminDashboard = lazy(() => import("./pages/SuperAdminDashboard"));
+const UserDash = lazy(() => import("./pages/UserDash"));
+const UserDashboard = lazy(() => import("./pages/UserDashboard"));
+const UserProfile = lazy(() => import("./pages/UserProfile"));
+const UpdateUserProfile = lazy(() => import("./pages/UpdateUserProfile"));
+
+// Lazy load remaining pages
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
+const PaymentCancel = lazy(() => import("./pages/PaymentCancel"));
+const SubscriptionManager = lazy(() => import("./pages/SubscriptionManager"));
+const UserHistoryPage = lazy(() => import("./pages/UserHistoryPage"));
+const RegisteredUsersPage = lazy(() => import("./pages/RegisteredUsers"));
+const DocumentValidation = lazy(() => import("./pages/DocumentValidation"));
+const Requirements = lazy(() => import("./pages/Requirements"));
+const Support = lazy(() => import("./pages/Support"));
+const PricelistPage = lazy(() => import("./pages/PricelistPage"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const MembershipCancellation = lazy(() => import("./pages/MembershipCancellation"));
+const KeycodePortals = lazy(() => import("./pages/KeycodePortals"));
+const KchDatabase = lazy(() => import("./pages/KchDatabase"));
 
 // Component to handle conditional navigation rendering
 function AppContent() {
@@ -88,27 +90,35 @@ function AppContent() {
             : ""
         }
       >
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/admin-register" element={<AdminRegister />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/payment-cancel" element={<PaymentCancel />} />
-          <Route
-            path="/vehicle-keycode-request"
-            element={<VehicleKeycodeRequest />}
-          />
-          <Route path="/subscriptions" element={<SubscriptionManager />} />
-          <Route path="/profile" element={<UpdateUserProfile />} />
-          <Route path="/user-profile" element={<UserProfile />} />
-          <Route path="/user-dash" element={<UserDash />} />
-          <Route path="/dashboard" element={<UserDashboard />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/super-admin" element={<SuperAdminDashboard />} />
+        <Suspense fallback={
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-300">Loading...</p>
+            </div>
+          </div>
+        }>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin-register" element={<AdminRegister />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/payment-cancel" element={<PaymentCancel />} />
+            <Route
+              path="/vehicle-keycode-request"
+              element={<VehicleKeycodeRequest />}
+            />
+            <Route path="/subscriptions" element={<SubscriptionManager />} />
+            <Route path="/profile" element={<UpdateUserProfile />} />
+            <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/user-dash" element={<UserDash />} />
+            <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/super-admin" element={<SuperAdminDashboard />} />
           <Route
             path="/admin/registered-users"
             element={<RegisteredUsersPage />} // Add the route for the new page
@@ -132,7 +142,7 @@ function AppContent() {
           {/* Legal & Policy Pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/tos" element={<TOS />} />
+          <Route path="/tos" element={<TermsOfService />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route
             path="/membership-cancellation"
@@ -141,6 +151,7 @@ function AppContent() {
 
           <Route path="*" element={<LandingPage />} />
         </Routes>
+        </Suspense>
         <Footer />
       </div>
     </>

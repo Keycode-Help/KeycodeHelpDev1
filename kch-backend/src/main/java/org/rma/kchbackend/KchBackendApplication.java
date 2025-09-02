@@ -19,17 +19,16 @@ public class KchBackendApplication {
         Dotenv dotenv = null;
         try {
             dotenv = Dotenv.load();
-            System.out.println("✅ .env file loaded successfully");
+
         } catch (Exception e) {
-            System.out.println("⚠️  .env file not found, using system environment variables");
-            System.out.println("   This is normal when running on Render or other cloud platforms");
+
         }
         
         // Force load environment variables
         loadEnvironmentVariables(dotenv);
         
         // Environment variables are now properly configured via system properties
-        System.out.println("✅ Environment variables configured via system properties");
+
         
         SpringApplication.run(KchBackendApplication.class, args);
     }
@@ -41,38 +40,38 @@ public class KchBackendApplication {
         String dbUrl = getValue("SPRING_DATASOURCE_URL", dotenv);
         if (dbUrl != null) {
             System.setProperty("spring.datasource.url", dbUrl);
-            System.out.println("✅ Set spring.datasource.url: " + dbUrl);
+
         }
         
         String dbUsername = getValue("SPRING_DATASOURCE_USERNAME", dotenv);
         if (dbUsername != null) {
             System.setProperty("spring.datasource.username", dbUsername);
-            System.out.println("✅ Set spring.datasource.username: " + dbUsername);
+
         }
         
         String dbPassword = getValue("SPRING_DATASOURCE_PASSWORD", dotenv);
         if (dbPassword != null) {
             System.setProperty("spring.datasource.password", dbPassword);
-            System.out.println("✅ Set spring.datasource.password: ***SET***");
+
         }
         
         String profile = getValue("SPRING_PROFILES_ACTIVE", dotenv);
         if (profile != null) {
             System.setProperty("spring.profiles.active", profile);
-            System.out.println("✅ Set spring.profiles.active: " + profile);
+
         }
         
         // Set Brevo email configuration
         String brevoUsername = getValue("BREVO_USERNAME", dotenv);
         if (brevoUsername != null) {
             System.setProperty("BREVO_USERNAME", brevoUsername);
-            System.out.println("✅ Set BREVO_USERNAME: " + brevoUsername);
+
         }
         
         String brevoApiKey = getValue("BREVO_API_KEY", dotenv);
         if (brevoApiKey != null) {
             System.setProperty("BREVO_API_KEY", brevoApiKey);
-            System.out.println("✅ Set BREVO_API_KEY: ***SET***");
+
         }
         
         // Set JWT configuration

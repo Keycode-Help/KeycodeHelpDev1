@@ -12,7 +12,6 @@ import "../styles/lp.css";
 import "../styles/landing-page-mobile.css";
 
 export default function LandingPage() {
-  const { token } = useAuth();
   const { shouldShowTrialBanner } = useTrialStatus();
   const [billingCycle, setBillingCycle] = useState("monthly");
 

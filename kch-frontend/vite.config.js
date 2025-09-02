@@ -10,14 +10,22 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     base: "/",
+    esbuild: {
+      drop: mode === 'production' ? ['console', 'debugger'] : [],
+    },
     build: {
       outDir: "dist",
       assetsDir: "assets",
       rollupOptions: {
         output: {
-          manualChunks: undefined,
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom'],
+            ui: ['lucide-react', '@vercel/analytics'],
+            auth: ['axios']
+          },
         },
       },
+      chunkSizeWarningLimit: 1000,
     },
     // Ensure proper SPA routing
     server: {

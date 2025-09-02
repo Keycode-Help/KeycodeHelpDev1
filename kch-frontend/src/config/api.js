@@ -1,33 +1,9 @@
 // API Configuration
 const API_CONFIG = {
   // Base URL for all API calls
-  BASE_URL: (() => {
-    const envUrl = import.meta.env.VITE_BACKEND_URL;
-    if (envUrl) {
-      return envUrl;
-    }
+  BASE_URL: import.meta.env.VITE_BACKEND_URL || "http://localhost:8080",
 
-    // Fallback logic based on environment
-    if (import.meta.env.MODE === "production") {
-      // Use environment variable or fallback to localhost for now
-      return envUrl || "http://localhost:8080";
-    }
 
-    return "http://localhost:8080";
-  })(),
-
-  // Debug logging (only in development)
-  debug: () => {
-    if (import.meta.env.DEV) {
-      console.log("🔧 API Config Debug:");
-      console.log("Environment:", import.meta.env.MODE);
-      console.log(
-        "VITE_BACKEND_URL:",
-        import.meta.env.VITE_BACKEND_URL ? "✅ Set" : "❌ Missing"
-      );
-      console.log("Final BASE_URL:", API_CONFIG.BASE_URL);
-    }
-  },
 
   // API endpoints
   ENDPOINTS: {
@@ -91,26 +67,6 @@ const API_CONFIG = {
 
   // Helper function to build full URLs
   buildUrl: (endpoint) => {
-    // Debug logging to help troubleshoot
-    API_CONFIG.debug();
-
-    // Check if we're in production and the backend URL is still localhost
-    if (
-      import.meta.env.MODE === "production" &&
-      API_CONFIG.BASE_URL.includes("localhost")
-    ) {
-      console.warn(
-        "⚠️ Warning: Using localhost in production! Environment variable may not be set."
-      );
-      // Use environment variable or fallback to localhost
-      const fallbackUrl =
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
-      if (import.meta.env.DEV) {
-        console.log("🔄 Using fallback URL:", fallbackUrl);
-      }
-      return `${fallbackUrl}${endpoint}`;
-    }
-
     return `${API_CONFIG.BASE_URL}${endpoint}`;
   },
 
