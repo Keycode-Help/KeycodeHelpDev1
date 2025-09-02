@@ -93,6 +93,24 @@ const KchDatabase = () => {
   const [copyAttempts, setCopyAttempts] = useState(0);
   const [showCopyWarning, setShowCopyWarning] = useState(false);
 
+  // Test database contents
+  const testDatabase = async () => {
+    try {
+      await TransponderAPI.testDatabaseContents();
+    } catch (error) {
+      console.error("Test failed:", error);
+    }
+  };
+
+  // Check table structures
+  const checkTableStructures = async () => {
+    try {
+      await TransponderAPI.checkTableStructures();
+    } catch (error) {
+      console.error("Check table structures failed:", error);
+    }
+  };
+
   // Check access control
   useEffect(() => {
     if (!isAuthenticated) {
@@ -488,6 +506,24 @@ const KchDatabase = () => {
           </div>
 
           <button
+            onClick={testDatabase}
+            className="px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Test Database Contents"
+          >
+            <Database className="w-4 h-4" />
+            Test DB
+          </button>
+
+          <button
+            onClick={checkTableStructures}
+            className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Check Table Structures"
+          >
+            <Database className="w-4 h-4" />
+            Check Tables
+          </button>
+
+          <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold cursor-pointer transition-all duration-300 transform hover:scale-105 ${
               showFilters
@@ -526,7 +562,7 @@ const KchDatabase = () => {
                     <option
                       key={make.id}
                       value={make.id}
-                      className="bg-slate-800 text-white flex items-center gap-2"
+                      className="bg-slate-800 text-white"
                     >
                       {make.name}
                     </option>

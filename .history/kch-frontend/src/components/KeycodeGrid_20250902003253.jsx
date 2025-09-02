@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { ExternalLink, Copy, Shield, Clock, Key } from "lucide-react";
-import { keycodeService } from "../services/keycodeService";
-import { getVehicleLogo } from "../utils/vehicleLogos";
+import React, { useState } from 'react';
+import { ExternalLink, Copy, Shield, Clock, Key } from 'lucide-react';
+import { keycodeService } from '../services/keycodeService';
+import { getVehicleLogo } from '../utils/vehicleLogos';
 
 const KeycodeGrid = ({ portals }) => {
   const [copyStatus, setCopyStatus] = useState({});
@@ -9,78 +9,76 @@ const KeycodeGrid = ({ portals }) => {
 
   const handleLaunchPortal = (portal) => {
     if (portal.portal_url) {
-      window.open(portal.portal_url, "_blank", "noopener,noreferrer");
+      window.open(portal.portal_url, '_blank', 'noopener,noreferrer');
     }
   };
 
   const handleCopyCredentials = async (portal) => {
     if (loading[portal.id]) return;
 
-    setLoading((prev) => ({ ...prev, [portal.id]: true }));
-    setCopyStatus((prev) => ({ ...prev, [portal.id]: "" }));
+    setLoading(prev => ({ ...prev, [portal.id]: true }));
+    setCopyStatus(prev => ({ ...prev, [portal.id]: '' }));
 
     try {
       const data = await keycodeService.getCredentials(portal.id);
 
       const credentials = `Username: ${data.username}\nPassword: ${data.password}`;
-
-      try {
-        await navigator.clipboard.writeText(credentials);
-        setCopyStatus((prev) => ({
-          ...prev,
-          [portal.id]: "Credentials copied to clipboard!",
-        }));
-      } catch (clipboardError) {
-        // Fallback for older browsers
-        const textArea = document.createElement("textarea");
-        textArea.value = credentials;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textArea);
-        setCopyStatus((prev) => ({
-          ...prev,
-          [portal.id]: "Credentials copied to clipboard!",
-        }));
-      }
+        
+        try {
+          await navigator.clipboard.writeText(credentials);
+          setCopyStatus(prev => ({ 
+            ...prev, 
+            [portal.id]: 'Credentials copied to clipboard!' 
+          }));
+        } catch (clipboardError) {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = credentials;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          setCopyStatus(prev => ({ 
+            ...prev, 
+            [portal.id]: 'Credentials copied to clipboard!' 
+          }));
+        }
     } catch (error) {
-      console.error("Error copying credentials:", error);
-      let errorMessage = "Failed to copy credentials";
-
+      console.error('Error copying credentials:', error);
+      let errorMessage = 'Failed to copy credentials';
+      
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            errorMessage = "Invalid request";
+            errorMessage = 'Invalid request';
             break;
           case 403:
-            errorMessage = "Access denied";
+            errorMessage = 'Access denied';
             break;
           case 404:
-            errorMessage = "Unknown OEM";
+            errorMessage = 'Unknown OEM';
             break;
           case 409:
-            errorMessage =
-              "Missing credentials. Update environment variables for this OEM.";
+            errorMessage = 'Missing credentials. Update environment variables for this OEM.';
             break;
           case 429:
-            errorMessage = "Rate limit exceeded. Try again later.";
+            errorMessage = 'Rate limit exceeded. Try again later.';
             break;
           default:
-            errorMessage =
-              error.response.data?.error || "Failed to copy credentials";
+            errorMessage = error.response.data?.error || 'Failed to copy credentials';
         }
       }
-
-      setCopyStatus((prev) => ({
-        ...prev,
-        [portal.id]: errorMessage,
+      
+      setCopyStatus(prev => ({ 
+        ...prev, 
+        [portal.id]: errorMessage
       }));
     } finally {
-      setLoading((prev) => ({ ...prev, [portal.id]: false }));
-
+      setLoading(prev => ({ ...prev, [portal.id]: false }));
+      
       // Clear status after 3 seconds
       setTimeout(() => {
-        setCopyStatus((prev) => ({ ...prev, [portal.id]: "" }));
+        setCopyStatus(prev => ({ ...prev, [portal.id]: '' }));
       }, 3000);
     }
   };
@@ -94,7 +92,7 @@ const KeycodeGrid = ({ portals }) => {
         </span>
       );
     }
-
+    
     if (portal.sdrm) {
       return (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -103,14 +101,16 @@ const KeycodeGrid = ({ portals }) => {
         </span>
       );
     }
-
+    
     return null;
   };
 
   const getActionButtons = (portal) => {
     if (!portal.portal_url) {
       return (
-        <div className="text-sm text-gray-500 italic">Portal not available</div>
+        <div className="text-sm text-gray-500 italic">
+          Portal not available
+        </div>
       );
     }
 
@@ -145,7 +145,7 @@ const KeycodeGrid = ({ portals }) => {
         <div
           key={portal.id}
           className={`bg-white rounded-lg shadow-sm border ${
-            !portal.portal_url ? "opacity-75" : ""
+            !portal.portal_url ? 'opacity-75' : ''
           } hover:shadow-md transition-shadow`}
         >
           {/* Card Header */}
@@ -160,8 +160,8 @@ const KeycodeGrid = ({ portals }) => {
                       alt={portal.name}
                       className="w-6 h-6 object-contain"
                       onError={(e) => {
-                        e.target.style.display = "none";
-                        e.target.nextSibling.style.display = "flex";
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
                       }}
                     />
                     {/* Fallback icon when logo fails to load */}
@@ -197,14 +197,11 @@ const KeycodeGrid = ({ portals }) => {
 
             {/* Status Message */}
             {copyStatus[portal.id] && (
-              <div
-                className={`mt-3 p-2 rounded-md text-sm ${
-                  copyStatus[portal.id].includes("Failed") ||
-                  copyStatus[portal.id].includes("error")
-                    ? "bg-red-100 text-red-700"
-                    : "bg-green-100 text-green-700"
-                }`}
-              >
+              <div className={`mt-3 p-2 rounded-md text-sm ${
+                copyStatus[portal.id].includes('Failed') || copyStatus[portal.id].includes('error')
+                  ? 'bg-red-100 text-red-700'
+                  : 'bg-green-100 text-green-700'
+              }`}>
                 {copyStatus[portal.id]}
               </div>
             )}

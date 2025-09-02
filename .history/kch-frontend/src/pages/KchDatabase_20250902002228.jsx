@@ -93,6 +93,24 @@ const KchDatabase = () => {
   const [copyAttempts, setCopyAttempts] = useState(0);
   const [showCopyWarning, setShowCopyWarning] = useState(false);
 
+  // Test database contents
+  const testDatabase = async () => {
+    try {
+      await TransponderAPI.testDatabaseContents();
+    } catch (error) {
+      console.error("Test failed:", error);
+    }
+  };
+
+  // Check table structures
+  const checkTableStructures = async () => {
+    try {
+      await TransponderAPI.checkTableStructures();
+    } catch (error) {
+      console.error("Check table structures failed:", error);
+    }
+  };
+
   // Check access control
   useEffect(() => {
     if (!isAuthenticated) {
@@ -124,17 +142,26 @@ const KchDatabase = () => {
 
   const loadInitialData = async () => {
     try {
+      console.log("Loading initial data...");
       const [makesData, systemTypesData, familiesData] = await Promise.all([
         TransponderAPI.getVehicleMakes(),
         TransponderAPI.getSystemTypes(),
         TransponderAPI.getTransponderFamilies(),
       ]);
 
-      setMakes(makesData);
-      setSystemTypes(systemTypesData);
-      setTransponderFamilies(familiesData);
+      console.log("Makes data loaded:", makesData);
+      console.log("System types data loaded:", systemTypesData);
+      console.log("Transponder families data loaded:", familiesData);
+
+      setMakes(makesData || []);
+      setSystemTypes(systemTypesData || []);
+      setTransponderFamilies(familiesData || []);
     } catch (error) {
       console.error("Error loading initial data:", error);
+      // Set empty arrays as fallback
+      setMakes([]);
+      setSystemTypes([]);
+      setTransponderFamilies([]);
     }
   };
 
@@ -488,6 +515,24 @@ const KchDatabase = () => {
           </div>
 
           <button
+            onClick={testDatabase}
+            className="px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Test Database Contents"
+          >
+            <Database className="w-4 h-4" />
+            Test DB
+          </button>
+
+          <button
+            onClick={checkTableStructures}
+            className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Check Table Structures"
+          >
+            <Database className="w-4 h-4" />
+            Check Tables
+          </button>
+
+          <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold cursor-pointer transition-all duration-300 transform hover:scale-105 ${
               showFilters
@@ -511,27 +556,65 @@ const KchDatabase = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-white text-sm">Make</label>
-                <select
-                  value={filters.makeId || ""}
-                  onChange={(e) =>
-                    handleFilterChange("makeId", e.target.value || null)
-                  }
-                  className="p-3 bg-slate-800/50 border-2 border-slate-600 rounded-xl text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 text-white shadow-sm"
-                  style={{ colorScheme: "dark" }}
-                >
-                  <option value="" className="bg-slate-800 text-white">
-                    All Makes
-                  </option>
-                  {makes.map((make) => (
-                    <option
-                      key={make.id}
-                      value={make.id}
-                      className="bg-slate-800 text-white flex items-center gap-2"
-                    >
-                      {make.name}
+                <div className="relative">
+                  <select
+                    value={filters.makeId || ""}
+                    onChange={(e) =>
+                      handleFilterChange("makeId", e.target.value || null)
+                    }
+                    className={`p-3 bg-slate-800/50 border-2 border-slate-600 rounded-xl text-sm transition-all duration-300 focus:outline-none focus:border-blue-500 text-white shadow-sm w-full ${
+                      filters.makeId ? 'pl-10' : ''
+                    }`}
+                    style={{ colorScheme: "dark" }}
+                    disabled={makes.length === 0}
+                  >
+                    <option value="" className="bg-slate-800 text-white">
+                      {makes.length === 0 ? "Loading makes..." : "All Makes"}
                     </option>
-                  ))}
-                </select>
+                    {makes.map((make) => (
+                      <option
+                        key={make.id}
+                        value={make.id}
+                        className="bg-slate-800 text-white"
+                      >
+                        {make.name}
+                      </option>
+                    ))}
+                  </select>
+                  {/* Logo display for selected make */}
+                  {filters.makeId && (
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      {(() => {
+                        const selectedMake = makes.find(m => m.id === filters.makeId);
+                        if (selectedMake) {
+                          return (
+                            <img
+                              src={getVehicleLogo(selectedMake.name)}
+                              alt={selectedMake.name}
+                              className="w-5 h-5 object-contain"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          );
+                        }
+                        return null;
+                      })()}
+                    </div>
+                  )}
+                  {/* Loading indicator */}
+                  {makes.length === 0 && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                    </div>
+                  )}
+                </div>
+                {/* Error message if makes failed to load */}
+                {makes.length === 0 && (
+                  <p className="text-xs text-red-400 mt-1">
+                    Unable to load vehicle makes. Please refresh the page.
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-2">

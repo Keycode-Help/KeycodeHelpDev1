@@ -93,6 +93,24 @@ const KchDatabase = () => {
   const [copyAttempts, setCopyAttempts] = useState(0);
   const [showCopyWarning, setShowCopyWarning] = useState(false);
 
+  // Test database contents
+  const testDatabase = async () => {
+    try {
+      await TransponderAPI.testDatabaseContents();
+    } catch (error) {
+      console.error("Test failed:", error);
+    }
+  };
+
+  // Check table structures
+  const checkTableStructures = async () => {
+    try {
+      await TransponderAPI.checkTableStructures();
+    } catch (error) {
+      console.error("Check table structures failed:", error);
+    }
+  };
+
   // Check access control
   useEffect(() => {
     if (!isAuthenticated) {
@@ -124,17 +142,26 @@ const KchDatabase = () => {
 
   const loadInitialData = async () => {
     try {
+      console.log("Loading initial data...");
       const [makesData, systemTypesData, familiesData] = await Promise.all([
         TransponderAPI.getVehicleMakes(),
         TransponderAPI.getSystemTypes(),
         TransponderAPI.getTransponderFamilies(),
       ]);
 
-      setMakes(makesData);
-      setSystemTypes(systemTypesData);
-      setTransponderFamilies(familiesData);
+      console.log("Makes data loaded:", makesData);
+      console.log("System types data loaded:", systemTypesData);
+      console.log("Transponder families data loaded:", familiesData);
+
+      setMakes(makesData || []);
+      setSystemTypes(systemTypesData || []);
+      setTransponderFamilies(familiesData || []);
     } catch (error) {
       console.error("Error loading initial data:", error);
+      // Set empty arrays as fallback
+      setMakes([]);
+      setSystemTypes([]);
+      setTransponderFamilies([]);
     }
   };
 
@@ -486,6 +513,24 @@ const KchDatabase = () => {
               placeholder="Search by chip type, OEM code, vehicle details..."
             />
           </div>
+
+          <button
+            onClick={testDatabase}
+            className="px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Test Database Contents"
+          >
+            <Database className="w-4 h-4" />
+            Test DB
+          </button>
+
+          <button
+            onClick={checkTableStructures}
+            className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Check Table Structures"
+          >
+            <Database className="w-4 h-4" />
+            Check Tables
+          </button>
 
           <button
             onClick={() => setShowFilters(!showFilters)}

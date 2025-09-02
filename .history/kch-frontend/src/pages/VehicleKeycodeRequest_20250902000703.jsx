@@ -15,7 +15,6 @@ import {
   getVehicleCategory,
   requiresPin,
   isValidVehicleCombination,
-  getVehicleLogo,
 } from "../data/vehicleDatabase";
 
 function VehicleKeycodeRequest() {
@@ -320,21 +319,9 @@ function VehicleKeycodeRequest() {
 
             {selectedMake && (
               <div className="bg-gradient-to-r from-blue-500/10 to-yellow-500/10 border border-blue-500/30 rounded-xl p-6">
-                <h3 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-3">
+                <h3 className="text-xl font-semibold text-blue-400 mb-4 flex items-center gap-2">
                   <Icon name="dollarSign" size={20} />
-                  <div className="flex items-center gap-2">
-                    {selectedMake && (
-                      <img
-                        src={getVehicleLogo(selectedMake)}
-                        alt={selectedMake}
-                        className="w-6 h-6 object-contain"
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    )}
-                    <span>Keycode Pricing</span>
-                  </div>
+                  Keycode Pricing
                 </h3>
 
                 <div className="grid md:grid-cols-2 gap-4">

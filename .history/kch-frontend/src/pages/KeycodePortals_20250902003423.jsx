@@ -136,8 +136,8 @@ const KeycodePortals = () => {
                 VSP ID:{" "}
                 <span className="font-mono font-semibold text-blue-600">
                   {portalsData.meta.vsp_id}
-                </span>{" "}
-                •{" "}
+                </span>
+                {" "}•{" "}
                 <span className="text-green-600 font-medium">
                   {portalsData.manufacturers.length} OEM Portals Available
                 </span>
