@@ -5,7 +5,7 @@ const instance = axios.create({
   withCredentials: true,
   timeout: 10000, // 10 second timeout
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -73,7 +73,7 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await instance.post("/auth/refresh", {}, { timeout: 5000 });
+        await instance.post("/auth/refresh");
         return instance(originalRequest);
       } catch (refreshError) {
         // Refresh failed, clear auth state and redirect to login
