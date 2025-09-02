@@ -35,10 +35,7 @@ instance.interceptors.request.use((config) => {
     if (token && !config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${token}`;
       if (import.meta.env.DEV) {
-        console.log(
-          "🔑 Adding Authorization header:",
-          `Bearer ${token.substring(0, 20)}...`
-        );
+        console.log("🔑 Adding Authorization header:", `Bearer ${token.substring(0, 20)}...`);
       }
     } else if (import.meta.env.DEV) {
       console.log("❌ No token found for request to:", url);
