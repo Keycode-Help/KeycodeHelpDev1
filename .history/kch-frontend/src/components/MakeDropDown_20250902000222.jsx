@@ -22,7 +22,7 @@ const MakeDropDown = ({ selectedMake, options, onChange }) => {
     setIsOpen(false);
   };
 
-  const selectedMakeData = options.find((option) => option === selectedMake);
+  const selectedMakeData = options.find(option => option === selectedMake);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -38,7 +38,7 @@ const MakeDropDown = ({ selectedMake, options, onChange }) => {
               alt={selectedMake}
               className="w-6 h-6 object-contain"
               onError={(e) => {
-                e.target.style.display = "none";
+                e.target.style.display = 'none';
               }}
             />
           )}
@@ -67,7 +67,7 @@ const MakeDropDown = ({ selectedMake, options, onChange }) => {
                   alt={make}
                   className="w-6 h-6 object-contain"
                   onError={(e) => {
-                    e.target.style.display = "none";
+                    e.target.style.display = 'none';
                   }}
                 />
                 <span>{make}</span>

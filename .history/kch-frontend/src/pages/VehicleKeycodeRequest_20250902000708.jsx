@@ -329,7 +329,7 @@ function VehicleKeycodeRequest() {
                         alt={selectedMake}
                         className="w-6 h-6 object-contain"
                         onError={(e) => {
-                          e.target.style.display = "none";
+                          e.target.style.display = 'none';
                         }}
                       />
                     )}

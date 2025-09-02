@@ -93,6 +93,24 @@ const KchDatabase = () => {
   const [copyAttempts, setCopyAttempts] = useState(0);
   const [showCopyWarning, setShowCopyWarning] = useState(false);
 
+  // Test database contents
+  const testDatabase = async () => {
+    try {
+      await TransponderAPI.testDatabaseContents();
+    } catch (error) {
+      console.error("Test failed:", error);
+    }
+  };
+
+  // Check table structures
+  const checkTableStructures = async () => {
+    try {
+      await TransponderAPI.checkTableStructures();
+    } catch (error) {
+      console.error("Check table structures failed:", error);
+    }
+  };
+
   // Check access control
   useEffect(() => {
     if (!isAuthenticated) {
@@ -260,13 +278,95 @@ const KchDatabase = () => {
       return "N/A";
     };
 
+    const getVehicleLogo = (makeName) => {
+      // Simple mapping for demonstration. In a real app, you'd have a more robust system.
+      switch (makeName.toLowerCase()) {
+        case "toyota":
+          return "/images/toyota.png";
+        case "honda":
+          return "/images/honda.png";
+        case "ford":
+          return "/images/ford.png";
+        case "chevrolet":
+          return "/images/chevrolet.png";
+        case "bmw":
+          return "/images/bmw.png";
+        case "mercedes-benz":
+          return "/images/mercedes.png";
+        case "audi":
+          return "/images/audi.png";
+        case "volkswagen":
+          return "/images/volkswagen.png";
+        case "hyundai":
+          return "/images/hyundai.png";
+        case "kia":
+          return "/images/kia.png";
+        case "lexus":
+          return "/images/lexus.png";
+        case "nissan":
+          return "/images/nissan.png";
+        case "subaru":
+          return "/images/subaru.png";
+        case "porsche":
+          return "/images/porsche.png";
+        case "jaguar":
+          return "/images/jaguar.png";
+        case "land rover":
+          return "/images/landrover.png";
+        case "mini":
+          return "/images/mini.png";
+        case "rolls-royce":
+          return "/images/rollsroyce.png";
+        case "bentley":
+          return "/images/bentley.png";
+        case "ferrari":
+          return "/images/ferrari.png";
+        case "lamborghini":
+          return "/images/lamborghini.png";
+        case "maserati":
+          return "/images/maserati.png";
+        case "porsche":
+          return "/images/porsche.png";
+        case "jaguar":
+          return "/images/jaguar.png";
+        case "land rover":
+          return "/images/landrover.png";
+        case "mini":
+          return "/images/mini.png";
+        case "rolls-royce":
+          return "/images/rollsroyce.png";
+        case "bentley":
+          return "/images/bentley.png";
+        case "ferrari":
+          return "/images/ferrari.png";
+        case "lamborghini":
+          return "/images/lamborghini.png";
+        case "maserati":
+          return "/images/maserati.png";
+        default:
+          return "/images/car.png"; // Default logo
+      }
+    };
+
     return (
       <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1">
-            <h4 className="text-lg font-bold text-white mb-2">
-              {make?.name} {model?.name}
-            </h4>
+            <div className="flex items-center gap-3 mb-2">
+              {make?.name && (
+                <img
+                  src={getVehicleLogo(make.name)}
+                  alt={make.name}
+                  className="w-8 h-8 object-contain"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              )}
+              <h4 className="text-lg font-bold text-white">
+                {make?.name} {model?.name}
+              </h4>
+            </div>
             <div className="flex items-center gap-2 text-sm text-gray-300">
               <Calendar className="w-4 h-4" />
               <span>{getYearRange()}</span>
@@ -488,6 +588,24 @@ const KchDatabase = () => {
           </div>
 
           <button
+            onClick={testDatabase}
+            className="px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Test Database Contents"
+          >
+            <Database className="w-4 h-4" />
+            Test DB
+          </button>
+
+          <button
+            onClick={checkTableStructures}
+            className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+            title="Check Table Structures"
+          >
+            <Database className="w-4 h-4" />
+            Check Tables
+          </button>
+
+          <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold cursor-pointer transition-all duration-300 transform hover:scale-105 ${
               showFilters
@@ -526,7 +644,7 @@ const KchDatabase = () => {
                     <option
                       key={make.id}
                       value={make.id}
-                      className="bg-slate-800 text-white flex items-center gap-2"
+                      className="bg-slate-800 text-white"
                     >
                       {make.name}
                     </option>
