@@ -100,10 +100,7 @@ export const AuthProvider = ({ children }) => {
         const token = getCurrentToken();
         if (token) {
           if (import.meta.env.DEV) {
-            console.log(
-              "🔑 Token found for /auth/me request:",
-              token.substring(0, 20) + "..."
-            );
+            console.log("🔑 Token found for /auth/me request:", token.substring(0, 20) + "...");
           }
           try {
             const response = await api.get("/auth/me");
