@@ -19,11 +19,7 @@ import {
 import "../styles/cart.css";
 
 // Memoized Checkout Form Component for better performance
-const CheckoutForm = memo(function CheckoutForm({
-  cartTotal,
-  cartItems,
-  onSuccess,
-}) {
+const CheckoutForm = memo(function CheckoutForm({ cartTotal, cartItems, onSuccess }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
@@ -56,34 +52,28 @@ const CheckoutForm = memo(function CheckoutForm({
   }, [cartTotal, cartItems]);
 
   // Memoize the order summary to prevent unnecessary re-renders
-  const orderSummary = useMemo(
-    () => (
-      <div className="order-summary">
-        <h3>📋 Order Summary</h3>
-        <div className="order-items">
-          {cartItems.map((item, index) => (
-            <div
-              key={`${item.id || index}-${item.make}-${item.model}`}
-              className="order-item"
-            >
-              <span className="item-name">
-                {item.make && item.model
-                  ? `${item.make} ${item.model}`
-                  : "Vehicle Keycode"}
-              </span>
-              <span className="item-price">
-                ${item.finalPrice || item.standardPrice || item.price}
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="order-total">
-          <strong>Total: ${cartTotal.toFixed(2)}</strong>
-        </div>
+  const orderSummary = useMemo(() => (
+    <div className="order-summary">
+      <h3>📋 Order Summary</h3>
+      <div className="order-items">
+        {cartItems.map((item, index) => (
+          <div key={`${item.id || index}-${item.make}-${item.model}`} className="order-item">
+            <span className="item-name">
+              {item.make && item.model
+                ? `${item.make} ${item.model}`
+                : "Vehicle Keycode"}
+            </span>
+            <span className="item-price">
+              ${item.finalPrice || item.standardPrice || item.price}
+            </span>
+          </div>
+        ))}
       </div>
-    ),
-    [cartItems, cartTotal]
-  );
+      <div className="order-total">
+        <strong>Total: ${cartTotal.toFixed(2)}</strong>
+      </div>
+    </div>
+  ), [cartItems, cartTotal]);
 
   return (
     <div className="checkout-form">
@@ -792,6 +782,8 @@ function Cart() {
                   ×
                 </button>
               </div>
+
+
 
               <CheckoutForm
                 cartTotal={cartTotal}

@@ -49,21 +49,14 @@ function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (import.meta.env.DEV) {
-      console.log("Form submitted with:", {
-        email: formData.email,
-        password: "[REDACTED]",
-      });
+      console.log("Form submitted with:", { email: formData.email, password: "[REDACTED]" });
       console.log("Login function:", login);
     }
 
     try {
-      if (import.meta.env.DEV) {
-        console.log("Calling login function...");
-      }
+      console.log("Calling login function...");
       const result = await login(formData.email, formData.password);
-      if (import.meta.env.DEV) {
-        console.log("Login result:", result);
-      }
+      console.log("Login result:", result);
       // The navigation will be handled by the useEffect above
     } catch (error) {
       console.error("Admin login failed", error);

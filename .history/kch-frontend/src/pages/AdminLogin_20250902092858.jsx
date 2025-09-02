@@ -49,10 +49,7 @@ function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (import.meta.env.DEV) {
-      console.log("Form submitted with:", {
-        email: formData.email,
-        password: "[REDACTED]",
-      });
+      console.log("Form submitted with:", { email: formData.email, password: "[REDACTED]" });
       console.log("Login function:", login);
     }
 
