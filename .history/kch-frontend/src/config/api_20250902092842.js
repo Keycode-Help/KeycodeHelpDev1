@@ -21,10 +21,7 @@ const API_CONFIG = {
     if (import.meta.env.DEV) {
       console.log("🔧 API Config Debug:");
       console.log("Environment:", import.meta.env.MODE);
-      console.log(
-        "VITE_BACKEND_URL:",
-        import.meta.env.VITE_BACKEND_URL ? "✅ Set" : "❌ Missing"
-      );
+      console.log("VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL ? "✅ Set" : "❌ Missing");
       console.log("Final BASE_URL:", API_CONFIG.BASE_URL);
     }
   },

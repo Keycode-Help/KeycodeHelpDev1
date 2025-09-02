@@ -68,15 +68,11 @@ export default function AuthForm({ mode, onSubmit, initial = {} }) {
         }
       );
 
-      if (import.meta.env.DEV) {
-        console.log("Response status:", response.status);
-        console.log("Response headers:", response.headers);
-      }
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
 
       const result = await response.json();
-      if (import.meta.env.DEV) {
-        console.log("Response body:", result);
-      }
+      console.log("Response body:", result);
 
       if (response.ok) {
         setResetMessage("✅ Password reset email sent! Check your inbox.");
