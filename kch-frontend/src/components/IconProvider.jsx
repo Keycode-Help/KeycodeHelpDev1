@@ -21,6 +21,7 @@ import {
   EyeOff,
   Search,
   Check,
+  Loader2,
 } from "lucide-react";
 
 export const Icons = {
@@ -45,6 +46,7 @@ export const Icons = {
   eyeOff: EyeOff,
   search: Search,
   check: Check,
+  loader: Loader2,
 };
 
 export function Icon({ name, size = 24, className = "", ...props }) {

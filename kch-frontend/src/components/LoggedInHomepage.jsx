@@ -15,7 +15,6 @@ import {
   History,
   User,
   ShoppingCart,
-  Shield as ShieldIcon,
 } from "lucide-react";
 
 const LoggedInHomepage = () => {
