@@ -53,20 +53,17 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-
+    
     // Clear any other potential auth-related items
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (
-        key &&
-        (key.includes("auth") || key.includes("token") || key.includes("user"))
-      ) {
+      if (key && (key.includes('auth') || key.includes('token') || key.includes('user'))) {
         keysToRemove.push(key);
       }
     }
-    keysToRemove.forEach((key) => localStorage.removeItem(key));
-
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
     console.log("🧹 Cleared all auth-related localStorage items");
   }, []);
 
@@ -83,7 +80,7 @@ export const AuthProvider = ({ children }) => {
   // Logout function - defined after dependencies to avoid circular dependency
   const logout = useCallback(() => {
     console.log("🚪 Logging out user - clearing all auth state");
-
+    
     setUser(null);
     setUserRole(null);
     setIsAuthenticated(false);
@@ -96,10 +93,10 @@ export const AuthProvider = ({ children }) => {
       "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie =
       "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
+    
     // Clear sessionStorage as well
     sessionStorage.clear();
-
+    
     console.log("✅ Logout completed - all auth state cleared");
   }, [clearStoredAuthState]);
 
@@ -317,32 +314,30 @@ export const useAuth = () => {
 };
 
 // Global debug function to clear all auth data (for debugging)
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   window.clearAllAuthData = () => {
     console.log("🧹 Manual auth data clear initiated...");
-
+    
     // Clear localStorage
     localStorage.clear();
-
+    
     // Clear sessionStorage
     sessionStorage.clear();
-
+    
     // Clear cookies
-    document.cookie.split(";").forEach(function (c) {
-      document.cookie = c
-        .replace(/^ +/, "")
-        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    document.cookie.split(";").forEach(function(c) { 
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
     });
-
+    
     // Clear any cache
-    if ("caches" in window) {
-      caches.keys().then((names) => {
-        names.forEach((name) => {
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => {
           caches.delete(name);
         });
       });
     }
-
+    
     console.log("✅ All auth data cleared! Please refresh the page.");
   };
 }
