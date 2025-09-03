@@ -8,6 +8,7 @@ import org.rma.kchbackend.service.MakeService;
 import org.rma.kchbackend.service.VehicleService;
 import org.rma.kchbackend.service.KeycodeUserService;
 import org.rma.kchbackend.service.CartService;
+import org.rma.kchbackend.service.KeycodeNotificationService;
 import org.rma.kchbackend.compliance.ComplianceRequirement;
 import org.rma.kchbackend.compliance.ComplianceService;
 import org.rma.kchbackend.dto.ErrorResponse;
@@ -40,11 +41,13 @@ public class VehicleKeycodeController {
     private final ComplianceService complianceService;
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
+    private final KeycodeNotificationService keycodeNotificationService;
 
     @Autowired
     public VehicleKeycodeController(VehicleService vehicleService, KeycodeUserService keycodeUserService,
                                     CartService cartService, MakeService makeService, ComplianceService complianceService,
-                                    CartItemRepository cartItemRepository, CartRepository cartRepository) {
+                                    CartItemRepository cartItemRepository, CartRepository cartRepository,
+                                    KeycodeNotificationService keycodeNotificationService) {
         this.vehicleService = vehicleService;
         this.keycodeUserService = keycodeUserService;
         this.cartService = cartService;
@@ -52,6 +55,7 @@ public class VehicleKeycodeController {
         this.complianceService = complianceService;
         this.cartItemRepository = cartItemRepository;
         this.cartRepository = cartRepository;
+        this.keycodeNotificationService = keycodeNotificationService;
     }
 
     @GetMapping("/test-public")
@@ -189,6 +193,14 @@ public class VehicleKeycodeController {
             cartService.updateCartTotal(savedCart);
             cartRepository.save(savedCart);
             
+            // Send notifications for the new keycode request
+            try {
+                keycodeNotificationService.sendKeycodeRequestNotifications(savedVehicle, savedGuestUser);
+            } catch (Exception e) {
+                System.err.println("⚠️ Failed to send notifications for keycode request: " + e.getMessage());
+                // Don't fail the request if notifications fail
+            }
+            
             // Return the vehicle data with cart information
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -308,11 +320,29 @@ public class VehicleKeycodeController {
                 vehicle.setKeycodeUser(user);
                 Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
                 cartService.addVehicleToCart(user, savedVehicle);
+                
+                // Send notifications for the new keycode request
+                try {
+                    keycodeNotificationService.sendKeycodeRequestNotifications(savedVehicle, user);
+                } catch (Exception e) {
+                    System.err.println("⚠️ Failed to send notifications for keycode request: " + e.getMessage());
+                    // Don't fail the request if notifications fail
+                }
+                
                 return ResponseEntity.ok("Vehicle keycode request has been added to your cart.");
             } else {
                 // Non-authenticated user - create anonymous request
                 vehicle.setKeycodeUser(null); // No user association
                 Vehicle savedVehicle = vehicleService.saveVehicle(vehicle);
+                
+                // Send notifications for the new keycode request (without user)
+                try {
+                    keycodeNotificationService.sendKeycodeRequestNotifications(savedVehicle, null);
+                } catch (Exception e) {
+                    System.err.println("⚠️ Failed to send notifications for keycode request: " + e.getMessage());
+                    // Don't fail the request if notifications fail
+                }
+                
                 // For non-members, we might want to create a session-based cart or redirect to payment
                 return ResponseEntity.ok("Vehicle keycode request created. Please proceed to checkout.");
             }
