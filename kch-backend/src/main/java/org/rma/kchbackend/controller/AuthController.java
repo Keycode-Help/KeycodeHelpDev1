@@ -703,17 +703,17 @@ public class AuthController {
             
             // Return user data (excluding sensitive information)
             Map<String, Object> userData = new HashMap<>();
-            userData.put("user", Map.of(
-                "id", user.getId(),
-                "fname", user.getFname(),
-                "lname", user.getLname(),
-                "email", user.getEmail(),
-                "phone", user.getPhone(),
-                "role", user.getRole(),
-                "isActive", user.isActive(),
-                "isAdminApproved", user.isAdminApproved(),
-                "isValidatedUser", user.isValidatedUser()
-            ));
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", user.getId());
+            userInfo.put("fname", user.getFname());
+            userInfo.put("lname", user.getLname());
+            userInfo.put("email", user.getEmail());
+            userInfo.put("phone", user.getPhone()); // This can be null
+            userInfo.put("role", user.getRole());
+            userInfo.put("isActive", user.isActive());
+            userInfo.put("isAdminApproved", user.isAdminApproved());
+            userInfo.put("isValidatedUser", user.isValidatedUser());
+            userData.put("user", userInfo);
 
             System.out.println("✅ /auth/me successful for user: " + email);
             return ResponseEntity.ok(userData);
