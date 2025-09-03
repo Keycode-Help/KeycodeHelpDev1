@@ -22,14 +22,17 @@ public class VehicleService {
     private final TransactionRepository transactionRepository;
     private final EmailService emailService;
     private final MakeRepository makeRepository;
+    private final KeycodeNotificationService keycodeNotificationService;
 
     @Autowired
     public VehicleService(VehicleRepository vehicleRepository, TransactionRepository transactionRepository,
-                          EmailService emailService, MakeRepository makeRepository) {
+                          EmailService emailService, MakeRepository makeRepository,
+                          KeycodeNotificationService keycodeNotificationService) {
         this.vehicleRepository = vehicleRepository;
         this.transactionRepository = transactionRepository;
         this.emailService = emailService;
         this.makeRepository = makeRepository;
+        this.keycodeNotificationService = keycodeNotificationService;
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
@@ -109,13 +112,19 @@ public class VehicleService {
                 }
                 transactionRepository.save(transaction);
 
-             //   String email = vehicle.getKeycodeUser().getEmail();
-             //   emailService.sendEmail(email, "Your Key Code is Ready", "The key code for your vehicle VIN " + vehicle.getVin() + " is: " + keycode);
-                String email = vehicle.getKeycodeUser().getEmail();
-                String hashedVin = generateHashedVin(vehicle.getVin());
-                emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),email, "Your Key Code is Ready!", "The Key Code for <b>VIN :" + hashedVin + "</b> is <b>" + keycode+"</b>.<br/>" +
-                        "The PIN Code for <b>VIN:"+ hashedVin +"</b> is <b>"+pinCode+"</b>.");
-                return "Keycode processed and email sent.";
+                // Send completion notifications using the new notification service
+                try {
+                    keycodeNotificationService.sendKeycodeCompletionNotifications(vehicle);
+                } catch (Exception e) {
+                    System.err.println("⚠️ Failed to send completion notifications: " + e.getMessage());
+                    // Fallback to old email method if new notification service fails
+                    String email = vehicle.getKeycodeUser().getEmail();
+                    String hashedVin = generateHashedVin(vehicle.getVin());
+                    emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),email, "Your Key Code is Ready!", "The Key Code for <b>VIN :" + hashedVin + "</b> is <b>" + keycode+"</b>.<br/>" +
+                            "The PIN Code for <b>VIN:"+ hashedVin +"</b> is <b>"+pinCode+"</b>.");
+                }
+                
+                return "Keycode processed and notifications sent.";
             } else {
                 return "Transaction not found for vehicle.";
             }
@@ -136,14 +145,21 @@ public class VehicleService {
                     transaction.setStatus("INPROGRESS");
                 transactionRepository.save(transaction);
 
-                //Send Email to user regarding Status Update
-                String email = vehicle.getKeycodeUser().getEmail();
-                System.out.println("In Progress Email:"+email);
-                String hashedVin = generateHashedVin(vehicle.getVin());
-                String body = "Your Keycode Request for <b>VIN : "+hashedVin+"</b> is <b>In Progress</b>.";
-                emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),
-                        email, "Keycode Request Status Update!", body);
-                return "Status Updated to In Progress";
+                // Send status update notifications using the new notification service
+                try {
+                    keycodeNotificationService.sendKeycodeStatusUpdateNotifications(vehicle, "IN PROGRESS");
+                } catch (Exception e) {
+                    System.err.println("⚠️ Failed to send status update notifications: " + e.getMessage());
+                    // Fallback to old email method if new notification service fails
+                    String email = vehicle.getKeycodeUser().getEmail();
+                    System.out.println("In Progress Email:"+email);
+                    String hashedVin = generateHashedVin(vehicle.getVin());
+                    String body = "Your Keycode Request for <b>VIN : "+hashedVin+"</b> is <b>In Progress</b>.";
+                    emailService.sendNotificationEmail(vehicle.getKeycodeUser().getFname(),
+                            email, "Keycode Request Status Update!", body);
+                }
+                
+                return "Status Updated to In Progress and notifications sent";
             } else {
                 return "Transaction not found for vehicle.";
             }
