@@ -633,6 +633,36 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/health/db")
+    public ResponseEntity<Map<String, Object>> checkDatabaseHealth() {
+        try {
+            System.out.println("🔍 /auth/health/db endpoint called");
+            
+            // Test database connection
+            long startTime = System.currentTimeMillis();
+            long userCount = userRepository.count(); // Simple query to test connection
+            long endTime = System.currentTimeMillis();
+            
+            Map<String, Object> healthInfo = new HashMap<>();
+            healthInfo.put("status", "healthy");
+            healthInfo.put("responseTime", endTime - startTime);
+            healthInfo.put("userCount", userCount);
+            healthInfo.put("timestamp", System.currentTimeMillis());
+            
+            System.out.println("✅ Database health check successful - Response time: " + (endTime - startTime) + "ms");
+            return ResponseEntity.ok(healthInfo);
+        } catch (Exception e) {
+            System.out.println("❌ Database health check failed: " + e.getMessage());
+            e.printStackTrace();
+            
+            Map<String, Object> healthInfo = new HashMap<>();
+            healthInfo.put("status", "unhealthy");
+            healthInfo.put("error", e.getMessage());
+            healthInfo.put("timestamp", System.currentTimeMillis());
+            return ResponseEntity.status(503).body(healthInfo);
+        }
+    }
+
     /**
      * Test endpoint that requires authentication - to debug JWT issues
      */
