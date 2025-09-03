@@ -716,6 +716,7 @@ public class AuthController {
             userData.put("user", userInfo);
 
             System.out.println("✅ /auth/me successful for user: " + email);
+            // Fixed NullPointerException by using HashMap instead of Map.of()
             return ResponseEntity.ok(userData);
         } catch (Exception e) {
             System.out.println("❌ Error in /auth/me: " + e.getMessage());
