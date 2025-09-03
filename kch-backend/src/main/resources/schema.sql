@@ -193,7 +193,26 @@ CREATE INDEX IF NOT EXISTS idx_transponder_detail_fts ON transponder_detail USIN
 CREATE INDEX IF NOT EXISTS idx_cross_ref_fts ON cross_ref USING gin(to_tsvector('english', label));
 CREATE INDEX IF NOT EXISTS idx_oem_key_fts ON oem_key USING gin(to_tsvector('english', code));
 
+-- Notification preferences table
+CREATE TABLE IF NOT EXISTS notification_preferences (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    email_notifications BOOLEAN DEFAULT TRUE,
+    sms_notifications BOOLEAN DEFAULT TRUE,
+    keycode_request_notifications BOOLEAN DEFAULT TRUE,
+    keycode_status_notifications BOOLEAN DEFAULT TRUE,
+    keycode_completion_notifications BOOLEAN DEFAULT TRUE,
+    admin_notifications BOOLEAN DEFAULT FALSE,
+    marketing_notifications BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES keycode_user(id) ON DELETE CASCADE
+);
+
 -- Trigram indexes for fuzzy matching
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX IF NOT EXISTS idx_model_name_trgm ON model USING gin(name gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_oem_key_trgm ON oem_key USING gin(code gin_trgm_ops);
+
+-- Index for notification preferences
+CREATE INDEX IF NOT EXISTS idx_notification_preferences_user_id ON notification_preferences(user_id);
