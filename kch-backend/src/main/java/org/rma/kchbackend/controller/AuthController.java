@@ -604,6 +604,36 @@ public class AuthController {
     }
 
     /**
+     * Debug endpoint to show JWT secret information
+     */
+    @GetMapping("/debug-jwt")
+    public ResponseEntity<?> debugJwt() {
+        try {
+            System.out.println("🔍 /auth/debug-jwt endpoint called");
+            
+            String jwtSecret = System.getenv("JWT_SECRET");
+            boolean hasJwtSecret = jwtSecret != null && !jwtSecret.isEmpty();
+            int secretLength = jwtSecret != null ? jwtSecret.length() : 0;
+            
+            System.out.println("🔍 JWT Secret Info:");
+            System.out.println("  - Has JWT_SECRET env var: " + hasJwtSecret);
+            System.out.println("  - Secret length: " + secretLength);
+            System.out.println("  - Secret starts with: " + (jwtSecret != null ? jwtSecret.substring(0, Math.min(10, jwtSecret.length())) + "..." : "null"));
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "JWT debug info",
+                "hasJwtSecret", hasJwtSecret,
+                "secretLength", secretLength,
+                "secretPreview", jwtSecret != null ? jwtSecret.substring(0, Math.min(10, jwtSecret.length())) + "..." : "null"
+            ));
+        } catch (Exception e) {
+            System.out.println("❌ Error in /auth/debug-jwt: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        }
+    }
+
+    /**
      * Test endpoint that requires authentication - to debug JWT issues
      */
     @GetMapping("/test-auth")
