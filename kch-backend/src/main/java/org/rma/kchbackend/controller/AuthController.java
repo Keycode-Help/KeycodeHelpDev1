@@ -9,6 +9,7 @@ import org.rma.kchbackend.service.AdminRegistrationCodeService;
 import org.rma.kchbackend.service.CustomUserDetailsService;
 import org.rma.kchbackend.service.PasswordResetService;
 import org.rma.kchbackend.util.JwtUtil;
+import org.rma.kchbackend.repository.KeycodeUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,9 +45,10 @@ public class AuthController {
     private final AdminRegistrationCodeService adminRegistrationCodeService;
     private final CustomUserDetailsService userDetailsService;
     private final PasswordResetService passwordResetService;
+    private final KeycodeUserRepository keycodeUserRepository;
 
     @Autowired
-    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService, CustomUserDetailsService userDetailsService, PasswordResetService passwordResetService) {
+    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService, CustomUserDetailsService userDetailsService, PasswordResetService passwordResetService, KeycodeUserRepository keycodeUserRepository) {
         this.keycodeUserService = keycodeUserService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
@@ -54,6 +56,7 @@ public class AuthController {
         this.adminRegistrationCodeService = adminRegistrationCodeService;
         this.userDetailsService = userDetailsService;
         this.passwordResetService = passwordResetService;
+        this.keycodeUserRepository = keycodeUserRepository;
     }
 
 
@@ -640,7 +643,7 @@ public class AuthController {
             
             // Test database connection
             long startTime = System.currentTimeMillis();
-            long userCount = userRepository.count(); // Simple query to test connection
+            long userCount = keycodeUserRepository.count(); // Simple query to test connection
             long endTime = System.currentTimeMillis();
             
             Map<String, Object> healthInfo = new HashMap<>();
