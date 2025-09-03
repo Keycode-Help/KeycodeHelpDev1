@@ -190,7 +190,6 @@ export const AuthProvider = ({ children }) => {
           } catch (refreshError) {
             console.error("Token refresh failed:", refreshError);
             if (refreshError.name !== "AbortError") {
-              // If refresh fails, logout the user
               logout();
             }
           }
@@ -204,7 +203,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     initializeAuth();
-  }, [getCurrentToken, storeAuthState, clearStoredAuthState, logout]);
+  }, [getCurrentToken, storeAuthState, clearStoredAuthState]);
 
   // Memoize the role setting logic to prevent unnecessary re-renders
   useEffect(() => {
