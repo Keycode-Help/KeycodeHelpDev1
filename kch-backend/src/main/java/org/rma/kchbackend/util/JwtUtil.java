@@ -93,11 +93,22 @@ public class JwtUtil {
     public boolean validateToken(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
-            boolean isValid = (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-            System.out.println("🔍 JWT validation for user " + username + ": " + isValid);
+            final String userDetailsUsername = userDetails.getUsername();
+            final boolean isExpired = isTokenExpired(token);
+            final boolean usernameMatches = username.equals(userDetailsUsername);
+            final boolean isValid = (usernameMatches && !isExpired);
+            
+            System.out.println("🔍 JWT validation details:");
+            System.out.println("  - Token username: " + username);
+            System.out.println("  - UserDetails username: " + userDetailsUsername);
+            System.out.println("  - Username matches: " + usernameMatches);
+            System.out.println("  - Token expired: " + isExpired);
+            System.out.println("  - Final validation result: " + isValid);
+            
             return isValid;
         } catch (Exception e) {
-            System.out.println("❌ JWT validation failed: " + e.getMessage());
+            System.out.println("❌ JWT validation failed with exception: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
