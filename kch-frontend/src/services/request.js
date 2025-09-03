@@ -63,6 +63,7 @@ instance.interceptors.response.use(
       url.includes("/auth/login") || url.includes("/auth/register");
     const hasRefreshCookie = !!getCookie("refresh_token");
 
+    // Handle 401 errors with token refresh
     if (
       status === 401 &&
       !originalRequest._retry &&
@@ -87,6 +88,22 @@ instance.interceptors.response.use(
           "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href = "/login";
         return Promise.reject(refreshError);
+      }
+    }
+
+    // Handle 403 errors more gracefully
+    if (status === 403) {
+      const isAuthMeCall = url.includes("/auth/me");
+      if (isAuthMeCall) {
+        // For /auth/me calls, just log a warning but don't logout
+        console.warn(
+          "403 on /auth/me - JWT token validation failed, but keeping local auth state"
+        );
+        return Promise.reject(error);
+      } else {
+        // For other protected resources, this might be a real authorization issue
+        console.warn("403 on protected resource - this might require logout");
+        return Promise.reject(error);
       }
     }
 

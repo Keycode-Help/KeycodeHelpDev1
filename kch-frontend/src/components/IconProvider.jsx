@@ -22,6 +22,9 @@ import {
   Search,
   Check,
   Loader2,
+  LogIn,
+  AlertTriangle,
+  Crown,
 } from "lucide-react";
 
 export const Icons = {
@@ -47,6 +50,9 @@ export const Icons = {
   search: Search,
   check: Check,
   loader: Loader2,
+  logIn: LogIn,
+  alertTriangle: AlertTriangle,
+  crown: Crown,
 };
 
 export function Icon({ name, size = 24, className = "", ...props }) {

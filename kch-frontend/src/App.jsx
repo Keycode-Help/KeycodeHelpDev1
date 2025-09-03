@@ -165,10 +165,10 @@ function App() {
               basename="/"
               future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             >
-              <TrialExpirationHandler />
               <AppContent />
               <Analytics />
             </Router>
+            <TrialExpirationHandler />
           </div>
         </AuthProvider>
       </HelmetProvider>
