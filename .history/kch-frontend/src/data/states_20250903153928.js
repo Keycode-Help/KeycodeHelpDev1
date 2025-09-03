@@ -49,7 +49,7 @@ const states = [
   "West Virginia",
   "Wisconsin",
   "Wyoming",
-  "Washington DC",
+  "Washington DC"
 ];
 
 export default states;
