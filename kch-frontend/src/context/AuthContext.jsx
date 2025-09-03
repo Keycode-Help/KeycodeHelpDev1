@@ -128,7 +128,29 @@ export const AuthProvider = ({ children }) => {
 
         // Then verify with backend (more secure) - with timeout
         const token = getCurrentToken();
-        if (token) {
+        if (token && storedUser && storedToken) {
+          // Check if token looks valid (basic JWT structure check)
+          const tokenParts = token.split(".");
+          if (tokenParts.length !== 3) {
+            console.warn("Invalid JWT token structure, clearing auth state");
+            clearStoredAuthState();
+            return;
+          }
+
+          // Check if token is expired (basic check)
+          try {
+            const payload = JSON.parse(atob(tokenParts[1]));
+            const exp = payload.exp * 1000; // Convert to milliseconds
+            if (Date.now() > exp) {
+              console.warn("JWT token is expired, clearing auth state");
+              clearStoredAuthState();
+              return;
+            }
+          } catch (e) {
+            console.warn("Could not parse JWT payload, clearing auth state");
+            clearStoredAuthState();
+            return;
+          }
           if (import.meta.env.DEV) {
             console.log(
               "🔑 Token found for /auth/me request:",
@@ -174,10 +196,11 @@ export const AuthProvider = ({ children }) => {
               // Keep localStorage state for now, backend might be temporarily down
             } else if (error.response?.status === 403) {
               console.warn(
-                "Backend auth endpoint returned 403 - JWT token is invalid or expired, logging out"
+                "Backend auth endpoint returned 403 - JWT token validation failed, but keeping local auth state"
               );
-              // 403 means the token is invalid/expired - we should logout
-              logout();
+              // Don't logout on 403 - this could be temporary backend issues
+              // Keep the user logged in locally and let them continue using the app
+              // The request interceptor will handle actual auth failures
             } else if (
               error.code === "ERR_NETWORK" ||
               error.message.includes("CORS")
