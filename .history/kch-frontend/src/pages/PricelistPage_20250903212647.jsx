@@ -243,7 +243,7 @@ const PricelistPage = () => {
         {/* Header */}
         <div className="text-center py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-2xl mb-6 shadow-2xl p-2">
+            <div className="inline-flex items-center justify-center w-20 h-20 mb-6">
               <img
                 src="/assets/images/logos/Secondary_logo.png"
                 alt="Keycode Help Logo"
