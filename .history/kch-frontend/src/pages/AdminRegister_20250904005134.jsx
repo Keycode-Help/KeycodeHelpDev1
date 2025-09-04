@@ -63,22 +63,17 @@ function AdminRegister() {
     setCodeRequestMessage("");
 
     try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"
-        }/admin-registration-code/request`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-          }),
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"}/admin-registration-code/request`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        }),
+      });
 
       const result = await response.json();
 
@@ -117,21 +112,16 @@ function AdminRegister() {
     setCodeValidationMessage("");
 
     try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"
-        }/admin-registration-code/validate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            code: formData.adminCode,
-          }),
-        }
-      );
+      const response = await fetch("/admin-registration-code/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          code: formData.adminCode,
+        }),
+      });
 
       const result = await response.json();
 
@@ -223,15 +213,10 @@ function AdminRegister() {
       formDataToSend.append("adminCode", formData.adminCode);
 
       // Send to backend admin registration endpoint
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"
-        }/auth/admin-register`,
-        {
-          method: "POST",
-          body: formDataToSend,
-        }
-      );
+      const response = await fetch("/auth/admin-register", {
+        method: "POST",
+        body: formDataToSend,
+      });
 
       if (response.ok) {
         const result = await response.text();

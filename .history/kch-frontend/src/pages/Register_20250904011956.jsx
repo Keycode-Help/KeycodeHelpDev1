@@ -47,34 +47,35 @@ function Register() {
     });
   };
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
-    
     if (!file) {
       setErrors((prev) => ({ ...prev, [name]: "File is required." }));
       return;
     }
 
-    try {
-      // Process file (validate and compress)
-      const processedFile = await processFile(file);
-      
-      // Clear any previous errors
-      setErrors((prev) => ({ ...prev, [name]: null }));
-      
-      // Update form data with processed file
-      setFormData({
-        ...formData,
-        [name]: processedFile,
-      });
-    } catch (error) {
-      // Set error message
+    if (!file.type.startsWith("image/")) {
       setErrors((prev) => ({
         ...prev,
-        [name]: error.message,
+        [name]: "Only image files are allowed.",
       }));
+      return;
     }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "File size should not exceed 5MB.",
+      }));
+      return;
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: null }));
+    setFormData({
+      ...formData,
+      [name]: file,
+    });
   };
 
   const validateForm = () => {
@@ -458,7 +459,7 @@ function Register() {
                     type="file"
                     name="frontId"
                     onChange={handleFileChange}
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept="image/*"
                     required
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
@@ -478,7 +479,7 @@ function Register() {
                     type="file"
                     name="backId"
                     onChange={handleFileChange}
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept="image/*"
                     required
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
@@ -499,7 +500,7 @@ function Register() {
                   type="file"
                   name="businessDocument"
                   onChange={handleFileChange}
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept="image/*"
                   required
                   className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
@@ -531,7 +532,7 @@ function Register() {
                   type="file"
                   name="coi"
                   onChange={handleFileChange}
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept="image/*"
                   required={formData.industry !== "mechanic"}
                   className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
@@ -546,28 +547,6 @@ function Register() {
                     {errors.coi}
                   </p>
                 )}
-              </div>
-            </div>
-
-            {/* File Upload Guidelines */}
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <Icon
-                  name="info"
-                  size={20}
-                  className="text-blue-400 flex-shrink-0 mt-0.5"
-                />
-                <div>
-                  <h4 className="text-blue-400 font-semibold mb-2">
-                    File Upload Guidelines
-                  </h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
-                    <li>• <strong>Accepted formats:</strong> JPG, PNG, PDF</li>
-                    <li>• <strong>Per file limit:</strong> 5MB maximum</li>
-                    <li>• <strong>Total upload limit:</strong> 25MB for all files</li>
-                    <li>• <strong>Image compression:</strong> Large images will be automatically compressed</li>
-                  </ul>
-                </div>
               </div>
             </div>
 

@@ -4,7 +4,6 @@ import api from "../services/request";
 import StatesDropDown from "../components/StatesDropDown";
 import states from "../data/states";
 import { Icon } from "../components/IconProvider";
-import { processFile, isValidFileType, isValidFileSize, formatFileSize, FILE_LIMITS } from "../utils/fileUtils";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -47,92 +46,48 @@ function Register() {
     });
   };
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
-    
     if (!file) {
       setErrors((prev) => ({ ...prev, [name]: "File is required." }));
       return;
     }
 
-    try {
-      // Process file (validate and compress)
-      const processedFile = await processFile(file);
-      
-      // Clear any previous errors
-      setErrors((prev) => ({ ...prev, [name]: null }));
-      
-      // Update form data with processed file
-      setFormData({
-        ...formData,
-        [name]: processedFile,
-      });
-    } catch (error) {
-      // Set error message
+    if (!file.type.startsWith("image/")) {
       setErrors((prev) => ({
         ...prev,
-        [name]: error.message,
+        [name]: "Only image files are allowed.",
       }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Required field validation
-    if (!formData.fname?.trim()) {
-      newErrors.fname = "First name is required";
-    }
-    if (!formData.lname?.trim()) {
-      newErrors.lname = "Last name is required";
-    }
-    if (!formData.email?.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-    }
-    if (!formData.phone?.trim()) {
-      newErrors.phone = "Phone number is required";
-    }
-    if (!selectedState) {
-      newErrors.state = "State is required";
-    }
-    if (!formData.industry) {
-      newErrors.industry = "Industry is required";
+      return;
     }
 
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "File size should not exceed 5MB.",
+      }));
+      return;
     }
 
-    // File validation
-    if (!formData.frontId) {
-      newErrors.frontId = "Front ID image is required";
-    }
-    if (!formData.backId) {
-      newErrors.backId = "Back ID image is required";
-    }
-    if (!formData.businessDocument) {
-      newErrors.businessDocument = "Business document is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors((prev) => ({ ...prev, [name]: null }));
+    setFormData({
+      ...formData,
+      [name]: file,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    // Password validation
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match. Please try again.");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      alert("Password must be at least 8 characters long.");
       return;
     }
 
@@ -221,17 +176,8 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Enter your first name"
                   required
-                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                    errors.fname
-                      ? "border-red-500 focus:ring-red-500"
-                      : "border-slate-600 focus:ring-blue-500"
-                  }`}
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
-                {errors.fname && (
-                  <span className="text-red-400 text-sm mt-1 block">
-                    {errors.fname}
-                  </span>
-                )}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-white mb-3">
@@ -244,17 +190,8 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Enter your last name"
                   required
-                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                    errors.lname
-                      ? "border-red-500 focus:ring-red-500"
-                      : "border-slate-600 focus:ring-blue-500"
-                  }`}
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
-                {errors.lname && (
-                  <span className="text-red-400 text-sm mt-1 block">
-                    {errors.lname}
-                  </span>
-                )}
               </div>
             </div>
 
@@ -269,22 +206,13 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Enter your email address"
                 required
-                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                  errors.email
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-slate-600 focus:ring-blue-500"
-                }`}
+                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               />
-              {errors.email && (
-                <span className="text-red-400 text-sm mt-1 block">
-                  {errors.email}
-                </span>
-              )}
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-white mb-3">
-                Phone Number <span className="text-red-400">*</span>
+                Phone Number
               </label>
               <input
                 type="tel"
@@ -292,18 +220,8 @@ function Register() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="Enter your phone number"
-                required
-                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                  errors.phone
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-slate-600 focus:ring-blue-500"
-                }`}
+                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               />
-              {errors.phone && (
-                <span className="text-red-400 text-sm mt-1 block">
-                  {errors.phone}
-                </span>
-              )}
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -319,11 +237,7 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Create a password"
                     required
-                    className={`w-full px-4 py-3 pr-12 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                      errors.password
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-slate-600 focus:ring-blue-500"
-                    }`}
+                    className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     style={{
                       color: "#ffffff",
                       WebkitTextFillColor: "#ffffff",
@@ -344,11 +258,6 @@ function Register() {
                     />
                   </button>
                 </div>
-                {errors.password && (
-                  <span className="text-red-400 text-sm mt-1 block">
-                    {errors.password}
-                  </span>
-                )}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-white mb-3">
@@ -362,11 +271,7 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Confirm your password"
                     required
-                    className={`w-full px-4 py-3 pr-12 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                      errors.confirmPassword
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-slate-600 focus:ring-blue-500"
-                    }`}
+                    className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     style={{
                       color: "#ffffff",
                       WebkitTextFillColor: "#ffffff",
@@ -387,11 +292,6 @@ function Register() {
                     />
                   </button>
                 </div>
-                {errors.confirmPassword && (
-                  <span className="text-red-400 text-sm mt-1 block">
-                    {errors.confirmPassword}
-                  </span>
-                )}
               </div>
             </div>
 
@@ -404,11 +304,6 @@ function Register() {
                 options={states}
                 onChange={(e) => setSelectedState(e.target.value)}
               />
-              {errors.state && (
-                <span className="text-red-400 text-sm mt-1 block">
-                  {errors.state}
-                </span>
-              )}
             </div>
 
             <div>
@@ -420,11 +315,7 @@ function Register() {
                 value={formData.industry}
                 onChange={handleChange}
                 required
-                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                  errors.industry
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-slate-600 focus:ring-blue-500"
-                }`}
+                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               >
                 {industryOptions.map((option) => (
                   <option
@@ -436,11 +327,6 @@ function Register() {
                   </option>
                 ))}
               </select>
-              {errors.industry && (
-                <span className="text-red-400 text-sm mt-1 block">
-                  {errors.industry}
-                </span>
-              )}
             </div>
 
             {/* File Uploads */}
@@ -458,7 +344,7 @@ function Register() {
                     type="file"
                     name="frontId"
                     onChange={handleFileChange}
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept="image/*"
                     required
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
@@ -478,7 +364,7 @@ function Register() {
                     type="file"
                     name="backId"
                     onChange={handleFileChange}
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept="image/*"
                     required
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
@@ -499,7 +385,7 @@ function Register() {
                   type="file"
                   name="businessDocument"
                   onChange={handleFileChange}
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept="image/*"
                   required
                   className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
@@ -531,7 +417,7 @@ function Register() {
                   type="file"
                   name="coi"
                   onChange={handleFileChange}
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept="image/*"
                   required={formData.industry !== "mechanic"}
                   className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
@@ -546,28 +432,6 @@ function Register() {
                     {errors.coi}
                   </p>
                 )}
-              </div>
-            </div>
-
-            {/* File Upload Guidelines */}
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <Icon
-                  name="info"
-                  size={20}
-                  className="text-blue-400 flex-shrink-0 mt-0.5"
-                />
-                <div>
-                  <h4 className="text-blue-400 font-semibold mb-2">
-                    File Upload Guidelines
-                  </h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
-                    <li>• <strong>Accepted formats:</strong> JPG, PNG, PDF</li>
-                    <li>• <strong>Per file limit:</strong> 5MB maximum</li>
-                    <li>• <strong>Total upload limit:</strong> 25MB for all files</li>
-                    <li>• <strong>Image compression:</strong> Large images will be automatically compressed</li>
-                  </ul>
-                </div>
               </div>
             </div>
 
