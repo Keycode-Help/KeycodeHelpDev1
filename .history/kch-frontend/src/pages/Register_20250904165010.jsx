@@ -477,50 +477,37 @@ function Register() {
               <label className="block text-sm font-semibold text-white mb-3">
                 Industry Affiliation <span className="text-red-400">*</span>
               </label>
-              <div className="relative">
-                <select
-                  name="industry"
-                  value={formData.industry}
-                  onChange={handleChange}
-                  required
-                  className={`w-full px-4 py-3 pr-10 bg-slate-800/50 border rounded-xl text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
-                    errors.industry
-                      ? "border-red-500 focus:ring-red-500"
-                      : "border-slate-600 focus:ring-blue-500"
-                  }`}
-                  style={{
-                    color:
-                      formData.industry && formData.industry !== ""
-                        ? "#ffffff"
-                        : "#9ca3af",
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    appearance: "none",
-                  }}
-                >
-                  {industryOptions.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                      className="bg-slate-800 text-white"
-                      style={{
-                        backgroundColor: "#1e293b",
-                        color: "#ffffff",
-                      }}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                {/* Custom dropdown arrow */}
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <Icon
-                    name="chevronDown"
-                    size={20}
-                    className="text-gray-400"
-                  />
-                </div>
-              </div>
+              <select
+                name="industry"
+                value={formData.industry}
+                onChange={handleChange}
+                required
+                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                  errors.industry
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-slate-600 focus:ring-blue-500"
+                }`}
+                style={{ 
+                  color: formData.industry && formData.industry !== "" ? "#ffffff" : "#9ca3af",
+                  WebkitAppearance: "none",
+                  MozAppearance: "none",
+                  appearance: "none"
+                }}
+              >
+                {industryOptions.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="bg-slate-800 text-white"
+                    style={{
+                      backgroundColor: "#1e293b",
+                      color: "#ffffff",
+                    }}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
               {errors.industry && (
                 <span className="text-red-400 text-sm mt-1 block">
                   {errors.industry}

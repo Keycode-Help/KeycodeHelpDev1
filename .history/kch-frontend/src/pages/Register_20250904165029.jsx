@@ -488,14 +488,11 @@ function Register() {
                       ? "border-red-500 focus:ring-red-500"
                       : "border-slate-600 focus:ring-blue-500"
                   }`}
-                  style={{
-                    color:
-                      formData.industry && formData.industry !== ""
-                        ? "#ffffff"
-                        : "#9ca3af",
+                  style={{ 
+                    color: formData.industry && formData.industry !== "" ? "#ffffff" : "#9ca3af",
                     WebkitAppearance: "none",
                     MozAppearance: "none",
-                    appearance: "none",
+                    appearance: "none"
                   }}
                 >
                   {industryOptions.map((option) => (
