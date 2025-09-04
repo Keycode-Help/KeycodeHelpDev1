@@ -238,18 +238,12 @@ function Register() {
                     placeholder="Create a password"
                     required
                     className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    style={{
-                      color: "#ffffff",
-                      WebkitTextFillColor: "#ffffff",
-                    }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     <Icon
                       name={showPassword ? "eyeOff" : "eye"}
@@ -272,18 +266,12 @@ function Register() {
                     placeholder="Confirm your password"
                     required
                     className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    style={{
-                      color: "#ffffff",
-                      WebkitTextFillColor: "#ffffff",
-                    }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
-                    aria-label={
-                      showConfirmPassword ? "Hide password" : "Show password"
-                    }
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   >
                     <Icon
                       name={showConfirmPassword ? "eyeOff" : "eye"}

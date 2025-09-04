@@ -74,6 +74,19 @@
   box-sizing: border-box;
 }
 
+/* Ensure password input text is visible */
+.form-group input[type="password"],
+.form-group input[type="text"] {
+  color: #333 !important;
+  -webkit-text-fill-color: #333 !important;
+}
+
+/* Fix for password dots visibility */
+.form-group input[type="password"] {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
 .form-group input:focus {
   outline: none;
   border-color: #1e3c72;
