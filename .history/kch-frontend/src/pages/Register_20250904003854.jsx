@@ -238,9 +238,9 @@ function Register() {
                     placeholder="Create a password"
                     required
                     className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    style={{
+                    style={{ 
                       color: "#ffffff",
-                      WebkitTextFillColor: "#ffffff",
+                      WebkitTextFillColor: "#ffffff"
                     }}
                   />
                   <button
@@ -272,10 +272,6 @@ function Register() {
                     placeholder="Confirm your password"
                     required
                     className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    style={{
-                      color: "#ffffff",
-                      WebkitTextFillColor: "#ffffff",
-                    }}
                   />
                   <button
                     type="button"

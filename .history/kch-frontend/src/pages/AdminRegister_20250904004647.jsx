@@ -250,10 +250,7 @@ function AdminRegister() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label
-                htmlFor="firstName"
-                className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-              >
+              <label htmlFor="firstName" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
                 First Name *
               </label>
               <input
@@ -264,23 +261,16 @@ function AdminRegister() {
                 onChange={handleChange}
                 placeholder="Enter first name"
                 className={`w-full px-4 py-3 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                  errors.firstName
-                    ? "border-red-500 focus:border-red-500"
-                    : "border-gray-300"
+                  errors.firstName ? "border-red-500 focus:border-red-500" : "border-gray-300"
                 }`}
               />
               {errors.firstName && (
-                <span className="text-red-500 text-sm font-medium mt-1 block">
-                  {errors.firstName}
-                </span>
+                <span className="text-red-500 text-sm font-medium mt-1 block">{errors.firstName}</span>
               )}
             </div>
 
             <div>
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-              >
+              <label htmlFor="lastName" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
                 Last Name *
               </label>
               <input
@@ -291,24 +281,17 @@ function AdminRegister() {
                 onChange={handleChange}
                 placeholder="Enter last name"
                 className={`w-full px-4 py-3 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                  errors.lastName
-                    ? "border-red-500 focus:border-red-500"
-                    : "border-gray-300"
+                  errors.lastName ? "border-red-500 focus:border-red-500" : "border-gray-300"
                 }`}
               />
               {errors.lastName && (
-                <span className="text-red-500 text-sm font-medium mt-1 block">
-                  {errors.lastName}
-                </span>
+                <span className="text-red-500 text-sm font-medium mt-1 block">{errors.lastName}</span>
               )}
             </div>
           </div>
 
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-            >
+            <label htmlFor="email" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
               Email Address *
             </label>
             <input
@@ -319,23 +302,16 @@ function AdminRegister() {
               onChange={handleChange}
               placeholder="Enter email address"
               className={`w-full px-4 py-3 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                errors.email
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300"
+                errors.email ? "border-red-500 focus:border-red-500" : "border-gray-300"
               }`}
             />
             {errors.email && (
-              <span className="text-red-500 text-sm font-medium mt-1 block">
-                {errors.email}
-              </span>
+              <span className="text-red-500 text-sm font-medium mt-1 block">{errors.email}</span>
             )}
           </div>
 
           <div>
-            <label
-              htmlFor="company"
-              className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-            >
+            <label htmlFor="company" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
               Company/Organization *
             </label>
             <input
@@ -346,24 +322,17 @@ function AdminRegister() {
               onChange={handleChange}
               placeholder="Enter company name"
               className={`w-full px-4 py-3 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                errors.company
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300"
+                errors.company ? "border-red-500 focus:border-red-500" : "border-gray-300"
               }`}
             />
             {errors.company && (
-              <span className="text-red-500 text-sm font-medium mt-1 block">
-                {errors.company}
-              </span>
+              <span className="text-red-500 text-sm font-medium mt-1 block">{errors.company}</span>
             )}
           </div>
 
           {/* Registration Code Request Section */}
           <div>
-            <label
-              htmlFor="adminCode"
-              className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-            >
+            <label htmlFor="adminCode" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
               Admin Registration Code *
             </label>
             <div className="flex gap-3 items-start flex-wrap">
@@ -375,9 +344,7 @@ function AdminRegister() {
                 onChange={handleChange}
                 placeholder="Enter registration code from email"
                 className={`flex-1 min-w-48 px-4 py-3 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                  errors.adminCode
-                    ? "border-red-500 focus:border-red-500"
-                    : "border-gray-300"
+                  errors.adminCode ? "border-red-500 focus:border-red-500" : "border-gray-300"
                 } ${!codeRequested ? "opacity-50 cursor-not-allowed" : ""}`}
                 disabled={!codeRequested}
               />
@@ -405,29 +372,23 @@ function AdminRegister() {
               )}
             </div>
             {errors.adminCode && (
-              <span className="text-red-500 text-sm font-medium mt-1 block">
-                {errors.adminCode}
-              </span>
+              <span className="text-red-500 text-sm font-medium mt-1 block">{errors.adminCode}</span>
             )}
             {codeRequestMessage && (
-              <div
-                className={`mt-2 p-3 rounded-lg text-sm font-medium ${
-                  codeRequestMessage.includes("✅")
-                    ? "bg-green-50 text-green-700 border-l-4 border-green-500"
-                    : "bg-red-50 text-red-700 border-l-4 border-red-500"
-                }`}
-              >
+              <div className={`mt-2 p-3 rounded-lg text-sm font-medium ${
+                codeRequestMessage.includes("✅") 
+                  ? "bg-green-50 text-green-700 border-l-4 border-green-500" 
+                  : "bg-red-50 text-red-700 border-l-4 border-red-500"
+              }`}>
                 {codeRequestMessage}
               </div>
             )}
             {codeValidationMessage && (
-              <div
-                className={`mt-2 p-3 rounded-lg text-sm font-medium ${
-                  codeValidationMessage.includes("✅")
-                    ? "bg-green-50 text-green-700 border-l-4 border-green-500"
-                    : "bg-red-50 text-red-700 border-l-4 border-red-500"
-                }`}
-              >
+              <div className={`mt-2 p-3 rounded-lg text-sm font-medium ${
+                codeValidationMessage.includes("✅") 
+                  ? "bg-green-50 text-green-700 border-l-4 border-green-500" 
+                  : "bg-red-50 text-red-700 border-l-4 border-red-500"
+              }`}>
                 {codeValidationMessage}
               </div>
             )}
@@ -439,10 +400,7 @@ function AdminRegister() {
           </div>
 
           <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-            >
+            <label htmlFor="phone" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
               Phone Number *
             </label>
             <input
@@ -453,24 +411,17 @@ function AdminRegister() {
               onChange={handleChange}
               placeholder="Enter phone number"
               className={`w-full px-4 py-3 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                errors.phone
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300"
+                errors.phone ? "border-red-500 focus:border-red-500" : "border-gray-300"
               }`}
             />
             {errors.phone && (
-              <span className="text-red-500 text-sm font-medium mt-1 block">
-                {errors.phone}
-              </span>
+              <span className="text-red-500 text-sm font-medium mt-1 block">{errors.phone}</span>
             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-              >
+              <label htmlFor="password" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
                 Password *
               </label>
               <div className="relative">
@@ -482,9 +433,7 @@ function AdminRegister() {
                   onChange={handleChange}
                   placeholder="Create password"
                   className={`w-full px-4 py-3 pr-12 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                    errors.password
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-300"
+                    errors.password ? "border-red-500 focus:border-red-500" : "border-gray-300"
                   }`}
                   style={{
                     color: "#333",
@@ -505,17 +454,12 @@ function AdminRegister() {
                 </button>
               </div>
               {errors.password && (
-                <span className="text-red-500 text-sm font-medium mt-1 block">
-                  {errors.password}
-                </span>
+                <span className="text-red-500 text-sm font-medium mt-1 block">{errors.password}</span>
               )}
             </div>
 
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide"
-              >
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-blue-900 mb-2 uppercase tracking-wide">
                 Confirm Password *
               </label>
               <div className="relative">
@@ -527,9 +471,7 @@ function AdminRegister() {
                   onChange={handleChange}
                   placeholder="Confirm password"
                   className={`w-full px-4 py-3 pr-12 border-2 rounded-lg text-base transition-all duration-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-900 focus:shadow-lg focus:-translate-y-0.5 ${
-                    errors.confirmPassword
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-300"
+                    errors.confirmPassword ? "border-red-500 focus:border-red-500" : "border-gray-300"
                   }`}
                   style={{
                     color: "#333",
@@ -552,15 +494,13 @@ function AdminRegister() {
                 </button>
               </div>
               {errors.confirmPassword && (
-                <span className="text-red-500 text-sm font-medium mt-1 block">
-                  {errors.confirmPassword}
-                </span>
+                <span className="text-red-500 text-sm font-medium mt-1 block">{errors.confirmPassword}</span>
               )}
             </div>
           </div>
 
-          <button
-            type="submit"
+          <button 
+            type="submit" 
             className="w-full py-4 bg-gradient-to-r from-blue-900 to-blue-800 text-white rounded-lg font-semibold text-lg uppercase tracking-wide cursor-pointer transition-all duration-300 mt-6 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group"
           >
             <span className="relative z-10">Create Admin Account</span>
@@ -571,8 +511,8 @@ function AdminRegister() {
         <div className="mt-8 text-center">
           <p className="text-gray-600">
             Already have an account?{" "}
-            <a
-              href="/admin-login"
+            <a 
+              href="/admin-login" 
               className="text-blue-900 font-semibold hover:text-blue-800 transition-colors duration-300 hover:underline"
             >
               Login here
