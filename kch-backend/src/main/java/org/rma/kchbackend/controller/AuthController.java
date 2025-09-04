@@ -142,6 +142,22 @@ public class AuthController {
                         user.setInsurance(coi.getBytes());
                     }
                     keycodeUserService.saveUser(user);
+                    
+                    // Send confirmation email to the user for reactivation
+                    try {
+                        sendUserRegistrationConfirmation(user);
+                    } catch (Exception e) {
+                        // Log the error but don't fail the registration
+                        System.err.println("⚠️ Failed to send confirmation email to user: " + e.getMessage());
+                    }
+                    
+                    // Notify admins about user reactivation that needs validation
+                    try {
+                        notifyAdminsOfNewUserRegistration(user);
+                    } catch (Exception e) {
+                        // Log the error but don't fail the registration
+                        System.err.println("⚠️ Failed to send notification to admins for user reactivation: " + e.getMessage());
+                    }
                 }
             }else{
                 // Create and save the user
@@ -164,6 +180,14 @@ public class AuthController {
                 user.setActive(false); // Inactive until validated
 
                 keycodeUserService.saveUser(user);
+                
+                // Send confirmation email to the user
+                try {
+                    sendUserRegistrationConfirmation(user);
+                } catch (Exception e) {
+                    // Log the error but don't fail the registration
+                    System.err.println("⚠️ Failed to send confirmation email to user: " + e.getMessage());
+                }
                 
                 // Notify admins about new user registration that needs validation
                 try {
@@ -1105,5 +1129,159 @@ public class AuthController {
                contentType.equals("image/jpeg") ||
                contentType.equals("image/jpg") ||
                contentType.equals("image/png");
+    }
+
+    /**
+     * Send registration confirmation email to the user
+     */
+    private void sendUserRegistrationConfirmation(KeycodeUser user) {
+        try {
+            String subject = "Welcome to Keycode Help - Account Created Successfully!";
+            String htmlBody = buildUserRegistrationConfirmationEmailBody(user);
+            
+            emailService.sendHtmlEmail(user.getEmail(), subject, htmlBody);
+            System.out.println("✅ Registration confirmation email sent to: " + user.getEmail());
+            
+        } catch (Exception e) {
+            System.err.println("❌ Failed to send registration confirmation email: " + e.getMessage());
+            e.printStackTrace();
+            throw e; // Re-throw to be caught by the calling method
+        }
+    }
+
+    /**
+     * Build HTML email body for user registration confirmation
+     */
+    private String buildUserRegistrationConfirmationEmailBody(KeycodeUser user) {
+        return String.format("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Welcome to Keycode Help</title>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #1e40af, #f59e0b); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                    .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
+                    .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+                    .welcome { font-size: 28px; margin: 0; }
+                    .subtitle { font-size: 16px; opacity: 0.9; margin: 10px 0 0 0; }
+                    .section { margin: 25px 0; }
+                    .section h3 { color: #1e40af; margin-bottom: 15px; font-size: 18px; }
+                    .info-box { background: white; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 5px; }
+                    .steps { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; }
+                    .step { margin: 10px 0; padding: 10px; background: #f1f5f9; border-radius: 5px; }
+                    .step-number { background: #1e40af; color: white; width: 25px; height: 25px; border-radius: 50%%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px; }
+                    .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 14px; }
+                    .contact { background: #e0f2fe; padding: 15px; border-radius: 8px; margin: 15px 0; }
+                    .highlight { background: #fef3c7; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <div class="logo">🔑 Keycode Help</div>
+                        <h1 class="welcome">Welcome, %s!</h1>
+                        <p class="subtitle">Your account has been created successfully</p>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="section">
+                            <h3>🎉 Registration Complete!</h3>
+                            <p>Thank you for joining Keycode Help! Your account has been created and is currently pending verification.</p>
+                            
+                            <div class="info-box">
+                                <strong>Account Details:</strong><br>
+                                Name: %s %s<br>
+                                Email: %s<br>
+                                Industry: %s<br>
+                                State: %s
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>📋 What Happens Next?</h3>
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <strong>Document Review</strong> - Our team will review your submitted documents within 24-48 hours
+                                </div>
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <strong>Account Verification</strong> - Once approved, you'll receive an email confirmation
+                                </div>
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <strong>Access Granted</strong> - You can then log in and start using the platform
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>⏰ Timeline Expectations</h3>
+                            <ul>
+                                <li><span class="highlight">24-48 hours</span> - Document review and verification</li>
+                                <li><span class="highlight">Email notification</span> - You'll be notified once your account is approved</li>
+                                <li><span class="highlight">Immediate access</span> - Once approved, you can log in and use all features</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>📞 Need Help?</h3>
+                            <div class="contact">
+                                <p>If you have any questions or need assistance, please don't hesitate to contact us:</p>
+                                <p>
+                                    📧 Email: <a href="mailto:support@keycode.help">support@keycode.help</a><br>
+                                    🌐 Website: <a href="https://www.keycode.help">www.keycode.help</a>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>🔒 Security Reminder</h3>
+                            <p>For your security, please keep your login credentials safe and never share them with anyone. Our team will never ask for your password via email or phone.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>Thank you for choosing Keycode Help!</p>
+                        <p>This is an automated message. Please do not reply to this email.</p>
+                        <p>&copy; 2024 Keycode Help. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """, 
+            user.getFname(),
+            user.getFname(),
+            user.getLname(),
+            user.getEmail(),
+            formatIndustryName(user.getIndustry()),
+            user.getState()
+        );
+    }
+
+    /**
+     * Format industry name for display
+     */
+    private String formatIndustryName(String industry) {
+        if (industry == null) return "Not specified";
+        
+        switch (industry.toLowerCase()) {
+            case "locksmith":
+                return "Locksmith";
+            case "mechanic":
+                return "Mechanic/Mobile Mechanic";
+            case "rental":
+                return "Rental Company Owner/Manager";
+            case "tow":
+                return "Tow Truck Company";
+            case "repo":
+                return "Repo Company";
+            default:
+                return industry;
+        }
     }
 }
