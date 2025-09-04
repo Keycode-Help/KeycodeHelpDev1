@@ -99,11 +99,8 @@ public class AuthController {
             // Validate file types
             if (!frontId.getContentType().startsWith("image/") ||
                     !backId.getContentType().startsWith("image/") ||
-                    !businessDocument.getContentType().startsWith("image/")) {
+                    !insurance.getContentType().startsWith("image/")) {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
-            }
-            if (coi != null && !coi.getContentType().startsWith("image/")) {
-                return ResponseEntity.badRequest().body("COI must be an image file.");
             }
 
             //Check whether the user already exists
@@ -124,13 +121,9 @@ public class AuthController {
                     user.setPassword(passwordEncoder.encode(password));
                     user.setRole(Role.BASEUSER);
                     user.setState(state);
-                    user.setIndustry(industry);
                     user.setFrontId(frontId.getBytes());
                     user.setBackId(backId.getBytes());
-                    user.setBusinessDocument(businessDocument.getBytes());
-                    if (coi != null) {
-                        user.setInsurance(coi.getBytes());
-                    }
+                    user.setInsurance(insurance.getBytes());
                     keycodeUserService.saveUser(user);
                 }
             }else{
@@ -143,13 +136,9 @@ public class AuthController {
                 user.setPassword(passwordEncoder.encode(password));
                 user.setRole(Role.BASEUSER);
                 user.setState(state);
-                user.setIndustry(industry);
                 user.setFrontId(frontId.getBytes());
                 user.setBackId(backId.getBytes());
-                user.setBusinessDocument(businessDocument.getBytes());
-                if (coi != null) {
-                    user.setInsurance(coi.getBytes());
-                }
+                user.setInsurance(insurance.getBytes());
                 user.setValidatedUser(false); // Requires admin validation
                 user.setActive(false); // Inactive until validated
 

@@ -603,9 +603,7 @@ function AdminDashboard() {
               <div className="w-10 h-10 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-xl flex items-center justify-center">
                 <Users className="w-5 h-5 text-orange-400" />
               </div>
-              <h2 className="text-white font-bold text-xl">
-                Pending User Registrations
-              </h2>
+              <h2 className="text-white font-bold text-xl">Pending User Registrations</h2>
             </div>
             {pendingUsers.length === 0 ? (
               <div className="text-center py-8">
@@ -633,21 +631,15 @@ function AdminDashboard() {
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-400">Phone:</span>
-                            <span className="text-white">
-                              {user.phone || "N/A"}
-                            </span>
+                            <span className="text-white">{user.phone || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-400">State:</span>
-                            <span className="text-white">
-                              {user.state || "N/A"}
-                            </span>
+                            <span className="text-white">{user.state || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-400">Industry:</span>
-                            <span className="text-white">
-                              {user.industry || "N/A"}
-                            </span>
+                            <span className="text-white">{user.industry || "N/A"}</span>
                           </div>
                         </div>
                       </div>

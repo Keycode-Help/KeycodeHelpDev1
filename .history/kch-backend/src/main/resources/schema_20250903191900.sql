@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS keycode_user (
     lname VARCHAR(255), 
     phone VARCHAR(255), 
     state VARCHAR(255), 
-    industry VARCHAR(255),
     role VARCHAR(50) DEFAULT 'BASEUSER',
     is_validated_user BOOLEAN DEFAULT FALSE,
     is_active BOOLEAN DEFAULT TRUE,
@@ -28,7 +27,6 @@ CREATE TABLE IF NOT EXISTS keycode_user (
     front_id BYTEA,
     back_id BYTEA,
     insurance BYTEA,
-    business_document BYTEA,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -78,32 +78,21 @@ public class AuthController {
             @RequestParam(value = "coi", required = false) MultipartFile coi) {
         try {
             // Validate files
-            if (frontId.isEmpty() || backId.isEmpty() || businessDocument.isEmpty()) {
-                return ResponseEntity.badRequest().body("All required document files are required.");
-            }
-
-            // COI is optional for mobile mechanics
-            if (coi != null && coi.isEmpty()) {
-                coi = null; // Set to null if empty
+            if (frontId.isEmpty() || backId.isEmpty() || insurance.isEmpty()) {
+                return ResponseEntity.badRequest().body("All document files are required.");
             }
 
             // Validate file size (e.g., 5MB limit)
             long maxFileSize = 5 * 1024 * 1024;
-            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || businessDocument.getSize() > maxFileSize) {
+            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || insurance.getSize() > maxFileSize) {
                 return ResponseEntity.badRequest().body("File size must not exceed 5MB.");
-            }
-            if (coi != null && coi.getSize() > maxFileSize) {
-                return ResponseEntity.badRequest().body("COI file size must not exceed 5MB.");
             }
 
             // Validate file types
             if (!frontId.getContentType().startsWith("image/") ||
                     !backId.getContentType().startsWith("image/") ||
-                    !businessDocument.getContentType().startsWith("image/")) {
+                    !insurance.getContentType().startsWith("image/")) {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
-            }
-            if (coi != null && !coi.getContentType().startsWith("image/")) {
-                return ResponseEntity.badRequest().body("COI must be an image file.");
             }
 
             //Check whether the user already exists
@@ -124,13 +113,9 @@ public class AuthController {
                     user.setPassword(passwordEncoder.encode(password));
                     user.setRole(Role.BASEUSER);
                     user.setState(state);
-                    user.setIndustry(industry);
                     user.setFrontId(frontId.getBytes());
                     user.setBackId(backId.getBytes());
-                    user.setBusinessDocument(businessDocument.getBytes());
-                    if (coi != null) {
-                        user.setInsurance(coi.getBytes());
-                    }
+                    user.setInsurance(insurance.getBytes());
                     keycodeUserService.saveUser(user);
                 }
             }else{
@@ -143,13 +128,9 @@ public class AuthController {
                 user.setPassword(passwordEncoder.encode(password));
                 user.setRole(Role.BASEUSER);
                 user.setState(state);
-                user.setIndustry(industry);
                 user.setFrontId(frontId.getBytes());
                 user.setBackId(backId.getBytes());
-                user.setBusinessDocument(businessDocument.getBytes());
-                if (coi != null) {
-                    user.setInsurance(coi.getBytes());
-                }
+                user.setInsurance(insurance.getBytes());
                 user.setValidatedUser(false); // Requires admin validation
                 user.setActive(false); // Inactive until validated
 
