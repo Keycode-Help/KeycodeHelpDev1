@@ -237,22 +237,14 @@ function Register() {
                     Registration Successful!
                   </h3>
                   <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                    Your account has been created successfully. We've sent a
-                    confirmation email to <strong>{formData.email}</strong> with
-                    verification instructions and next steps.
+                    Your account has been created successfully. We've sent a confirmation email to <strong>{formData.email}</strong> with verification instructions and next steps.
                   </p>
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <h4 className="text-green-300 font-medium mb-2">
-                      What happens next?
-                    </h4>
+                    <h4 className="text-green-300 font-medium mb-2">What happens next?</h4>
                     <ul className="text-gray-300 text-sm space-y-1">
                       <li>• Check your email for verification instructions</li>
-                      <li>
-                        • Your documents will be reviewed within 24-48 hours
-                      </li>
-                      <li>
-                        • You'll receive an email once your account is approved
-                      </li>
+                      <li>• Your documents will be reviewed within 24-48 hours</li>
+                      <li>• You'll receive an email once your account is approved</li>
                       <li>• You can then log in and access the platform</li>
                     </ul>
                   </div>
@@ -494,9 +486,9 @@ function Register() {
                     key={option.value}
                     value={option.value}
                     className="bg-slate-800 text-white"
-                    style={{
-                      backgroundColor: "#1e293b",
-                      color: option.value ? "#ffffff" : "#9ca3af",
+                    style={{ 
+                      backgroundColor: "#1e293b", 
+                      color: option.value ? "#ffffff" : "#9ca3af" 
                     }}
                   >
                     {option.label}
