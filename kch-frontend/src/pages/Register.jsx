@@ -77,17 +77,62 @@ function Register() {
     });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Required field validation
+    if (!formData.fname?.trim()) {
+      newErrors.fname = "First name is required";
+    }
+    if (!formData.lname?.trim()) {
+      newErrors.lname = "Last name is required";
+    }
+    if (!formData.email?.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
+    }
+    if (!formData.phone?.trim()) {
+      newErrors.phone = "Phone number is required";
+    }
+    if (!selectedState) {
+      newErrors.state = "State is required";
+    }
+    if (!formData.industry) {
+      newErrors.industry = "Industry is required";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    // File validation
+    if (!formData.frontId) {
+      newErrors.frontId = "Front ID image is required";
+    }
+    if (!formData.backId) {
+      newErrors.backId = "Back ID image is required";
+    }
+    if (!formData.businessDocument) {
+      newErrors.businessDocument = "Business document is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Password validation
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match. Please try again.");
-      return;
-    }
-
-    if (formData.password.length < 8) {
-      alert("Password must be at least 8 characters long.");
+    if (!validateForm()) {
       return;
     }
 
@@ -176,8 +221,13 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Enter your first name"
                   required
-                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                    errors.fname ? "border-red-500 focus:ring-red-500" : "border-slate-600 focus:ring-blue-500"
+                  }`}
                 />
+                {errors.fname && (
+                  <span className="text-red-400 text-sm mt-1 block">{errors.fname}</span>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-white mb-3">
@@ -190,8 +240,13 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Enter your last name"
                   required
-                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                    errors.lname ? "border-red-500 focus:ring-red-500" : "border-slate-600 focus:ring-blue-500"
+                  }`}
                 />
+                {errors.lname && (
+                  <span className="text-red-400 text-sm mt-1 block">{errors.lname}</span>
+                )}
               </div>
             </div>
 
@@ -206,13 +261,18 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Enter your email address"
                 required
-                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                  errors.email ? "border-red-500 focus:ring-red-500" : "border-slate-600 focus:ring-blue-500"
+                }`}
               />
+              {errors.email && (
+                <span className="text-red-400 text-sm mt-1 block">{errors.email}</span>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-white mb-3">
-                Phone Number
+                Phone Number <span className="text-red-400">*</span>
               </label>
               <input
                 type="tel"
@@ -220,8 +280,14 @@ function Register() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="Enter your phone number"
-                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                required
+                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                  errors.phone ? "border-red-500 focus:ring-red-500" : "border-slate-600 focus:ring-blue-500"
+                }`}
               />
+              {errors.phone && (
+                <span className="text-red-400 text-sm mt-1 block">{errors.phone}</span>
+              )}
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -237,7 +303,9 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Create a password"
                     required
-                    className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className={`w-full px-4 py-3 pr-12 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                      errors.password ? "border-red-500 focus:ring-red-500" : "border-slate-600 focus:ring-blue-500"
+                    }`}
                     style={{
                       color: "#ffffff",
                       WebkitTextFillColor: "#ffffff",
@@ -258,6 +326,9 @@ function Register() {
                     />
                   </button>
                 </div>
+                {errors.password && (
+                  <span className="text-red-400 text-sm mt-1 block">{errors.password}</span>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-white mb-3">
@@ -271,7 +342,9 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Confirm your password"
                     required
-                    className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className={`w-full px-4 py-3 pr-12 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                      errors.confirmPassword ? "border-red-500 focus:ring-red-500" : "border-slate-600 focus:ring-blue-500"
+                    }`}
                     style={{
                       color: "#ffffff",
                       WebkitTextFillColor: "#ffffff",
@@ -292,6 +365,9 @@ function Register() {
                     />
                   </button>
                 </div>
+                {errors.confirmPassword && (
+                  <span className="text-red-400 text-sm mt-1 block">{errors.confirmPassword}</span>
+                )}
               </div>
             </div>
 
@@ -304,6 +380,9 @@ function Register() {
                 options={states}
                 onChange={(e) => setSelectedState(e.target.value)}
               />
+              {errors.state && (
+                <span className="text-red-400 text-sm mt-1 block">{errors.state}</span>
+              )}
             </div>
 
             <div>
@@ -315,7 +394,9 @@ function Register() {
                 value={formData.industry}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                  errors.industry ? "border-red-500 focus:ring-red-500" : "border-slate-600 focus:ring-blue-500"
+                }`}
               >
                 {industryOptions.map((option) => (
                   <option
@@ -327,6 +408,9 @@ function Register() {
                   </option>
                 ))}
               </select>
+              {errors.industry && (
+                <span className="text-red-400 text-sm mt-1 block">{errors.industry}</span>
+              )}
             </div>
 
             {/* File Uploads */}
