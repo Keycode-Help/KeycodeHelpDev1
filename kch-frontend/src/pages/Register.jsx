@@ -319,20 +319,22 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Create a password"
                     required
-                    className={`w-full px-4 py-3 pr-12 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                    className={`w-full px-4 py-3 pr-12 bg-white border rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
                       errors.password
                         ? "border-red-500 focus:ring-red-500"
-                        : "border-slate-600 focus:ring-blue-500"
+                        : "border-gray-300 focus:ring-blue-500"
                     }`}
                     style={{
-                      color: "#ffffff",
-                      WebkitTextFillColor: "#ffffff",
+                      color: "#1f2937",
+                      WebkitTextFillColor: "#1f2937",
+                      WebkitTextSecurity: showPassword ? "none" : "disc",
+                      textSecurity: showPassword ? "none" : "disc",
                     }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
@@ -362,20 +364,22 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Confirm your password"
                     required
-                    className={`w-full px-4 py-3 pr-12 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                    className={`w-full px-4 py-3 pr-12 bg-white border rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
                       errors.confirmPassword
                         ? "border-red-500 focus:ring-red-500"
-                        : "border-slate-600 focus:ring-blue-500"
+                        : "border-gray-300 focus:ring-blue-500"
                     }`}
                     style={{
-                      color: "#ffffff",
-                      WebkitTextFillColor: "#ffffff",
+                      color: "#1f2937",
+                      WebkitTextFillColor: "#1f2937",
+                      WebkitTextSecurity: showConfirmPassword ? "none" : "disc",
+                      textSecurity: showConfirmPassword ? "none" : "disc",
                     }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
                     aria-label={
                       showConfirmPassword ? "Hide password" : "Show password"
                     }
