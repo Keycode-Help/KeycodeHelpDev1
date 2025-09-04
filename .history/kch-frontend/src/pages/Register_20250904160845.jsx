@@ -223,47 +223,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Success Message */}
-          {showSuccessMessage && (
-            <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-6 mb-8">
-              <div className="flex items-start gap-3">
-                <Icon
-                  name="checkCircle"
-                  size={24}
-                  className="text-green-400 flex-shrink-0 mt-1"
-                />
-                <div>
-                  <h3 className="text-green-400 font-semibold mb-2">
-                    Registration Successful!
-                  </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                    Your account has been created successfully. We've sent a
-                    confirmation email to <strong>{formData.email}</strong> with
-                    verification instructions and next steps.
-                  </p>
-                  <div className="bg-slate-800/50 rounded-lg p-4">
-                    <h4 className="text-green-300 font-medium mb-2">
-                      What happens next?
-                    </h4>
-                    <ul className="text-gray-300 text-sm space-y-1">
-                      <li>• Check your email for verification instructions</li>
-                      <li>
-                        • Your documents will be reviewed within 24-48 hours
-                      </li>
-                      <li>
-                        • You'll receive an email once your account is approved
-                      </li>
-                      <li>• You can then log in and access the platform</li>
-                    </ul>
-                  </div>
-                  <p className="text-gray-400 text-xs mt-3">
-                    Redirecting to login page in a few seconds...
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Personal Information */}
@@ -487,17 +446,12 @@ function Register() {
                     ? "border-red-500 focus:ring-red-500"
                     : "border-slate-600 focus:ring-blue-500"
                 }`}
-                style={{ color: formData.industry ? "#ffffff" : "#9ca3af" }}
               >
                 {industryOptions.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}
                     className="bg-slate-800 text-white"
-                    style={{
-                      backgroundColor: "#1e293b",
-                      color: option.value ? "#ffffff" : "#9ca3af",
-                    }}
                   >
                     {option.label}
                   </option>
@@ -649,29 +603,10 @@ function Register() {
 
             <button
               type="submit"
-              disabled={isSubmitting || showSuccessMessage}
-              className={`w-full font-semibold py-3 px-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center justify-center gap-2 ${
-                isSubmitting || showSuccessMessage
-                  ? "bg-gray-500 text-gray-300 cursor-not-allowed"
-                  : "bg-gradient-to-r from-blue-500 to-yellow-500 text-white hover:from-blue-600 hover:to-yellow-600"
-              }`}
+              className="w-full bg-gradient-to-r from-blue-500 to-yellow-500 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center justify-center gap-2"
             >
-              {isSubmitting ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Creating Account...
-                </>
-              ) : showSuccessMessage ? (
-                <>
-                  <Icon name="checkCircle" size={18} />
-                  Account Created!
-                </>
-              ) : (
-                <>
-                  <Icon name="userPlus" size={18} />
-                  Create Account
-                </>
-              )}
+              <Icon name="userPlus" size={18} />
+              Create Account
             </button>
           </form>
 
