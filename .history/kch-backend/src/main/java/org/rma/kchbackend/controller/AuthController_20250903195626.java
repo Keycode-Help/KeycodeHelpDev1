@@ -71,39 +71,26 @@ public class AuthController {
             @RequestParam("phone") String phone,
             @RequestParam("password") String password,
             @RequestParam("state") String state,
-            @RequestParam("industry") String industry,
             @RequestParam("frontId") MultipartFile frontId,
             @RequestParam("backId") MultipartFile backId,
-            @RequestParam("businessDocument") MultipartFile businessDocument,
-            @RequestParam(value = "coi", required = false) MultipartFile coi) {
+            @RequestParam("insurance") MultipartFile insurance) {
         try {
             // Validate files
-            if (frontId.isEmpty() || backId.isEmpty() || businessDocument.isEmpty()) {
-                return ResponseEntity.badRequest().body("All required document files are required.");
-            }
-
-            // COI is optional for mobile mechanics
-            if (coi != null && coi.isEmpty()) {
-                coi = null; // Set to null if empty
+            if (frontId.isEmpty() || backId.isEmpty() || insurance.isEmpty()) {
+                return ResponseEntity.badRequest().body("All document files are required.");
             }
 
             // Validate file size (e.g., 5MB limit)
             long maxFileSize = 5 * 1024 * 1024;
-            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || businessDocument.getSize() > maxFileSize) {
+            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || insurance.getSize() > maxFileSize) {
                 return ResponseEntity.badRequest().body("File size must not exceed 5MB.");
-            }
-            if (coi != null && coi.getSize() > maxFileSize) {
-                return ResponseEntity.badRequest().body("COI file size must not exceed 5MB.");
             }
 
             // Validate file types
             if (!frontId.getContentType().startsWith("image/") ||
                     !backId.getContentType().startsWith("image/") ||
-                    !businessDocument.getContentType().startsWith("image/")) {
+                    !insurance.getContentType().startsWith("image/")) {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
-            }
-            if (coi != null && !coi.getContentType().startsWith("image/")) {
-                return ResponseEntity.badRequest().body("COI must be an image file.");
             }
 
             //Check whether the user already exists
@@ -124,13 +111,9 @@ public class AuthController {
                     user.setPassword(passwordEncoder.encode(password));
                     user.setRole(Role.BASEUSER);
                     user.setState(state);
-                    user.setIndustry(industry);
                     user.setFrontId(frontId.getBytes());
                     user.setBackId(backId.getBytes());
-                    user.setBusinessDocument(businessDocument.getBytes());
-                    if (coi != null) {
-                        user.setInsurance(coi.getBytes());
-                    }
+                    user.setInsurance(insurance.getBytes());
                     keycodeUserService.saveUser(user);
                 }
             }else{
@@ -143,13 +126,9 @@ public class AuthController {
                 user.setPassword(passwordEncoder.encode(password));
                 user.setRole(Role.BASEUSER);
                 user.setState(state);
-                user.setIndustry(industry);
                 user.setFrontId(frontId.getBytes());
                 user.setBackId(backId.getBytes());
-                user.setBusinessDocument(businessDocument.getBytes());
-                if (coi != null) {
-                    user.setInsurance(coi.getBytes());
-                }
+                user.setInsurance(insurance.getBytes());
                 user.setValidatedUser(false); // Requires admin validation
                 user.setActive(false); // Inactive until validated
 
@@ -990,71 +969,6 @@ public class AuthController {
             adminUser.isAdminApproved() ? "Yes" : "No",
             adminUser.isActive() ? "Yes" : "No",
             adminUser.isValidatedUser() ? "Yes" : "No"
-        );
-    }
-
-    /**
-     * Notify admins about new base user registration that needs validation
-     */
-    private void notifyAdminsOfNewUserRegistration(KeycodeUser user) {
-        try {
-            // Get admin email addresses - in production, fetch from database
-            String[] adminEmails = {
-                "admin@keycode.help",
-                "support@keycode.help"
-            };
-
-            String subject = "New User Registration Requires Validation - Keycode Help";
-            String body = buildNewUserRegistrationEmailBody(user);
-
-            for (String adminEmail : adminEmails) {
-                emailService.sendNotificationEmail("Admin", adminEmail, subject, body);
-                System.out.println("✅ New user registration notification sent to: " + adminEmail);
-            }
-
-        } catch (Exception e) {
-            System.err.println("❌ Failed to send new user registration notification: " + e.getMessage());
-            e.printStackTrace();
-            throw e; // Re-throw to be caught by the calling method
-        }
-    }
-
-    /**
-     * Build email body for new user registration notification
-     */
-    private String buildNewUserRegistrationEmailBody(KeycodeUser user) {
-        return String.format("""
-            New User Registration Requires Validation
-            
-            A new user account has been created and requires your validation:
-            
-            User Details:
-            Name: %s %s
-            Email: %s
-            Phone: %s
-            State: %s
-            
-            Account Status:
-            - Validated: %s
-            - Active: %s
-            - Role: %s
-            
-            Action Required:
-            Please log in to the Admin Dashboard to review and validate this user account.
-            
-            Dashboard URL: https://keycode.help/admin-dashboard
-            
-            Best regards,
-            Keycode Help System
-            """, 
-            user.getFname(),
-            user.getLname(),
-            user.getEmail(),
-            user.getPhone(),
-            user.getState(),
-            user.isValidatedUser() ? "Yes" : "No",
-            user.isActive() ? "Yes" : "No",
-            user.getRole().toString()
         );
     }
 

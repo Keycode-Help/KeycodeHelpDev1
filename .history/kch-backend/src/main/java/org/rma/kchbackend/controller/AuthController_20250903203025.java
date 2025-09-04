@@ -124,13 +124,9 @@ public class AuthController {
                     user.setPassword(passwordEncoder.encode(password));
                     user.setRole(Role.BASEUSER);
                     user.setState(state);
-                    user.setIndustry(industry);
                     user.setFrontId(frontId.getBytes());
                     user.setBackId(backId.getBytes());
-                    user.setBusinessDocument(businessDocument.getBytes());
-                    if (coi != null) {
-                        user.setInsurance(coi.getBytes());
-                    }
+                    user.setInsurance(insurance.getBytes());
                     keycodeUserService.saveUser(user);
                 }
             }else{
@@ -143,13 +139,9 @@ public class AuthController {
                 user.setPassword(passwordEncoder.encode(password));
                 user.setRole(Role.BASEUSER);
                 user.setState(state);
-                user.setIndustry(industry);
                 user.setFrontId(frontId.getBytes());
                 user.setBackId(backId.getBytes());
-                user.setBusinessDocument(businessDocument.getBytes());
-                if (coi != null) {
-                    user.setInsurance(coi.getBytes());
-                }
+                user.setInsurance(insurance.getBytes());
                 user.setValidatedUser(false); // Requires admin validation
                 user.setActive(false); // Inactive until validated
 

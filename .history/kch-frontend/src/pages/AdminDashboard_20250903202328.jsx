@@ -501,23 +501,14 @@ function AdminDashboard() {
             </select>
           </div>
           {/* Quick stats */}
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-4 text-center shadow-lg">
               <div className="text-gray-400 text-xs font-medium mb-1">
-                Pending Requests
+                Pending
               </div>
               <div className="text-white text-xl font-bold flex items-center justify-center gap-2">
                 <Clock className="h-5 w-5 text-yellow-400" />
                 {pendingRequests.length}
-              </div>
-            </div>
-            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-4 text-center shadow-lg">
-              <div className="text-gray-400 text-xs font-medium mb-1">
-                Pending Users
-              </div>
-              <div className="text-white text-xl font-bold flex items-center justify-center gap-2">
-                <Users className="h-5 w-5 text-orange-400" />
-                {pendingUsers.length}
               </div>
             </div>
             <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-4 text-center shadow-lg">
@@ -593,109 +584,6 @@ function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
-              </div>
-            )}
-          </section>
-
-          {/* Pending User Registrations */}
-          <section className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-3xl p-6 shadow-xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-xl flex items-center justify-center">
-                <Users className="w-5 h-5 text-orange-400" />
-              </div>
-              <h2 className="text-white font-bold text-xl">
-                Pending User Registrations
-              </h2>
-            </div>
-            {pendingUsers.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-slate-700/50 to-slate-800/50 border border-slate-600 rounded-xl flex items-center justify-center">
-                  <Users className="w-8 h-8 text-gray-400" />
-                </div>
-                <p className="text-gray-400">No pending user registrations.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {pendingUsers.map((user) => (
-                  <div
-                    key={user.id}
-                    className="bg-gradient-to-br from-slate-700/30 to-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-2xl p-5 hover:border-slate-500 transition-all duration-300 shadow-lg"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold text-lg mb-2">
-                          {user.fname} {user.lname}
-                        </h3>
-                        <div className="space-y-1 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-gray-400">Email:</span>
-                            <span className="text-white">{user.email}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-400">Phone:</span>
-                            <span className="text-white">
-                              {user.phone || "N/A"}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-400">State:</span>
-                            <span className="text-white">
-                              {user.state || "N/A"}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-400">Industry:</span>
-                            <span className="text-white">
-                              {user.industry || "N/A"}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <button
-                          onClick={() => handleApproveUser(user.id)}
-                          className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-2 rounded-xl font-semibold hover:from-emerald-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-300 shadow-lg flex items-center gap-2"
-                        >
-                          <UserCheck className="w-4 h-4" />
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleRejectUser(user.id)}
-                          className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-xl font-semibold hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-300 shadow-lg flex items-center gap-2"
-                        >
-                          <UserX className="w-4 h-4" />
-                          Reject
-                        </button>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {user.frontId && (
-                        <img
-                          src={user.frontId}
-                          alt="Front ID"
-                          className="w-20 h-20 object-cover rounded-lg border border-slate-600 hover:border-slate-500 cursor-pointer transition-colors duration-200"
-                          onClick={() => openModal(user.frontId)}
-                        />
-                      )}
-                      {user.backId && (
-                        <img
-                          src={user.backId}
-                          alt="Back ID"
-                          className="w-20 h-20 object-cover rounded-lg border border-slate-600 hover:border-slate-500 cursor-pointer transition-colors duration-200"
-                          onClick={() => openModal(user.backId)}
-                        />
-                      )}
-                      {user.insurance && (
-                        <img
-                          src={user.insurance}
-                          alt="Insurance"
-                          className="w-20 h-20 object-cover rounded-lg border border-slate-600 hover:border-slate-500 cursor-pointer transition-colors duration-200"
-                          onClick={() => openModal(user.insurance)}
-                        />
-                      )}
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </section>

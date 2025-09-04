@@ -28,10 +28,7 @@ function Register() {
     { value: "", label: "Select your industry" },
     { value: "locksmith", label: "Locksmith" },
     { value: "mechanic", label: "Mechanic/Mobile Mechanic" },
-    {
-      value: "rental",
-      label: "Rental Company Owner/Manager (With authorization)",
-    },
+    { value: "rental", label: "Rental Company Owner/Manager (With authorization)" },
     { value: "tow", label: "Tow Truck Company" },
     { value: "repo", label: "Repo Company" },
   ];
@@ -96,7 +93,6 @@ function Register() {
     formDataObj.append("phone", formData.phone);
     formDataObj.append("password", formData.password);
     formDataObj.append("state", selectedState); // Add selected state
-    formDataObj.append("industry", formData.industry); // Add industry
     formDataObj.append("frontId", formData.frontId);
     formDataObj.append("backId", formData.backId);
     formDataObj.append("businessDocument", formData.businessDocument);
@@ -260,29 +256,6 @@ function Register() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-white mb-3">
-                Industry Affiliation <span className="text-red-400">*</span>
-              </label>
-              <select
-                name="industry"
-                value={formData.industry}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-              >
-                {industryOptions.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                    className="bg-slate-800 text-white"
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* File Uploads */}
             <div className="space-y-6">
               <h3 className="text-lg font-semibold text-white border-b border-slate-700 pb-2">
@@ -358,27 +331,19 @@ function Register() {
               <div>
                 <label className="block text-sm font-semibold text-white mb-3">
                   Certificate of Insurance (COI){" "}
-                  {formData.industry !== "mechanic" && (
-                    <span className="text-red-400">*</span>
-                  )}
-                  {formData.industry === "mechanic" && (
-                    <span className="text-yellow-400">
-                      (Optional for Mobile Mechanics)
-                    </span>
-                  )}
+                  <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="file"
                   name="coi"
                   onChange={handleFileChange}
                   accept="image/*"
-                  required={formData.industry !== "mechanic"}
+                  required
                   className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
                 <p className="text-xs text-gray-400 mt-2">
-                  {formData.industry === "mechanic"
-                    ? "Certificate of Insurance is optional for Mobile Mechanics but recommended for business verification"
-                    : "Active Certificate of Insurance required for business verification"}
+                  Active Certificate of Insurance required for business
+                  verification
                 </p>
                 {errors.coi && (
                   <p className="text-sm text-red-400 mt-2 flex items-center gap-2">

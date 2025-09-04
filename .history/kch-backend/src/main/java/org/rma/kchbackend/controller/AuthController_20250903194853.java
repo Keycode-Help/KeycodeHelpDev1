@@ -49,7 +49,8 @@ public class AuthController {
     private final KeycodeUserRepository keycodeUserRepository;
     private final EmailService emailService;
 
-    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService, CustomUserDetailsService userDetailsService, PasswordResetService passwordResetService, KeycodeUserRepository keycodeUserRepository, EmailService emailService) {
+    @Autowired
+    public AuthController(KeycodeUserService keycodeUserService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, AdminRegistrationCodeService adminRegistrationCodeService, CustomUserDetailsService userDetailsService, PasswordResetService passwordResetService, KeycodeUserRepository keycodeUserRepository) {
         this.keycodeUserService = keycodeUserService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
@@ -58,7 +59,6 @@ public class AuthController {
         this.userDetailsService = userDetailsService;
         this.passwordResetService = passwordResetService;
         this.keycodeUserRepository = keycodeUserRepository;
-        this.emailService = emailService;
     }
 
 
@@ -71,39 +71,26 @@ public class AuthController {
             @RequestParam("phone") String phone,
             @RequestParam("password") String password,
             @RequestParam("state") String state,
-            @RequestParam("industry") String industry,
             @RequestParam("frontId") MultipartFile frontId,
             @RequestParam("backId") MultipartFile backId,
-            @RequestParam("businessDocument") MultipartFile businessDocument,
-            @RequestParam(value = "coi", required = false) MultipartFile coi) {
+            @RequestParam("insurance") MultipartFile insurance) {
         try {
             // Validate files
-            if (frontId.isEmpty() || backId.isEmpty() || businessDocument.isEmpty()) {
-                return ResponseEntity.badRequest().body("All required document files are required.");
-            }
-
-            // COI is optional for mobile mechanics
-            if (coi != null && coi.isEmpty()) {
-                coi = null; // Set to null if empty
+            if (frontId.isEmpty() || backId.isEmpty() || insurance.isEmpty()) {
+                return ResponseEntity.badRequest().body("All document files are required.");
             }
 
             // Validate file size (e.g., 5MB limit)
             long maxFileSize = 5 * 1024 * 1024;
-            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || businessDocument.getSize() > maxFileSize) {
+            if (frontId.getSize() > maxFileSize || backId.getSize() > maxFileSize || insurance.getSize() > maxFileSize) {
                 return ResponseEntity.badRequest().body("File size must not exceed 5MB.");
-            }
-            if (coi != null && coi.getSize() > maxFileSize) {
-                return ResponseEntity.badRequest().body("COI file size must not exceed 5MB.");
             }
 
             // Validate file types
             if (!frontId.getContentType().startsWith("image/") ||
                     !backId.getContentType().startsWith("image/") ||
-                    !businessDocument.getContentType().startsWith("image/")) {
+                    !insurance.getContentType().startsWith("image/")) {
                 return ResponseEntity.badRequest().body("Only image files are allowed.");
-            }
-            if (coi != null && !coi.getContentType().startsWith("image/")) {
-                return ResponseEntity.badRequest().body("COI must be an image file.");
             }
 
             //Check whether the user already exists
@@ -124,13 +111,9 @@ public class AuthController {
                     user.setPassword(passwordEncoder.encode(password));
                     user.setRole(Role.BASEUSER);
                     user.setState(state);
-                    user.setIndustry(industry);
                     user.setFrontId(frontId.getBytes());
                     user.setBackId(backId.getBytes());
-                    user.setBusinessDocument(businessDocument.getBytes());
-                    if (coi != null) {
-                        user.setInsurance(coi.getBytes());
-                    }
+                    user.setInsurance(insurance.getBytes());
                     keycodeUserService.saveUser(user);
                 }
             }else{
@@ -143,25 +126,11 @@ public class AuthController {
                 user.setPassword(passwordEncoder.encode(password));
                 user.setRole(Role.BASEUSER);
                 user.setState(state);
-                user.setIndustry(industry);
                 user.setFrontId(frontId.getBytes());
                 user.setBackId(backId.getBytes());
-                user.setBusinessDocument(businessDocument.getBytes());
-                if (coi != null) {
-                    user.setInsurance(coi.getBytes());
-                }
-                user.setValidatedUser(false); // Requires admin validation
-                user.setActive(false); // Inactive until validated
+                user.setInsurance(insurance.getBytes());
 
                 keycodeUserService.saveUser(user);
-                
-                // Notify admins about new user registration that needs validation
-                try {
-                    notifyAdminsOfNewUserRegistration(user);
-                } catch (Exception e) {
-                    // Log the error but don't fail the registration
-                    System.err.println("⚠️ Failed to send notification to admins for new user registration: " + e.getMessage());
-                }
             }
             return ResponseEntity.ok("User registered successfully!");
         } catch (Exception e) {
@@ -924,138 +893,6 @@ public class AuthController {
             e.printStackTrace();
             return ResponseEntity.status(500).body(Map.of("error", "An error occurred while processing your request"));
         }
-    }
-
-    /**
-     * Notify super admins about new admin registration that needs approval
-     */
-    private void notifySuperAdminsOfNewAdminRegistration(KeycodeUser adminUser) {
-        try {
-            // Get super admin email addresses - in production, fetch from database
-            String[] superAdminEmails = {
-                "mytech@metrepairs.com", // Anthony's email
-                "admin@keycode.help"
-            };
-
-            String subject = "New Admin Registration Requires Approval - Keycode Help";
-            String body = buildNewAdminRegistrationEmailBody(adminUser);
-
-            for (String superAdminEmail : superAdminEmails) {
-                emailService.sendNotificationEmail("Super Admin", superAdminEmail, subject, body);
-                System.out.println("✅ New admin registration notification sent to: " + superAdminEmail);
-            }
-
-        } catch (Exception e) {
-            System.err.println("❌ Failed to send new admin registration notification: " + e.getMessage());
-            e.printStackTrace();
-            throw e; // Re-throw to be caught by the calling method
-        }
-    }
-
-    /**
-     * Build email body for new admin registration notification
-     */
-    private String buildNewAdminRegistrationEmailBody(KeycodeUser adminUser) {
-        return String.format("""
-            New Admin Registration Requires Approval
-            
-            A new admin account has been created and requires your approval:
-            
-            Admin Details:
-            Name: %s %s
-            Email: %s
-            Phone: %s
-            Company: %s
-            Registration Code Used: %s
-            
-            Account Status:
-            - Admin Approved: %s
-            - Active: %s
-            - Validated: %s
-            
-            Action Required:
-            Please log in to the Super Admin Dashboard to review and approve this admin account.
-            
-            Dashboard URL: https://keycode.help/super-admin-dashboard
-            
-            Best regards,
-            Keycode Help System
-            """, 
-            adminUser.getFname(),
-            adminUser.getLname(),
-            adminUser.getEmail(),
-            adminUser.getPhone(),
-            adminUser.getCompany(),
-            adminUser.getAdminCode(),
-            adminUser.isAdminApproved() ? "Yes" : "No",
-            adminUser.isActive() ? "Yes" : "No",
-            adminUser.isValidatedUser() ? "Yes" : "No"
-        );
-    }
-
-    /**
-     * Notify admins about new base user registration that needs validation
-     */
-    private void notifyAdminsOfNewUserRegistration(KeycodeUser user) {
-        try {
-            // Get admin email addresses - in production, fetch from database
-            String[] adminEmails = {
-                "admin@keycode.help",
-                "support@keycode.help"
-            };
-
-            String subject = "New User Registration Requires Validation - Keycode Help";
-            String body = buildNewUserRegistrationEmailBody(user);
-
-            for (String adminEmail : adminEmails) {
-                emailService.sendNotificationEmail("Admin", adminEmail, subject, body);
-                System.out.println("✅ New user registration notification sent to: " + adminEmail);
-            }
-
-        } catch (Exception e) {
-            System.err.println("❌ Failed to send new user registration notification: " + e.getMessage());
-            e.printStackTrace();
-            throw e; // Re-throw to be caught by the calling method
-        }
-    }
-
-    /**
-     * Build email body for new user registration notification
-     */
-    private String buildNewUserRegistrationEmailBody(KeycodeUser user) {
-        return String.format("""
-            New User Registration Requires Validation
-            
-            A new user account has been created and requires your validation:
-            
-            User Details:
-            Name: %s %s
-            Email: %s
-            Phone: %s
-            State: %s
-            
-            Account Status:
-            - Validated: %s
-            - Active: %s
-            - Role: %s
-            
-            Action Required:
-            Please log in to the Admin Dashboard to review and validate this user account.
-            
-            Dashboard URL: https://keycode.help/admin-dashboard
-            
-            Best regards,
-            Keycode Help System
-            """, 
-            user.getFname(),
-            user.getLname(),
-            user.getEmail(),
-            user.getPhone(),
-            user.getState(),
-            user.isValidatedUser() ? "Yes" : "No",
-            user.isActive() ? "Yes" : "No",
-            user.getRole().toString()
-        );
     }
 
     static class LoginRequest {
