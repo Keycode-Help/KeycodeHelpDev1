@@ -63,7 +63,7 @@ function AdminRegister() {
     setCodeRequestMessage("");
 
     try {
-      const response = await fetch("/admin-registration-code/request", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"}/admin-registration-code/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,7 +112,7 @@ function AdminRegister() {
     setCodeValidationMessage("");
 
     try {
-      const response = await fetch("/admin-registration-code/validate", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"}/admin-registration-code/validate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -213,7 +213,7 @@ function AdminRegister() {
       formDataToSend.append("adminCode", formData.adminCode);
 
       // Send to backend admin registration endpoint
-      const response = await fetch("/auth/admin-register", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"}/auth/admin-register`, {
         method: "POST",
         body: formDataToSend,
       });
