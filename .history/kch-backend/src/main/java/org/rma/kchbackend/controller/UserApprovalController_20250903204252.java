@@ -18,6 +18,7 @@ public class UserApprovalController {
 
     private final KeycodeUserService keycodeUserService;
 
+    @Autowired
     public UserApprovalController(KeycodeUserService keycodeUserService) {
         this.keycodeUserService = keycodeUserService;
     }
