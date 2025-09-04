@@ -4,13 +4,7 @@ import api from "../services/request";
 import StatesDropDown from "../components/StatesDropDown";
 import states from "../data/states";
 import { Icon } from "../components/IconProvider";
-import {
-  processFile,
-  isValidFileType,
-  isValidFileSize,
-  formatFileSize,
-  FILE_LIMITS,
-} from "../utils/fileUtils";
+import { processFile, isValidFileType, isValidFileSize, formatFileSize, FILE_LIMITS } from "../utils/fileUtils";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -56,7 +50,7 @@ function Register() {
   const handleFileChange = async (e) => {
     const { name, files } = e.target;
     const file = files[0];
-
+    
     if (!file) {
       setErrors((prev) => ({ ...prev, [name]: "File is required." }));
       return;
@@ -65,10 +59,10 @@ function Register() {
     try {
       // Process file (validate and compress)
       const processedFile = await processFile(file);
-
+      
       // Clear any previous errors
       setErrors((prev) => ({ ...prev, [name]: null }));
-
+      
       // Update form data with processed file
       setFormData({
         ...formData,
@@ -340,7 +334,7 @@ function Register() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
@@ -370,22 +364,20 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Confirm your password"
                     required
-                    className={`w-full px-4 py-3 pr-12 bg-white border rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                    className={`w-full px-4 py-3 pr-12 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
                       errors.confirmPassword
                         ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 focus:ring-blue-500"
+                        : "border-slate-600 focus:ring-blue-500"
                     }`}
                     style={{
-                      color: "#1f2937",
-                      WebkitTextFillColor: "#1f2937",
-                      WebkitTextSecurity: showConfirmPassword ? "none" : "disc",
-                      textSecurity: showConfirmPassword ? "none" : "disc",
+                      color: "#ffffff",
+                      WebkitTextFillColor: "#ffffff",
                     }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
                     aria-label={
                       showConfirmPassword ? "Hide password" : "Show password"
                     }
@@ -572,19 +564,10 @@ function Register() {
                     File Upload Guidelines
                   </h4>
                   <ul className="text-gray-300 text-sm space-y-1">
-                    <li>
-                      • <strong>Accepted formats:</strong> JPG, PNG, PDF
-                    </li>
-                    <li>
-                      • <strong>Per file limit:</strong> 5MB maximum
-                    </li>
-                    <li>
-                      • <strong>Total upload limit:</strong> 25MB for all files
-                    </li>
-                    <li>
-                      • <strong>Image compression:</strong> Large images will be
-                      automatically compressed
-                    </li>
+                    <li>• <strong>Accepted formats:</strong> JPG, PNG, PDF</li>
+                    <li>• <strong>Per file limit:</strong> 5MB maximum</li>
+                    <li>• <strong>Total upload limit:</strong> 25MB for all files</li>
+                    <li>• <strong>Image compression:</strong> Large images will be automatically compressed</li>
                   </ul>
                 </div>
               </div>
