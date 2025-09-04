@@ -18,12 +18,11 @@ const Footer = () => {
             {/* Company Info */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-yellow-500 rounded-xl flex items-center justify-center">
-                  <Key className="h-6 w-6 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent">
-                  Keycode Help
-                </h3>
+                <img
+                  src="/assets/images/logos/Logodarktheme.png"
+                  alt="Keycode Help Logo"
+                  className="h-10 w-auto"
+                />
               </div>
               <p className="text-gray-300 text-lg leading-relaxed max-w-md">
                 Professional vehicle keycode lookup services. Get accurate,

@@ -62,12 +62,11 @@ const TopNavbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-yellow-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">K</span>
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent">
-              Keycode Help
-            </span>
+            <img
+              src="/assets/images/logos/Logodarktheme.png"
+              alt="Keycode Help Logo"
+              className="h-8 w-auto"
+            />
           </div>
 
           {/* Navigation Links */}
