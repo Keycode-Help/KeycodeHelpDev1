@@ -243,13 +243,12 @@ const PricelistPage = () => {
         {/* Header */}
         <div className="text-center py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-2xl mb-6 shadow-2xl p-2">
-              <img
-                src="/assets/images/logos/Secondary_logo.png"
-                alt="Keycode Help Logo"
-                className="w-full h-full object-contain"
-              />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-yellow-500 rounded-2xl mb-6 shadow-2xl">
+              <span className="text-2xl font-bold text-white">$</span>
             </div>
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent mb-6">
+              Keycode Pricing by Manufacturer
+            </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Transparent pricing for every vehicle brand. Members save
               significantly on keycode requests. Some vehicles require

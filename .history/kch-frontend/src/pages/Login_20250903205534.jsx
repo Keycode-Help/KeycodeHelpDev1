@@ -50,9 +50,9 @@ function Login() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-              <img
-                src="/assets/images/logos/MainLogoGold.png"
-                alt="Keycode Help Logo"
+              <img 
+                src="/assets/images/logos/MainLogoGold.png" 
+                alt="Keycode Help Logo" 
                 className="w-full h-full object-contain"
               />
             </div>
