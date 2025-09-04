@@ -4,13 +4,7 @@ import api from "../services/request";
 import StatesDropDown from "../components/StatesDropDown";
 import states from "../data/states";
 import { Icon } from "../components/IconProvider";
-import {
-  processFile,
-  isValidFileType,
-  isValidFileSize,
-  formatFileSize,
-  FILE_LIMITS,
-} from "../utils/fileUtils";
+import { processFile, isValidFileType, isValidFileSize, formatFileSize, FILE_LIMITS } from "../utils/fileUtils";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -56,7 +50,7 @@ function Register() {
   const handleFileChange = async (e) => {
     const { name, files } = e.target;
     const file = files[0];
-
+    
     if (!file) {
       setErrors((prev) => ({ ...prev, [name]: "File is required." }));
       return;
@@ -65,10 +59,10 @@ function Register() {
     try {
       // Process file (validate and compress)
       const processedFile = await processFile(file);
-
+      
       // Clear any previous errors
       setErrors((prev) => ({ ...prev, [name]: null }));
-
+      
       // Update form data with processed file
       setFormData({
         ...formData,
@@ -572,19 +566,10 @@ function Register() {
                     File Upload Guidelines
                   </h4>
                   <ul className="text-gray-300 text-sm space-y-1">
-                    <li>
-                      • <strong>Accepted formats:</strong> JPG, PNG, PDF
-                    </li>
-                    <li>
-                      • <strong>Per file limit:</strong> 5MB maximum
-                    </li>
-                    <li>
-                      • <strong>Total upload limit:</strong> 25MB for all files
-                    </li>
-                    <li>
-                      • <strong>Image compression:</strong> Large images will be
-                      automatically compressed
-                    </li>
+                    <li>• <strong>Accepted formats:</strong> JPG, PNG, PDF</li>
+                    <li>• <strong>Per file limit:</strong> 5MB maximum</li>
+                    <li>• <strong>Total upload limit:</strong> 25MB for all files</li>
+                    <li>• <strong>Image compression:</strong> Large images will be automatically compressed</li>
                   </ul>
                 </div>
               </div>
