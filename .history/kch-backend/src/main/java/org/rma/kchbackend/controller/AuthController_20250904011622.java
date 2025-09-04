@@ -1092,18 +1092,4 @@ public class AuthController {
             this.password = password;
         }
     }
-
-    /**
-     * Helper method to validate file types
-     */
-    private boolean isValidFileType(String contentType) {
-        if (contentType == null) return false;
-        
-        // Accept images (JPG, PNG) and PDFs
-        return contentType.startsWith("image/") || 
-               contentType.equals("application/pdf") ||
-               contentType.equals("image/jpeg") ||
-               contentType.equals("image/jpg") ||
-               contentType.equals("image/png");
-    }
 }
