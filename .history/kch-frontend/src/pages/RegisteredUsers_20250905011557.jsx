@@ -24,7 +24,10 @@ function RegisteredUsers() {
   useEffect(() => {
     api
       .get("/admin/users")
-      .then((response) => setUsers(response.data))
+      .then((response) => {
+        console.log("Users data:", response.data);
+        setUsers(response.data);
+      })
       .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
@@ -208,6 +211,12 @@ function RegisteredUsers() {
                     </button>
                   </div>
                 )}
+
+                {/* Debug info - remove this later */}
+                <div className="mt-2 text-xs text-gray-500">
+                  Debug: isValidatedUser={String(user.isValidatedUser)},
+                  isActive={String(user.isActive)}
+                </div>
               </div>
             ))}
           </div>

@@ -24,7 +24,10 @@ function RegisteredUsers() {
   useEffect(() => {
     api
       .get("/admin/users")
-      .then((response) => setUsers(response.data))
+      .then((response) => {
+        console.log("Users data:", response.data);
+        setUsers(response.data);
+      })
       .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
@@ -194,7 +197,7 @@ function RegisteredUsers() {
                 </div>
 
                 {/* Validation Button */}
-                {!user.isValidatedUser && (
+                {!user.isValidatedUser && user.isActive && (
                   <div className="mt-3 pt-3 border-t border-neutral-700">
                     <button
                       className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-200"
@@ -208,6 +211,11 @@ function RegisteredUsers() {
                     </button>
                   </div>
                 )}
+                
+                {/* Debug info - remove this later */}
+                <div className="mt-2 text-xs text-gray-500">
+                  Debug: isValidatedUser={String(user.isValidatedUser)}, isActive={String(user.isActive)}
+                </div>
               </div>
             ))}
           </div>

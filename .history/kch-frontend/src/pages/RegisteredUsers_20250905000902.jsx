@@ -160,7 +160,7 @@ function RegisteredUsers() {
                   user.isActive ? "border-neutral-800" : "border-red-800"
                 } bg-black/40 p-4 hover:border-neutral-700 transition-colors`}
               >
-                <div
+                <div 
                   className="cursor-pointer"
                   onClick={() => handleUserClick(user)}
                 >
@@ -192,9 +192,9 @@ function RegisteredUsers() {
                     </div>
                   )}
                 </div>
-
+                
                 {/* Validation Button */}
-                {!user.isValidatedUser && (
+                {!user.isValidatedUser && user.isActive && (
                   <div className="mt-3 pt-3 border-t border-neutral-700">
                     <button
                       className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-200"

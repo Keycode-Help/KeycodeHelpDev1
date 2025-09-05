@@ -135,7 +135,7 @@ function RegisteredUsers() {
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-yellow-400">
-                {users.filter((u) => !u.isValidatedUser).length}
+                {users.filter((u) => !u.isValidatedUser && u.isActive).length}
               </div>
               <div className="text-xs text-gray-400">Pending</div>
             </div>
@@ -154,61 +154,41 @@ function RegisteredUsers() {
         <section className="rounded-3xl border border-neutral-800 bg-black/30 p-5 backdrop-blur supports-[backdrop-filter]:bg-black/40 lg:col-span-2">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {users.map((user) => (
-              <div
+              <button
                 key={user.id}
-                className={`rounded-2xl border ${
+                onClick={() => handleUserClick(user)}
+                className={`text-left rounded-2xl border ${
                   user.isActive ? "border-neutral-800" : "border-red-800"
                 } bg-black/40 p-4 hover:border-neutral-700 transition-colors`}
               >
-                <div
-                  className="cursor-pointer"
-                  onClick={() => handleUserClick(user)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="text-white font-semibold">
-                      {user.fname} {user.lname}
+                <div className="flex items-center justify-between">
+                  <div className="text-white font-semibold">
+                    {user.fname} {user.lname}
+                  </div>
+                  {!user.isActive && (
+                    <span className="text-xs text-red-400">Inactive</span>
+                  )}
+                </div>
+                <div className="text-gray-300 text-sm">{user.email}</div>
+                <div className="flex items-center gap-2 mt-2">
+                  {user.isValidatedUser ? (
+                    <div className="flex items-center gap-1 text-green-400 text-xs">
+                      <CheckCircle className="h-3 w-3" />
+                      <span>Approved</span>
                     </div>
-                    {!user.isActive && (
-                      <span className="text-xs text-red-400">Inactive</span>
-                    )}
-                  </div>
-                  <div className="text-gray-300 text-sm">{user.email}</div>
-                  <div className="flex items-center gap-2 mt-2">
-                    {user.isValidatedUser ? (
-                      <div className="flex items-center gap-1 text-green-400 text-xs">
-                        <CheckCircle className="h-3 w-3" />
-                        <span>Approved</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1 text-yellow-400 text-xs">
-                        <AlertCircle className="h-3 w-3" />
-                        <span>Pending Review</span>
-                      </div>
-                    )}
-                  </div>
-                  {user.trialEndsAt && (
-                    <div className="text-gray-400 text-xs mt-1">
-                      Trial ends: {new Date(user.trialEndsAt).toLocaleString()}
+                  ) : (
+                    <div className="flex items-center gap-1 text-yellow-400 text-xs">
+                      <AlertCircle className="h-3 w-3" />
+                      <span>Pending Review</span>
                     </div>
                   )}
                 </div>
-
-                {/* Validation Button */}
-                {!user.isValidatedUser && (
-                  <div className="mt-3 pt-3 border-t border-neutral-700">
-                    <button
-                      className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-200"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleValidateUser(user.id);
-                      }}
-                    >
-                      <Shield className="h-4 w-4" />
-                      Approve
-                    </button>
+                {user.trialEndsAt && (
+                  <div className="text-gray-400 text-xs mt-1">
+                    Trial ends: {new Date(user.trialEndsAt).toLocaleString()}
                   </div>
                 )}
-              </div>
+              </button>
             ))}
           </div>
         </section>
