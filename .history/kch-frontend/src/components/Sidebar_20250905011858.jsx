@@ -184,21 +184,16 @@ function Sidebar() {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-700">
-          {!isCollapsed ? (
+          {!isCollapsed && (
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="/assets/images/logos/Logodarktheme.png"
                 alt="Keycode Help Logo"
                 className="h-8 w-auto"
               />
-            </Link>
-          ) : (
-            <Link to="/" className="flex items-center justify-center">
-              <img
-                src="/assets/images/logos/Logodarktheme.png"
-                alt="Keycode Help Logo"
-                className="h-8 w-8 object-contain"
-              />
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent">
+                Keycode Help
+              </span>
             </Link>
           )}
           <button

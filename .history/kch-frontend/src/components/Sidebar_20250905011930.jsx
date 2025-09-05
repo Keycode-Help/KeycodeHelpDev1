@@ -191,6 +191,9 @@ function Sidebar() {
                 alt="Keycode Help Logo"
                 className="h-8 w-auto"
               />
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 bg-clip-text text-transparent">
+                Keycode Help
+              </span>
             </Link>
           ) : (
             <Link to="/" className="flex items-center justify-center">
