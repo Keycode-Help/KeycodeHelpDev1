@@ -49,6 +49,7 @@ function Register() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("Industry change:", name, value); // Debug log
     setFormData({
       ...formData,
       [name]: value,
@@ -476,6 +477,10 @@ function Register() {
             <div>
               <label className="block text-sm font-semibold text-white mb-3">
                 Industry Affiliation <span className="text-red-400">*</span>
+                {/* Debug display */}
+                <span className="text-xs text-gray-400 ml-2">
+                  (Current: {formData.industry || "empty"})
+                </span>
               </label>
               <div className="relative">
                 <select
