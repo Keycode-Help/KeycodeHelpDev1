@@ -302,7 +302,7 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Enter your last name"
                   required
-                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl [color:#000000!important] placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
                     errors.lname
                       ? "border-red-500 focus:ring-red-500"
                       : "border-slate-600 focus:ring-blue-500"
@@ -327,7 +327,7 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Enter your email address"
                 required
-                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl [color:#000000!important] placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
                   errors.email
                     ? "border-red-500 focus:ring-red-500"
                     : "border-slate-600 focus:ring-blue-500"
@@ -351,7 +351,7 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Enter your phone number"
                 required
-                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl [color:#000000!important] placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
                   errors.phone
                     ? "border-red-500 focus:ring-red-500"
                     : "border-slate-600 focus:ring-blue-500"
