@@ -483,21 +483,24 @@ function Register() {
                   value={formData.industry}
                   onChange={handleChange}
                   required
-                  className={`w-full px-4 py-3 pr-10 bg-slate-800/50 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 appearance-none ${
+                  className={`industry-select-field w-full px-4 py-3 pr-10 bg-slate-800/50 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 appearance-none ${
                     errors.industry
                       ? "border-red-500 focus:ring-red-500"
                       : "border-slate-600 focus:ring-blue-500"
                   } ${
                     formData.industry && formData.industry !== ""
-                      ? "[color:#000000!important]"
-                      : "[color:#9ca3af!important]"
+                      ? "text-slate-200"
+                      : "text-gray-400"
                   }`}
+                  style={{
+                    color: formData.industry && formData.industry !== "" ? "#e2e8f0" : "#9ca3af",
+                  }}
                 >
                   {industryOptions.map((option) => (
                     <option
                       key={option.value}
                       value={option.value}
-                      className="bg-slate-800 [color:#000000!important]"
+                      className="bg-slate-800 text-slate-200"
                     >
                       {option.label}
                     </option>

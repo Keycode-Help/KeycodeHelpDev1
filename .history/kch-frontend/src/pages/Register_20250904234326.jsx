@@ -49,6 +49,7 @@ function Register() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log('Industry change:', name, value); // Debug log
     setFormData({
       ...formData,
       [name]: value,
@@ -476,6 +477,10 @@ function Register() {
             <div>
               <label className="block text-sm font-semibold text-white mb-3">
                 Industry Affiliation <span className="text-red-400">*</span>
+                {/* Debug display */}
+                <span className="text-xs text-gray-400 ml-2">
+                  (Current: {formData.industry || 'empty'})
+                </span>
               </label>
               <div className="relative">
                 <select
@@ -489,15 +494,15 @@ function Register() {
                       : "border-slate-600 focus:ring-blue-500"
                   } ${
                     formData.industry && formData.industry !== ""
-                      ? "[color:#000000!important]"
-                      : "[color:#9ca3af!important]"
+                      ? "text-slate-200"
+                      : "text-gray-400"
                   }`}
                 >
                   {industryOptions.map((option) => (
                     <option
                       key={option.value}
                       value={option.value}
-                      className="bg-slate-800 [color:#000000!important]"
+                      className="bg-slate-800 text-slate-200"
                     >
                       {option.label}
                     </option>

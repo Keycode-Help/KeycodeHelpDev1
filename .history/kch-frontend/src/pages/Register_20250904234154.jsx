@@ -489,15 +489,15 @@ function Register() {
                       : "border-slate-600 focus:ring-blue-500"
                   } ${
                     formData.industry && formData.industry !== ""
-                      ? "[color:#000000!important]"
-                      : "[color:#9ca3af!important]"
+                      ? "[color:#e2e8f0]"
+                      : "[color:#9ca3af]"
                   }`}
                 >
                   {industryOptions.map((option) => (
                     <option
                       key={option.value}
                       value={option.value}
-                      className="bg-slate-800 [color:#000000!important]"
+                      className="bg-slate-800 text-slate-200"
                     >
                       {option.label}
                     </option>
