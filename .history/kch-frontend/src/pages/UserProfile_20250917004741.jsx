@@ -935,46 +935,45 @@ function UserProfile() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {Array.isArray(orderHistory) &&
-                    orderHistory.map((order, index) => (
-                      <div
-                        key={index}
-                        className="bg-slate-700/50 border border-slate-600 rounded-xl p-6"
-                      >
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-white font-medium">
-                            {formatDate(order.orderDate)}
-                          </span>
-                          <span
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              order.status === "COMPLETED"
-                                ? "bg-green-600 text-white"
-                                : order.status === "PENDING"
-                                ? "bg-yellow-600 text-white"
-                                : order.status === "CANCELLED"
-                                ? "bg-red-600 text-white"
-                                : "bg-slate-600 text-white"
-                            }`}
-                          >
-                            {order.status}
+                  {orderHistory.map((order, index) => (
+                    <div
+                      key={index}
+                      className="bg-slate-700/50 border border-slate-600 rounded-xl p-6"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-white font-medium">
+                          {formatDate(order.orderDate)}
+                        </span>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            order.status === "COMPLETED"
+                              ? "bg-green-600 text-white"
+                              : order.status === "PENDING"
+                              ? "bg-yellow-600 text-white"
+                              : order.status === "CANCELLED"
+                              ? "bg-red-600 text-white"
+                              : "bg-slate-600 text-white"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-white">VIN:</span>
+                          <span className="text-white font-mono">
+                            {maskVIN(order.vin)}
                           </span>
                         </div>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div className="flex items-center justify-between">
-                            <span className="text-white">VIN:</span>
-                            <span className="text-white font-mono">
-                              {maskVIN(order.vin)}
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white">Cost:</span>
-                            <span className="text-green-400 font-semibold">
-                              ${order.cost.toFixed(2)}
-                            </span>
-                          </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-white">Cost:</span>
+                          <span className="text-green-400 font-semibold">
+                            ${order.cost.toFixed(2)}
+                          </span>
                         </div>
                       </div>
-                    ))}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

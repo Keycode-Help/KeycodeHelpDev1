@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  input,
+  textarea,
+  select {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+  }
+
+  input:disabled,
+  textarea:disabled,
+  select:disabled {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+  }
+}

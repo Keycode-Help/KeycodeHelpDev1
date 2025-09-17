@@ -11,11 +11,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    css: {
-      postcss: {
-        plugins: [tailwindcss, autoprefixer],
-      },
-    },
     base: "/",
     build: {
       outDir: "dist",

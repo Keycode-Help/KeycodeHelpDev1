@@ -13,7 +13,10 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     css: {
       postcss: {
-        plugins: [tailwindcss, autoprefixer],
+        plugins: [
+          tailwindcss,
+          autoprefixer,
+        ],
       },
     },
     base: "/",

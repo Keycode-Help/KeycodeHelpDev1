@@ -135,13 +135,9 @@ function UserProfile() {
   const fetchOrderHistory = async () => {
     try {
       const response = await api.get("/user/orders");
-      // Ensure we always set an array
-      const orders = Array.isArray(response.data) ? response.data : [];
-      setOrderHistory(orders);
+      setOrderHistory(response.data);
     } catch (error) {
       console.error("Error fetching orders:", error);
-      // Set empty array on error
-      setOrderHistory([]);
     }
   };
 
@@ -626,9 +622,11 @@ function UserProfile() {
                     type="email"
                     value={profileData.email}
                     disabled
-                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white cursor-not-allowed"
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-400 cursor-not-allowed"
                   />
-                  <p className="text-xs text-white">Email cannot be changed</p>
+                  <p className="text-xs text-slate-400">
+                    Email cannot be changed
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-white">
@@ -824,19 +822,23 @@ function UserProfile() {
 
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <div className="text-sm text-white mb-1">Start Date</div>
+                    <div className="text-sm text-slate-400 mb-1">
+                      Start Date
+                    </div>
                     <div className="text-white font-medium">
                       {formatDate(subscription.startDate)}
                     </div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <div className="text-sm text-white mb-1">End Date</div>
+                    <div className="text-sm text-slate-400 mb-1">End Date</div>
                     <div className="text-white font-medium">
                       {formatDate(subscription.endDate)}
                     </div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <div className="text-sm text-white mb-1">Auto-Renew</div>
+                    <div className="text-sm text-slate-400 mb-1">
+                      Auto-Renew
+                    </div>
                     <div className="text-white font-medium">
                       {subscription.autoRenew ? "Yes" : "No"}
                     </div>
@@ -924,57 +926,56 @@ function UserProfile() {
               <h3 className="text-2xl font-semibold text-white mb-6">
                 Order History
               </h3>
-              {!Array.isArray(orderHistory) || orderHistory.length === 0 ? (
+              {orderHistory.length === 0 ? (
                 <div className="text-center py-12">
-                  <History size={48} className="text-white mx-auto mb-4" />
+                  <History size={48} className="text-slate-400 mx-auto mb-4" />
                   <p className="text-white text-lg">No orders found</p>
-                  <p className="text-white text-sm mt-2">
+                  <p className="text-slate-400 text-sm mt-2">
                     Your order history will appear here once you make a
                     purchase.
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {Array.isArray(orderHistory) &&
-                    orderHistory.map((order, index) => (
-                      <div
-                        key={index}
-                        className="bg-slate-700/50 border border-slate-600 rounded-xl p-6"
-                      >
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-white font-medium">
-                            {formatDate(order.orderDate)}
-                          </span>
-                          <span
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              order.status === "COMPLETED"
-                                ? "bg-green-600 text-white"
-                                : order.status === "PENDING"
-                                ? "bg-yellow-600 text-white"
-                                : order.status === "CANCELLED"
-                                ? "bg-red-600 text-white"
-                                : "bg-slate-600 text-white"
-                            }`}
-                          >
-                            {order.status}
+                  {orderHistory.map((order, index) => (
+                    <div
+                      key={index}
+                      className="bg-slate-700/50 border border-slate-600 rounded-xl p-6"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-white font-medium">
+                          {formatDate(order.orderDate)}
+                        </span>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            order.status === "COMPLETED"
+                              ? "bg-green-600 text-white"
+                              : order.status === "PENDING"
+                              ? "bg-yellow-600 text-white"
+                              : order.status === "CANCELLED"
+                              ? "bg-red-600 text-white"
+                              : "bg-slate-600 text-white"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">VIN:</span>
+                          <span className="text-white font-mono">
+                            {maskVIN(order.vin)}
                           </span>
                         </div>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div className="flex items-center justify-between">
-                            <span className="text-white">VIN:</span>
-                            <span className="text-white font-mono">
-                              {maskVIN(order.vin)}
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white">Cost:</span>
-                            <span className="text-green-400 font-semibold">
-                              ${order.cost.toFixed(2)}
-                            </span>
-                          </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">Cost:</span>
+                          <span className="text-green-400 font-semibold">
+                            ${order.cost.toFixed(2)}
+                          </span>
                         </div>
                       </div>
-                    ))}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -1007,7 +1008,7 @@ function UserProfile() {
                   <label htmlFor="business-license" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
+                        <FileText size={32} className="text-slate-400 mb-3" />
                         <span className="text-white font-medium mb-2">
                           Business License
                         </span>
@@ -1035,7 +1036,7 @@ function UserProfile() {
                   <label htmlFor="drivers-license-front" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
+                        <FileText size={32} className="text-slate-400 mb-3" />
                         <span className="text-white font-medium mb-2">
                           Driver's License - Front
                         </span>
@@ -1063,7 +1064,7 @@ function UserProfile() {
                   <label htmlFor="drivers-license-back" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
+                        <FileText size={32} className="text-slate-400 mb-3" />
                         <span className="text-white font-medium mb-2">
                           Driver's License - Back
                         </span>
@@ -1091,7 +1092,7 @@ function UserProfile() {
                   <label htmlFor="insurance-certificate" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
+                        <FileText size={32} className="text-slate-400 mb-3" />
                         <span className="text-white font-medium mb-2">
                           Insurance Certificate
                         </span>
@@ -1168,9 +1169,11 @@ function UserProfile() {
                           key={index}
                           className="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg"
                         >
-                          <FileText size={16} className="text-white" />
-                          <span className="text-white flex-1">{doc.name}</span>
-                          <span className="text-white text-sm">
+                          <FileText size={16} className="text-slate-400" />
+                          <span className="text-white flex-1">
+                            {doc.name}
+                          </span>
+                          <span className="text-slate-400 text-sm">
                             {formatDate(doc.uploadDate)}
                           </span>
                         </div>

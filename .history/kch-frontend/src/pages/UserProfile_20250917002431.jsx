@@ -135,13 +135,9 @@ function UserProfile() {
   const fetchOrderHistory = async () => {
     try {
       const response = await api.get("/user/orders");
-      // Ensure we always set an array
-      const orders = Array.isArray(response.data) ? response.data : [];
-      setOrderHistory(orders);
+      setOrderHistory(response.data);
     } catch (error) {
       console.error("Error fetching orders:", error);
-      // Set empty array on error
-      setOrderHistory([]);
     }
   };
 
@@ -334,7 +330,7 @@ function UserProfile() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-lg">Initializing...</p>
+          <p className="text-slate-300 text-lg">Initializing...</p>
         </div>
       </div>
     );
@@ -348,7 +344,7 @@ function UserProfile() {
           <h2 className="text-2xl font-bold text-white mb-4">
             Authentication Required
           </h2>
-          <p className="text-white mb-6">
+          <p className="text-slate-300 mb-6">
             Please log in to access your profile.
           </p>
           <button
@@ -367,7 +363,7 @@ function UserProfile() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-lg">Loading your profile...</p>
+          <p className="text-slate-300 text-lg">Loading your profile...</p>
         </div>
       </div>
     );
@@ -381,7 +377,7 @@ function UserProfile() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
             User Profile
           </h1>
-          <p className="text-white text-lg">
+          <p className="text-slate-300 text-lg">
             Manage your account, subscription, and security settings
           </p>
         </div>
@@ -409,7 +405,7 @@ function UserProfile() {
                           {formatDate(notice.date)}
                         </span>
                       </div>
-                      <p className="text-white text-sm">{notice.message}</p>
+                      <p className="text-slate-300 text-sm">{notice.message}</p>
                     </div>
                   ))}
                 </div>
@@ -425,7 +421,7 @@ function UserProfile() {
               className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                 activeTab === "profile"
                   ? "bg-blue-600 text-white shadow-lg"
-                  : "text-white hover:text-white hover:bg-slate-700/50"
+                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
               }`}
               onClick={() => setActiveTab("profile")}
             >
@@ -436,7 +432,7 @@ function UserProfile() {
               className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                 activeTab === "subscription"
                   ? "bg-blue-600 text-white shadow-lg"
-                  : "text-white hover:text-white hover:bg-slate-700/50"
+                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
               }`}
               onClick={() => setActiveTab("subscription")}
             >
@@ -447,7 +443,7 @@ function UserProfile() {
               className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                 activeTab === "orders"
                   ? "bg-blue-600 text-white shadow-lg"
-                  : "text-white hover:text-white hover:bg-slate-700/50"
+                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
               }`}
               onClick={() => setActiveTab("orders")}
             >
@@ -458,7 +454,7 @@ function UserProfile() {
               className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                 activeTab === "credentials"
                   ? "bg-blue-600 text-white shadow-lg"
-                  : "text-white hover:text-white hover:bg-slate-700/50"
+                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
               }`}
               onClick={() => setActiveTab("credentials")}
             >
@@ -469,7 +465,7 @@ function UserProfile() {
               className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                 activeTab === "security"
                   ? "bg-blue-600 text-white shadow-lg"
-                  : "text-white hover:text-white hover:bg-slate-700/50"
+                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
               }`}
               onClick={() => setActiveTab("security")}
             >
@@ -488,7 +484,7 @@ function UserProfile() {
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   Profile Photos
                 </h2>
-                <p className="text-white mt-2">
+                <p className="text-slate-400 mt-2">
                   Upload your profile photo and company logo
                 </p>
               </div>
@@ -506,9 +502,9 @@ function UserProfile() {
                       ) : (
                         <div className="flex flex-col items-center">
                           <div className="w-24 h-24 bg-slate-600 rounded-full flex items-center justify-center mb-4">
-                            <User size={40} className="text-white" />
+                            <User size={40} className="text-slate-400" />
                           </div>
-                          <span className="text-white font-medium">
+                          <span className="text-slate-300 font-medium">
                             Profile Photo
                           </span>
                         </div>
@@ -523,7 +519,7 @@ function UserProfile() {
                       className="hidden"
                     />
                   </label>
-                  <p className="text-sm text-white text-center">
+                  <p className="text-sm text-slate-400 text-center">
                     Click to upload profile photo
                   </p>
                 </div>
@@ -541,9 +537,9 @@ function UserProfile() {
                       ) : (
                         <div className="flex flex-col items-center">
                           <div className="w-24 h-24 bg-slate-600 rounded-lg flex items-center justify-center mb-4">
-                            <Building2 size={40} className="text-white" />
+                            <Building2 size={40} className="text-slate-400" />
                           </div>
-                          <span className="text-white font-medium">
+                          <span className="text-slate-300 font-medium">
                             Company Logo
                           </span>
                         </div>
@@ -558,7 +554,7 @@ function UserProfile() {
                       className="hidden"
                     />
                   </label>
-                  <p className="text-sm text-white text-center">
+                  <p className="text-sm text-slate-400 text-center">
                     Click to upload company logo
                   </p>
                 </div>
@@ -571,7 +567,7 @@ function UserProfile() {
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   Personal Information
                 </h2>
-                <p className="text-white mt-2">
+                <p className="text-slate-400 mt-2">
                   Update your personal details and contact information
                 </p>
               </div>
@@ -592,7 +588,16 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      color: "white !important",
+                      WebkitTextFillColor: "white !important",
+                      WebkitAppearance: "none",
+                      MozAppearance: "textfield",
+                      backgroundColor: "rgba(51, 65, 85, 0.5)",
+                      border: "1px solid rgb(71, 85, 105)",
+                      caretColor: "white",
+                    }}
                     placeholder="Enter your first name"
                   />
                 </div>
@@ -610,7 +615,16 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      color: "white !important",
+                      WebkitTextFillColor: "white !important",
+                      WebkitAppearance: "none",
+                      MozAppearance: "textfield",
+                      backgroundColor: "rgba(51, 65, 85, 0.5)",
+                      border: "1px solid rgb(71, 85, 105)",
+                      caretColor: "white",
+                    }}
                     placeholder="Enter your last name"
                   />
                 </div>
@@ -626,9 +640,11 @@ function UserProfile() {
                     type="email"
                     value={profileData.email}
                     disabled
-                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white cursor-not-allowed"
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-400 cursor-not-allowed"
                   />
-                  <p className="text-xs text-white">Email cannot be changed</p>
+                  <p className="text-xs text-slate-400">
+                    Email cannot be changed
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-white">
@@ -644,7 +660,16 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      color: "white !important",
+                      WebkitTextFillColor: "white !important",
+                      WebkitAppearance: "none",
+                      MozAppearance: "textfield",
+                      backgroundColor: "rgba(51, 65, 85, 0.5)",
+                      border: "1px solid rgb(71, 85, 105)",
+                      caretColor: "white",
+                    }}
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -699,7 +724,16 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      color: "white !important",
+                      WebkitTextFillColor: "white !important",
+                      WebkitAppearance: "none",
+                      MozAppearance: "textfield",
+                      backgroundColor: "rgba(51, 65, 85, 0.5)",
+                      border: "1px solid rgb(71, 85, 105)",
+                      caretColor: "white",
+                    }}
                     placeholder="Enter your street address"
                   />
                 </div>
@@ -719,7 +753,7 @@ function UserProfile() {
                         }))
                       }
                       disabled={!isEditing}
-                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
                       style={{ color: "white !important" }}
                       style={{ color: "white !important" }}
                       placeholder="City"
@@ -739,7 +773,7 @@ function UserProfile() {
                         }))
                       }
                       disabled={!isEditing}
-                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
                       style={{ color: "white !important" }}
                       style={{ color: "white !important" }}
                       placeholder="State"
@@ -759,7 +793,7 @@ function UserProfile() {
                         }))
                       }
                       disabled={!isEditing}
-                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
                       style={{ color: "white !important" }}
                       style={{ color: "white !important" }}
                       placeholder="ZIP Code"
@@ -824,19 +858,23 @@ function UserProfile() {
 
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <div className="text-sm text-white mb-1">Start Date</div>
+                    <div className="text-sm text-slate-400 mb-1">
+                      Start Date
+                    </div>
                     <div className="text-white font-medium">
                       {formatDate(subscription.startDate)}
                     </div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <div className="text-sm text-white mb-1">End Date</div>
+                    <div className="text-sm text-slate-400 mb-1">End Date</div>
                     <div className="text-white font-medium">
                       {formatDate(subscription.endDate)}
                     </div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <div className="text-sm text-white mb-1">Auto-Renew</div>
+                    <div className="text-sm text-slate-400 mb-1">
+                      Auto-Renew
+                    </div>
                     <div className="text-white font-medium">
                       {subscription.autoRenew ? "Yes" : "No"}
                     </div>
@@ -851,15 +889,15 @@ function UserProfile() {
                     <ul className="space-y-2">
                       {subscription.tier === "BASIC" && (
                         <>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             15% off keycode purchases
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Limited vehicle access
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Basic support
                           </li>
@@ -867,19 +905,19 @@ function UserProfile() {
                       )}
                       {subscription.tier === "PROFESSIONAL" && (
                         <>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             20% off keycode purchases
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Extended vehicle coverage
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Priority support
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Bulk ordering (up to 20 codes)
                           </li>
@@ -887,23 +925,23 @@ function UserProfile() {
                       )}
                       {subscription.tier === "ENTERPRISE" && (
                         <>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             25% off keycode purchases
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Complete vehicle database
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             24/7 premium support
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Unlimited bulk ordering
                           </li>
-                          <li className="flex items-center gap-2 text-white">
+                          <li className="flex items-center gap-2 text-slate-300">
                             <CheckCircle size={16} className="text-green-400" />
                             Multi-location management
                           </li>
@@ -924,57 +962,56 @@ function UserProfile() {
               <h3 className="text-2xl font-semibold text-white mb-6">
                 Order History
               </h3>
-              {!Array.isArray(orderHistory) || orderHistory.length === 0 ? (
+              {orderHistory.length === 0 ? (
                 <div className="text-center py-12">
-                  <History size={48} className="text-white mx-auto mb-4" />
-                  <p className="text-white text-lg">No orders found</p>
-                  <p className="text-white text-sm mt-2">
+                  <History size={48} className="text-slate-400 mx-auto mb-4" />
+                  <p className="text-slate-300 text-lg">No orders found</p>
+                  <p className="text-slate-400 text-sm mt-2">
                     Your order history will appear here once you make a
                     purchase.
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {Array.isArray(orderHistory) &&
-                    orderHistory.map((order, index) => (
-                      <div
-                        key={index}
-                        className="bg-slate-700/50 border border-slate-600 rounded-xl p-6"
-                      >
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-white font-medium">
-                            {formatDate(order.orderDate)}
-                          </span>
-                          <span
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              order.status === "COMPLETED"
-                                ? "bg-green-600 text-white"
-                                : order.status === "PENDING"
-                                ? "bg-yellow-600 text-white"
-                                : order.status === "CANCELLED"
-                                ? "bg-red-600 text-white"
-                                : "bg-slate-600 text-white"
-                            }`}
-                          >
-                            {order.status}
+                  {orderHistory.map((order, index) => (
+                    <div
+                      key={index}
+                      className="bg-slate-700/50 border border-slate-600 rounded-xl p-6"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-slate-300 font-medium">
+                          {formatDate(order.orderDate)}
+                        </span>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            order.status === "COMPLETED"
+                              ? "bg-green-600 text-white"
+                              : order.status === "PENDING"
+                              ? "bg-yellow-600 text-white"
+                              : order.status === "CANCELLED"
+                              ? "bg-red-600 text-white"
+                              : "bg-slate-600 text-white"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">VIN:</span>
+                          <span className="text-white font-mono">
+                            {maskVIN(order.vin)}
                           </span>
                         </div>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div className="flex items-center justify-between">
-                            <span className="text-white">VIN:</span>
-                            <span className="text-white font-mono">
-                              {maskVIN(order.vin)}
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white">Cost:</span>
-                            <span className="text-green-400 font-semibold">
-                              ${order.cost.toFixed(2)}
-                            </span>
-                          </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">Cost:</span>
+                          <span className="text-green-400 font-semibold">
+                            ${order.cost.toFixed(2)}
+                          </span>
                         </div>
                       </div>
-                    ))}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -1007,8 +1044,8 @@ function UserProfile() {
                   <label htmlFor="business-license" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
-                        <span className="text-white font-medium mb-2">
+                        <FileText size={32} className="text-slate-400 mb-3" />
+                        <span className="text-slate-300 font-medium mb-2">
                           Business License
                         </span>
                         {credentials.businessLicense && (
@@ -1035,8 +1072,8 @@ function UserProfile() {
                   <label htmlFor="drivers-license-front" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
-                        <span className="text-white font-medium mb-2">
+                        <FileText size={32} className="text-slate-400 mb-3" />
+                        <span className="text-slate-300 font-medium mb-2">
                           Driver's License - Front
                         </span>
                         {credentials.driversLicenseFront && (
@@ -1063,8 +1100,8 @@ function UserProfile() {
                   <label htmlFor="drivers-license-back" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
-                        <span className="text-white font-medium mb-2">
+                        <FileText size={32} className="text-slate-400 mb-3" />
+                        <span className="text-slate-300 font-medium mb-2">
                           Driver's License - Back
                         </span>
                         {credentials.driversLicenseBack && (
@@ -1091,8 +1128,8 @@ function UserProfile() {
                   <label htmlFor="insurance-certificate" className="block">
                     <div className="bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-200 cursor-pointer">
                       <div className="flex flex-col items-center">
-                        <FileText size={32} className="text-white mb-3" />
-                        <span className="text-white font-medium mb-2">
+                        <FileText size={32} className="text-slate-400 mb-3" />
+                        <span className="text-slate-300 font-medium mb-2">
                           Insurance Certificate
                         </span>
                         {credentials.insuranceCertificate && (
@@ -1168,9 +1205,11 @@ function UserProfile() {
                           key={index}
                           className="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg"
                         >
-                          <FileText size={16} className="text-white" />
-                          <span className="text-white flex-1">{doc.name}</span>
-                          <span className="text-white text-sm">
+                          <FileText size={16} className="text-slate-400" />
+                          <span className="text-slate-300 flex-1">
+                            {doc.name}
+                          </span>
+                          <span className="text-slate-400 text-sm">
                             {formatDate(doc.uploadDate)}
                           </span>
                         </div>
@@ -1201,7 +1240,7 @@ function UserProfile() {
                         <h4 className="text-lg font-semibold text-white">
                           Fingerprint Authentication
                         </h4>
-                        <p className="text-white text-sm">
+                        <p className="text-slate-300 text-sm">
                           Use your fingerprint to access profile changes
                         </p>
                       </div>
@@ -1230,7 +1269,7 @@ function UserProfile() {
                         <h4 className="text-lg font-semibold text-white">
                           Two-Factor Authentication
                         </h4>
-                        <p className="text-white text-sm">
+                        <p className="text-slate-300 text-sm">
                           Add an extra layer of security with 2FA
                         </p>
                       </div>
@@ -1256,13 +1295,13 @@ function UserProfile() {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between py-2">
-                    <span className="text-white">Last Login:</span>
+                    <span className="text-slate-300">Last Login:</span>
                     <span className="text-white font-medium">
                       {formatDate(securitySettings.lastLogin)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2">
-                    <span className="text-white">Login History:</span>
+                    <span className="text-slate-300">Login History:</span>
                     <span className="text-white font-medium">
                       {securitySettings.loginHistory.length} recent logins
                     </span>
@@ -1281,7 +1320,7 @@ function UserProfile() {
             <h3 className="text-xl font-semibold text-white mb-4">
               Enable Fingerprint Authentication
             </h3>
-            <p className="text-white mb-6">
+            <p className="text-slate-300 mb-6">
               Please scan your fingerprint to enable this feature
             </p>
             <div className="flex gap-4 justify-end">
@@ -1305,7 +1344,7 @@ function UserProfile() {
             <h3 className="text-xl font-semibold text-white mb-4">
               Enable Two-Factor Authentication
             </h3>
-            <p className="text-white mb-6">
+            <p className="text-slate-300 mb-6">
               Scan the QR code with your authenticator app
             </p>
             <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-8 text-center mb-6">
