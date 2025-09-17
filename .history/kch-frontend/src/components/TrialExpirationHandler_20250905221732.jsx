@@ -1,0 +1,56 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Icon } from "./IconProvider";
+import { useTrialStatus } from "../hooks/useTrialStatus";
+
+export default function TrialExpirationHandler() {
+  const { trialStatus, isTrialExpired } = useTrialStatus();
+  const [showExpirationNotice, setShowExpirationNotice] = useState(false);
+
+  useEffect(() => {
+    // Check if trial has expired
+    if (trialStatus.hasTrial && isTrialExpired()) {
+      setShowExpirationNotice(true);
+    }
+  }, [trialStatus, isTrialExpired]);
+
+  if (!showExpirationNotice) {
+    return null;
+  }
+
+  return (
+    <div className="fixed top-4 right-4 z-50 max-w-md">
+      <div className="bg-gradient-to-br from-warning/20 to-warning/30 border border-warning/30 rounded-2xl p-6 backdrop-blur-sm shadow-xl relative overflow-hidden">
+        <div className="p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0">
+              <Icon name="alertTriangle" size={20} className="text-warning" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-warning mb-2">Trial Expired</h4>
+              <p className="text-sm text-white/80 mb-3">
+                Your premium trial has ended. Upgrade to continue enjoying
+                premium features and member pricing.
+              </p>
+              <div className="flex gap-2">
+                <Link
+                  to="/membership"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-dark text-white font-semibold rounded-lg hover:from-primary-dark hover:to-primary hover:-translate-y-1 hover:shadow-lg transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  <Icon name="crown" size={16} />
+                  Upgrade Now
+                </Link>
+                <button
+                  onClick={() => setShowExpirationNotice(false)}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 border-2 border-primary text-primary bg-transparent font-semibold rounded-lg hover:bg-primary hover:text-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

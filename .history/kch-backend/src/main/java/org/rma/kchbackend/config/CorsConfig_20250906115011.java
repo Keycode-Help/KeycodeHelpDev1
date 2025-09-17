@@ -1,0 +1,73 @@
+package org.rma.kchbackend.config;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+@Configuration
+public class CorsConfig {
+
+    @Bean
+    @Primary
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration c = new CorsConfiguration();
+        // Allow both localhost and production domains
+        c.setAllowedOrigins(List.of(
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "https://keycode-help-dev1.vercel.app",
+            "https://keycode-help-dev1-mrguru2024s-projects.vercel.app",
+            "https://keycode.help",
+            "https://www.keycode.help"
+        ));
+        c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        c.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        c.setAllowCredentials(true);
+        c.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
+        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
+        s.registerCorsConfiguration("/**", c);
+        return s;
+    }
+
+    @Bean
+    @Profile("dev")
+    public CorsConfigurationSource devCors() {
+        return corsConfigurationSource();
+    }
+
+    @Bean
+    @Profile("prod")
+    public CorsConfigurationSource prodCors(
+        @Value("${app.cors.allowed-origins:}") List<String> origins) {
+        CorsConfiguration c = new CorsConfiguration();
+        
+        // Use the origins from environment variable if provided, otherwise use default list
+        if (origins != null && !origins.isEmpty()) {
+            c.setAllowedOrigins(origins);
+        } else {
+            // Fallback to default origins
+            c.setAllowedOrigins(List.of(
+                "https://keycode.help",
+                "https://www.keycode.help",
+                "https://keycode-help-dev1.vercel.app"
+            ));
+        }
+        
+        c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        c.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        c.setAllowCredentials(true);
+        c.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
+        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
+        s.registerCorsConfiguration("/**", c);
+        return s;
+    }
+
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Loading Debug</title>
+</head>
+<body>
+    <h1>Image Loading Debug</h1>
+    <div id="test-results"></div>
+    
+    <script>
+        // Test the getOptimizedImageUrl function
+        function base64ToBlobUrl(base64String, mimeType = 'image/jpeg') {
+            if (!base64String) return null;
+            
+            try {
+                // Check if it's already a data URL
+                if (base64String.startsWith('data:')) {
+                    const matches = base64String.match(/^data:([^;]+);base64,(.+)$/);
+                    if (matches) {
+                        mimeType = matches[1];
+                        base64String = matches[2];
+                    } else {
+                        throw new Error('Invalid data URL format');
+                    }
+                }
+                
+                // Decode base64 string
+                const byteCharacters = atob(base64String);
+                const byteNumbers = new Array(byteCharacters.length);
+                
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: mimeType });
+                
+                return URL.createObjectURL(blob);
+            } catch (error) {
+                console.error('Error converting base64 to blob URL:', error);
+                return null;
+            }
+        }
+        
+        function getOptimizedImageUrl(imageData, maxBase64Length = 100000) {
+            if (!imageData) return null;
+            
+            // If it's already a regular URL (not base64), return as is
+            if (imageData.startsWith('http')) {
+                return imageData;
+            }
+            
+            // Check if it's a relative path (not base64)
+            if (imageData.startsWith('/') && !imageData.startsWith('/9j/') && !imageData.startsWith('/iVBORw0KGgo') && !imageData.startsWith('/R0lGOD')) {
+                return imageData;
+            }
+            
+            // Handle different base64 formats
+            let base64String = imageData;
+            let mimeType = 'image/jpeg'; // Default to JPEG
+            
+            // Check if it's already a data URL
+            if (imageData.startsWith('data:')) {
+                const matches = imageData.match(/^data:([^;]+);base64,(.+)$/);
+                if (matches) {
+                    mimeType = matches[1];
+                    base64String = matches[2];
+                } else {
+                    // Invalid data URL format, treat as raw base64
+                    base64String = imageData;
+                }
+            } else {
+                // Raw base64 string - determine mime type from base64 header
+                if (imageData.startsWith('/9j/')) {
+                    mimeType = 'image/jpeg';
+                } else if (imageData.startsWith('iVBORw0KGgo')) {
+                    mimeType = 'image/png';
+                } else if (imageData.startsWith('R0lGOD')) {
+                    mimeType = 'image/gif';
+                }
+            }
+            
+            // For large base64 strings, convert to blob URL
+            if (base64String.length > maxBase64Length) {
+                return base64ToBlobUrl(base64String, mimeType);
+            } else {
+                // For smaller base64 strings, create data URL
+                return `data:${mimeType};base64,${base64String}`;
+            }
+        }
+        
+        // Test with a sample base64 string that starts with /9j/
+        const testBase64 = '/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQA...';
+        
+        console.log('Testing image URL generation...');
+        console.log('Input:', testBase64.substring(0, 50) + '...');
+        console.log('Length:', testBase64.length);
+        
+        const result = getOptimizedImageUrl(testBase64);
+        console.log('Result:', result);
+        
+        // Create an image element to test loading
+        const img = document.createElement('img');
+        img.onload = () => {
+            console.log('✅ Image loaded successfully');
+            document.getElementById('test-results').innerHTML = `
+                <p>✅ Image loaded successfully!</p>
+                <p>URL: ${result.substring(0, 100)}...</p>
+                <img src="${result}" style="max-width: 200px; max-height: 200px;" />
+            `;
+        };
+        img.onerror = (e) => {
+            console.error('❌ Image failed to load:', e);
+            document.getElementById('test-results').innerHTML = `
+                <p>❌ Image failed to load</p>
+                <p>URL: ${result}</p>
+                <p>Error: ${e.message || 'Unknown error'}</p>
+            `;
+        };
+        img.src = result;
+    </script>
+</body>
+</html>

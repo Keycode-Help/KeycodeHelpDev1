@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply pt-20; /* Account for fixed navbar height */
+    background-color: #0f172a; /* Dark background using slate-900 equivalent */
+  }
+}
