@@ -64,7 +64,6 @@ export const Icons = {
   info: Info,
   alertCircle: AlertCircle,
   mail: Mail,
-  shoppingCart: ShoppingCart,
 };
 
 export function Icon({ name, size = 24, className = "", ...props }) {

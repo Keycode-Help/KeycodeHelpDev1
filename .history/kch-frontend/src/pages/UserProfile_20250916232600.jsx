@@ -484,9 +484,7 @@ function UserProfile() {
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   Profile Photos
                 </h2>
-                <p className="text-slate-400 mt-2">
-                  Upload your profile photo and company logo
-                </p>
+                <p className="text-slate-400 mt-2">Upload your profile photo and company logo</p>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Profile Photo */}
@@ -567,9 +565,7 @@ function UserProfile() {
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   Personal Information
                 </h2>
-                <p className="text-slate-400 mt-2">
-                  Update your personal details and contact information
-                </p>
+                <p className="text-slate-400 mt-2">Update your personal details and contact information</p>
               </div>
 
               {/* Name Fields */}
@@ -622,7 +618,7 @@ function UserProfile() {
                     type="email"
                     value={profileData.email}
                     disabled
-                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-slate-400 cursor-not-allowed"
+                    className="w-full px-4 py-3 bg-slate-600/50 border border-slate-500 rounded-xl text-gray-400 cursor-not-allowed"
                   />
                   <p className="text-xs text-slate-400">
                     Email cannot be changed
