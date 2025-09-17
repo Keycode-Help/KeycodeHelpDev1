@@ -63,12 +63,8 @@ public class UserProfileController {
             profileData.put("profilePhoto", null); // Not in current model
             profileData.put("companyLogo", null); // Not in current model
             
-            long totalTime = System.currentTimeMillis() - startTime;
-            System.out.println("✅ /user/profile completed in: " + totalTime + "ms");
             return ResponseEntity.ok(profileData);
         } catch (Exception e) {
-            long totalTime = System.currentTimeMillis() - startTime;
-            System.out.println("❌ /user/profile failed after: " + totalTime + "ms - Error: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500).body("An unexpected error occurred: " + e.getMessage());
         }

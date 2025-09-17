@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Force white text on all inputs - override browser defaults */
+input, textarea, select {
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+}
+
+/* Handle autofill specifically */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: white !important;
+  -webkit-box-shadow: 0 0 0 30px #374151 inset !important;
+}
+
+/* Disabled state */
+input:disabled, textarea:disabled, select:disabled {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}

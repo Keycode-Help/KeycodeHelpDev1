@@ -5,6 +5,7 @@ import App from "./App";
 import { setupGlobalErrorHandling } from "./utils/messageChannelHandler";
 import "./index.css";
 
+
 // Setup global error handling for message channel errors
 setupGlobalErrorHandling();
 

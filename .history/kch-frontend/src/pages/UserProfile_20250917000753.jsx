@@ -588,7 +588,8 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:text-slate-300 disabled:bg-slate-800/50"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
+                    style={{ color: 'white !important' }}
                     placeholder="Enter your first name"
                   />
                 </div>
@@ -606,7 +607,8 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:text-slate-300 disabled:bg-slate-800/50"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
+                    style={{ color: 'white !important' }}
                     placeholder="Enter your last name"
                   />
                 </div>
@@ -642,7 +644,8 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:text-slate-300 disabled:bg-slate-800/50"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
+                    style={{ color: 'white !important' }}
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -663,7 +666,7 @@ function UserProfile() {
                     }))
                   }
                   disabled={!isEditing}
-                  className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:text-slate-300 disabled:bg-slate-800/50"
+                  className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
                   placeholder="Enter your company name"
                 />
               </div>
@@ -688,7 +691,8 @@ function UserProfile() {
                       }))
                     }
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:text-slate-300 disabled:bg-slate-800/50"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
+                    style={{ color: 'white !important' }}
                     placeholder="Enter your street address"
                   />
                 </div>
@@ -709,8 +713,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
-                      style={{ color: "white !important" }}
-                      style={{ color: "white !important" }}
+                    style={{ color: 'white !important' }}
                       placeholder="City"
                     />
                   </div>
@@ -729,8 +732,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
-                      style={{ color: "white !important" }}
-                      style={{ color: "white !important" }}
+                    style={{ color: 'white !important' }}
                       placeholder="State"
                     />
                   </div>
@@ -749,8 +751,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl !text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:!text-slate-300 disabled:bg-slate-800/50"
-                      style={{ color: "white !important" }}
-                      style={{ color: "white !important" }}
+                    style={{ color: 'white !important' }}
                       placeholder="ZIP Code"
                     />
                   </div>

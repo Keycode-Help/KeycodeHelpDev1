@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply pt-20; /* Account for fixed navbar height */
+    background-color: #0f172a; /* Dark background using slate-900 equivalent */
+  }
+  
+  /* Force all input elements to have white text */
+  input, textarea, select {
+    color: white !important;
+  }
+  
+  /* Ensure disabled inputs have proper styling */
+  input:disabled, textarea:disabled, select:disabled {
+    color: #cbd5e1 !important; /* slate-300 */
+  }
+  
+  /* Override any browser defaults for form elements */
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="tel"], 
+  input[type="number"],
+  textarea {
+    color: white !important;
+  }
+}
