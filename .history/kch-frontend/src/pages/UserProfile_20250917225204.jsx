@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/request";
 import QRCode from "qrcode";
-import toast from "react-hot-toast";
 import {
   User,
   Building2,
@@ -132,12 +131,10 @@ function UserProfile() {
       console.log("✅ User profile fetched successfully");
     } catch (error) {
       console.error("Error fetching profile:", error);
-
+      
       // Handle authentication errors specifically
       if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log(
-          "🚨 Authentication error in fetchUserProfile, redirecting to login..."
-        );
+        console.log("🚨 Authentication error in fetchUserProfile, redirecting to login...");
         toast.error("Your session has expired. Please log in again.");
         window.location.href = "/login";
       } else {
@@ -173,12 +170,10 @@ function UserProfile() {
       console.log("✅ Order history fetched successfully");
     } catch (error) {
       console.error("Error fetching orders:", error);
-
+      
       // Handle authentication errors specifically
       if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log(
-          "🚨 Authentication error in fetchOrderHistory, redirecting to login..."
-        );
+        console.log("🚨 Authentication error in fetchOrderHistory, redirecting to login...");
         toast.error("Your session has expired. Please log in again.");
         window.location.href = "/login";
       } else {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/request";
 import QRCode from "qrcode";
-import toast from "react-hot-toast";
 import {
   User,
   Building2,
@@ -85,33 +84,18 @@ function UserProfile() {
   const [twoFactorSecret, setTwoFactorSecret] = useState("");
 
   useEffect(() => {
-    console.log("🔍 UserProfile useEffect - Auth state:", {
-      isInitialized,
-      isAuthenticated,
-      hasUser: !!user,
-      userId: user?.id,
-      userEmail: user?.email,
-      userRole: user?.role,
-    });
-
     if (isInitialized && isAuthenticated && user) {
-      console.log("✅ All auth conditions met, fetching user data...");
       fetchUserProfile();
       fetchSubscriptionData();
       fetchOrderHistory();
       fetchSecuritySettings();
       fetchCredentials();
       fetchImportantNotices();
-    } else if (isInitialized && !isAuthenticated) {
-      console.log("❌ User not authenticated, redirecting to login...");
-      // Redirect to login if not authenticated
-      window.location.href = "/login";
     }
   }, [isInitialized, isAuthenticated, user]);
 
   const fetchUserProfile = async () => {
     try {
-      console.log("🔄 Fetching user profile...");
       const response = await api.get("/user/profile");
       const data = response.data;
 
@@ -129,20 +113,8 @@ function UserProfile() {
         profilePhoto: data.profilePhoto || null,
         companyLogo: data.companyLogo || null,
       });
-      console.log("✅ User profile fetched successfully");
     } catch (error) {
       console.error("Error fetching profile:", error);
-
-      // Handle authentication errors specifically
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log(
-          "🚨 Authentication error in fetchUserProfile, redirecting to login..."
-        );
-        toast.error("Your session has expired. Please log in again.");
-        window.location.href = "/login";
-      } else {
-        toast.error("Failed to load profile data. Please try again later.");
-      }
     }
   };
 
@@ -165,27 +137,14 @@ function UserProfile() {
 
   const fetchOrderHistory = async () => {
     try {
-      console.log("🔄 Fetching order history...");
       const response = await api.get("/user/orders");
       // Ensure we always set an array
       const orders = Array.isArray(response.data) ? response.data : [];
       setOrderHistory(orders);
-      console.log("✅ Order history fetched successfully");
     } catch (error) {
       console.error("Error fetching orders:", error);
-
-      // Handle authentication errors specifically
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log(
-          "🚨 Authentication error in fetchOrderHistory, redirecting to login..."
-        );
-        toast.error("Your session has expired. Please log in again.");
-        window.location.href = "/login";
-      } else {
-        toast.error("Failed to load order history. Please try again later.");
-        // Set empty array on error
-        setOrderHistory([]);
-      }
+      // Set empty array on error
+      setOrderHistory([]);
     }
   };
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/request";
 import QRCode from "qrcode";
-import toast from "react-hot-toast";
 import {
   User,
   Building2,
@@ -85,33 +84,18 @@ function UserProfile() {
   const [twoFactorSecret, setTwoFactorSecret] = useState("");
 
   useEffect(() => {
-    console.log("🔍 UserProfile useEffect - Auth state:", {
-      isInitialized,
-      isAuthenticated,
-      hasUser: !!user,
-      userId: user?.id,
-      userEmail: user?.email,
-      userRole: user?.role,
-    });
-
     if (isInitialized && isAuthenticated && user) {
-      console.log("✅ All auth conditions met, fetching user data...");
       fetchUserProfile();
       fetchSubscriptionData();
       fetchOrderHistory();
       fetchSecuritySettings();
       fetchCredentials();
       fetchImportantNotices();
-    } else if (isInitialized && !isAuthenticated) {
-      console.log("❌ User not authenticated, redirecting to login...");
-      // Redirect to login if not authenticated
-      window.location.href = "/login";
     }
   }, [isInitialized, isAuthenticated, user]);
 
   const fetchUserProfile = async () => {
     try {
-      console.log("🔄 Fetching user profile...");
       const response = await api.get("/user/profile");
       const data = response.data;
 
@@ -129,20 +113,8 @@ function UserProfile() {
         profilePhoto: data.profilePhoto || null,
         companyLogo: data.companyLogo || null,
       });
-      console.log("✅ User profile fetched successfully");
     } catch (error) {
       console.error("Error fetching profile:", error);
-
-      // Handle authentication errors specifically
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log(
-          "🚨 Authentication error in fetchUserProfile, redirecting to login..."
-        );
-        toast.error("Your session has expired. Please log in again.");
-        window.location.href = "/login";
-      } else {
-        toast.error("Failed to load profile data. Please try again later.");
-      }
     }
   };
 
@@ -165,27 +137,14 @@ function UserProfile() {
 
   const fetchOrderHistory = async () => {
     try {
-      console.log("🔄 Fetching order history...");
       const response = await api.get("/user/orders");
       // Ensure we always set an array
       const orders = Array.isArray(response.data) ? response.data : [];
       setOrderHistory(orders);
-      console.log("✅ Order history fetched successfully");
     } catch (error) {
       console.error("Error fetching orders:", error);
-
-      // Handle authentication errors specifically
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log(
-          "🚨 Authentication error in fetchOrderHistory, redirecting to login..."
-        );
-        toast.error("Your session has expired. Please log in again.");
-        window.location.href = "/login";
-      } else {
-        toast.error("Failed to load order history. Please try again later.");
-        // Set empty array on error
-        setOrderHistory([]);
-      }
+      // Set empty array on error
+      setOrderHistory([]);
     }
   };
 
@@ -256,7 +215,7 @@ function UserProfile() {
     }
 
     if (setting === "twoFactor" && value) {
-      handle2FASetup();
+      setShow2FAModal(true);
       return;
     }
 
@@ -349,22 +308,22 @@ function UserProfile() {
       // Generate a secret for 2FA (in real implementation, this would come from backend)
       const secret = Math.random().toString(36).substring(2, 18);
       setTwoFactorSecret(secret);
-
+      
       // Create TOTP URL for authenticator apps
       const appName = "Keycode Help";
       const accountName = user?.email || "user@example.com";
       const totpUrl = `otpauth://totp/${appName}:${accountName}?secret=${secret}&issuer=${appName}`;
-
+      
       // Generate QR code
       const qrCodeDataUrl = await QRCode.toDataURL(totpUrl, {
         width: 200,
         margin: 2,
         color: {
-          dark: "#000000",
-          light: "#FFFFFF",
-        },
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
       });
-
+      
       setQrCodeUrl(qrCodeDataUrl);
     } catch (error) {
       console.error("Error generating QR code:", error);
@@ -374,91 +333,6 @@ function UserProfile() {
   const handle2FASetup = () => {
     setShow2FAModal(true);
     generateQRCode();
-  };
-
-  const handleFingerprintSetup = async () => {
-    try {
-      // Check if WebAuthn is supported
-      if (!window.PublicKeyCredential) {
-        alert(
-          "Fingerprint authentication is not supported on this device/browser."
-        );
-        setShowFingerprintModal(false);
-        return;
-      }
-
-      // Create credential options
-      const credentialCreationOptions = {
-        publicKey: {
-          challenge: new Uint8Array(32),
-          rp: {
-            name: "Keycode Help",
-            id: window.location.hostname,
-          },
-          user: {
-            id: new TextEncoder().encode(user?.email || "user"),
-            name: user?.email || "user@example.com",
-            displayName: `${user?.firstName || "User"} ${
-              user?.lastName || ""
-            }`.trim(),
-          },
-          pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-          authenticatorSelection: {
-            authenticatorAttachment: "platform",
-            userVerification: "required",
-          },
-          timeout: 60000,
-          attestation: "direct",
-        },
-      };
-
-      // Create credential
-      const credential = await navigator.credentials.create(
-        credentialCreationOptions
-      );
-
-      if (credential) {
-        // In a real implementation, you'd send this to your backend
-        console.log("Fingerprint credential created:", credential);
-
-        // Update security settings
-        await api.put("/user/security", {
-          fingerprintEnabled: true,
-        });
-
-        setSecuritySettings((prev) => ({
-          ...prev,
-          fingerprintEnabled: true,
-        }));
-
-        setShowFingerprintModal(false);
-        alert("Fingerprint authentication enabled successfully!");
-      }
-    } catch (error) {
-      console.error("Fingerprint setup failed:", error);
-      alert("Failed to set up fingerprint authentication. Please try again.");
-    }
-  };
-
-  const handle2FAEnable = async () => {
-    try {
-      // In a real implementation, you'd verify the TOTP code first
-      await api.put("/user/security", {
-        twoFactorEnabled: true,
-        twoFactorSecret: twoFactorSecret,
-      });
-
-      setSecuritySettings((prev) => ({
-        ...prev,
-        twoFactorEnabled: true,
-      }));
-
-      setShow2FAModal(false);
-      alert("Two-Factor Authentication enabled successfully!");
-    } catch (error) {
-      console.error("2FA setup failed:", error);
-      alert("Failed to enable Two-Factor Authentication. Please try again.");
-    }
   };
 
   const getSubscriptionStatusColor = (status) => {
@@ -1452,10 +1326,7 @@ function UserProfile() {
               >
                 Cancel
               </button>
-              <button
-                onClick={handleFingerprintSetup}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
-              >
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
                 Enable
               </button>
             </div>
@@ -1473,21 +1344,8 @@ function UserProfile() {
               Scan the QR code with your authenticator app
             </p>
             <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-8 text-center mb-6">
-              <div className="w-48 h-48 bg-white mx-auto rounded-lg flex items-center justify-center p-4">
-                {qrCodeUrl ? (
-                  <img
-                    src={qrCodeUrl}
-                    alt="2FA QR Code"
-                    className="w-full h-full object-contain"
-                  />
-                ) : (
-                  <div className="text-center">
-                    <div className="w-8 h-8 border-2 border-slate-400 border-t-blue-500 rounded-full animate-spin mx-auto mb-2"></div>
-                    <span className="text-slate-600 text-sm">
-                      Generating QR Code...
-                    </span>
-                  </div>
-                )}
+              <div className="w-32 h-32 bg-white mx-auto rounded-lg flex items-center justify-center">
+                <span className="text-slate-800 font-medium">QR Code</span>
               </div>
             </div>
             <div className="flex gap-4 justify-end">
@@ -1497,10 +1355,7 @@ function UserProfile() {
               >
                 Cancel
               </button>
-              <button
-                onClick={handle2FAEnable}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
-              >
+              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
                 Enable
               </button>
             </div>
