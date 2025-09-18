@@ -67,16 +67,14 @@ function NastfCompliance() {
       });
 
       // Handle different response types
-      if (Array.isArray(response.data)) {
-        // Actual compliance data
-        setComplianceData(response.data);
-        setError(null); // Clear any previous errors
-        console.log("📊 Loaded", response.data.length, "compliance records");
-      } else if (typeof response.data === "string") {
+      if (typeof response.data === "string") {
         // Simple test response - show success message
         console.log("📝 Test response received:", response.data);
         setComplianceData([]); // Set empty array for now
         setError(`✅ Backend connection successful: ${response.data}`);
+      } else if (Array.isArray(response.data)) {
+        // Actual compliance data
+        setComplianceData(response.data);
       } else {
         // Unexpected response format
         console.warn("⚠️ Unexpected response format:", response.data);
