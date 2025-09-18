@@ -477,7 +477,7 @@ public class AdminDashboardController {
                     // Calculate days remaining for NASTF compliance
                     if (vehicle.getCreatedAt() != null) {
                         long daysSinceOrder = java.time.Duration.between(
-                            vehicle.getCreatedAt().atZone(java.time.ZoneId.systemDefault()).toInstant(),
+                            vehicle.getCreatedAt().toInstant(),
                             java.time.Instant.now()
                         ).toDays();
                         data.put("daysSinceOrder", daysSinceOrder);
