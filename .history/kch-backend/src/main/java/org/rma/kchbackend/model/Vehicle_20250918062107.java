@@ -65,12 +65,4 @@ public class Vehicle {
 
     @Column(columnDefinition = "BYTEA")
     private byte[] registration;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
 }

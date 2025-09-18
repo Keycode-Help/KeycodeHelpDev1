@@ -312,69 +312,7 @@ public class AdminDashboardController {
     }
 
     @GetMapping("/user-history")
-    public ResponseEntity<?> getUserHistory(@RequestParam String email, @RequestParam(required = false) String nastfMode) {
-        // NASTF compliance mode
-        if ("true".equals(nastfMode)) {
-            System.out.println("🚀 ==> NASTF COMPLIANCE MODE ACTIVATED <==");
-            System.out.println("✅ Authentication working through user-history endpoint");
-            
-            try {
-                List<Map<String, Object>> complianceData = new ArrayList<>();
-                List<Transaction> allTransactions = transactionService.getAllTransactions();
-                
-                System.out.println("📊 Found " + allTransactions.size() + " total transactions");
-                
-                for (Transaction transaction : allTransactions) {
-                    if (transaction.getVehicles() != null) {
-                        for (Vehicle vehicle : transaction.getVehicles()) {
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("transactionId", transaction.getId());
-                            data.put("confirmationNumber", transaction.getConfirmationNumber());
-                            data.put("vehicleId", vehicle.getId());
-                            data.put("vin", vehicle.getVin());
-                            data.put("make", vehicle.getMake() != null ? vehicle.getMake().getName() : "Unknown");
-                            data.put("model", vehicle.getModel());
-                            data.put("year", vehicle.getYear());
-                            data.put("status", vehicle.getStatus());
-                            data.put("keycode", vehicle.getKeycode());
-                            
-                            // Use current time for testing since createdAt might not be available
-                            data.put("createdAt", java.time.LocalDateTime.now());
-                            data.put("daysSinceOrder", 1); // Mock for testing
-                            data.put("daysRemaining", 3);
-                            data.put("isUrgent", false);
-                            data.put("isOverdue", false);
-                            
-                            // User information
-                            KeycodeUser user = transaction.getKeycodeUser();
-                            if (user != null) {
-                                data.put("userEmail", user.getEmail());
-                                data.put("userName", user.getFname() + " " + user.getLname());
-                                data.put("userState", user.getState());
-                                data.put("userCompany", user.getCompany());
-                            }
-                            
-                            // Document availability
-                            data.put("hasFrontId", vehicle.getFrontId() != null);
-                            data.put("hasBackId", vehicle.getBackId() != null);
-                            data.put("hasRegistration", vehicle.getRegistration() != null);
-                            
-                            complianceData.add(data);
-                        }
-                    }
-                }
-                
-                System.out.println("✅ Returning " + complianceData.size() + " compliance records");
-                return ResponseEntity.ok(complianceData);
-                
-            } catch (Exception e) {
-                System.out.println("❌ Error in NASTF compliance mode: " + e.getMessage());
-                e.printStackTrace();
-                return ResponseEntity.status(500).body("NASTF Error: " + e.getMessage());
-            }
-        }
-        
-        // Regular user history mode
+    public ResponseEntity<?> getUserHistory(@RequestParam String email) {
         Optional<KeycodeUser> userOptional = keycodeUserService.findByEmail(email);
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found");
@@ -576,12 +514,6 @@ public class AdminDashboardController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error downloading documents: " + e.getMessage());
         }
-    }
-
-    @GetMapping("/nastf-compliance-test")
-    public ResponseEntity<?> getNastfComplianceTest() {
-        System.out.println("🚀 ==> NASTF COMPLIANCE TEST ENDPOINT HIT <==");
-        return ResponseEntity.ok("NASTF Test endpoint working!");
     }
 
     @GetMapping("/users")

@@ -58,9 +58,7 @@ function NastfCompliance() {
     try {
       console.log("🔄 Fetching NASTF compliance data...");
       // Use working user-history endpoint with NASTF mode
-      const response = await api.get(
-        "/admin/user-history?email=test@example.com&nastfMode=true"
-      );
+      const response = await api.get("/admin/user-history?email=test@example.com&nastfMode=true");
       setComplianceData(response.data);
       console.log("✅ NASTF compliance data fetched:", response.data);
     } catch (error) {
