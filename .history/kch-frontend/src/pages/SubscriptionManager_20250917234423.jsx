@@ -8,54 +8,11 @@ import api from "../services/request";
 import toast from "react-hot-toast";
 
 export default function SubscriptionManager() {
-  const { isAuthenticated, user, isInitialized, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [currentPlan, setCurrentPlan] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [billingCycle, setBillingCycle] = useState("monthly");
-  const [trialStatus, setTrialStatus] = useState(null);
-  const [loadingTrialStatus, setLoadingTrialStatus] = useState(true);
   const navigate = useNavigate();
-
-  // Debug authentication state on component mount
-  React.useEffect(() => {
-    console.log("🔍 SubscriptionManager - Auth State Debug:", {
-      isAuthenticated,
-      isInitialized,
-      isLoading,
-      hasUser: !!user,
-      userId: user?.id,
-      userEmail: user?.email,
-      localStorage_auth_user: !!localStorage.getItem("auth_user"),
-      localStorage_auth_token: !!localStorage.getItem("auth_token"),
-      cookies: document.cookie,
-    });
-  }, [isAuthenticated, user, isInitialized, isLoading]);
-
-  // Fetch trial status
-  const fetchTrialStatus = async () => {
-    if (!isAuthenticated || !user) return;
-
-    try {
-      console.log("🔄 Fetching trial status...");
-      const response = await api.get("/trial/status");
-      setTrialStatus(response.data);
-      console.log("✅ Trial status fetched:", response.data);
-    } catch (error) {
-      console.error("❌ Error fetching trial status:", error);
-      setTrialStatus(null);
-    } finally {
-      setLoadingTrialStatus(false);
-    }
-  };
-
-  // Fetch trial status when component mounts and user is authenticated
-  React.useEffect(() => {
-    if (isInitialized && isAuthenticated && user) {
-      fetchTrialStatus();
-    } else if (isInitialized && !isAuthenticated) {
-      setLoadingTrialStatus(false);
-    }
-  }, [isInitialized, isAuthenticated, user]);
 
   // Mock data - in real app, this would come from API
   const availablePlans = [
@@ -172,150 +129,20 @@ export default function SubscriptionManager() {
   ];
 
   const handleSubscribe = async (plan) => {
-    console.log("🔄 Starting subscription process for plan:", plan);
-    console.log("🔍 Authentication state:", {
-      isAuthenticated,
-      isInitialized,
-      isLoading,
-      hasUser: !!user,
-      localStorage_token: !!localStorage.getItem("auth_token"),
-      localStorage_user: !!localStorage.getItem("auth_user"),
-    });
-
-    // Wait for auth to initialize before checking
-    if (!isInitialized) {
-      console.log("⏳ Authentication still initializing, please wait...");
-      toast.error("Please wait for authentication to initialize");
-      return;
-    }
-
     if (!isAuthenticated) {
-      console.log(
-        "❌ User not authenticated after initialization, redirecting to login..."
-      );
-      console.log("🔍 Detailed auth state:", {
-        user,
-        localStorage_items: {
-          auth_user: localStorage.getItem("auth_user"),
-          auth_token:
-            localStorage.getItem("auth_token")?.substring(0, 20) + "...",
-        },
-        cookies: document.cookie,
-      });
-      toast.error("Please log in to subscribe to a plan");
+      // Redirect to login
       window.location.href = "/login";
       return;
     }
 
     // Trial plan starts a 3-day trial flow via backend
     if (plan?.isTrial) {
-      // Ensure trial status is loaded before proceeding
-      if (loadingTrialStatus) {
-        console.log("⏳ Trial status still loading, please wait...");
-        toast.error("Please wait while we check your trial status...");
-        return;
-      }
-
-      // Check if user already has an active trial (using actual field names from API)
-      const hasActiveTrial = trialStatus?.isActive || trialStatus?.hasTrial;
-      if (hasActiveTrial) {
-        console.log("⚠️ User already has an active trial", trialStatus);
-        toast.error(
-          `You already have an active trial! ${
-            trialStatus.remainingDays || "Several"
-          } days remaining.`
-        );
-        return;
-      }
-
-      // Check if user has used their trial before
-      if (trialStatus?.hasUsedTrial && !hasActiveTrial) {
-        console.log("⚠️ User has already used their trial");
-        toast.error(
-          "You have already used your free trial. Please choose a paid plan."
-        );
-        return;
-      }
-
       try {
-        console.log("🔄 Adding trial subscription to cart...");
-        const subscriptionPayload = {
-          tier: "BASE", // SubscriptionTier enum value
-          trial: true, // boolean for trial flag
-          isActivated: false, // boolean - subscription starts inactive
-        };
-
-        console.log("🔍 Subscription payload:", subscriptionPayload);
-        const response = await api.post(
-          "/cart/addSubscription",
-          subscriptionPayload
-        );
-
-        console.log("✅ Trial subscription added successfully:", response.data);
-        toast.success("Trial subscription added to cart!");
+        await api.post("/cart/addSubscription", { tier: "BASIC", trial: true });
         navigate("/cart");
         return;
-      } catch (error) {
-        console.error("❌ Error adding trial subscription:", error);
-        console.error("❌ Error response data:", error.response?.data);
-        console.error("❌ Error status:", error.response?.status);
-        console.error("❌ Full error details:", {
-          message: error.message,
-          status: error.response?.status,
-          statusText: error.response?.statusText,
-          data: error.response?.data,
-          config: {
-            url: error.config?.url,
-            method: error.config?.method,
-            data: error.config?.data,
-          },
-        });
-
-        // Handle authentication errors specifically
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          console.log(
-            "🚨 Authentication error in subscription, redirecting to login..."
-          );
-          toast.error("Your session has expired. Please log in again.");
-          window.location.href = "/login";
-          return;
-        }
-
-        // Handle 400 Bad Request with specific error message
-        if (error.response?.status === 400) {
-          const errorMessage =
-            error.response?.data?.message ||
-            error.response?.data ||
-            "Bad request";
-          console.log(
-            "🚨 400 Bad Request - Backend validation error:",
-            errorMessage
-          );
-
-          // Handle specific trial errors
-          if (errorMessage.includes("already has an active trial")) {
-            toast.error(
-              "You already have an active trial! Check your account for trial details."
-            );
-            // Refresh trial status to update UI
-            fetchTrialStatus();
-          } else if (errorMessage.includes("trial")) {
-            toast.error(
-              "Trial error: " + errorMessage.replace("Trial error: ", "")
-            );
-          } else {
-            toast.error(`Subscription error: ${errorMessage}`);
-          }
-          return;
-        }
-
-        // Handle other errors
-        console.log(
-          "⚠️ Subscription API error, falling back to trial explainer page"
-        );
-        toast.error(
-          "Unable to process subscription. Redirecting to trial information."
-        );
+      } catch (e) {
+        // Fallback to trial explainer page
         navigate("/membership?trial=start");
         return;
       }
@@ -323,7 +150,6 @@ export default function SubscriptionManager() {
 
     // TODO: Implement paid subscription logic
     console.log("Subscribing to plan:", plan);
-    toast.success(`Subscribed to ${plan.title} plan!`);
     setCurrentPlan(plan);
     setShowUpgrade(false);
   };
@@ -347,73 +173,6 @@ export default function SubscriptionManager() {
   if (!currentPlan) {
     return (
       <div className="container mx-auto p-6 pt-20">
-        {/* Current Trial Status */}
-        {trialStatus?.isActive && trialStatus?.hasTrial && (
-          <div className="mb-8 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-3xl p-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-white mb-2">
-                🎉 Your Trial is Active!
-              </h2>
-              <p className="text-xl text-blue-300 mb-6">
-                {trialStatus.remainingDays} days remaining • Full premium access
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-6 mb-6">
-                <div className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="text-blue-300 text-sm mb-1">
-                    Trial Expires
-                  </div>
-                  <div className="text-white font-bold">
-                    {trialStatus.trialEndsAt
-                      ? new Date(trialStatus.trialEndsAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )
-                      : "Unknown"}
-                  </div>
-                </div>
-                <div className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="text-blue-300 text-sm mb-1">Access Level</div>
-                  <div className="text-white font-bold">Premium</div>
-                </div>
-                <div className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="text-blue-300 text-sm mb-1">Status</div>
-                  <div className="text-green-400 font-bold">Active</div>
-                </div>
-              </div>
-
-              <div className="bg-slate-800/30 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  What's included in your trial:
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Priority processing (30m - 1h)
-                  </div>
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Premium keycode database access
-                  </div>
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Phone & live chat support
-                  </div>
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Expanded vehicle coverage
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {isTrialMode ? (
           <>
             <div className="text-center mb-12">
@@ -515,35 +274,14 @@ export default function SubscriptionManager() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 mb-16">
-              {availablePlans.map((plan) => {
-                // Check if this is the trial plan and user has trial status
-                const isTrialPlan = plan.isTrial;
-                const hasActiveTrial =
-                  trialStatus?.isActive || trialStatus?.hasTrial;
-                const hasUsedTrial = trialStatus?.hasUsedTrial;
-                const isTrialDisabled =
-                  isTrialPlan &&
-                  (hasActiveTrial || hasUsedTrial || loadingTrialStatus);
-
-                return (
-                  <MembershipCard
-                    key={plan.id}
-                    tier={plan}
-                    onSubscribe={() => handleSubscribe(plan)}
-                    billingCycle={billingCycle}
-                    disabled={isTrialDisabled}
-                    statusMessage={
-                      isTrialPlan && loadingTrialStatus
-                        ? "Checking trial status..."
-                        : isTrialPlan && hasActiveTrial
-                        ? `Active Trial (${trialStatus.remainingDays} days left)`
-                        : isTrialPlan && hasUsedTrial
-                        ? "Trial Already Used"
-                        : null
-                    }
-                  />
-                );
-              })}
+              {availablePlans.map((plan) => (
+                <MembershipCard
+                  key={plan.id}
+                  tier={plan}
+                  onSubscribe={() => handleSubscribe(plan)}
+                  billingCycle={billingCycle}
+                />
+              ))}
             </div>
 
             <FAQSection faqData={faqData} />

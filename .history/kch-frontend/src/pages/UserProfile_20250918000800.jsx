@@ -24,7 +24,7 @@ import {
 
 function UserProfile() {
   const { user, isAuthenticated, isInitialized } = useAuth();
-  const { trialStatus } = useTrialStatus();
+  const { trialStatus, isLoading: trialLoading } = useTrialStatus();
 
   // Profile data state
   const [profileData, setProfileData] = useState({
@@ -1076,74 +1076,6 @@ function UserProfile() {
                   </div>
                 )}
               </div>
-
-              {/* Trial Information Section */}
-              {trialStatus?.hasTrial && trialStatus?.isActive && (
-                <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-                      <Clock className="w-5 h-5 text-blue-400" />
-                      Active Trial
-                    </h3>
-                    <span className="px-3 py-1 bg-blue-500 text-white text-sm font-medium rounded-full">
-                      {trialStatus.remainingDays} days left
-                    </span>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4 mb-4">
-                    <div className="bg-slate-800/50 rounded-lg p-4">
-                      <div className="text-sm text-blue-300 mb-1">
-                        Trial Expires
-                      </div>
-                      <div className="text-white font-medium">
-                        {trialStatus.trialEndsAt
-                          ? new Date(
-                              trialStatus.trialEndsAt
-                            ).toLocaleDateString("en-US", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
-                          : "Unknown"}
-                      </div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-4">
-                      <div className="text-sm text-blue-300 mb-1">
-                        Premium Access
-                      </div>
-                      <div className="text-white font-medium">
-                        {trialStatus.hasPremiumAccess ? "Active" : "Inactive"}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-slate-800/50 rounded-lg p-4">
-                    <h4 className="text-lg font-semibold text-white mb-3">
-                      Trial Benefits:
-                    </h4>
-                    <ul className="space-y-2">
-                      <li className="flex items-center gap-2 text-white">
-                        <CheckCircle size={16} className="text-green-400" />
-                        Priority processing (30m - 1h)
-                      </li>
-                      <li className="flex items-center gap-2 text-white">
-                        <CheckCircle size={16} className="text-green-400" />
-                        Premium keycode database access
-                      </li>
-                      <li className="flex items-center gap-2 text-white">
-                        <CheckCircle size={16} className="text-green-400" />
-                        Phone & live chat support
-                      </li>
-                      <li className="flex items-center gap-2 text-white">
-                        <CheckCircle size={16} className="text-green-400" />
-                        Expanded vehicle coverage
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         )}

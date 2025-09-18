@@ -9,6 +9,18 @@ const TrialBanner = ({ onDismiss }) => {
   const { isAuthenticated, isInitialized } = useAuth();
   const { trialStatus, shouldShowTrialNotice } = useTrialStatus();
 
+  // Debug logging
+  useEffect(() => {
+    console.log("🔍 TrialBanner Debug:", {
+      isInitialized,
+      isAuthenticated,
+      isVisible,
+      trialStatus,
+      shouldShowTrialNotice: shouldShowTrialNotice(),
+      trialEndsAt: trialStatus.trialEndsAt
+    });
+  }, [isInitialized, isAuthenticated, isVisible, trialStatus, shouldShowTrialNotice]);
+
   useEffect(() => {
     if (!trialStatus.trialEndsAt) return;
 
@@ -60,7 +72,7 @@ const TrialBanner = ({ onDismiss }) => {
     return null;
 
   return (
-    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 shadow-lg fixed top-0 left-0 right-0 z-50">
+    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 shadow-lg">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Clock className="h-5 w-5 text-blue-100" />

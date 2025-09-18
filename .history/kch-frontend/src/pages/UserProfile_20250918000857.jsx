@@ -24,7 +24,7 @@ import {
 
 function UserProfile() {
   const { user, isAuthenticated, isInitialized } = useAuth();
-  const { trialStatus } = useTrialStatus();
+  const { trialStatus, isLoading: trialLoading } = useTrialStatus();
 
   // Profile data state
   const [profileData, setProfileData] = useState({
@@ -1089,30 +1089,25 @@ function UserProfile() {
                       {trialStatus.remainingDays} days left
                     </span>
                   </div>
-
+                  
                   <div className="grid md:grid-cols-2 gap-4 mb-4">
                     <div className="bg-slate-800/50 rounded-lg p-4">
-                      <div className="text-sm text-blue-300 mb-1">
-                        Trial Expires
-                      </div>
+                      <div className="text-sm text-blue-300 mb-1">Trial Expires</div>
                       <div className="text-white font-medium">
-                        {trialStatus.trialEndsAt
-                          ? new Date(
-                              trialStatus.trialEndsAt
-                            ).toLocaleDateString("en-US", {
+                        {trialStatus.trialEndsAt 
+                          ? new Date(trialStatus.trialEndsAt).toLocaleDateString("en-US", {
                               year: "numeric",
                               month: "long",
                               day: "numeric",
                               hour: "2-digit",
-                              minute: "2-digit",
+                              minute: "2-digit"
                             })
-                          : "Unknown"}
+                          : "Unknown"
+                        }
                       </div>
                     </div>
                     <div className="bg-slate-800/50 rounded-lg p-4">
-                      <div className="text-sm text-blue-300 mb-1">
-                        Premium Access
-                      </div>
+                      <div className="text-sm text-blue-300 mb-1">Premium Access</div>
                       <div className="text-white font-medium">
                         {trialStatus.hasPremiumAccess ? "Active" : "Inactive"}
                       </div>
@@ -1120,9 +1115,7 @@ function UserProfile() {
                   </div>
 
                   <div className="bg-slate-800/50 rounded-lg p-4">
-                    <h4 className="text-lg font-semibold text-white mb-3">
-                      Trial Benefits:
-                    </h4>
+                    <h4 className="text-lg font-semibold text-white mb-3">Trial Benefits:</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2 text-white">
                         <CheckCircle size={16} className="text-green-400" />

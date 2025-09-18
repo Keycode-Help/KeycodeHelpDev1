@@ -13,7 +13,6 @@ import Footer from "./components/Footer";
 import TrialExpirationHandler from "./components/TrialExpirationHandler";
 import TrialBanner from "./components/TrialBanner";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { useTrialStatus } from "./hooks/useTrialStatus";
 import ErrorBoundary from "./utils/errorBoundary.jsx";
 // import "./styles/mobile-responsive.css"; // Removed - using Tailwind only
 import { initMobileResponsiveness } from "./utils/mobileResponsivenessTest";
@@ -59,7 +58,6 @@ import KchDatabase from "./pages/KchDatabase";
 function AppContent() {
   const location = useLocation();
   const { isAuthenticated, isInitialized } = useAuth();
-  const { shouldShowTrialNotice } = useTrialStatus();
 
   // Check if current page should hide the sidebar
   const isHomepage = location.pathname === "/";
@@ -101,11 +99,11 @@ function AppContent() {
       {isAuthenticated && <TrialExpirationHandler />}
 
       <div
-        className={`min-h-screen bg-gradient-to-br from-dark via-secondary to-dark transition-all duration-300 ${
+        className={
           isAuthenticated && !shouldHideSidebar
-            ? "ml-16 lg:ml-64 w-[calc(100%-4rem)] lg:w-[calc(100%-16rem)]"
-            : ""
-        } ${isAuthenticated && shouldShowTrialNotice() ? "pt-16" : ""}`}
+            ? "min-h-screen bg-gradient-to-br from-dark via-secondary to-dark transition-all duration-300 ml-16 lg:ml-64 w-[calc(100%-4rem)] lg:w-[calc(100%-16rem)]"
+            : "min-h-screen bg-gradient-to-br from-dark via-secondary to-dark"
+        }
       >
         <Routes>
           <Route path="/" element={<LandingPage />} />

@@ -220,11 +220,7 @@ export default function SubscriptionManager() {
       const hasActiveTrial = trialStatus?.isActive || trialStatus?.hasTrial;
       if (hasActiveTrial) {
         console.log("⚠️ User already has an active trial", trialStatus);
-        toast.error(
-          `You already have an active trial! ${
-            trialStatus.remainingDays || "Several"
-          } days remaining.`
-        );
+        toast.error(`You already have an active trial! ${trialStatus.remainingDays || 'Several'} days remaining.`);
         return;
       }
 
@@ -347,73 +343,6 @@ export default function SubscriptionManager() {
   if (!currentPlan) {
     return (
       <div className="container mx-auto p-6 pt-20">
-        {/* Current Trial Status */}
-        {trialStatus?.isActive && trialStatus?.hasTrial && (
-          <div className="mb-8 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-3xl p-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-white mb-2">
-                🎉 Your Trial is Active!
-              </h2>
-              <p className="text-xl text-blue-300 mb-6">
-                {trialStatus.remainingDays} days remaining • Full premium access
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-6 mb-6">
-                <div className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="text-blue-300 text-sm mb-1">
-                    Trial Expires
-                  </div>
-                  <div className="text-white font-bold">
-                    {trialStatus.trialEndsAt
-                      ? new Date(trialStatus.trialEndsAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )
-                      : "Unknown"}
-                  </div>
-                </div>
-                <div className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="text-blue-300 text-sm mb-1">Access Level</div>
-                  <div className="text-white font-bold">Premium</div>
-                </div>
-                <div className="bg-slate-800/50 rounded-xl p-4">
-                  <div className="text-blue-300 text-sm mb-1">Status</div>
-                  <div className="text-green-400 font-bold">Active</div>
-                </div>
-              </div>
-
-              <div className="bg-slate-800/30 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  What's included in your trial:
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Priority processing (30m - 1h)
-                  </div>
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Premium keycode database access
-                  </div>
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Phone & live chat support
-                  </div>
-                  <div className="flex items-center gap-2 text-white">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    Expanded vehicle coverage
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {isTrialMode ? (
           <>
             <div className="text-center mb-12">
@@ -518,12 +447,10 @@ export default function SubscriptionManager() {
               {availablePlans.map((plan) => {
                 // Check if this is the trial plan and user has trial status
                 const isTrialPlan = plan.isTrial;
-                const hasActiveTrial =
-                  trialStatus?.isActive || trialStatus?.hasTrial;
+                const hasActiveTrial = trialStatus?.isActive || trialStatus?.hasTrial;
                 const hasUsedTrial = trialStatus?.hasUsedTrial;
                 const isTrialDisabled =
-                  isTrialPlan &&
-                  (hasActiveTrial || hasUsedTrial || loadingTrialStatus);
+                  isTrialPlan && (hasActiveTrial || hasUsedTrial || loadingTrialStatus);
 
                 return (
                   <MembershipCard

@@ -101,11 +101,15 @@ function AppContent() {
       {isAuthenticated && <TrialExpirationHandler />}
 
       <div
-        className={`min-h-screen bg-gradient-to-br from-dark via-secondary to-dark transition-all duration-300 ${
-          isAuthenticated && !shouldHideSidebar
-            ? "ml-16 lg:ml-64 w-[calc(100%-4rem)] lg:w-[calc(100%-16rem)]"
-            : ""
-        } ${isAuthenticated && shouldShowTrialNotice() ? "pt-16" : ""}`}
+        className={
+          `min-h-screen bg-gradient-to-br from-dark via-secondary to-dark transition-all duration-300 ${
+            isAuthenticated && !shouldHideSidebar
+              ? "ml-16 lg:ml-64 w-[calc(100%-4rem)] lg:w-[calc(100%-16rem)]"
+              : ""
+          } ${
+            isAuthenticated && shouldShowTrialNotice() ? "pt-16" : ""
+          }`
+        }
       >
         <Routes>
           <Route path="/" element={<LandingPage />} />

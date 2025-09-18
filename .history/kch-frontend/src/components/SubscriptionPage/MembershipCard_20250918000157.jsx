@@ -2,13 +2,7 @@ import React from "react";
 import { FeaturesList } from "./FeaturesList";
 
 /* eslint-disable react/prop-types */
-export function MembershipCard({
-  tier,
-  onSubscribe,
-  billingCycle,
-  disabled = false,
-  statusMessage = null,
-}) {
+export function MembershipCard({ tier, onSubscribe, billingCycle, disabled = false, statusMessage = null }) {
   const getPrice = () => {
     if (tier.isTrial) return 0;
     if (tier.title === "Basic") return tier.monthlyPrice;
@@ -30,9 +24,9 @@ export function MembershipCard({
   return (
     <div
       className={`rounded-3xl overflow-hidden bg-black border-2 transition duration-300 ease-in-out ${
-        disabled
-          ? "border-gray-600 opacity-75"
-          : "hover:border-yellow-500 border-white/[0.12]"
+        disabled 
+          ? 'border-gray-600 opacity-75' 
+          : 'hover:border-yellow-500 border-white/[0.12]'
       }`}
     >
       <div className="p-6">
@@ -67,15 +61,14 @@ export function MembershipCard({
           disabled={disabled}
           className={`w-full inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold rounded-xl transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 mt-4 ${
             disabled
-              ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-primary to-primary-dark text-white hover:from-primary-dark hover:to-primary hover:-translate-y-1 hover:shadow-lg focus:ring-primary"
+              ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+              : 'bg-gradient-to-r from-primary to-primary-dark text-white hover:from-primary-dark hover:to-primary hover:-translate-y-1 hover:shadow-lg focus:ring-primary'
           }`}
         >
-          {disabled
-            ? statusMessage?.includes("Active")
-              ? "Trial Active"
-              : "Not Available"
-            : "Get Started"}
+          {disabled 
+            ? (statusMessage?.includes('Active') ? 'Trial Active' : 'Not Available')
+            : 'Get Started'
+          }
         </button>
 
         <FeaturesList features={tier.features} perks={tier.perks} />

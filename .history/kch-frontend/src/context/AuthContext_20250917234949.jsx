@@ -278,15 +278,15 @@ export const AuthProvider = ({ children }) => {
         if (storedUser && storedToken) {
           try {
             const userData = JSON.parse(storedUser);
-
+            
             // Validate that the JWT token is not expired
             try {
-              const tokenParts = storedToken.split(".");
+              const tokenParts = storedToken.split('.');
               if (tokenParts.length === 3) {
                 const payload = JSON.parse(atob(tokenParts[1]));
                 const now = Math.floor(Date.now() / 1000);
                 const isExpired = payload.exp && payload.exp < now;
-
+                
                 if (isExpired) {
                   console.log("❌ JWT token expired, clearing auth state");
                   clearStoredAuthState();
@@ -300,12 +300,10 @@ export const AuthProvider = ({ children }) => {
             setUser(userData);
             setIsAuthenticated(true);
             console.log(`✅ Auth restored from ${storageType} (backend JWT)`);
-
+            
             // Also set cookies for request interceptor consistency
             if (!getCookie("access_token")) {
-              document.cookie = `access_token=${storedToken}; path=/; max-age=${
-                7 * 24 * 60 * 60
-              }; SameSite=Lax; Secure=false`;
+              document.cookie = `access_token=${storedToken}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax; Secure=false`;
               console.log("🍪 Set access_token cookie from localStorage");
             }
           } catch (e) {

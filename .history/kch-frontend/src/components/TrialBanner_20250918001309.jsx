@@ -9,6 +9,24 @@ const TrialBanner = ({ onDismiss }) => {
   const { isAuthenticated, isInitialized } = useAuth();
   const { trialStatus, shouldShowTrialNotice } = useTrialStatus();
 
+  // Debug logging
+  useEffect(() => {
+    console.log("🔍 TrialBanner Debug:", {
+      isInitialized,
+      isAuthenticated,
+      isVisible,
+      trialStatus,
+      shouldShowTrialNotice: shouldShowTrialNotice(),
+      trialEndsAt: trialStatus.trialEndsAt,
+    });
+  }, [
+    isInitialized,
+    isAuthenticated,
+    isVisible,
+    trialStatus,
+    shouldShowTrialNotice,
+  ]);
+
   useEffect(() => {
     if (!trialStatus.trialEndsAt) return;
 
