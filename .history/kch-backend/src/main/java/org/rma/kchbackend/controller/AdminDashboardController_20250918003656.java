@@ -39,15 +39,13 @@ public class AdminDashboardController {
             SubscriptionService subscriptionService,
             KeycodeUserService keycodeUserService,
             EmailService emailService,
-            AdminActionLogService adminActionLogService,
-            VehicleRepository vehicleRepository) {
+            AdminActionLogService adminActionLogService) {
         this.vehicleService = vehicleService;
         this.transactionService = transactionService;
         this.subscriptionService = subscriptionService;
         this.keycodeUserService = keycodeUserService;
         this.emailService = emailService;
         this.adminActionLogService = adminActionLogService;
-        this.vehicleRepository = vehicleRepository;
     }
 
 

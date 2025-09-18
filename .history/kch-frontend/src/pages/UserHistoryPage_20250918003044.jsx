@@ -70,14 +70,12 @@ function UserHistoryPage() {
           dataType: typeof response.data,
           isArray: Array.isArray(response.data),
           length: response.data?.length,
-          data: response.data,
+          data: response.data
         });
-
+        
         // Show informative message if user exists but has no transactions
         if (Array.isArray(response.data) && response.data.length === 0) {
-          setError(
-            `User "${email}" found, but has no transaction history yet.`
-          );
+          setError(`User "${email}" found, but has no transaction history yet.`);
         }
       })
       .catch((error) => {
@@ -88,23 +86,16 @@ function UserHistoryPage() {
           data: error.response?.data,
           message: error.message,
         });
-
+        
         // Handle specific error cases
-        if (
-          error.response?.status === 400 &&
-          error.response?.data === "User not found"
-        ) {
+        if (error.response?.status === 400 && error.response?.data === "User not found") {
           setError(`User with email "${email}" does not exist in the system.`);
         } else if (error.response?.status === 403) {
-          setError(
-            "Access denied. You don't have permission to view user history."
-          );
+          setError("Access denied. You don't have permission to view user history.");
         } else {
           setError(
             `Failed to fetch user history: ${
-              error.response?.data?.message ||
-              error.response?.data ||
-              error.message
+              error.response?.data?.message || error.response?.data || error.message
             }`
           );
         }
@@ -166,7 +157,6 @@ function UserHistoryPage() {
                 placeholder="Enter User Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && fetchHistory()}
                 className="flex-1 px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               />
               <button
@@ -181,21 +171,6 @@ function UserHistoryPage() {
             {error && (
               <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
                 <p className="text-red-400 text-sm">{error}</p>
-              </div>
-            )}
-
-            {/* Helper section */}
-            {!isLoading && history.length === 0 && !error && (
-              <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-                <h4 className="text-blue-300 font-semibold mb-2">💡 Tip:</h4>
-                <p className="text-blue-200 text-sm mb-2">
-                  To find users with transaction history, you can:
-                </p>
-                <ul className="text-blue-200/80 text-sm space-y-1 ml-4">
-                  <li>• Check the User Management page for active users</li>
-                  <li>• Look for users who have completed purchases</li>
-                  <li>• Try searching for your own email: {user?.email}</li>
-                </ul>
               </div>
             )}
           </div>
@@ -260,14 +235,10 @@ function UserHistoryPage() {
                 No transaction history found
               </p>
               <p className="text-white/60 text-sm">
-                {email
-                  ? `for "${email}"`
-                  : "Enter an email address and click 'Fetch History' to search"}
+                {email ? `for "${email}"` : "Enter an email address and click 'Fetch History' to search"}
               </p>
               <div className="mt-6 p-4 bg-slate-700/30 rounded-xl text-left max-w-md mx-auto">
-                <h4 className="text-white font-semibold mb-2">
-                  Possible reasons:
-                </h4>
+                <h4 className="text-white font-semibold mb-2">Possible reasons:</h4>
                 <ul className="text-white/70 text-sm space-y-1">
                   <li>• User has no completed transactions</li>
                   <li>• User has only pending/failed transactions</li>
@@ -281,8 +252,7 @@ function UserHistoryPage() {
                 <span className="text-2xl">🔍</span>
               </div>
               <p className="text-white/80 text-lg">
-                Enter a user email address above to search for their transaction
-                history
+                Enter a user email address above to search for their transaction history
               </p>
             </div>
           )}

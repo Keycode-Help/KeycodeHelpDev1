@@ -7,7 +7,6 @@ import org.rma.kchbackend.model.Make;
 import org.rma.kchbackend.model.Transaction;
 import org.rma.kchbackend.model.Vehicle;
 import org.rma.kchbackend.service.*;
-import org.rma.kchbackend.repository.VehicleRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ public class AdminDashboardController {
     private final KeycodeUserService keycodeUserService;
     private final EmailService emailService;
     private final AdminActionLogService adminActionLogService;
-    private final VehicleRepository vehicleRepository;
 
     @Autowired
     public AdminDashboardController(
@@ -39,15 +37,13 @@ public class AdminDashboardController {
             SubscriptionService subscriptionService,
             KeycodeUserService keycodeUserService,
             EmailService emailService,
-            AdminActionLogService adminActionLogService,
-            VehicleRepository vehicleRepository) {
+            AdminActionLogService adminActionLogService) {
         this.vehicleService = vehicleService;
         this.transactionService = transactionService;
         this.subscriptionService = subscriptionService;
         this.keycodeUserService = keycodeUserService;
         this.emailService = emailService;
         this.adminActionLogService = adminActionLogService;
-        this.vehicleRepository = vehicleRepository;
     }
 
 

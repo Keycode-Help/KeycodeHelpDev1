@@ -139,7 +139,6 @@ function AppContent() {
             element={<DocumentValidation />}
           />
           <Route path="/admin/user-history" element={<UserHistoryPage />} />
-          <Route path="/admin/nastf-compliance" element={<NastfCompliance />} />
           <Route path="/keycodes" element={<KeycodePortals />} />
           <Route path="/kch-db" element={<KchDatabase />} />
 

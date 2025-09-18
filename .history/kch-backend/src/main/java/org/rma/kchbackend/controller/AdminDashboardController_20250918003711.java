@@ -47,7 +47,6 @@ public class AdminDashboardController {
         this.keycodeUserService = keycodeUserService;
         this.emailService = emailService;
         this.adminActionLogService = adminActionLogService;
-        this.vehicleRepository = vehicleRepository;
     }
 
 

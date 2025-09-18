@@ -30,7 +30,6 @@ public class AdminDashboardController {
     private final KeycodeUserService keycodeUserService;
     private final EmailService emailService;
     private final AdminActionLogService adminActionLogService;
-    private final VehicleRepository vehicleRepository;
 
     @Autowired
     public AdminDashboardController(
@@ -39,15 +38,13 @@ public class AdminDashboardController {
             SubscriptionService subscriptionService,
             KeycodeUserService keycodeUserService,
             EmailService emailService,
-            AdminActionLogService adminActionLogService,
-            VehicleRepository vehicleRepository) {
+            AdminActionLogService adminActionLogService) {
         this.vehicleService = vehicleService;
         this.transactionService = transactionService;
         this.subscriptionService = subscriptionService;
         this.keycodeUserService = keycodeUserService;
         this.emailService = emailService;
         this.adminActionLogService = adminActionLogService;
-        this.vehicleRepository = vehicleRepository;
     }
 
 

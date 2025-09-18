@@ -116,11 +116,7 @@ function Sidebar() {
             icon: FileText,
           },
           { path: "/admin/user-history", label: "User History", icon: History },
-          {
-            path: "/admin/nastf-compliance",
-            label: "NASTF Compliance",
-            icon: Clock,
-          },
+          { path: "/admin/nastf-compliance", label: "NASTF Compliance", icon: Clock },
         ],
         Services: [
           { path: "/pricing", label: "Pricing", icon: DollarSign },
@@ -154,11 +150,7 @@ function Sidebar() {
             icon: FileText,
           },
           { path: "/admin/user-history", label: "User History", icon: History },
-          {
-            path: "/admin/nastf-compliance",
-            label: "NASTF Compliance",
-            icon: Clock,
-          },
+          { path: "/admin/nastf-compliance", label: "NASTF Compliance", icon: Clock },
         ],
         Services: [
           { path: "/pricing", label: "Pricing", icon: DollarSign },
