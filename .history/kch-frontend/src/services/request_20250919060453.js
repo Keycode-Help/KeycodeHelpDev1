@@ -207,35 +207,10 @@ instance.interceptors.response.use(
             return Promise.reject(refreshError);
           }
         } else {
-          // No refresh token or already tried, clear auth and redirect
+          // No refresh token or already tried, just reject
           console.warn(
-            "403 on protected resource - session expired, clearing auth and redirecting to login"
+            "403 on protected resource after refresh attempt - this might require logout"
           );
-
-          // Clear all auth data
-          localStorage.removeItem("auth_user");
-          localStorage.removeItem("auth_token");
-
-          // Clear all cookies
-          const cookiesToClear = [
-            "access_token",
-            "refresh_token",
-            "next-auth.session-token",
-            "next-auth.csrf-token",
-            "next-auth.callback-url",
-          ];
-
-          cookiesToClear.forEach((cookieName) => {
-            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
-            document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-          });
-
-          // Show user-friendly message and redirect
-          if (window.location.pathname !== "/login") {
-            alert("Your session has expired. Please log in again.");
-            window.location.href = "/login";
-          }
-
           return Promise.reject(error);
         }
       } else {

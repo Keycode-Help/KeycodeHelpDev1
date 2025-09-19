@@ -141,7 +141,6 @@ function AppContent() {
           />
           <Route path="/admin/user-history" element={<UserHistoryPage />} />
           <Route path="/admin/nastf-compliance" element={<NastfCompliance />} />
-          <Route path="/admin/activity-logs" element={<AdminActivityLogs />} />
           <Route path="/keycodes" element={<KeycodePortals />} />
           <Route path="/kch-db" element={<KchDatabase />} />
 

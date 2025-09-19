@@ -371,18 +371,10 @@ public class AdminDashboardController {
                 // Sort by most recent first
                 allLogs.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
                 
-                // Limit total logs to prevent huge responses (max 1000 logs)
-                if (allLogs.size() > 1000) {
-                    allLogs = allLogs.subList(0, 1000);
-                    System.out.println("⚠️ Limiting logs to 1000 most recent entries for performance");
-                }
-                
                 // Apply pagination
                 int start = page * size;
                 int end = Math.min(start + size, allLogs.size());
                 List<AdminActionLog> paginatedLogs = allLogs.subList(start, end);
-                
-                System.out.println("📄 Paginated logs: " + paginatedLogs.size() + " (page " + page + ", size " + size + ")");
                 
                 // Return simple log data without enhancement to avoid timeouts
                 List<Map<String, Object>> simpleLogs = paginatedLogs.stream().map(log -> {

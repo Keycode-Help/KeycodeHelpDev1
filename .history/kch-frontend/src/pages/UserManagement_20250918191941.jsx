@@ -35,7 +35,6 @@ import {
   Ban,
   Unlock,
   AlertCircle,
-  X,
 } from "lucide-react";
 
 function UserManagement() {
@@ -57,8 +56,6 @@ function UserManagement() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [deleteReason, setDeleteReason] = useState("");
-  const [showDocumentViewer, setShowDocumentViewer] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState(null);
   const blobUrlsRef = useRef(new Map());
 
   // Update current time every second for real-time countdown
@@ -341,18 +338,14 @@ function UserManagement() {
     setActionLoading((prev) => new Set(prev).add(userId));
 
     try {
-      const response = await api.delete(
-        `/admin/users/${userId}/delete?reason=${encodeURIComponent(reason)}`
-      );
+      const response = await api.delete(`/admin/users/${userId}/delete?reason=${encodeURIComponent(reason)}`);
 
       if (response.status === 200) {
         // Refresh users list
         await fetchAllUsers();
         console.log(`✅ User ${userId} deleted successfully`);
-        toast.success(
-          `User deleted successfully: ${response.data.deletedUser}`
-        );
-
+        toast.success(`User deleted successfully: ${response.data.deletedUser}`);
+        
         // Close delete confirmation modal
         setShowDeleteConfirm(false);
         setUserToDelete(null);
@@ -382,26 +375,6 @@ function UserManagement() {
     setShowDeleteConfirm(false);
     setUserToDelete(null);
     setDeleteReason("");
-  };
-
-  const viewDocument = (documentData, documentType, userName) => {
-    if (!documentData) {
-      toast.error("Document not available");
-      return;
-    }
-
-    setSelectedDocument({
-      data: documentData,
-      type: documentType,
-      userName: userName,
-      url: getImageUrl(documentData),
-    });
-    setShowDocumentViewer(true);
-  };
-
-  const closeDocumentViewer = () => {
-    setShowDocumentViewer(false);
-    setSelectedDocument(null);
   };
 
   // Enhanced Status badge component with countdown
@@ -1179,20 +1152,10 @@ function UserManagement() {
                           <img
                             src={getImageUrl(selectedUser.frontId)}
                             alt="Front ID"
-                            className="w-full h-32 object-cover rounded-lg border border-slate-600 cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() =>
-                              viewDocument(
-                                selectedUser.frontId,
-                                "Front ID",
-                                selectedUser.displayName
-                              )
-                            }
+                            className="w-full h-32 object-cover rounded-lg border border-slate-600"
                           />
                           <p className="text-white/70 text-sm mt-2 text-center">
                             Front ID
-                            <span className="block text-xs text-blue-400">
-                              Click to view full size
-                            </span>
                           </p>
                         </div>
                       )}
@@ -1201,20 +1164,10 @@ function UserManagement() {
                           <img
                             src={getImageUrl(selectedUser.backId)}
                             alt="Back ID"
-                            className="w-full h-32 object-cover rounded-lg border border-slate-600 cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() =>
-                              viewDocument(
-                                selectedUser.backId,
-                                "Back ID",
-                                selectedUser.displayName
-                              )
-                            }
+                            className="w-full h-32 object-cover rounded-lg border border-slate-600"
                           />
                           <p className="text-white/70 text-sm mt-2 text-center">
                             Back ID
-                            <span className="block text-xs text-blue-400">
-                              Click to view full size
-                            </span>
                           </p>
                         </div>
                       )}
@@ -1223,159 +1176,16 @@ function UserManagement() {
                           <img
                             src={getImageUrl(selectedUser.insurance)}
                             alt="Insurance"
-                            className="w-full h-32 object-cover rounded-lg border border-slate-600 cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() =>
-                              viewDocument(
-                                selectedUser.insurance,
-                                "Insurance Document",
-                                selectedUser.displayName
-                              )
-                            }
+                            className="w-full h-32 object-cover rounded-lg border border-slate-600"
                           />
                           <p className="text-white/70 text-sm mt-2 text-center">
                             Insurance
-                            <span className="block text-xs text-blue-400">
-                              Click to view full size
-                            </span>
                           </p>
                         </div>
                       )}
                     </div>
                   </div>
                 )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Delete Confirmation Modal */}
-        {showDeleteConfirm && userToDelete && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <AlertTriangle className="w-8 h-8 text-red-400" />
-                </div>
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  Delete User Account
-                </h2>
-                <p className="text-white/70">
-                  Are you sure you want to delete the account for:
-                </p>
-                <p className="text-white font-semibold mt-2">
-                  {userToDelete.displayName} ({userToDelete.email})
-                </p>
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-white/70 text-sm font-medium mb-2">
-                  Reason for deletion (optional):
-                </label>
-                <textarea
-                  value={deleteReason}
-                  onChange={(e) => setDeleteReason(e.target.value)}
-                  placeholder="Enter reason for deletion..."
-                  className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
-                  rows="3"
-                />
-              </div>
-
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-red-400 font-semibold mb-1">Warning</h4>
-                    <p className="text-red-300 text-sm">
-                      This action will permanently deactivate the user account.
-                      The user will lose access to all services and their data
-                      will be preserved for compliance purposes.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={cancelDelete}
-                  className="flex-1 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() =>
-                    handleDeleteUser(userToDelete.id, deleteReason)
-                  }
-                  disabled={actionLoading.has(userToDelete.id)}
-                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {actionLoading.has(userToDelete.id) ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      Deleting...
-                    </>
-                  ) : (
-                    <>
-                      <Trash2 className="w-4 h-4" />
-                      Delete User
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Document Viewer Modal */}
-        {showDocumentViewer && selectedDocument && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-slate-800 rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-hidden">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-xl font-bold text-white">
-                    {selectedDocument.type}
-                  </h2>
-                  <p className="text-white/70 text-sm">
-                    User: {selectedDocument.userName}
-                  </p>
-                </div>
-                <button
-                  onClick={closeDocumentViewer}
-                  className="p-2 text-white/70 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              <div className="flex justify-center">
-                <img
-                  src={selectedDocument.url}
-                  alt={selectedDocument.type}
-                  className="max-w-full max-h-[70vh] object-contain rounded-lg border border-slate-600"
-                />
-              </div>
-
-              <div className="mt-4 flex justify-center gap-3">
-                <button
-                  onClick={() => {
-                    const link = document.createElement("a");
-                    link.href = selectedDocument.url;
-                    link.download = `${selectedDocument.userName.replace(
-                      /\s+/g,
-                      "_"
-                    )}_${selectedDocument.type.replace(/\s+/g, "_")}.jpg`;
-                    link.click();
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  Download
-                </button>
-                <button
-                  onClick={closeDocumentViewer}
-                  className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
-                >
-                  Close
-                </button>
               </div>
             </div>
           </div>

@@ -35,7 +35,6 @@ import {
   Ban,
   Unlock,
   AlertCircle,
-  X,
 } from "lucide-react";
 
 function UserManagement() {
@@ -394,7 +393,7 @@ function UserManagement() {
       data: documentData,
       type: documentType,
       userName: userName,
-      url: getImageUrl(documentData),
+      url: getImageUrl(documentData)
     });
     setShowDocumentViewer(true);
   };
@@ -1180,19 +1179,11 @@ function UserManagement() {
                             src={getImageUrl(selectedUser.frontId)}
                             alt="Front ID"
                             className="w-full h-32 object-cover rounded-lg border border-slate-600 cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() =>
-                              viewDocument(
-                                selectedUser.frontId,
-                                "Front ID",
-                                selectedUser.displayName
-                              )
-                            }
+                            onClick={() => viewDocument(selectedUser.frontId, "Front ID", selectedUser.displayName)}
                           />
                           <p className="text-white/70 text-sm mt-2 text-center">
                             Front ID
-                            <span className="block text-xs text-blue-400">
-                              Click to view full size
-                            </span>
+                            <span className="block text-xs text-blue-400">Click to view full size</span>
                           </p>
                         </div>
                       )}
@@ -1202,19 +1193,11 @@ function UserManagement() {
                             src={getImageUrl(selectedUser.backId)}
                             alt="Back ID"
                             className="w-full h-32 object-cover rounded-lg border border-slate-600 cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() =>
-                              viewDocument(
-                                selectedUser.backId,
-                                "Back ID",
-                                selectedUser.displayName
-                              )
-                            }
+                            onClick={() => viewDocument(selectedUser.backId, "Back ID", selectedUser.displayName)}
                           />
                           <p className="text-white/70 text-sm mt-2 text-center">
                             Back ID
-                            <span className="block text-xs text-blue-400">
-                              Click to view full size
-                            </span>
+                            <span className="block text-xs text-blue-400">Click to view full size</span>
                           </p>
                         </div>
                       )}
@@ -1223,20 +1206,10 @@ function UserManagement() {
                           <img
                             src={getImageUrl(selectedUser.insurance)}
                             alt="Insurance"
-                            className="w-full h-32 object-cover rounded-lg border border-slate-600 cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() =>
-                              viewDocument(
-                                selectedUser.insurance,
-                                "Insurance Document",
-                                selectedUser.displayName
-                              )
-                            }
+                            className="w-full h-32 object-cover rounded-lg border border-slate-600"
                           />
                           <p className="text-white/70 text-sm mt-2 text-center">
                             Insurance
-                            <span className="block text-xs text-blue-400">
-                              Click to view full size
-                            </span>
                           </p>
                         </div>
                       )}
@@ -1319,62 +1292,6 @@ function UserManagement() {
                       Delete User
                     </>
                   )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Document Viewer Modal */}
-        {showDocumentViewer && selectedDocument && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-slate-800 rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-hidden">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-xl font-bold text-white">
-                    {selectedDocument.type}
-                  </h2>
-                  <p className="text-white/70 text-sm">
-                    User: {selectedDocument.userName}
-                  </p>
-                </div>
-                <button
-                  onClick={closeDocumentViewer}
-                  className="p-2 text-white/70 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              <div className="flex justify-center">
-                <img
-                  src={selectedDocument.url}
-                  alt={selectedDocument.type}
-                  className="max-w-full max-h-[70vh] object-contain rounded-lg border border-slate-600"
-                />
-              </div>
-
-              <div className="mt-4 flex justify-center gap-3">
-                <button
-                  onClick={() => {
-                    const link = document.createElement("a");
-                    link.href = selectedDocument.url;
-                    link.download = `${selectedDocument.userName.replace(
-                      /\s+/g,
-                      "_"
-                    )}_${selectedDocument.type.replace(/\s+/g, "_")}.jpg`;
-                    link.click();
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  Download
-                </button>
-                <button
-                  onClick={closeDocumentViewer}
-                  className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
-                >
-                  Close
                 </button>
               </div>
             </div>

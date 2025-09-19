@@ -351,9 +351,8 @@ public class AdminDashboardController {
                 adminActionLogService.log(requestingAdminEmail, "VIEW_ADMIN_LOGS", null, 
                     "Super admin accessed admin activity logs");
                 
-                // Get all admin action logs (limit to recent ones for performance)
+                // Get all admin action logs
                 List<AdminActionLog> allLogs = adminActionLogRepository.findAll();
-                System.out.println("📊 Total logs in database: " + allLogs.size());
                 
                 // Apply filters
                 if (adminEmailFilter != null && !adminEmailFilter.trim().isEmpty()) {
@@ -371,21 +370,13 @@ public class AdminDashboardController {
                 // Sort by most recent first
                 allLogs.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
                 
-                // Limit total logs to prevent huge responses (max 1000 logs)
-                if (allLogs.size() > 1000) {
-                    allLogs = allLogs.subList(0, 1000);
-                    System.out.println("⚠️ Limiting logs to 1000 most recent entries for performance");
-                }
-                
                 // Apply pagination
                 int start = page * size;
                 int end = Math.min(start + size, allLogs.size());
                 List<AdminActionLog> paginatedLogs = allLogs.subList(start, end);
                 
-                System.out.println("📄 Paginated logs: " + paginatedLogs.size() + " (page " + page + ", size " + size + ")");
-                
-                // Return simple log data without enhancement to avoid timeouts
-                List<Map<String, Object>> simpleLogs = paginatedLogs.stream().map(log -> {
+                // Enhance logs with additional context
+                List<Map<String, Object>> enhancedLogs = paginatedLogs.stream().map(log -> {
                     Map<String, Object> logData = new HashMap<>();
                     logData.put("id", log.getId());
                     logData.put("adminEmail", log.getAdminEmail());
@@ -394,22 +385,36 @@ public class AdminDashboardController {
                     logData.put("details", log.getDetails());
                     logData.put("createdAt", log.getCreatedAt());
                     
-                    // Skip expensive database lookups for now to avoid timeouts
-                    // TODO: Optimize with batch queries or caching later
+                    // Add target user information if available
+                    if (log.getTargetUserId() != null) {
+                        Optional<KeycodeUser> targetUserOpt = keycodeUserService.findById(log.getTargetUserId());
+                        if (targetUserOpt.isPresent()) {
+                            KeycodeUser targetUser = targetUserOpt.get();
+                            logData.put("targetUserEmail", targetUser.getEmail());
+                            logData.put("targetUserName", targetUser.getFname() + " " + targetUser.getLname());
+                            logData.put("targetUserRole", targetUser.getRole());
+                        }
+                    }
+                    
+                    // Add admin user information
+                    Optional<KeycodeUser> adminUserOpt = keycodeUserService.findByEmail(log.getAdminEmail());
+                    if (adminUserOpt.isPresent()) {
+                        KeycodeUser adminUser = adminUserOpt.get();
+                        logData.put("adminName", adminUser.getFname() + " " + adminUser.getLname());
+                        logData.put("adminRole", adminUser.getRole());
+                    }
                     
                     return logData;
                 }).collect(Collectors.toList());
                 
                 Map<String, Object> response = new HashMap<>();
-                response.put("logs", simpleLogs);
+                response.put("logs", enhancedLogs);
                 response.put("totalCount", allLogs.size());
                 response.put("page", page);
                 response.put("size", size);
                 response.put("hasMore", end < allLogs.size());
                 
-                System.out.println("✅ Returning " + simpleLogs.size() + " admin activity logs");
-                System.out.println("📊 Response structure: " + response.keySet());
-                System.out.println("📝 First log sample: " + (simpleLogs.isEmpty() ? "No logs" : simpleLogs.get(0)));
+                System.out.println("✅ Returning " + enhancedLogs.size() + " admin activity logs");
                 return ResponseEntity.ok(response);
                 
             } catch (Exception e) {

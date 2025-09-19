@@ -34,7 +34,6 @@ public class AdminDashboardController {
     private final EmailService emailService;
     private final AdminActionLogService adminActionLogService;
     private final VehicleRepository vehicleRepository;
-    private final AdminActionLogRepository adminActionLogRepository;
 
     @Autowired
     public AdminDashboardController(
@@ -44,8 +43,7 @@ public class AdminDashboardController {
             KeycodeUserService keycodeUserService,
             EmailService emailService,
             AdminActionLogService adminActionLogService,
-            VehicleRepository vehicleRepository,
-            AdminActionLogRepository adminActionLogRepository) {
+            VehicleRepository vehicleRepository) {
         this.vehicleService = vehicleService;
         this.transactionService = transactionService;
         this.subscriptionService = subscriptionService;
@@ -53,7 +51,6 @@ public class AdminDashboardController {
         this.emailService = emailService;
         this.adminActionLogService = adminActionLogService;
         this.vehicleRepository = vehicleRepository;
-        this.adminActionLogRepository = adminActionLogRepository;
     }
 
 
@@ -318,109 +315,7 @@ public class AdminDashboardController {
     }
 
     @GetMapping("/user-history")
-    public ResponseEntity<?> getUserHistory(@RequestParam String email, 
-                                          @RequestParam(required = false) String nastfMode,
-                                          @RequestParam(required = false) String adminLogsMode,
-                                          @RequestParam(required = false) String adminEmailFilter,
-                                          @RequestParam(required = false) String actionFilter,
-                                          @RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "50") int size,
-                                          Authentication auth) {
-        
-        // Admin activity logs mode
-        if ("true".equals(adminLogsMode)) {
-            System.out.println("🚀 ==> ADMIN ACTIVITY LOGS MODE ACTIVATED <==");
-            
-            try {
-                String requestingAdminEmail = auth != null ? auth.getName() : "unknown";
-                
-                // Verify requesting user is a super admin
-                Optional<KeycodeUser> requestingAdminOpt = keycodeUserService.findByEmail(requestingAdminEmail);
-                if (requestingAdminOpt.isEmpty()) {
-                    return ResponseEntity.status(403).body("Admin user not found");
-                }
-                
-                KeycodeUser requestingAdmin = requestingAdminOpt.get();
-                if (requestingAdmin.getRole() != Role.SUPER_ADMIN) {
-                    adminActionLogService.log(requestingAdminEmail, "VIEW_ADMIN_LOGS_DENIED", null, 
-                        "Non-super admin attempted to view admin activity logs");
-                    return ResponseEntity.status(403).body("Only super admins can view admin activity logs");
-                }
-                
-                // Log the access
-                adminActionLogService.log(requestingAdminEmail, "VIEW_ADMIN_LOGS", null, 
-                    "Super admin accessed admin activity logs");
-                
-                // Get all admin action logs (limit to recent ones for performance)
-                List<AdminActionLog> allLogs = adminActionLogRepository.findAll();
-                System.out.println("📊 Total logs in database: " + allLogs.size());
-                
-                // Apply filters
-                if (adminEmailFilter != null && !adminEmailFilter.trim().isEmpty()) {
-                    allLogs = allLogs.stream()
-                        .filter(log -> log.getAdminEmail().toLowerCase().contains(adminEmailFilter.toLowerCase()))
-                        .collect(Collectors.toList());
-                }
-                
-                if (actionFilter != null && !actionFilter.trim().isEmpty()) {
-                    allLogs = allLogs.stream()
-                        .filter(log -> log.getAction().toLowerCase().contains(actionFilter.toLowerCase()))
-                        .collect(Collectors.toList());
-                }
-                
-                // Sort by most recent first
-                allLogs.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
-                
-                // Limit total logs to prevent huge responses (max 1000 logs)
-                if (allLogs.size() > 1000) {
-                    allLogs = allLogs.subList(0, 1000);
-                    System.out.println("⚠️ Limiting logs to 1000 most recent entries for performance");
-                }
-                
-                // Apply pagination
-                int start = page * size;
-                int end = Math.min(start + size, allLogs.size());
-                List<AdminActionLog> paginatedLogs = allLogs.subList(start, end);
-                
-                System.out.println("📄 Paginated logs: " + paginatedLogs.size() + " (page " + page + ", size " + size + ")");
-                
-                // Return simple log data without enhancement to avoid timeouts
-                List<Map<String, Object>> simpleLogs = paginatedLogs.stream().map(log -> {
-                    Map<String, Object> logData = new HashMap<>();
-                    logData.put("id", log.getId());
-                    logData.put("adminEmail", log.getAdminEmail());
-                    logData.put("action", log.getAction());
-                    logData.put("targetUserId", log.getTargetUserId());
-                    logData.put("details", log.getDetails());
-                    logData.put("createdAt", log.getCreatedAt());
-                    
-                    // Skip expensive database lookups for now to avoid timeouts
-                    // TODO: Optimize with batch queries or caching later
-                    
-                    return logData;
-                }).collect(Collectors.toList());
-                
-                Map<String, Object> response = new HashMap<>();
-                response.put("logs", simpleLogs);
-                response.put("totalCount", allLogs.size());
-                response.put("page", page);
-                response.put("size", size);
-                response.put("hasMore", end < allLogs.size());
-                
-                System.out.println("✅ Returning " + simpleLogs.size() + " admin activity logs");
-                System.out.println("📊 Response structure: " + response.keySet());
-                System.out.println("📝 First log sample: " + (simpleLogs.isEmpty() ? "No logs" : simpleLogs.get(0)));
-                return ResponseEntity.ok(response);
-                
-            } catch (Exception e) {
-                String requestingAdminEmail = auth != null ? auth.getName() : "unknown";
-                adminActionLogService.log(requestingAdminEmail, "VIEW_ADMIN_LOGS_ERROR", null, 
-                    "Error viewing admin logs: " + e.getMessage());
-                e.printStackTrace();
-                return ResponseEntity.status(500).body("Error fetching admin activity logs: " + e.getMessage());
-            }
-        }
-        
+    public ResponseEntity<?> getUserHistory(@RequestParam String email, @RequestParam(required = false) String nastfMode) {
         // NASTF compliance mode
         if ("true".equals(nastfMode)) {
             System.out.println("🚀 ==> NASTF COMPLIANCE MODE ACTIVATED <==");
@@ -876,45 +771,6 @@ public class AdminDashboardController {
             adminActionLogService.log(adminEmail, "DELETE_USER_ERROR", id, "Error deleting user: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error deleting user: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/generate-test-logs")
-    public ResponseEntity<String> generateTestLogs(Authentication auth) {
-        try {
-            String adminEmail = auth != null ? auth.getName() : "unknown";
-            
-            // Verify requesting user is a super admin
-            Optional<KeycodeUser> adminOpt = keycodeUserService.findByEmail(adminEmail);
-            if (adminOpt.isEmpty()) {
-                return ResponseEntity.status(403).body("Admin user not found");
-            }
-            
-            KeycodeUser admin = adminOpt.get();
-            if (admin.getRole() != Role.SUPER_ADMIN) {
-                return ResponseEntity.status(403).body("Only super admins can generate test logs");
-            }
-            
-            // Generate test activity logs for the super admin
-            adminActionLogService.log(adminEmail, "LOGIN", null, "Super admin logged into dashboard");
-            adminActionLogService.log(adminEmail, "VIEW_USERS", null, "Accessed user management page");
-            adminActionLogService.log(adminEmail, "SEARCH_USER", null, "Searched for user: test@example.com");
-            adminActionLogService.log(adminEmail, "VIEW_USER_PROFILE", 123L, "Viewed user profile details");
-            adminActionLogService.log(adminEmail, "UPDATE_USER_NOTES", 123L, "Updated user notes: Test note added");
-            adminActionLogService.log(adminEmail, "ACTIVATE_TRIAL", 456L, "Activated 3-day trial for user");
-            adminActionLogService.log(adminEmail, "REVOKE_USER", 789L, "Revoked user access due to policy violation");
-            adminActionLogService.log(adminEmail, "VIEW_NASTF_COMPLIANCE", null, "Accessed NASTF compliance dashboard");
-            adminActionLogService.log(adminEmail, "DOWNLOAD_DOCUMENTS", 101L, "Downloaded D1 form documents for vehicle");
-            adminActionLogService.log(adminEmail, "VIEW_ADMIN_LOGS", null, "Accessed admin activity logs");
-            adminActionLogService.log(adminEmail, "EXPORT_REPORT", null, "Exported user activity report");
-            adminActionLogService.log(adminEmail, "SYSTEM_MAINTENANCE", null, "Performed system maintenance tasks");
-            
-            return ResponseEntity.ok("✅ Generated 12 test activity logs for super admin: " + adminEmail);
-            
-        } catch (Exception e) {
-            System.err.println("❌ Error generating test logs: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Error generating test logs: " + e.getMessage());
         }
     }
 
