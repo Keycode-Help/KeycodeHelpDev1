@@ -67,7 +67,6 @@ function AppContent() {
   const location = useLocation();
   const { isAuthenticated, isInitialized } = useAuth();
   const { shouldShowTrialNotice } = useTrialStatus();
-  const { isOnline } = useConnectionStatus();
 
   // Check if current page should hide the sidebar
   const isHomepage = location.pathname === "/";
@@ -107,9 +106,6 @@ function AppContent() {
 
       {/* Show trial expiration handler for authenticated users */}
       {isAuthenticated && <TrialExpirationHandler />}
-
-      {/* Show offline indicator */}
-      <OfflineIndicator />
 
       <div
         className={`min-h-screen bg-gradient-to-br from-dark via-secondary to-dark transition-all duration-300 ${
@@ -172,7 +168,6 @@ function AppContent() {
             path="/membership-cancellation"
             element={<MembershipCancellation />}
           />
-          <Route path="/offline" element={<OfflinePage />} />
 
           <Route path="*" element={<LandingPage />} />
         </Routes>
@@ -188,32 +183,6 @@ function App() {
     initMobileResponsiveness();
     addZFoldCSSVariables();
     initZFoldOptimizations();
-  }, []);
-
-  // Register Service Worker for offline functionality
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((registration) => {
-          console.log("✅ Service Worker registered:", registration.scope);
-        })
-        .catch((error) => {
-          console.error("❌ Service Worker registration failed:", error);
-        });
-    }
-  }, []);
-
-  // Sync offline actions when connection is restored
-  useEffect(() => {
-    const handleOnline = () => {
-      console.log("🌐 Connection restored, syncing offline actions...");
-      syncActions();
-      clearOldCache();
-    };
-
-    window.addEventListener("online", handleOnline);
-    return () => window.removeEventListener("online", handleOnline);
   }, []);
 
   // App component with enhanced routing for production deployment

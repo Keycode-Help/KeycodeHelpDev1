@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTrialStatus } from "../hooks/useTrialStatus";
+import { useConnectionStatus } from "../hooks/useConnectionStatus";
 import api from "../services/request";
-import {
-  get,
-  isCachedResponse,
-  isOfflineResponse,
-} from "../services/offlineRequest";
+import { get, isCachedResponse, isOfflineResponse } from "../services/offlineRequest";
 import QRCode from "qrcode";
 import toast from "react-hot-toast";
 import PasswordChange from "../components/PasswordChange";
@@ -31,6 +28,7 @@ import {
 function UserProfile() {
   const { user, isAuthenticated, isInitialized } = useAuth();
   const { trialStatus } = useTrialStatus();
+  const { isOnline } = useConnectionStatus();
 
   // Profile data state
   const [profileData, setProfileData] = useState({
@@ -122,7 +120,7 @@ function UserProfile() {
       console.log("🔄 Fetching user profile...");
       const response = await get("/user/profile");
       const data = response.data;
-
+      
       console.log("📊 Raw profile data received:", data);
 
       // Check if response is from cache or offline
@@ -148,7 +146,7 @@ function UserProfile() {
         profilePhoto: data.profilePhoto || null,
         companyLogo: data.companyLogo || null,
       };
-
+      
       setProfileData(profileData);
       console.log("✅ User profile mapped and set:", profileData);
     } catch (error) {
@@ -186,7 +184,7 @@ function UserProfile() {
       console.log("🔄 Fetching subscription data...");
       const response = await get("/user/subscription");
       const data = response.data;
-
+      
       console.log("📊 Raw subscription data received:", data);
 
       // Check if response is from cache or offline
@@ -195,7 +193,7 @@ function UserProfile() {
       } else if (isOfflineResponse(response)) {
         console.log("📴 Subscription data served offline");
       }
-
+      
       // Map backend data to frontend state with fallbacks
       const subscriptionData = {
         tier: data.tier || "NONE",
@@ -204,7 +202,7 @@ function UserProfile() {
         endDate: data.endDate || null,
         autoRenew: data.autoRenew || false,
       };
-
+      
       setSubscription(subscriptionData);
       console.log("✅ Subscription data mapped and set:", subscriptionData);
     } catch (error) {
@@ -227,7 +225,7 @@ function UserProfile() {
       console.log("🔄 Fetching order history...");
       const response = await get("/user/orders");
       const data = response.data;
-
+      
       console.log("📊 Raw order history data received:", data);
 
       // Check if response is from cache or offline
@@ -236,10 +234,10 @@ function UserProfile() {
       } else if (isOfflineResponse(response)) {
         console.log("📴 Order history served offline");
       }
-
+      
       // Ensure we always set an array
       const orders = Array.isArray(data) ? data : [];
-
+      
       // Map order data to ensure consistent structure
       const mappedOrders = orders.map((order) => ({
         id: order.id || order.orderId || null,
@@ -249,7 +247,7 @@ function UserProfile() {
         cost: order.cost || order.price || order.amount || 0,
         ...order, // Include any additional fields
       }));
-
+      
       setOrderHistory(mappedOrders);
       console.log("✅ Order history mapped and set:", mappedOrders);
     } catch (error) {

@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTrialStatus } from "../hooks/useTrialStatus";
+import { useConnectionStatus } from "../hooks/useConnectionStatus";
 import api from "../services/request";
-import {
-  get,
-  isCachedResponse,
-  isOfflineResponse,
-} from "../services/offlineRequest";
+import { get, post, put, isCachedResponse, isOfflineResponse } from "../services/offlineRequest";
 import QRCode from "qrcode";
 import toast from "react-hot-toast";
 import PasswordChange from "../components/PasswordChange";
@@ -31,6 +28,7 @@ import {
 function UserProfile() {
   const { user, isAuthenticated, isInitialized } = useAuth();
   const { trialStatus } = useTrialStatus();
+  const { isOnline } = useConnectionStatus();
 
   // Profile data state
   const [profileData, setProfileData] = useState({
@@ -120,19 +118,10 @@ function UserProfile() {
   const fetchUserProfile = async () => {
     try {
       console.log("🔄 Fetching user profile...");
-      const response = await get("/user/profile");
+      const response = await api.get("/user/profile");
       const data = response.data;
 
       console.log("📊 Raw profile data received:", data);
-
-      // Check if response is from cache or offline
-      if (isCachedResponse(response)) {
-        console.log("📦 Profile data served from cache");
-        toast.success("Profile data loaded from cache", { duration: 2000 });
-      } else if (isOfflineResponse(response)) {
-        console.log("📴 Profile data served offline");
-        toast.info("Profile data loaded offline", { duration: 3000 });
-      }
 
       // Map backend data to frontend state with fallbacks
       const profileData = {
@@ -184,17 +173,10 @@ function UserProfile() {
   const fetchSubscriptionData = async () => {
     try {
       console.log("🔄 Fetching subscription data...");
-      const response = await get("/user/subscription");
+      const response = await api.get("/user/subscription");
       const data = response.data;
 
       console.log("📊 Raw subscription data received:", data);
-
-      // Check if response is from cache or offline
-      if (isCachedResponse(response)) {
-        console.log("📦 Subscription data served from cache");
-      } else if (isOfflineResponse(response)) {
-        console.log("📴 Subscription data served offline");
-      }
 
       // Map backend data to frontend state with fallbacks
       const subscriptionData = {
@@ -225,17 +207,10 @@ function UserProfile() {
   const fetchOrderHistory = async () => {
     try {
       console.log("🔄 Fetching order history...");
-      const response = await get("/user/orders");
+      const response = await api.get("/user/orders");
       const data = response.data;
 
       console.log("📊 Raw order history data received:", data);
-
-      // Check if response is from cache or offline
-      if (isCachedResponse(response)) {
-        console.log("📦 Order history served from cache");
-      } else if (isOfflineResponse(response)) {
-        console.log("📴 Order history served offline");
-      }
 
       // Ensure we always set an array
       const orders = Array.isArray(data) ? data : [];
