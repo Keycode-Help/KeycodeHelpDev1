@@ -922,9 +922,10 @@ public class AdminDashboardController {
     }
 
     @GetMapping("/admin-logs-simple")
-    public ResponseEntity<?> getAdminLogsSimple() {
+    public ResponseEntity<?> getAdminLogsSimple(Authentication auth) {
         try {
-            System.out.println("🧪 Simple admin logs endpoint called (no auth required)");
+            String adminEmail = auth != null ? auth.getName() : "unknown";
+            System.out.println("🧪 Simple admin logs endpoint called by: " + adminEmail);
             
             // Return a simple test response
             Map<String, Object> response = new HashMap<>();
@@ -945,16 +946,17 @@ public class AdminDashboardController {
     }
     
     @GetMapping("/admin-logs-test")
-    public ResponseEntity<?> getTestAdminLogs() {
+    public ResponseEntity<?> getTestAdminLogs(Authentication auth) {
         try {
-            System.out.println("🧪 Test admin logs endpoint called (no auth required)");
+            String adminEmail = auth != null ? auth.getName() : "unknown";
+            System.out.println("🧪 Test admin logs endpoint called by: " + adminEmail);
             
             // Create some test logs
             List<Map<String, Object>> testLogs = new ArrayList<>();
             
             Map<String, Object> log1 = new HashMap<>();
             log1.put("id", 1L);
-            log1.put("adminEmail", "5epmgllc@gmail.com");
+            log1.put("adminEmail", adminEmail);
             log1.put("action", "VIEW_ADMIN_LOGS");
             log1.put("details", "Super admin accessed admin activity logs");
             log1.put("createdAt", java.time.LocalDateTime.now().toString());
@@ -962,7 +964,7 @@ public class AdminDashboardController {
             
             Map<String, Object> log2 = new HashMap<>();
             log2.put("id", 2L);
-            log2.put("adminEmail", "5epmgllc@gmail.com");
+            log2.put("adminEmail", adminEmail);
             log2.put("action", "LOGIN");
             log2.put("details", "Super admin logged in successfully");
             log2.put("createdAt", java.time.LocalDateTime.now().minusMinutes(5).toString());
@@ -970,7 +972,7 @@ public class AdminDashboardController {
             
             Map<String, Object> log3 = new HashMap<>();
             log3.put("id", 3L);
-            log3.put("adminEmail", "5epmgllc@gmail.com");
+            log3.put("adminEmail", adminEmail);
             log3.put("action", "USER_DELETION");
             log3.put("details", "Deleted user account for compliance reasons");
             log3.put("createdAt", java.time.LocalDateTime.now().minusHours(1).toString());
@@ -989,55 +991,6 @@ public class AdminDashboardController {
             
         } catch (Exception e) {
             System.err.println("❌ Error in test admin logs: " + e.getMessage());
-            return ResponseEntity.status(500).body("Error: " + e.getMessage());
-        }
-    }
-    
-    @GetMapping("/admin-logs-public")
-    public ResponseEntity<?> getPublicTestLogs() {
-        try {
-            System.out.println("🌐 Public test admin logs endpoint called (no auth required)");
-            
-            // Create some test logs
-            List<Map<String, Object>> testLogs = new ArrayList<>();
-            
-            Map<String, Object> log1 = new HashMap<>();
-            log1.put("id", 1L);
-            log1.put("adminEmail", "5epmgllc@gmail.com");
-            log1.put("action", "VIEW_ADMIN_LOGS");
-            log1.put("details", "Super admin accessed admin activity logs");
-            log1.put("createdAt", java.time.LocalDateTime.now().toString());
-            testLogs.add(log1);
-            
-            Map<String, Object> log2 = new HashMap<>();
-            log2.put("id", 2L);
-            log2.put("adminEmail", "5epmgllc@gmail.com");
-            log2.put("action", "LOGIN");
-            log2.put("details", "Super admin logged in successfully");
-            log2.put("createdAt", java.time.LocalDateTime.now().minusMinutes(5).toString());
-            testLogs.add(log2);
-            
-            Map<String, Object> log3 = new HashMap<>();
-            log3.put("id", 3L);
-            log3.put("adminEmail", "5epmgllc@gmail.com");
-            log3.put("action", "USER_DELETION");
-            log3.put("details", "Deleted user account for compliance reasons");
-            log3.put("createdAt", java.time.LocalDateTime.now().minusHours(1).toString());
-            testLogs.add(log3);
-            
-            Map<String, Object> response = new HashMap<>();
-            response.put("logs", testLogs);
-            response.put("totalCount", 3);
-            response.put("page", 0);
-            response.put("size", 25);
-            response.put("hasMore", false);
-            response.put("message", "Public test data - no authentication required");
-            
-            System.out.println("✅ Public test admin logs response created with " + testLogs.size() + " logs");
-            return ResponseEntity.ok(response);
-            
-        } catch (Exception e) {
-            System.err.println("❌ Error in public test admin logs: " + e.getMessage());
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }

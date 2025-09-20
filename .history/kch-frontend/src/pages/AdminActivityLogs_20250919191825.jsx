@@ -13,6 +13,7 @@ import {
   User,
   FileText,
   Eye,
+  Database,
   Download,
   ChevronLeft,
   ChevronRight,
@@ -28,6 +29,7 @@ function AdminActivityLogs() {
     adminEmail: "",
     action: "",
   });
+  const [generatingLogs, setGeneratingLogs] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(false);
@@ -69,6 +71,33 @@ function AdminActivityLogs() {
       }
     }
   }, [userRole]);
+
+  // Generate test logs for super admin
+  const generateTestLogs = async () => {
+    setGeneratingLogs(true);
+    try {
+      const response = await api.post(
+        "/admin/generate-test-logs",
+        {},
+        {
+          timeout: 10000, // 10 second timeout for test log generation
+        }
+      );
+      toast.success("✅ Test logs generated successfully!");
+      console.log("🎯 Test logs response:", response.data);
+
+      // Refresh the logs after generating test data
+      await fetchLogs(0);
+    } catch (error) {
+      console.error("❌ Error generating test logs:", error);
+      toast.error(
+        "Failed to generate test logs: " +
+          (error.response?.data || error.message)
+      );
+    } finally {
+      setGeneratingLogs(false);
+    }
+  };
 
   // Fetch admin activity logs with retry logic
   const fetchLogs = async (

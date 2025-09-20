@@ -13,6 +13,7 @@ import {
   User,
   FileText,
   Eye,
+  Database,
   Download,
   ChevronLeft,
   ChevronRight,
@@ -69,6 +70,7 @@ function AdminActivityLogs() {
       }
     }
   }, [userRole]);
+
 
   // Fetch admin activity logs with retry logic
   const fetchLogs = async (

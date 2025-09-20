@@ -13,6 +13,7 @@ import {
   User,
   FileText,
   Eye,
+  Database,
   Download,
   ChevronLeft,
   ChevronRight,
@@ -28,6 +29,7 @@ function AdminActivityLogs() {
     adminEmail: "",
     action: "",
   });
+  const [generatingLogs, setGeneratingLogs] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(false);
@@ -69,6 +71,7 @@ function AdminActivityLogs() {
       }
     }
   }, [userRole]);
+
 
   // Fetch admin activity logs with retry logic
   const fetchLogs = async (

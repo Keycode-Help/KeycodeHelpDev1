@@ -884,6 +884,7 @@ function UserProfile() {
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-white"
                       style={{ color: "white !important" }}
+                      style={{ color: "white !important" }}
                       placeholder="City"
                     />
                   </div>
@@ -1224,8 +1225,8 @@ function UserProfile() {
                     className="text-amber-400 mt-0.5 flex-shrink-0"
                   />
                   <p className="text-amber-200">
-                    <strong>Important:</strong> Driver&apos;s license requires
-                    both front and back sides for verification.
+                    <strong>Important:</strong> Driver's license requires both
+                    front and back sides for verification.
                   </p>
                 </div>
               </div>
@@ -1265,7 +1266,7 @@ function UserProfile() {
                       <div className="flex flex-col items-center">
                         <FileText size={32} className="text-white mb-3" />
                         <span className="text-white font-medium mb-2">
-                          Driver&apos;s License - Front
+                          Driver's License - Front
                         </span>
                         {credentials.driversLicenseFront && (
                           <CheckCircle size={20} className="text-green-400" />
@@ -1293,7 +1294,7 @@ function UserProfile() {
                       <div className="flex flex-col items-center">
                         <FileText size={32} className="text-white mb-3" />
                         <span className="text-white font-medium mb-2">
-                          Driver&apos;s License - Back
+                          Driver's License - Back
                         </span>
                         {credentials.driversLicenseBack && (
                           <CheckCircle size={20} className="text-green-400" />
@@ -1346,8 +1347,8 @@ function UserProfile() {
 
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
                 <p className="text-blue-200 text-sm">
-                  Both front and back of your driver&apos;s license are required
-                  for verification purposes.
+                  Both front and back of your driver's license are required for
+                  verification purposes.
                 </p>
               </div>
 

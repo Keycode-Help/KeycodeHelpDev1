@@ -7,7 +7,7 @@ const instance = axios.create({
   timeout: import.meta.env.PROD ? 60000 : 30000, // 60s for production, 30s for dev
   headers: {
     "Content-Type": "application/json",
-    // Note: Connection header is controlled by the browser, cannot be set manually
+    Connection: "keep-alive",
   },
   // Add connection pooling and retry options
   maxRedirects: 3,

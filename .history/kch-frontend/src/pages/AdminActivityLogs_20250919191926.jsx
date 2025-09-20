@@ -70,6 +70,7 @@ function AdminActivityLogs() {
     }
   }, [userRole]);
 
+
   // Fetch admin activity logs with retry logic
   const fetchLogs = async (
     page = 0,

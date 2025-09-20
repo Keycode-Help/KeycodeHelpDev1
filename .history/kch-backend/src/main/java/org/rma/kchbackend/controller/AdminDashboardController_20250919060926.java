@@ -353,35 +353,8 @@ public class AdminDashboardController {
                     "Super admin accessed admin activity logs");
                 
                 // Get all admin action logs (limit to recent ones for performance)
-                System.out.println("🔍 Querying admin action logs from database...");
-                
-                List<AdminActionLog> allLogs;
-                try {
-                    // Try a simple count first to test database connectivity
-                    long count = adminActionLogRepository.count();
-                    System.out.println("📊 Admin logs count: " + count);
-                    
-                    if (count == 0) {
-                        System.out.println("⚠️ No admin logs found in database, returning empty result");
-                        allLogs = new java.util.ArrayList<>();
-                    } else {
-                        System.out.println("🔍 Fetching admin logs with native query to avoid corruption...");
-                        try {
-                            // Use native query to avoid potential data corruption issues
-                            allLogs = adminActionLogRepository.findTop100ByOrderByCreatedAtDesc();
-                            System.out.println("📊 Total logs retrieved: " + allLogs.size());
-                        } catch (Exception e) {
-                            System.err.println("❌ Error with findTop100, falling back to empty list: " + e.getMessage());
-                            allLogs = new java.util.ArrayList<>();
-                        }
-                    }
-                } catch (Exception dbError) {
-                    System.err.println("❌ Database error: " + dbError.getMessage());
-                    dbError.printStackTrace();
-                    return ResponseEntity.status(500).body("Database error: " + dbError.getMessage());
-                }
-                
-                System.out.println("⏰ Database query completed at: " + java.time.LocalDateTime.now());
+                List<AdminActionLog> allLogs = adminActionLogRepository.findAll();
+                System.out.println("📊 Total logs in database: " + allLogs.size());
                 
                 // Apply filters
                 if (adminEmailFilter != null && !adminEmailFilter.trim().isEmpty()) {
@@ -412,23 +385,18 @@ public class AdminDashboardController {
                 
                 System.out.println("📄 Paginated logs: " + paginatedLogs.size() + " (page " + page + ", size " + size + ")");
                 
-                // Return minimal log data to reduce response size and avoid timeouts
+                // Return simple log data without enhancement to avoid timeouts
                 List<Map<String, Object>> simpleLogs = paginatedLogs.stream().map(log -> {
                     Map<String, Object> logData = new HashMap<>();
                     logData.put("id", log.getId());
                     logData.put("adminEmail", log.getAdminEmail());
                     logData.put("action", log.getAction());
                     logData.put("targetUserId", log.getTargetUserId());
+                    logData.put("details", log.getDetails());
+                    logData.put("createdAt", log.getCreatedAt());
                     
-                    // Truncate details to reduce response size
-                    String details = log.getDetails();
-                    if (details != null && details.length() > 100) {
-                        details = details.substring(0, 100) + "...";
-                    }
-                    logData.put("details", details);
-                    
-                    // Format timestamp as string to reduce serialization overhead
-                    logData.put("createdAt", log.getCreatedAt().toString());
+                    // Skip expensive database lookups for now to avoid timeouts
+                    // TODO: Optimize with batch queries or caching later
                     
                     return logData;
                 }).collect(Collectors.toList());
@@ -443,16 +411,7 @@ public class AdminDashboardController {
                 System.out.println("✅ Returning " + simpleLogs.size() + " admin activity logs");
                 System.out.println("📊 Response structure: " + response.keySet());
                 System.out.println("📝 First log sample: " + (simpleLogs.isEmpty() ? "No logs" : simpleLogs.get(0)));
-                System.out.println("⏰ About to send response at: " + java.time.LocalDateTime.now());
-                
-                // Add headers to help with connection issues
-                ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok()
-                    .header("Connection", "keep-alive")
-                    .header("Cache-Control", "no-cache")
-                    .body(response);
-                
-                System.out.println("🚀 Response created, sending to client...");
-                return responseEntity;
+                return ResponseEntity.ok(response);
                 
             } catch (Exception e) {
                 String requestingAdminEmail = auth != null ? auth.getName() : "unknown";
@@ -918,127 +877,6 @@ public class AdminDashboardController {
             adminActionLogService.log(adminEmail, "DELETE_USER_ERROR", id, "Error deleting user: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error deleting user: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/admin-logs-simple")
-    public ResponseEntity<?> getAdminLogsSimple() {
-        try {
-            System.out.println("🧪 Simple admin logs endpoint called (no auth required)");
-            
-            // Return a simple test response
-            Map<String, Object> response = new HashMap<>();
-            response.put("logs", new ArrayList<>());
-            response.put("totalCount", 0);
-            response.put("page", 0);
-            response.put("size", 25);
-            response.put("hasMore", false);
-            response.put("message", "Simple endpoint test - no database query");
-            
-            System.out.println("✅ Simple admin logs response created");
-            return ResponseEntity.ok(response);
-            
-        } catch (Exception e) {
-            System.err.println("❌ Error in simple admin logs: " + e.getMessage());
-            return ResponseEntity.status(500).body("Error: " + e.getMessage());
-        }
-    }
-    
-    @GetMapping("/admin-logs-test")
-    public ResponseEntity<?> getTestAdminLogs() {
-        try {
-            System.out.println("🧪 Test admin logs endpoint called (no auth required)");
-            
-            // Create some test logs
-            List<Map<String, Object>> testLogs = new ArrayList<>();
-            
-            Map<String, Object> log1 = new HashMap<>();
-            log1.put("id", 1L);
-            log1.put("adminEmail", "5epmgllc@gmail.com");
-            log1.put("action", "VIEW_ADMIN_LOGS");
-            log1.put("details", "Super admin accessed admin activity logs");
-            log1.put("createdAt", java.time.LocalDateTime.now().toString());
-            testLogs.add(log1);
-            
-            Map<String, Object> log2 = new HashMap<>();
-            log2.put("id", 2L);
-            log2.put("adminEmail", "5epmgllc@gmail.com");
-            log2.put("action", "LOGIN");
-            log2.put("details", "Super admin logged in successfully");
-            log2.put("createdAt", java.time.LocalDateTime.now().minusMinutes(5).toString());
-            testLogs.add(log2);
-            
-            Map<String, Object> log3 = new HashMap<>();
-            log3.put("id", 3L);
-            log3.put("adminEmail", "5epmgllc@gmail.com");
-            log3.put("action", "USER_DELETION");
-            log3.put("details", "Deleted user account for compliance reasons");
-            log3.put("createdAt", java.time.LocalDateTime.now().minusHours(1).toString());
-            testLogs.add(log3);
-            
-            Map<String, Object> response = new HashMap<>();
-            response.put("logs", testLogs);
-            response.put("totalCount", 3);
-            response.put("page", 0);
-            response.put("size", 25);
-            response.put("hasMore", false);
-            response.put("message", "Test data - sample admin activity logs");
-            
-            System.out.println("✅ Test admin logs response created with " + testLogs.size() + " logs");
-            return ResponseEntity.ok(response);
-            
-        } catch (Exception e) {
-            System.err.println("❌ Error in test admin logs: " + e.getMessage());
-            return ResponseEntity.status(500).body("Error: " + e.getMessage());
-        }
-    }
-    
-    @GetMapping("/admin-logs-public")
-    public ResponseEntity<?> getPublicTestLogs() {
-        try {
-            System.out.println("🌐 Public test admin logs endpoint called (no auth required)");
-            
-            // Create some test logs
-            List<Map<String, Object>> testLogs = new ArrayList<>();
-            
-            Map<String, Object> log1 = new HashMap<>();
-            log1.put("id", 1L);
-            log1.put("adminEmail", "5epmgllc@gmail.com");
-            log1.put("action", "VIEW_ADMIN_LOGS");
-            log1.put("details", "Super admin accessed admin activity logs");
-            log1.put("createdAt", java.time.LocalDateTime.now().toString());
-            testLogs.add(log1);
-            
-            Map<String, Object> log2 = new HashMap<>();
-            log2.put("id", 2L);
-            log2.put("adminEmail", "5epmgllc@gmail.com");
-            log2.put("action", "LOGIN");
-            log2.put("details", "Super admin logged in successfully");
-            log2.put("createdAt", java.time.LocalDateTime.now().minusMinutes(5).toString());
-            testLogs.add(log2);
-            
-            Map<String, Object> log3 = new HashMap<>();
-            log3.put("id", 3L);
-            log3.put("adminEmail", "5epmgllc@gmail.com");
-            log3.put("action", "USER_DELETION");
-            log3.put("details", "Deleted user account for compliance reasons");
-            log3.put("createdAt", java.time.LocalDateTime.now().minusHours(1).toString());
-            testLogs.add(log3);
-            
-            Map<String, Object> response = new HashMap<>();
-            response.put("logs", testLogs);
-            response.put("totalCount", 3);
-            response.put("page", 0);
-            response.put("size", 25);
-            response.put("hasMore", false);
-            response.put("message", "Public test data - no authentication required");
-            
-            System.out.println("✅ Public test admin logs response created with " + testLogs.size() + " logs");
-            return ResponseEntity.ok(response);
-            
-        } catch (Exception e) {
-            System.err.println("❌ Error in public test admin logs: " + e.getMessage());
-            return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
 

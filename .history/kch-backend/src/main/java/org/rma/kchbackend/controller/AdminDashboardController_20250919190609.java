@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -945,16 +946,22 @@ public class AdminDashboardController {
     }
     
     @GetMapping("/admin-logs-test")
-    public ResponseEntity<?> getTestAdminLogs() {
+    public ResponseEntity<?> getTestAdminLogs(HttpServletRequest request) {
         try {
-            System.out.println("🧪 Test admin logs endpoint called (no auth required)");
+            // Get admin email from JWT token manually to avoid Spring Security issues
+            String adminEmail = getRequestingAdminEmail(request);
+            if (adminEmail == null) {
+                adminEmail = "unknown@example.com";
+            }
+            
+            System.out.println("🧪 Test admin logs endpoint called by: " + adminEmail);
             
             // Create some test logs
             List<Map<String, Object>> testLogs = new ArrayList<>();
             
             Map<String, Object> log1 = new HashMap<>();
             log1.put("id", 1L);
-            log1.put("adminEmail", "5epmgllc@gmail.com");
+            log1.put("adminEmail", adminEmail);
             log1.put("action", "VIEW_ADMIN_LOGS");
             log1.put("details", "Super admin accessed admin activity logs");
             log1.put("createdAt", java.time.LocalDateTime.now().toString());
@@ -962,7 +969,7 @@ public class AdminDashboardController {
             
             Map<String, Object> log2 = new HashMap<>();
             log2.put("id", 2L);
-            log2.put("adminEmail", "5epmgllc@gmail.com");
+            log2.put("adminEmail", adminEmail);
             log2.put("action", "LOGIN");
             log2.put("details", "Super admin logged in successfully");
             log2.put("createdAt", java.time.LocalDateTime.now().minusMinutes(5).toString());
@@ -970,7 +977,7 @@ public class AdminDashboardController {
             
             Map<String, Object> log3 = new HashMap<>();
             log3.put("id", 3L);
-            log3.put("adminEmail", "5epmgllc@gmail.com");
+            log3.put("adminEmail", adminEmail);
             log3.put("action", "USER_DELETION");
             log3.put("details", "Deleted user account for compliance reasons");
             log3.put("createdAt", java.time.LocalDateTime.now().minusHours(1).toString());
