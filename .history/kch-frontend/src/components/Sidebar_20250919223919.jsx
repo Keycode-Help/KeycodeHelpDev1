@@ -18,7 +18,6 @@ import {
   ChevronDown,
   ChevronRight,
   Users,
-  Lock,
   UserCheck,
   UserPlus,
   BarChart3,
@@ -88,7 +87,6 @@ function Sidebar() {
         ],
         Account: [
           { path: "/user-profile", label: "Profile", icon: User },
-          { path: "/change-password", label: "Change Password", icon: Lock },
           { path: "/cart", label: "Cart", icon: ShoppingCart },
         ],
         Database: [{ path: "/kch-db", label: "KCH Database", icon: Database }],
@@ -131,7 +129,6 @@ function Sidebar() {
         ],
         Account: [
           { path: "/user-profile", label: "Profile", icon: User },
-          { path: "/change-password", label: "Change Password", icon: Lock },
         ],
       };
     }
@@ -178,7 +175,6 @@ function Sidebar() {
         ],
         Account: [
           { path: "/user-profile", label: "Profile", icon: User },
-          { path: "/change-password", label: "Change Password", icon: Lock },
         ],
       };
     }

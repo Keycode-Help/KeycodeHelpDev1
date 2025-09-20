@@ -18,7 +18,6 @@ import {
   ChevronDown,
   ChevronRight,
   Users,
-  Lock,
   UserCheck,
   UserPlus,
   BarChart3,
@@ -131,7 +130,6 @@ function Sidebar() {
         ],
         Account: [
           { path: "/user-profile", label: "Profile", icon: User },
-          { path: "/change-password", label: "Change Password", icon: Lock },
         ],
       };
     }
@@ -178,7 +176,6 @@ function Sidebar() {
         ],
         Account: [
           { path: "/user-profile", label: "Profile", icon: User },
-          { path: "/change-password", label: "Change Password", icon: Lock },
         ],
       };
     }

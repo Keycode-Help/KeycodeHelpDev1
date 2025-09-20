@@ -18,7 +18,6 @@ import {
   ChevronDown,
   ChevronRight,
   Users,
-  Lock,
   UserCheck,
   UserPlus,
   BarChart3,
