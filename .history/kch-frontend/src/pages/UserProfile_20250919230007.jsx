@@ -245,46 +245,10 @@ function UserProfile() {
   const handleFileUpload = (event, field) => {
     const file = event.target.files[0];
     if (file) {
-      // Validate file type
-      if (!file.type.startsWith("image/")) {
-        toast.error("Please select an image file");
-        return;
-      }
-
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("File size must be less than 5MB");
-        return;
-      }
-
-      console.log(
-        `📁 File selected for ${field}:`,
-        file.name,
-        file.size,
-        file.type
-      );
-
       setProfileData((prev) => ({
         ...prev,
         [field]: file,
       }));
-
-      toast.success(
-        `${
-          field === "profilePhoto" ? "Profile photo" : "Company logo"
-        } selected successfully!`
-      );
-    }
-  };
-
-  const triggerFileInput = (inputId) => {
-    if (!isEditing) {
-      toast.error("Please enable editing mode first");
-      return;
-    }
-    const fileInput = document.getElementById(inputId);
-    if (fileInput) {
-      fileInput.click();
     }
   };
 
@@ -695,24 +659,13 @@ function UserProfile() {
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Profile Photo */}
                 <div className="space-y-4">
-                  <label
-                    htmlFor="profile-photo"
-                    className={`block ${
-                      !isEditing
-                        ? "cursor-not-allowed opacity-50"
-                        : "cursor-pointer"
-                    }`}
+                  <label 
+                    htmlFor="profile-photo" 
+                    className={`block ${!isEditing ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
                   >
-                    <div
-                      className={`bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-8 text-center transition-colors duration-200 ${
-                        isEditing
-                          ? "hover:border-blue-500 cursor-pointer"
-                          : "cursor-not-allowed"
-                      }`}
-                      onClick={() =>
-                        isEditing && triggerFileInput("profile-photo")
-                      }
-                    >
+                    <div className={`bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-8 text-center transition-colors duration-200 ${
+                      isEditing ? 'hover:border-blue-500 cursor-pointer' : 'cursor-not-allowed'
+                    }`}>
                       {profileData.profilePhoto ? (
                         <img
                           src={URL.createObjectURL(profileData.profilePhoto)}
@@ -739,40 +692,20 @@ function UserProfile() {
                     disabled={!isEditing}
                     className="hidden"
                   />
-                  <div className="text-center">
-                    <p className="text-sm text-white">
-                      {isEditing
-                        ? "Click to upload profile photo"
-                        : "Enable editing to upload photo"}
-                    </p>
-                    {profileData.profilePhoto && (
-                      <p className="text-xs text-green-400 mt-1">
-                        ✓ Photo selected: {profileData.profilePhoto.name}
-                      </p>
-                    )}
-                  </div>
+                  <p className="text-sm text-white text-center">
+                    {isEditing ? "Click to upload profile photo" : "Enable editing to upload photo"}
+                  </p>
                 </div>
 
                 {/* Company Logo */}
                 <div className="space-y-4">
-                  <label
-                    htmlFor="company-logo"
-                    className={`block ${
-                      !isEditing
-                        ? "cursor-not-allowed opacity-50"
-                        : "cursor-pointer"
-                    }`}
+                  <label 
+                    htmlFor="company-logo" 
+                    className={`block ${!isEditing ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
                   >
-                    <div
-                      className={`bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-8 text-center transition-colors duration-200 ${
-                        isEditing
-                          ? "hover:border-blue-500 cursor-pointer"
-                          : "cursor-not-allowed"
-                      }`}
-                      onClick={() =>
-                        isEditing && triggerFileInput("company-logo")
-                      }
-                    >
+                    <div className={`bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-xl p-8 text-center transition-colors duration-200 ${
+                      isEditing ? 'hover:border-blue-500 cursor-pointer' : 'cursor-not-allowed'
+                    }`}>
                       {profileData.companyLogo ? (
                         <img
                           src={URL.createObjectURL(profileData.companyLogo)}
@@ -799,18 +732,9 @@ function UserProfile() {
                     disabled={!isEditing}
                     className="hidden"
                   />
-                  <div className="text-center">
-                    <p className="text-sm text-white">
-                      {isEditing
-                        ? "Click to upload company logo"
-                        : "Enable editing to upload logo"}
-                    </p>
-                    {profileData.companyLogo && (
-                      <p className="text-xs text-green-400 mt-1">
-                        ✓ Logo selected: {profileData.companyLogo.name}
-                      </p>
-                    )}
-                  </div>
+                  <p className="text-sm text-white text-center">
+                    {isEditing ? "Click to upload company logo" : "Enable editing to upload logo"}
+                  </p>
                 </div>
               </div>
             </div>
