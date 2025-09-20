@@ -56,23 +56,19 @@ public class CorsConfig {
         if (origins != null && !origins.isEmpty()) {
             c.setAllowedOrigins(origins);
         } else {
-            // Fallback to default origins with patterns for better compatibility
-            c.setAllowedOriginPatterns(List.of(
+            // Fallback to default origins
+            c.setAllowedOrigins(List.of(
                 "https://keycode.help",
                 "https://www.keycode.help",
-                "https://*.vercel.app",
                 "https://keycode-help-dev1.vercel.app"
             ));
         }
         
-        c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
+        c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         c.setAllowedHeaders(List.of("*")); // Allow all headers for better compatibility
         c.setAllowCredentials(true);
-        c.setExposedHeaders(List.of("Authorization", "Set-Cookie", "Content-Type"));
+        c.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
         c.setMaxAge(3600L); // Cache preflight response for 1 hour
-        
-        System.out.println("🔧 Production CORS Configuration loaded for origins: " + c.getAllowedOriginPatterns());
-        
         UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
         s.registerCorsConfiguration("/**", c);
         return s;
