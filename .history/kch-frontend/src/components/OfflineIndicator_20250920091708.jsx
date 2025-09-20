@@ -81,15 +81,13 @@ function OfflineIndicator() {
       {/* Main Status Indicator */}
       <div
         className={`fixed top-4 right-4 z-50 transition-all duration-300 ${
-          isOnline && !isSlowConnection
-            ? "opacity-0 pointer-events-none"
-            : "opacity-100"
+          isOnline && !isSlowConnection ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
         <div
           className={`flex items-center gap-2 px-3 py-2 rounded-lg shadow-lg cursor-pointer transition-all duration-200 ${
             isOnline
-              ? isSlowConnection
+              ? isSlow
                 ? "bg-yellow-500/20 border border-yellow-500/30"
                 : "bg-blue-500/20 border border-blue-500/30"
               : "bg-red-500/20 border border-red-500/30"
@@ -221,7 +219,7 @@ function OfflineIndicator() {
             )}
 
             {/* Slow Connection Information */}
-            {isOnline && isSlowConnection && (
+            {isOnline && isSlow && (
               <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
                 <div className="flex items-start gap-2">
                   <AlertTriangle

@@ -1,7 +1,7 @@
 // Service Worker for Keycode Help - Offline Support
-const CACHE_NAME = "keycode-help-v1.0.1";
-const STATIC_CACHE_NAME = "keycode-help-static-v1.0.1";
-const DYNAMIC_CACHE_NAME = "keycode-help-dynamic-v1.0.1";
+const CACHE_NAME = "keycode-help-v1.0.0";
+const STATIC_CACHE_NAME = "keycode-help-static-v1.0.0";
+const DYNAMIC_CACHE_NAME = "keycode-help-dynamic-v1.0.0";
 
 // Files to cache immediately
 const STATIC_FILES = [

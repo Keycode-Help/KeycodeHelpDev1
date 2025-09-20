@@ -15,8 +15,8 @@ function OfflineIndicator() {
     isOnline,
     connectionType,
     formattedOfflineDuration,
-    isSlowConnection,
-    isGoodConnection,
+    isSlowConnection: isSlow,
+    isGoodConnection: isGood,
   } = useConnectionStatus();
 
   const [showDetails, setShowDetails] = useState(false);
@@ -50,22 +50,22 @@ function OfflineIndicator() {
   // Get connection status color
   const getStatusColor = () => {
     if (!isOnline) return "text-red-400";
-    if (isSlowConnection) return "text-yellow-400";
-    if (isGoodConnection) return "text-green-400";
+    if (isSlow) return "text-yellow-400";
+    if (isGood) return "text-green-400";
     return "text-blue-400";
   };
 
   // Get connection status icon
   const getStatusIcon = () => {
     if (!isOnline) return <WifiOff size={16} />;
-    if (isSlowConnection) return <AlertTriangle size={16} />;
+    if (isSlow) return <AlertTriangle size={16} />;
     return <Wifi size={16} />;
   };
 
   // Get connection status text
   const getStatusText = () => {
     if (!isOnline) return "Offline";
-    if (isSlowConnection) return "Slow Connection";
+    if (isSlow) return "Slow Connection";
     return "Online";
   };
 
@@ -81,7 +81,7 @@ function OfflineIndicator() {
       {/* Main Status Indicator */}
       <div
         className={`fixed top-4 right-4 z-50 transition-all duration-300 ${
-          isOnline && !isSlowConnection
+          isOnline && !isSlowConnection()
             ? "opacity-0 pointer-events-none"
             : "opacity-100"
         }`}
@@ -89,7 +89,7 @@ function OfflineIndicator() {
         <div
           className={`flex items-center gap-2 px-3 py-2 rounded-lg shadow-lg cursor-pointer transition-all duration-200 ${
             isOnline
-              ? isSlowConnection
+              ? isSlowConnection()
                 ? "bg-yellow-500/20 border border-yellow-500/30"
                 : "bg-blue-500/20 border border-blue-500/30"
               : "bg-red-500/20 border border-red-500/30"
@@ -221,7 +221,7 @@ function OfflineIndicator() {
             )}
 
             {/* Slow Connection Information */}
-            {isOnline && isSlowConnection && (
+            {isOnline && isSlowConnection() && (
               <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
                 <div className="flex items-start gap-2">
                   <AlertTriangle

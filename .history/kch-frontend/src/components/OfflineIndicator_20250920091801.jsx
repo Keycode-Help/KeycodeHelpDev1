@@ -81,9 +81,7 @@ function OfflineIndicator() {
       {/* Main Status Indicator */}
       <div
         className={`fixed top-4 right-4 z-50 transition-all duration-300 ${
-          isOnline && !isSlowConnection
-            ? "opacity-0 pointer-events-none"
-            : "opacity-100"
+          isOnline && !isSlowConnection ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
         <div
