@@ -875,6 +875,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+                      style={{ color: "white !important" }}
                       placeholder="City"
                     />
                   </div>
@@ -893,6 +894,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+                      style={{ color: "white !important" }}
                       placeholder="State"
                     />
                   </div>
@@ -911,6 +913,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+                      style={{ color: "white !important" }}
                       placeholder="ZIP Code"
                     />
                   </div>
@@ -1336,7 +1339,7 @@ function UserProfile() {
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
                 <p className="text-blue-200 text-sm">
                   Both front and back of your driver&apos;s license are required
-                  Add for verification purposes.
+ Add                 for verification purposes.
                 </p>
               </div>
 

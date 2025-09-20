@@ -790,7 +790,7 @@ function UserProfile() {
                     type="email"
                     value={profileData.email}
                     disabled
-                    className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl text-gray-500 cursor-not-allowed"
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white cursor-not-allowed"
                   />
                   <p className="text-xs text-white">Email cannot be changed</p>
                 </div>
@@ -829,7 +829,16 @@ function UserProfile() {
                     }))
                   }
                   disabled={!isEditing}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{
+                    color: "white !important",
+                    WebkitTextFillColor: "white !important",
+                    WebkitAppearance: "none",
+                    MozAppearance: "textfield",
+                    backgroundColor: "rgba(51, 65, 85, 0.5)",
+                    border: "1px solid rgb(71, 85, 105)",
+                    caretColor: "white",
+                  }}
                   placeholder="Enter your company name"
                 />
               </div>
@@ -875,6 +884,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+                      style={{ color: "white !important" }}
                       placeholder="City"
                     />
                   </div>
@@ -893,6 +903,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+                      style={{ color: "white !important" }}
                       placeholder="State"
                     />
                   </div>
@@ -911,6 +922,7 @@ function UserProfile() {
                       }
                       disabled={!isEditing}
                       className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
+                      style={{ color: "white !important" }}
                       placeholder="ZIP Code"
                     />
                   </div>
@@ -1336,7 +1348,7 @@ function UserProfile() {
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
                 <p className="text-blue-200 text-sm">
                   Both front and back of your driver&apos;s license are required
-                  Add for verification purposes.
+ Add                 for verification purposes.
                 </p>
               </div>
 
