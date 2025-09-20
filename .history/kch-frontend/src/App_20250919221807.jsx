@@ -127,7 +127,6 @@ function AppContent() {
           <Route path="/subscriptions" element={<SubscriptionManager />} />
           <Route path="/profile" element={<UpdateUserProfile />} />
           <Route path="/user-profile" element={<UserProfile />} />
-          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/user-dash" element={<UserDash />} />
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />

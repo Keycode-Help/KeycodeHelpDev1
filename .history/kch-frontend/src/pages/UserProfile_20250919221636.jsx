@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTrialStatus } from "../hooks/useTrialStatus";
 import api from "../services/request";
@@ -15,6 +15,7 @@ import {
   Fingerprint,
   Smartphone,
   Edit3,
+  Camera,
   Save,
   X,
   AlertTriangle,
@@ -78,6 +79,7 @@ function UserProfile() {
   // UI state
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
+  const [showSecurityModal, setShowSecurityModal] = useState(false);
   const [showFingerprintModal, setShowFingerprintModal] = useState(false);
   const [show2FAModal, setShow2FAModal] = useState(false);
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
@@ -1348,7 +1350,7 @@ function UserProfile() {
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
                 <p className="text-blue-200 text-sm">
                   Both front and back of your driver&apos;s license are required
- Add                 for verification purposes.
+                  for verification purposes.
                 </p>
               </div>
 
@@ -1599,17 +1601,6 @@ function UserProfile() {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Password Change Modal */}
-      {showPasswordChangeModal && (
-        <PasswordChange
-          onClose={() => setShowPasswordChangeModal(false)}
-          onSuccess={() => {
-            setShowPasswordChangeModal(false);
-            toast.success("Password changed successfully!");
-          }}
-        />
       )}
     </div>
   );

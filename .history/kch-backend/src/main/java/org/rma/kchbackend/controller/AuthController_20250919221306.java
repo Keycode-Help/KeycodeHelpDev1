@@ -1,6 +1,7 @@
 package org.rma.kchbackend.controller;
 
 import jakarta.validation.constraints.NotBlank;
+import org.rma.kchbackend.dto.RegisterRequest;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Role;
 import org.rma.kchbackend.service.KeycodeUserService;
@@ -10,6 +11,7 @@ import org.rma.kchbackend.service.PasswordResetService;
 import org.rma.kchbackend.service.EmailService;
 import org.rma.kchbackend.util.JwtUtil;
 import org.rma.kchbackend.repository.KeycodeUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,11 +19,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -1425,136 +1431,6 @@ public class AuthController {
             user.getEmail(),
             formatIndustryName(user.getIndustry()),
             user.getState()
-        );
-    }
-
-    /**
-     * Send password change notification email to the user
-     */
-    private void sendPasswordChangeNotification(KeycodeUser user) {
-        try {
-            String subject = "Password Changed Successfully - Keycode Help";
-            String htmlBody = buildPasswordChangeNotificationEmailBody(user);
-            
-            emailService.sendHtmlEmail(user.getEmail(), subject, htmlBody);
-            System.out.println("✅ Password change notification email sent to: " + user.getEmail());
-            
-        } catch (Exception e) {
-            System.err.println("❌ Failed to send password change notification email: " + e.getMessage());
-            e.printStackTrace();
-            throw e; // Re-throw to be caught by the calling method
-        }
-    }
-
-    /**
-     * Build HTML email body for password change notification
-     */
-    private String buildPasswordChangeNotificationEmailBody(KeycodeUser user) {
-        String currentDate = new java.text.SimpleDateFormat("MMMM dd, yyyy 'at' h:mm a").format(new java.util.Date());
-        
-        return String.format("""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Password Changed - Keycode Help</title>
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background: linear-gradient(135deg, #1e40af, #f59e0b); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-                    .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
-                    .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-                    .title { font-size: 24px; margin: 0; }
-                    .subtitle { font-size: 16px; opacity: 0.9; margin: 10px 0 0 0; }
-                    .section { margin: 25px 0; }
-                    .section h3 { color: #1e40af; margin-bottom: 15px; font-size: 18px; }
-                    .info-box { background: white; border-left: 4px solid #10b981; padding: 15px; margin: 15px 0; border-radius: 5px; }
-                    .warning-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 5px; }
-                    .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 14px; }
-                    .contact { background: #e0f2fe; padding: 15px; border-radius: 8px; margin: 15px 0; }
-                    .highlight { background: #fef3c7; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
-                    .icon { font-size: 20px; margin-right: 8px; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <div class="logo">🔑 Keycode Help</div>
-                        <h1 class="title">Password Changed Successfully</h1>
-                        <p class="subtitle">Your account password has been updated</p>
-                    </div>
-                    
-                    <div class="content">
-                        <div class="section">
-                            <h3><span class="icon">✅</span>Password Update Confirmed</h3>
-                            <p>Hello %s,</p>
-                            <p>Your password has been successfully changed on your Keycode Help account.</p>
-                            
-                            <div class="info-box">
-                                <strong>Account Details:</strong><br>
-                                Name: %s %s<br>
-                                Email: %s<br>
-                                Password Changed: %s
-                            </div>
-                        </div>
-                        
-                        <div class="section">
-                            <h3><span class="icon">🔒</span>Security Information</h3>
-                            <p>For your security, please note the following:</p>
-                            <ul>
-                                <li>Your password was changed using your current password verification</li>
-                                <li>This change was made from an authenticated session</li>
-                                <li>If you did not make this change, please contact us immediately</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="warning-box">
-                            <h3><span class="icon">⚠️</span>Important Security Notice</h3>
-                            <p><strong>If you did not make this password change:</strong></p>
-                            <ul>
-                                <li>Contact our support team immediately</li>
-                                <li>Consider changing your password again</li>
-                                <li>Review your account activity</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="section">
-                            <h3><span class="icon">📞</span>Need Help?</h3>
-                            <div class="contact">
-                                <p>If you have any questions or concerns about this password change, please contact us:</p>
-                                <p>
-                                    📧 Email: <a href="mailto:support@keycode.help">support@keycode.help</a><br>
-                                    🌐 Website: <a href="https://www.keycode.help">www.keycode.help</a>
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <div class="section">
-                            <h3><span class="icon">💡</span>Security Tips</h3>
-                            <ul>
-                                <li>Use a strong, unique password</li>
-                                <li>Don't share your password with anyone</li>
-                                <li>Log out from shared computers</li>
-                                <li>Enable two-factor authentication if available</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="footer">
-                        <p>This is an automated security notification.</p>
-                        <p>Please do not reply to this email.</p>
-                        <p>&copy; 2024 Keycode Help. All rights reserved.</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """, 
-            user.getFname(),
-            user.getFname(),
-            user.getLname(),
-            user.getEmail(),
-            currentDate
         );
     }
 

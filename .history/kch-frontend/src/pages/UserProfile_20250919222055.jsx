@@ -1348,7 +1348,7 @@ function UserProfile() {
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
                 <p className="text-blue-200 text-sm">
                   Both front and back of your driver&apos;s license are required
- Add                 for verification purposes.
+                  for verification purposes.
                 </p>
               </div>
 

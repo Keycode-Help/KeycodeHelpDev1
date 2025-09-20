@@ -1,6 +1,7 @@
 package org.rma.kchbackend.controller;
 
 import jakarta.validation.constraints.NotBlank;
+import org.rma.kchbackend.dto.RegisterRequest;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.model.Role;
 import org.rma.kchbackend.service.KeycodeUserService;
@@ -10,6 +11,7 @@ import org.rma.kchbackend.service.PasswordResetService;
 import org.rma.kchbackend.service.EmailService;
 import org.rma.kchbackend.util.JwtUtil;
 import org.rma.kchbackend.repository.KeycodeUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,11 +19,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;

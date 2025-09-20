@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTrialStatus } from "../hooks/useTrialStatus";
 import api from "../services/request";
@@ -15,6 +15,7 @@ import {
   Fingerprint,
   Smartphone,
   Edit3,
+  Camera,
   Save,
   X,
   AlertTriangle,
@@ -78,6 +79,7 @@ function UserProfile() {
   // UI state
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
+  const [showSecurityModal, setShowSecurityModal] = useState(false);
   const [showFingerprintModal, setShowFingerprintModal] = useState(false);
   const [show2FAModal, setShow2FAModal] = useState(false);
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
@@ -1348,7 +1350,7 @@ function UserProfile() {
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
                 <p className="text-blue-200 text-sm">
                   Both front and back of your driver&apos;s license are required
- Add                 for verification purposes.
+                  for verification purposes.
                 </p>
               </div>
 
@@ -1420,31 +1422,6 @@ function UserProfile() {
               </h3>
 
               <div className="space-y-6">
-                {/* Password Change Section */}
-                <div className="bg-slate-700/50 border border-slate-600 rounded-xl p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-red-600/20 rounded-lg">
-                        <Lock size={24} className="text-red-400" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-white">
-                          Password Management
-                        </h4>
-                        <p className="text-white text-sm">
-                          Change your account password for better security
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setShowPasswordChangeModal(true)}
-                      className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-lg"
-                    >
-                      Change Password
-                    </button>
-                  </div>
-                </div>
-
                 <div className="bg-slate-700/50 border border-slate-600 rounded-xl p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -1599,17 +1576,6 @@ function UserProfile() {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Password Change Modal */}
-      {showPasswordChangeModal && (
-        <PasswordChange
-          onClose={() => setShowPasswordChangeModal(false)}
-          onSuccess={() => {
-            setShowPasswordChangeModal(false);
-            toast.success("Password changed successfully!");
-          }}
-        />
       )}
     </div>
   );
