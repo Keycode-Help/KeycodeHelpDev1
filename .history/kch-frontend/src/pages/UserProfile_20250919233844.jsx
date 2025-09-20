@@ -117,7 +117,7 @@ function UserProfile() {
       console.log("🔄 Fetching user profile...");
       const response = await api.get("/user/profile");
       const data = response.data;
-
+      
       console.log("📊 Raw profile data received:", data);
 
       // Map backend data to frontend state with fallbacks
@@ -134,7 +134,7 @@ function UserProfile() {
         profilePhoto: data.profilePhoto || null,
         companyLogo: data.companyLogo || null,
       };
-
+      
       setProfileData(profileData);
       console.log("✅ User profile mapped and set:", profileData);
     } catch (error) {
@@ -172,9 +172,9 @@ function UserProfile() {
       console.log("🔄 Fetching subscription data...");
       const response = await api.get("/user/subscription");
       const data = response.data;
-
+      
       console.log("📊 Raw subscription data received:", data);
-
+      
       // Map backend data to frontend state with fallbacks
       const subscriptionData = {
         tier: data.tier || "NONE",
@@ -183,7 +183,7 @@ function UserProfile() {
         endDate: data.endDate || null,
         autoRenew: data.autoRenew || false,
       };
-
+      
       setSubscription(subscriptionData);
       console.log("✅ Subscription data mapped and set:", subscriptionData);
     } catch (error) {
@@ -206,22 +206,22 @@ function UserProfile() {
       console.log("🔄 Fetching order history...");
       const response = await api.get("/user/orders");
       const data = response.data;
-
+      
       console.log("📊 Raw order history data received:", data);
-
+      
       // Ensure we always set an array
       const orders = Array.isArray(data) ? data : [];
-
+      
       // Map order data to ensure consistent structure
-      const mappedOrders = orders.map((order) => ({
+      const mappedOrders = orders.map(order => ({
         id: order.id || order.orderId || null,
         orderDate: order.orderDate || order.createdAt || order.date || null,
         status: order.status || "UNKNOWN",
         vin: order.vin || "",
         cost: order.cost || order.price || order.amount || 0,
-        ...order, // Include any additional fields
+        ...order // Include any additional fields
       }));
-
+      
       setOrderHistory(mappedOrders);
       console.log("✅ Order history mapped and set:", mappedOrders);
     } catch (error) {

@@ -117,7 +117,7 @@ function UserProfile() {
       console.log("🔄 Fetching user profile...");
       const response = await api.get("/user/profile");
       const data = response.data;
-
+      
       console.log("📊 Raw profile data received:", data);
 
       // Map backend data to frontend state with fallbacks
@@ -134,7 +134,7 @@ function UserProfile() {
         profilePhoto: data.profilePhoto || null,
         companyLogo: data.companyLogo || null,
       };
-
+      
       setProfileData(profileData);
       console.log("✅ User profile mapped and set:", profileData);
     } catch (error) {
@@ -169,35 +169,18 @@ function UserProfile() {
 
   const fetchSubscriptionData = async () => {
     try {
-      console.log("🔄 Fetching subscription data...");
       const response = await api.get("/user/subscription");
-      const data = response.data;
-
-      console.log("📊 Raw subscription data received:", data);
-
-      // Map backend data to frontend state with fallbacks
-      const subscriptionData = {
-        tier: data.tier || "NONE",
-        status: data.status || "INACTIVE",
-        startDate: data.startDate || null,
-        endDate: data.endDate || null,
-        autoRenew: data.autoRenew || false,
-      };
-
-      setSubscription(subscriptionData);
-      console.log("✅ Subscription data mapped and set:", subscriptionData);
+      setSubscription(response.data);
     } catch (error) {
-      console.error("❌ Error fetching subscription:", error);
+      console.error("Error fetching subscription:", error);
       // Gracefully fallback to no subscription on auth/permissions errors
-      const defaultSubscription = {
+      setSubscription({
         tier: "NONE",
         status: "INACTIVE",
         startDate: null,
         endDate: null,
         autoRenew: false,
-      };
-      setSubscription(defaultSubscription);
-      console.log("⚠️ Using default subscription data:", defaultSubscription);
+      });
     }
   };
 
@@ -205,27 +188,12 @@ function UserProfile() {
     try {
       console.log("🔄 Fetching order history...");
       const response = await api.get("/user/orders");
-      const data = response.data;
-
-      console.log("📊 Raw order history data received:", data);
-
       // Ensure we always set an array
-      const orders = Array.isArray(data) ? data : [];
-
-      // Map order data to ensure consistent structure
-      const mappedOrders = orders.map((order) => ({
-        id: order.id || order.orderId || null,
-        orderDate: order.orderDate || order.createdAt || order.date || null,
-        status: order.status || "UNKNOWN",
-        vin: order.vin || "",
-        cost: order.cost || order.price || order.amount || 0,
-        ...order, // Include any additional fields
-      }));
-
-      setOrderHistory(mappedOrders);
-      console.log("✅ Order history mapped and set:", mappedOrders);
+      const orders = Array.isArray(response.data) ? response.data : [];
+      setOrderHistory(orders);
+      console.log("✅ Order history fetched successfully");
     } catch (error) {
-      console.error("❌ Error fetching orders:", error);
+      console.error("Error fetching orders:", error);
 
       // Handle authentication errors specifically
       if (error.response?.status === 401 || error.response?.status === 403) {
@@ -238,7 +206,6 @@ function UserProfile() {
         toast.error("Failed to load order history. Please try again later.");
         // Set empty array on error
         setOrderHistory([]);
-        console.log("⚠️ Using empty order history array due to error");
       }
     }
   };

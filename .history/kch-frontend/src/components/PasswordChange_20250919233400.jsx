@@ -45,15 +45,11 @@ function PasswordChange({ onClose, onSuccess }) {
       // At least one special character (expanded set)
       special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password),
       // No common patterns or sequences
-      noSequential:
-        !/(.)\1{2,}/.test(password) && !/(123|abc|qwe|asd|zxc)/i.test(password),
+      noSequential: !/(.)\1{2,}/.test(password) && !/(123|abc|qwe|asd|zxc)/i.test(password),
       // No common dictionary words (basic check)
-      noCommonWords:
-        !/^(password|123456|admin|user|login|welcome|qwerty|letmein)$/i.test(
-          password
-        ),
+      noCommonWords: !/^(password|123456|admin|user|login|welcome|qwerty|letmein)$/i.test(password),
       // At least 3 different character types
-      characterVariety: (function () {
+      characterVariety: (function() {
         let types = 0;
         if (/[A-Z]/.test(password)) types++;
         if (/[a-z]/.test(password)) types++;
@@ -68,8 +64,7 @@ function PasswordChange({ onClose, onSuccess }) {
     let color = "";
 
     if (score <= 3) {
-      feedback =
-        "Very Weak - Password must be at least 12 characters with uppercase, lowercase, numbers, and special characters";
+      feedback = "Very Weak - Password must be at least 12 characters with uppercase, lowercase, numbers, and special characters";
       color = "red";
     } else if (score === 4) {
       feedback = "Weak - Add more character variety and avoid common patterns";
@@ -334,7 +329,7 @@ function PasswordChange({ onClose, onSuccess }) {
                 <div className="w-full bg-slate-700 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthBg()}`}
-                    style={{ width: `${(passwordStrength.score / 8) * 100}%` }}
+                    style={{ width: `${(passwordStrength.score / 5) * 100}%` }}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -351,14 +346,11 @@ function PasswordChange({ onClose, onSuccess }) {
                           className={passed ? "opacity-100" : "opacity-50"}
                         />
                         <span className="capitalize">
-                          {check === "length" && "12+ characters"}
+                          {check === "length" && "8+ characters"}
                           {check === "uppercase" && "Uppercase"}
                           {check === "lowercase" && "Lowercase"}
                           {check === "number" && "Number"}
                           {check === "special" && "Special char"}
-                          {check === "noSequential" && "No sequences"}
-                          {check === "noCommonWords" && "No common words"}
-                          {check === "characterVariety" && "3+ types"}
                         </span>
                       </div>
                     )
@@ -417,14 +409,8 @@ function PasswordChange({ onClose, onSuccess }) {
                   Security Notice
                 </h4>
                 <ul className="text-blue-200 text-xs space-y-1">
-                  <li>
-                    • Minimum 12 characters with uppercase, lowercase, numbers,
-                    and special characters
-                  </li>
-                  <li>
-                    • Avoid common words, sequences, and repeated characters
-                  </li>
-                  <li>• Use a unique password not used on other accounts</li>
+                  <li>• Use a strong, unique password</li>
+                  <li>• Don't reuse passwords from other accounts</li>
                   <li>
                     • You'll receive an email confirmation after changing your
                     password
