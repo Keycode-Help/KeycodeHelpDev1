@@ -6,11 +6,13 @@ import {
   useLocation,
 } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-// Completely remove Analytics import to prevent 403 errors in development
-const Analytics = () => {
-  console.log("🚫 Analytics completely disabled - no imports loaded");
-  return null;
-};
+// Conditional import to completely prevent Analytics loading in development
+let Analytics;
+if (typeof window !== 'undefined' && process.env.NODE_ENV === "production") {
+  Analytics = require("@vercel/analytics/react").Analytics;
+} else {
+  Analytics = () => null; // No-op component for development
+}
 import Sidebar from "./components/Sidebar";
 import TopNavbar from "./components/TopNavbar";
 import Footer from "./components/Footer";

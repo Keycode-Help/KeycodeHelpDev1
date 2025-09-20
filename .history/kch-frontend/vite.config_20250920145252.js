@@ -36,9 +36,6 @@ export default defineConfig(({ mode }) => {
       // Increase header size limits to handle large base64 image URLs
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
       },
       // Configure proxy for development server
       proxy: {

@@ -94,7 +94,7 @@ function UserProfile() {
 
   useEffect(() => {
     // Only log in development and limit frequency
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       console.log("🔍 UserProfile useEffect - Auth state:", {
         isInitialized,
         isAuthenticated,
@@ -104,7 +104,7 @@ function UserProfile() {
     }
 
     if (isInitialized && isAuthenticated && user) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         console.log("✅ All auth conditions met, fetching user data...");
       }
       fetchUserProfile();
@@ -114,7 +114,7 @@ function UserProfile() {
       fetchCredentials();
       fetchImportantNotices();
     } else if (isInitialized && !isAuthenticated) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         console.log("❌ User not authenticated, redirecting to login...");
       }
       // Redirect to login if not authenticated
@@ -124,7 +124,7 @@ function UserProfile() {
 
   const fetchUserProfile = async () => {
     try {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         console.log("🔄 Fetching user profile...");
       }
       const response = await get("/user/profile");

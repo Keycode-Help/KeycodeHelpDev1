@@ -6,11 +6,13 @@ import {
   useLocation,
 } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-// Completely remove Analytics import to prevent 403 errors in development
-const Analytics = () => {
-  console.log("🚫 Analytics completely disabled - no imports loaded");
-  return null;
-};
+// Conditional import to completely prevent Analytics loading in development
+let Analytics;
+if (typeof window !== 'undefined' && process.env.NODE_ENV === "production") {
+  Analytics = require("@vercel/analytics/react").Analytics;
+} else {
+  Analytics = () => null; // No-op component for development
+}
 import Sidebar from "./components/Sidebar";
 import TopNavbar from "./components/TopNavbar";
 import Footer from "./components/Footer";
@@ -231,8 +233,16 @@ function App() {
               future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             >
               <AppContent />
-              {/* Analytics is conditionally imported - only loads in production */}
-              <Analytics />
+              {/* Only render Analytics in production to prevent 403 errors in dev */}
+              {(() => {
+                const isProduction = process.env.NODE_ENV === "production";
+                console.log("🔍 Analytics check:", {
+                  NODE_ENV: process.env.NODE_ENV,
+                  isProduction,
+                  willLoadAnalytics: isProduction,
+                });
+                return isProduction ? <Analytics /> : null;
+              })()}
             </Router>
           </div>
         </AuthProvider>

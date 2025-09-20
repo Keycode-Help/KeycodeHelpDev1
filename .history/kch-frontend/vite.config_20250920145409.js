@@ -37,8 +37,8 @@ export default defineConfig(({ mode }) => {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Cache-Control": "no-cache, no-store, must-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
+        "Pragma": "no-cache",
+        "Expires": "0",
       },
       // Configure proxy for development server
       proxy: {

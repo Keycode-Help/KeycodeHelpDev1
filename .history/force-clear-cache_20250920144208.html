@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Force Clear Cache</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 10px 5px; }
+        .button:hover { background: #0056b3; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Force Clear Browser Cache</h1>
+        <p>This page will help you completely clear your browser cache to fix the Analytics 403 error.</p>
+        
+        <h3>Method 1: Hard Refresh</h3>
+        <p>Press <strong>Ctrl+Shift+R</strong> (Windows) or <strong>Cmd+Shift+R</strong> (Mac)</p>
+        
+        <h3>Method 2: Clear Storage</h3>
+        <button class="button" onclick="clearStorage()">Clear All Storage Data</button>
+        <div id="storageResult"></div>
+        
+        <h3>Method 3: Manual Steps</h3>
+        <ol>
+            <li>Press <strong>F12</strong> to open DevTools</li>
+            <li>Right-click the refresh button (while DevTools is open)</li>
+            <li>Select <strong>"Empty Cache and Hard Reload"</strong></li>
+        </ol>
+        
+        <h3>Method 4: Complete Browser Clear</h3>
+        <ol>
+            <li>Press <strong>Ctrl+Shift+Delete</strong> (Windows) or <strong>Cmd+Shift+Delete</strong> (Mac)</li>
+            <li>Select <strong>"All time"</strong> for time range</li>
+            <li>Check <strong>"Cached images and files"</strong></li>
+            <li>Click <strong>"Clear data"</strong></li>
+        </ol>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #e7f3ff; border-left: 4px solid #007bff;">
+            <strong>✅ After clearing cache, you should see:</strong><br>
+            "🚫 Analytics completely disabled - no imports loaded" in console<br><br>
+            <strong>❌ You should NOT see:</strong><br>
+            Any 403 errors from va.vercel-scripts.com
+        </div>
+    </div>
+
+    <script>
+        function clearStorage() {
+            try {
+                // Clear all storage types
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Clear IndexedDB if available
+                if ('indexedDB' in window) {
+                    indexedDB.databases().then(databases => {
+                        databases.forEach(db => {
+                            indexedDB.deleteDatabase(db.name);
+                        });
+                    });
+                }
+                
+                // Clear service worker cache if available
+                if ('serviceWorker' in navigator && 'caches' in window) {
+                    caches.keys().then(names => {
+                        names.forEach(name => {
+                            caches.delete(name);
+                        });
+                    });
+                }
+                
+                document.getElementById('storageResult').innerHTML = 
+                    '<div class="success">✅ Storage cleared successfully! Now refresh the page.</div>';
+            } catch (error) {
+                document.getElementById('storageResult').innerHTML = 
+                    '<div class="error">❌ Error clearing storage: ' + error.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html>
