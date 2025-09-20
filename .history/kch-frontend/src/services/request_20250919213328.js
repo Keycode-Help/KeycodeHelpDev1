@@ -119,16 +119,12 @@ instance.interceptors.response.use(
         );
 
         // Use backend refresh endpoint with credentials
-        const refreshResponse = await instance.post(
-          "/auth/refresh",
-          {},
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
+        const refreshResponse = await instance.post("/auth/refresh", {}, {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
           }
-        );
+        });
 
         if (refreshResponse.data.status !== "ok") {
           throw new Error("Refresh failed");
@@ -137,15 +133,13 @@ instance.interceptors.response.use(
         console.log(
           "✅ Backend token refresh successful, retrying original request"
         );
-
+        
         // Update the Authorization header for the retry
         originalRequest.headers = {
           ...originalRequest.headers,
-          Authorization: `Bearer ${
-            refreshResponse.data.accessToken || getCookie("access_token")
-          }`,
+          'Authorization': `Bearer ${refreshResponse.data.accessToken || getCookie("access_token")}`
         };
-
+        
         return instance(originalRequest);
       } catch (refreshError) {
         // Refresh failed, clear auth state and redirect to login

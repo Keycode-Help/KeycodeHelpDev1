@@ -28,7 +28,7 @@ function Login() {
 
       // Use the error message from AuthContext (already formatted)
       const errorMessage = error.message || "Login failed. Please try again.";
-
+      
       // Show user-friendly error message
       alert(errorMessage);
     }

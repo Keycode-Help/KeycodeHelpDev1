@@ -413,20 +413,10 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       try {
         // Use backend authentication instead of Supabase
-        const response = await api.post(
-          "/auth/login",
-          {
-            email,
-            password,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          }
-        );
+        const response = await api.post("/auth/login", {
+          email,
+          password,
+        });
 
         if (response.data.status === "ok") {
           const userData = {
@@ -481,14 +471,11 @@ export const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Backend login error:", error);
-
+        
         // Provide more specific error messages
         let errorMessage = "Login failed. ";
-
-        if (error.code === "ERR_NETWORK" || error.message?.includes("CORS")) {
-          errorMessage +=
-            "Network connection issue. Please check your internet connection and try again.";
-        } else if (error.response?.status === 401) {
+        
+        if (error.response?.status === 401) {
           errorMessage += "Invalid email or password.";
         } else if (error.response?.status === 403) {
           errorMessage += "Account access denied.";
@@ -501,10 +488,10 @@ export const AuthProvider = ({ children }) => {
         } else {
           errorMessage += "Unable to connect to server. Please try again.";
         }
-
+        
         // Clear any existing auth state on login failure
         clearStoredAuthState();
-
+        
         MessageChannelErrorHandler.handleAsyncError(error, "login operation");
         throw new Error(errorMessage);
       } finally {

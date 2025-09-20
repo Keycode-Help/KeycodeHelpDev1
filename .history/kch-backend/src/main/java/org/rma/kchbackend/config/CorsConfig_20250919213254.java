@@ -29,10 +29,9 @@ public class CorsConfig {
             "https://www.keycode.help"
         ));
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        c.setAllowedHeaders(List.of("*")); // Allow all headers for better compatibility
+        c.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         c.setAllowCredentials(true);
         c.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
-        c.setMaxAge(3600L); // Cache preflight response for 1 hour
         UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
         s.registerCorsConfiguration("/**", c);
         return s;
@@ -63,10 +62,9 @@ public class CorsConfig {
         }
         
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        c.setAllowedHeaders(List.of("*")); // Allow all headers for better compatibility
+        c.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         c.setAllowCredentials(true);
         c.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
-        c.setMaxAge(3600L); // Cache preflight response for 1 hour
         UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
         s.registerCorsConfiguration("/**", c);
         return s;
