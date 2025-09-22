@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     Optional<Subscription> findByKeycodeUser(KeycodeUser user);
     List<Subscription> findByIsActivated(boolean isActivated);
+    List<Subscription> findByTrialTrueAndActivatedTrue();
 }

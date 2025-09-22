@@ -23,10 +23,10 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: undefined,
-          // Force new bundle hash to break cache
-          entryFileNames: `assets/[name]-${Date.now()}.js`,
-          chunkFileNames: `assets/[name]-${Date.now()}.js`,
-          assetFileNames: `assets/[name]-${Date.now()}.[ext]`,
+          // Use consistent naming for better caching in development
+          entryFileNames: `assets/[name]-[hash].js`,
+          chunkFileNames: `assets/[name]-[hash].js`,
+          assetFileNames: `assets/[name]-[hash].[ext]`,
         },
       },
     },
@@ -36,9 +36,6 @@ export default defineConfig(({ mode }) => {
       // Increase header size limits to handle large base64 image URLs
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
       },
       // Configure proxy for development server
       proxy: {
@@ -50,11 +47,16 @@ export default defineConfig(({ mode }) => {
       },
       // Increase request header size limit
       middlewareMode: false,
-      hmr: {
-        port: 24678,
-        // Prevent excessive reloads
-        overlay: true,
-      },
+      // TEMPORARILY DISABLE ALL HMR to get stable server
+      hmr: false,
+      // hmr: {
+      //   port: 24678,
+      //   host: 'localhost',
+      //   // Prevent excessive reloads
+      //   overlay: false,
+      //   // Reduce HMR sensitivity
+      //   clientPort: 24678,
+      // },
       // Watch options to prevent excessive file watching
       watch: {
         usePolling: false,

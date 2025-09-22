@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class TrialService {
@@ -119,8 +120,20 @@ public class TrialService {
      * Check and handle expired trials for all users
      */
     public void checkAndHandleExpiredTrials() {
-        // This could be called by a scheduled task
-        // For now, we'll handle it when checking individual subscriptions
+        try {
+            // Find all active trial subscriptions
+            List<Subscription> trialSubscriptions = subscriptionRepository.findByTrialTrueAndActivatedTrue();
+            
+            for (Subscription subscription : trialSubscriptions) {
+                if (isTrialExpired(subscription)) {
+                    // Handle trial expiration
+                    handleTrialExpiration(subscription);
+                    System.out.println("Trial expired for user: " + subscription.getKeycodeUser().getEmail());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error checking expired trials: " + e.getMessage());
+        }
     }
 
     /**
@@ -132,7 +145,6 @@ public class TrialService {
         }
         
         boolean isActive = isTrialActive(subscription);
-        boolean isExpired = isTrialExpired(subscription);
         long remainingDays = getRemainingTrialDays(subscription);
         
         return new TrialStatus(true, isActive, remainingDays, subscription.getTrialEndsAt());

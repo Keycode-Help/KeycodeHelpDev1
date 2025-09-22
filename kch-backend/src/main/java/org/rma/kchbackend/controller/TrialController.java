@@ -55,6 +55,12 @@ public class TrialController {
             System.out.println("⏱️ Subscription lookup took: " + (System.currentTimeMillis() - subscriptionStartTime) + "ms");
             
             long trialStartTime = System.currentTimeMillis();
+            
+            // Check if trial has expired and handle it
+            if (subscription != null && subscription.isTrial()) {
+                trialService.handleTrialExpiration(subscription);
+            }
+            
             TrialService.TrialStatus trialStatus = trialService.getTrialStatus(subscription);
             System.out.println("⏱️ Trial status calculation took: " + (System.currentTimeMillis() - trialStartTime) + "ms");
 
@@ -127,6 +133,11 @@ public class TrialController {
             String accessType = "none";
 
             if (subscription != null) {
+                // Check if trial has expired and handle it
+                if (subscription.isTrial()) {
+                    trialService.handleTrialExpiration(subscription);
+                }
+                
                 if (subscription.isTrial() && trialService.isTrialActive(subscription)) {
                     hasPremiumAccess = true;
                     accessType = "trial";

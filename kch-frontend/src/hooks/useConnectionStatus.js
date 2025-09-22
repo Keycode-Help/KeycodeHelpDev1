@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 // Custom hook for monitoring connection status
 export function useConnectionStatus() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [connectionType, setConnectionType] = useState("unknown");
   const [lastOnlineTime, setLastOnlineTime] = useState(Date.now());
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
     // Handle online/offline events
@@ -53,10 +54,16 @@ export function useConnectionStatus() {
 
     detectConnectionType();
 
+    // Update current time every second to prevent excessive re-renders
+    const timeInterval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+
     // Cleanup
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
+      clearInterval(timeInterval);
 
       if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
         navigator.serviceWorker.removeEventListener(
@@ -67,15 +74,14 @@ export function useConnectionStatus() {
     };
   }, []);
 
-  // Calculate offline duration
-  const getOfflineDuration = () => {
+  // Memoize calculated values to prevent infinite re-renders
+  const offlineDuration = useMemo(() => {
     if (isOnline) return 0;
-    return Date.now() - lastOnlineTime;
-  };
+    return currentTime - lastOnlineTime;
+  }, [isOnline, lastOnlineTime, currentTime]);
 
-  // Format offline duration
-  const getFormattedOfflineDuration = () => {
-    const duration = getOfflineDuration();
+  const formattedOfflineDuration = useMemo(() => {
+    const duration = offlineDuration;
     const minutes = Math.floor(duration / 60000);
     const hours = Math.floor(minutes / 60);
 
@@ -83,26 +89,24 @@ export function useConnectionStatus() {
       return `${hours}h ${minutes % 60}m`;
     }
     return `${minutes}m`;
-  };
+  }, [offlineDuration]);
 
-  // Check if connection is slow
-  const isSlowConnection = () => {
+  const isSlowConnection = useMemo(() => {
     return connectionType === "slow-2g" || connectionType === "2g";
-  };
+  }, [connectionType]);
 
-  // Check if connection is good
-  const isGoodConnection = () => {
+  const isGoodConnection = useMemo(() => {
     return connectionType === "4g" || connectionType === "3g";
-  };
+  }, [connectionType]);
 
   return {
     isOnline,
     connectionType,
     lastOnlineTime,
-    offlineDuration: getOfflineDuration(),
-    formattedOfflineDuration: getFormattedOfflineDuration(),
-    isSlowConnection: isSlowConnection(),
-    isGoodConnection: isGoodConnection(),
+    offlineDuration,
+    formattedOfflineDuration,
+    isSlowConnection,
+    isGoodConnection,
   };
 }
 

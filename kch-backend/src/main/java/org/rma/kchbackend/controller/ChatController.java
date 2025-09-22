@@ -4,6 +4,8 @@ import org.rma.kchbackend.model.ChatMessage;
 import org.rma.kchbackend.model.KeycodeUser;
 import org.rma.kchbackend.repository.ChatMessageRepository;
 import org.rma.kchbackend.service.KeycodeUserService;
+import org.rma.kchbackend.service.TrialService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class ChatController {
     private final ChatMessageRepository chatRepo;
     private final KeycodeUserService userService;
     private final org.rma.kchbackend.service.ChatStreamService streamService;
+    
+    @Autowired
+    private TrialService trialService;
 
     public ChatController(ChatMessageRepository chatRepo, KeycodeUserService userService, org.rma.kchbackend.service.ChatStreamService streamService) {
         this.chatRepo = chatRepo;
@@ -29,10 +34,23 @@ public class ChatController {
     public ResponseEntity<?> history(Authentication auth) {
         String email = auth.getName();
         KeycodeUser user = userService.findByEmail(email).orElseThrow();
-        // Only premium/trial users can access chat
-        if (user.getSubscription() == null || (!user.getSubscription().isActivated() && !user.getSubscription().isTrial())) {
+        
+        // Check if user has premium access (trial or paid)
+        boolean hasPremiumAccess = false;
+        if (user.getSubscription() != null) {
+            if (user.getSubscription().isTrial()) {
+                // Check if trial has expired and handle it
+                trialService.handleTrialExpiration(user.getSubscription());
+                hasPremiumAccess = trialService.isTrialActive(user.getSubscription());
+            } else if (user.getSubscription().isActivated()) {
+                hasPremiumAccess = true;
+            }
+        }
+        
+        if (!hasPremiumAccess) {
             return ResponseEntity.status(403).body("Chat available for premium users only");
         }
+        
         List<ChatMessage> msgs = chatRepo.findByUserIdOrderByCreatedAtAsc(user.getId());
         return ResponseEntity.ok(msgs);
     }
@@ -41,9 +59,23 @@ public class ChatController {
     public ResponseEntity<?> send(@RequestBody SendPayload payload, Authentication auth) {
         String email = auth.getName();
         KeycodeUser user = userService.findByEmail(email).orElseThrow();
-        if (user.getSubscription() == null || (!user.getSubscription().isActivated() && !user.getSubscription().isTrial())) {
+        
+        // Check if user has premium access (trial or paid)
+        boolean hasPremiumAccess = false;
+        if (user.getSubscription() != null) {
+            if (user.getSubscription().isTrial()) {
+                // Check if trial has expired and handle it
+                trialService.handleTrialExpiration(user.getSubscription());
+                hasPremiumAccess = trialService.isTrialActive(user.getSubscription());
+            } else if (user.getSubscription().isActivated()) {
+                hasPremiumAccess = true;
+            }
+        }
+        
+        if (!hasPremiumAccess) {
             return ResponseEntity.status(403).body("Chat available for premium users only");
         }
+        
         ChatMessage m = new ChatMessage();
         m.setUserId(user.getId());
         m.setSender("USER");
@@ -56,9 +88,23 @@ public class ChatController {
     public SseEmitter stream(Authentication auth) {
         String email = auth.getName();
         KeycodeUser user = userService.findByEmail(email).orElseThrow();
-        if (user.getSubscription() == null || (!user.getSubscription().isActivated() && !user.getSubscription().isTrial())) {
+        
+        // Check if user has premium access (trial or paid)
+        boolean hasPremiumAccess = false;
+        if (user.getSubscription() != null) {
+            if (user.getSubscription().isTrial()) {
+                // Check if trial has expired and handle it
+                trialService.handleTrialExpiration(user.getSubscription());
+                hasPremiumAccess = trialService.isTrialActive(user.getSubscription());
+            } else if (user.getSubscription().isActivated()) {
+                hasPremiumAccess = true;
+            }
+        }
+        
+        if (!hasPremiumAccess) {
             throw new RuntimeException("Forbidden");
         }
+        
         return streamService.subscribe(user.getId());
     }
 

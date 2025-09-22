@@ -21,6 +21,7 @@ import TopNavbar from "./components/TopNavbar";
 import Footer from "./components/Footer";
 import TrialExpirationHandler from "./components/TrialExpirationHandler";
 import TrialBanner from "./components/TrialBanner";
+import StartTrialBanner from "./components/StartTrialBanner";
 import OfflineIndicator from "./components/OfflineIndicator";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { useTrialStatus } from "./hooks/useTrialStatus";
@@ -48,6 +49,9 @@ import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import SubscriptionManager from "./pages/SubscriptionManager";
 import UserHistoryPage from "./pages/UserHistoryPage";
 import RegisteredUsersPage from "./pages/RegisteredUsers"; // Import the new page
+import TestPage from "./pages/TestPage"; // Test page for debugging
+import SimpleHome from "./pages/SimpleHome"; // Simple home page without auth
+import UltraMinimal from "./pages/UltraMinimal"; // Ultra minimal test
 import UserManagement from "./pages/UserManagement";
 import DocumentValidation from "./pages/DocumentValidation";
 import Requirements from "./pages/Requirements";
@@ -114,6 +118,9 @@ function AppContent() {
       {/* Show trial banner for authenticated users with trial access */}
       {isAuthenticated && <TrialBanner />}
 
+      {/* Show start trial banner for authenticated users without premium access */}
+      {isAuthenticated && <StartTrialBanner />}
+
       {/* Show trial expiration handler for authenticated users */}
       {isAuthenticated && <TrialExpirationHandler />}
 
@@ -128,6 +135,14 @@ function AppContent() {
         } ${isAuthenticated && shouldShowTrialNotice() ? "pt-16" : ""}`}
       >
         <Routes>
+          {/* Temporary debug routes - remove in production */}
+          {process.env.NODE_ENV === "development" && (
+            <>
+              <Route path="/minimal" element={<UltraMinimal />} />
+              <Route path="/test" element={<TestPage />} />
+              <Route path="/simple" element={<SimpleHome />} />
+            </>
+          )}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin-login" element={<AdminLogin />} />
@@ -199,17 +214,17 @@ function App() {
     initZFoldOptimizations();
   }, []);
 
-  // Register Service Worker for offline functionality
+  // TEMPORARILY DISABLE Service Worker to isolate errors
   useEffect(() => {
+    console.log("🚫 Service Worker temporarily disabled to fix errors");
+    // Unregister existing service workers
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((registration) => {
-          console.log("✅ Service Worker registered:", registration.scope);
-        })
-        .catch((error) => {
-          console.error("❌ Service Worker registration failed:", error);
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
+          console.log("✅ Service Worker unregistered");
         });
+      });
     }
   }, []);
 

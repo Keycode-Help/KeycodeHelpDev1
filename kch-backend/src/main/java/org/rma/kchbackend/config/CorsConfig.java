@@ -47,6 +47,32 @@ public class CorsConfig {
     }
 
     @Bean
+    @Profile("supabase")
+    public CorsConfigurationSource supabaseCors() {
+        CorsConfiguration c = new CorsConfiguration();
+        // Allow localhost for development and production origins
+        c.setAllowedOriginPatterns(List.of(
+            "http://localhost:*",
+            "https://*.vercel.app",
+            "https://keycode.help",
+            "https://www.keycode.help",
+            "https://keycode-help-dev1.vercel.app",
+            "https://keycode-help-dev1-mrguru2024s-projects.vercel.app"
+        ));
+        c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
+        c.setAllowedHeaders(List.of("*")); // Allow all headers for better compatibility
+        c.setAllowCredentials(true);
+        c.setExposedHeaders(List.of("Authorization", "Set-Cookie", "Content-Type"));
+        c.setMaxAge(3600L); // Cache preflight response for 1 hour
+        
+        System.out.println("🔧 Supabase CORS Configuration loaded for origins: " + c.getAllowedOriginPatterns());
+        
+        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
+        s.registerCorsConfiguration("/**", c);
+        return s;
+    }
+
+    @Bean
     @Profile("prod")
     public CorsConfigurationSource prodCors(
         @Value("${app.cors.allowed-origins:}") List<String> origins) {

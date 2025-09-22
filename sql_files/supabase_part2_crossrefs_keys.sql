@@ -1,0 +1,92 @@
+-- Supabase Transponder Database - Part 2: Cross-refs, OEM Keys, Notes, Makes
+-- Run this SECOND in Supabase SQL Editor
+
+-- Cross References
+INSERT INTO cross_ref (id, label) VALUES (1, 'Consult manual');
+INSERT INTO cross_ref (id, label) VALUES (2, 'JMA TP05 / SILCA T5');
+INSERT INTO cross_ref (id, label) VALUES (3, 'JMA TP05, Silca 13');
+INSERT INTO cross_ref (id, label) VALUES (4, 'JMA TP08 / KD48 / CN6');
+INSERT INTO cross_ref (id, label) VALUES (5, 'JMA TP08 / Silca T6');
+INSERT INTO cross_ref (id, label) VALUES (6, 'JMA TP08, Silca T6');
+INSERT INTO cross_ref (id, label) VALUES (7, 'JMA TP08, Silca T6, JMA TP05, Silca 13');
+INSERT INTO cross_ref (id, label) VALUES (8, 'JMA TP12 / SILCA GTI / K-JMD');
+INSERT INTO cross_ref (id, label) VALUES (9, 'JMA TP12 / SILCA T14 / CN3');
+INSERT INTO cross_ref (id, label) VALUES (10, 'JMA TP12 / XT27 / K-JMD');
+INSERT INTO cross_ref (id, label) VALUES (11, 'JMA TP19, XT27A66, K-JMD');
+INSERT INTO cross_ref (id, label) VALUES (12, 'JMA TP25 / SILCA A2');
+INSERT INTO cross_ref (id, label) VALUES (13, 'JMA TPX2 / JMA TP21 / SILCA GTI / YS-01 / K-JMD / XT27');
+INSERT INTO cross_ref (id, label) VALUES (14, 'PCF7935 / JMA TP12 / XT27 / K-JMD');
+INSERT INTO cross_ref (id, label) VALUES (15, 'PCF7936 / JMA TP12 / SILCA GTI / K-JMD');
+INSERT INTO cross_ref (id, label) VALUES (16, 'PCF7936, JMA TP12GM, SILCA T14, CN3, XT27, K-JMD');
+INSERT INTO cross_ref (id, label) VALUES (17, 'PCF7936, JMA TP12GM, SILCA T14, CN3, XT27A66, K-JMD');
+INSERT INTO cross_ref (id, label) VALUES (18, 'PCF7936AS, JMA TP12GM, SILCA T14, CN3, XT27, K-JMD');
+
+
+-- OEM Keys
+INSERT INTO oem_key (id, code) VALUES (1, '13500218, 13504196');
+INSERT INTO oem_key (id, code) VALUES (2, '13500318, 5921872, 5927057, OHT05918179');
+INSERT INTO oem_key (id, code) VALUES (3, '13529661, 13529660, 13584504, 13508771');
+INSERT INTO oem_key (id, code) VALUES (4, '13530752, HYQ4AA 13529664, 13585722');
+INSERT INTO oem_key (id, code) VALUES (5, '13541559, 13541561, 13541565, 13537962');
+INSERT INTO oem_key (id, code) VALUES (6, '13541561, 13541565, 13537962');
+INSERT INTO oem_key (id, code) VALUES (7, '23465955, 23465951, NBGGD9C04');
+INSERT INTO oem_key (id, code) VALUES (8, '4E0837220M, 4E0837220N');
+INSERT INTO oem_key (id, code) VALUES (9, '4F0837220AF, 4F0837220AJ');
+INSERT INTO oem_key (id, code) VALUES (10, '4F0837220AG, 4F0837220Q');
+INSERT INTO oem_key (id, code) VALUES (11, '4F0837220AK, 4F0837220R');
+INSERT INTO oem_key (id, code) VALUES (12, '4G0959754BP, 4G0959754DC');
+INSERT INTO oem_key (id, code) VALUES (13, '4G0959754K, 4G0959754G');
+INSERT INTO oem_key (id, code) VALUES (14, '4H0959754DD, 4H0959754DB');
+INSERT INTO oem_key (id, code) VALUES (15, '4H0959754K, 4H0959754BM');
+INSERT INTO oem_key (id, code) VALUES (16, '56046681AE, M3N-40821302');
+INSERT INTO oem_key (id, code) VALUES (17, '5912545, OHT01060512, 23465184, 13500221');
+INSERT INTO oem_key (id, code) VALUES (18, '6000627330, 6000628569, 6000631468');
+INSERT INTO oem_key (id, code) VALUES (19, '6000628443, 71749374, 71776098');
+INSERT INTO oem_key (id, code) VALUES (20, '71749374, 71776098, 6000626799');
+INSERT INTO oem_key (id, code) VALUES (21, '71752197, 6000626708, 6000626710');
+INSERT INTO oem_key (id, code) VALUES (22, '71765697, 6000629617');
+INSERT INTO oem_key (id, code) VALUES (23, '71778806, 6000626702');
+INSERT INTO oem_key (id, code) VALUES (24, '81A837220, 81A837220E');
+INSERT INTO oem_key (id, code) VALUES (25, '82A837220H, 82A837220E');
+INSERT INTO oem_key (id, code) VALUES (26, '8K0959754BR, 8K0959754BP');
+INSERT INTO oem_key (id, code) VALUES (27, '8K0959754D, 8T0959754F');
+INSERT INTO oem_key (id, code) VALUES (28, '8P0837220D, 8P0837220G');
+INSERT INTO oem_key (id, code) VALUES (29, '8S0959754H, 8S0959754AL');
+INSERT INTO oem_key (id, code) VALUES (30, '8T0959754A, 8T0959754D');
+INSERT INTO oem_key (id, code) VALUES (31, '8V0837220D, 8V0837220F');
+INSERT INTO oem_key (id, code) VALUES (32, '8X0837220, 8X0837220A');
+INSERT INTO oem_key (id, code) VALUES (33, '8X0837220R, 8X0837220C');
+INSERT INTO oem_key (id, code) VALUES (34, '92271667');
+INSERT INTO oem_key (id, code) VALUES (35, '96458347');
+INSERT INTO oem_key (id, code) VALUES (36, 'EMU470102, ACJ932U01');
+INSERT INTO oem_key (id, code) VALUES (37, 'H0561-C993A, CWTWB1U751');
+INSERT INTO oem_key (id, code) VALUES (38, 'HYQ1AA 13529634, HYQ1EA 13508282, 84540864');
+INSERT INTO oem_key (id, code) VALUES (39, 'HYQ1AA 13580802, HYQ1EA 13508282, M3N32337100');
+INSERT INTO oem_key (id, code) VALUES (40, 'HYQ1EA 13508398, 13529632');
+INSERT INTO oem_key (id, code) VALUES (41, 'HYQ4AA 13529664, 13508767, 13585722');
+INSERT INTO oem_key (id, code) VALUES (42, 'HYQ4AA 13529665, 13585723, 13584498, 13529650');
+INSERT INTO oem_key (id, code) VALUES (43, 'HYQ4EA 13508780, 13594573, 13529653, 13508771');
+INSERT INTO oem_key (id, code) VALUES (44, 'HYQ4EA 13519177, 13598815, 13519188');
+INSERT INTO oem_key (id, code) VALUES (45, 'HYQ4EA 13529638, 13598815, 13585728');
+INSERT INTO oem_key (id, code) VALUES (46, 'HYQ4EA 13584514, 13506669, 13519188');
+INSERT INTO oem_key (id, code) VALUES (47, 'KR55WK50073, 13575177');
+INSERT INTO oem_key (id, code) VALUES (48, 'M3N32337100, 84540865, 13577770, 22881480');
+INSERT INTO oem_key (id, code) VALUES (49, 'M3N5WY7777A 25926479, 25926480');
+INSERT INTO oem_key (id, code) VALUES (50, 'OHT01060512 13504200, 23335583, 5912543');
+INSERT INTO oem_key (id, code) VALUES (51, 'OHT01060512, 20873621, 5913598');
+INSERT INTO oem_key (id, code) VALUES (52, 'OHT01060512, 5913598, 20873621');
+INSERT INTO oem_key (id, code) VALUES (53, 'OHT05918179, 22923862, 22755321, 5920157');
+INSERT INTO oem_key (id, code) VALUES (54, 'See dealer');
+INSERT INTO oem_key (id, code) VALUES (55, 'YG0G20TB1 13538853, 13538852');
+INSERT INTO oem_key (id, code) VALUES (56, 'YG0G21TB2 13548437');
+
+
+-- Notes
+INSERT INTO note (id, text) VALUES (1, 'No additional notes');
+
+
+-- Makes (existing ones preserved)
+INSERT INTO make (name, non_member_price, member_price) VALUES ('Audi', 99.99, 79.99) ON CONFLICT (name) DO NOTHING;
+INSERT INTO make (name, non_member_price, member_price) VALUES ('Chevrolet', 99.99, 79.99) ON CONFLICT (name) DO NOTHING;
+INSERT INTO make (name, non_member_price, member_price) VALUES ('Fiat', 99.99, 79.99) ON CONFLICT (name) DO NOTHING;
+INSERT INTO make (name, non_member_price, member_price) VALUES ('Isuzu', 99.99, 79.99) ON CONFLICT (name) DO NOTHING;

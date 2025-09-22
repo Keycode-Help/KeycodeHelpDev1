@@ -49,7 +49,19 @@ public class CartController {
                    if(cartItem.getVehicle() !=null){
                        // If cart item is vehicle, standard price depends on membership status
                        Subscription userSubscription = user.getSubscription();
-                       if(userSubscription != null && userSubscription.isActivated()){
+                       boolean hasPremiumAccess = false;
+                       
+                       if(userSubscription != null) {
+                           // Check if trial has expired and handle it
+                           if(userSubscription.isTrial()) {
+                               trialService.handleTrialExpiration(userSubscription);
+                               hasPremiumAccess = trialService.isTrialActive(userSubscription);
+                           } else if(userSubscription.isActivated()) {
+                               hasPremiumAccess = true;
+                           }
+                       }
+                       
+                       if(hasPremiumAccess){
                            cartItemStandardPrice = cartItem.getVehicle().getMake().getMemberPrice();
                        }else{
                            cartItemStandardPrice = cartItem.getVehicle().getMake().getNonMemberPrice();

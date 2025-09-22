@@ -113,8 +113,12 @@ async function handleApiRequest(request) {
     if (networkResponse.ok) {
       // Cache successful GET requests
       if (request.method === "GET" && isCacheableApi(url.pathname)) {
-        const cache = await caches.open(DYNAMIC_CACHE_NAME);
-        cache.put(request, networkResponse.clone());
+        try {
+          const cache = await caches.open(DYNAMIC_CACHE_NAME);
+          await cache.put(request, networkResponse.clone());
+        } catch (error) {
+          console.warn("Failed to cache API response:", error);
+        }
       }
 
       // Notify client that we're online
@@ -161,7 +165,11 @@ async function handlePageRequest(request) {
     const networkResponse = await fetch(request);
     if (networkResponse.ok && networkResponse.status !== 206) {
       // Don't cache partial responses (206) as they're not supported by Cache API
-      cache.put(request, networkResponse.clone());
+      try {
+        await cache.put(request, networkResponse.clone());
+      } catch (error) {
+        console.warn("Failed to cache response:", error);
+      }
     }
 
     return networkResponse;
@@ -186,7 +194,11 @@ async function handleStaticRequest(request) {
     const networkResponse = await fetch(request);
     if (networkResponse.ok && networkResponse.status !== 206) {
       // Don't cache partial responses (206) as they're not supported by Cache API
-      cache.put(request, networkResponse.clone());
+      try {
+        await cache.put(request, networkResponse.clone());
+      } catch (error) {
+        console.warn("Failed to cache response:", error);
+      }
     }
 
     return networkResponse;
